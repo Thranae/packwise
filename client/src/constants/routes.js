@@ -1,0 +1,17 @@
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  DASHBOARD: '/dashboard',
+  OVERVIEW: '/overview',
+  PROFILE: '/profile',
+  SETTINGS: '/settings',
+  ONBOARDING: '/onboarding',
+  FORGOT_PASSWORD: '/forgot-password',
+  TRIPS: '/trips',
+  TRIPS_NEW: '/trips/new',
+  PACKING: '/packing',
+  ASSISTANT: '/assistant',
+  BUDGET: '/budget',
+  DOCUMENTS: '/documents',
+};

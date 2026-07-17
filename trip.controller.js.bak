@@ -1,0 +1,19 @@
+import express from 'express';
+import { generateTrip, modifyTrip, getUserTrips } from '../controllers/trip.controller.js';
+// import { verifyToken } from '../middleware/auth.middleware.js'; // Assuming you have auth middleware
+
+const router = express.Router();
+
+// Mocking auth middleware for now so frontend can easily hit the API
+// In production, uncomment verifyToken
+
+// Generate a new trip based on prompt
+router.post('/generate', generateTrip);
+
+// Modify an existing trip via chat
+router.post('/chat', modifyTrip);
+
+// Get all trips for the logged in user
+router.get('/', getUserTrips);
+
+export default router;

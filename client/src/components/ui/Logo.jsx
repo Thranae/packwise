@@ -1,0 +1,91 @@
+import React from 'react';
+import { cn } from '@/utils/cn';
+
+/**
+ * Official Voyage Genie Logo (Suitcase + Location Pin)
+ * Minimal, premium, simple outline.
+ */
+export const LogoIcon = ({ className, size = 'md' }) => {
+  const sizes = {
+    sm: 'w-5 h-5',
+    md: 'w-7 h-7',
+    lg: 'w-10 h-10',
+    xl: 'w-14 h-14',
+  };
+
+  return (
+    <svg 
+      viewBox="0 0 48 48" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg" 
+      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_8px_rgba(79,124,255,0.6)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
+    >
+      <defs>
+        <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="40%" stopColor="#e2e8f0" />
+          <stop offset="100%" stopColor="#64748b" />
+        </linearGradient>
+        <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#93c5fd" />
+          <stop offset="100%" stopColor="#3b82f6" />
+        </linearGradient>
+      </defs>
+
+      {/* Telescopic Handle Poles (Animate up on hover) */}
+      <path d="M18 12V6 M30 12V6" stroke="url(#metallic)" strokeWidth="2.5" strokeLinecap="round" className="transition-transform duration-700 group-hover:-translate-y-1" />
+      
+      {/* Handle Grip (Animate up on hover) */}
+      <path d="M15 6H33" stroke="url(#metallic)" strokeWidth="3.5" strokeLinecap="round" className="transition-transform duration-700 group-hover:-translate-y-1" />
+      
+      {/* Suitcase Body (Taller than wide, hard-shell) */}
+      <rect x="10" y="12" width="28" height="30" rx="4" stroke="url(#metallic)" strokeWidth="3" strokeLinejoin="round" />
+      
+      {/* Vertical Ribs (Rimowa style) */}
+      <path d="M16 18V36 M32 18V36" stroke="url(#metallic)" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+
+      {/* Wheels */}
+      <circle cx="15" cy="44" r="2" fill="url(#metallic)" />
+      <circle cx="33" cy="44" r="2" fill="url(#metallic)" />
+
+      {/* Integrated Location Pin (Blue Accent) - Bounces up on hover */}
+      <g className="transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-3 origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="url(#pin-grad)" className="transition-all duration-700" />
+        <circle cx="24" cy="22" r="2.5" fill="white" />
+      </g>
+    </svg>
+  );
+};
+
+export const Logo = ({ size = 'md', className, showText = true }) => {
+  const textSizes = {
+    sm: 'text-lg',
+    md: 'text-xl',
+    lg: 'text-3xl',
+    xl: 'text-4xl',
+  };
+
+  return (
+    <div className={cn('group flex items-center gap-3 cursor-pointer', className)}>
+      <LogoIcon size={size} className="text-text-primary" />
+      {showText && (
+        <span className={cn('font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', textSizes[size])}>
+          Voyage Genie<span className="text-[var(--color-accent)] inline-block transition-transform duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125">.</span>
+        </span>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Circular Suitcase Icon (Used above Auth forms)
+ */
+export const AuthWelcomeIcon = ({ className }) => (
+  <div className={cn("inline-flex items-center justify-center w-12 h-12 rounded-full border border-border-subtle bg-bg-surface shadow-sm", className)}>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F7CFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="9" width="14" height="11" rx="2" />
+      <path d="M9 9V6C9 4.89543 9.89543 4 11 4H13C14.1046 4 15 4.89543 15 6V9" />
+      <line x1="9" y1="14" x2="15" y2="14" />
+    </svg>
+  </div>
+);

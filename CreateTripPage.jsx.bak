@@ -1,0 +1,203 @@
+import React, { useState } from 'react';
+import { Bot, MapPin, Calendar, Wallet, Heart, Compass, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { PageTransition } from '@/components/common/PageTransition';
+import { Button } from '@/components/ui/Button';
+import { ROUTES } from '@/constants/routes';
+
+export default function CreateTripPage() {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    // Mock generation delay
+    setTimeout(() => {
+      navigate(ROUTES.TRIPS); // For now redirect back to trips
+    }, 4000);
+  };
+
+  const steps = [
+    { id: 1, title: 'Destination', icon: MapPin },
+    { id: 2, title: 'Duration & Budget', icon: Wallet },
+    { id: 3, title: 'Interests & Style', icon: Compass },
+  ];
+
+  return (
+    <PageTransition>
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-[#5B8CFF] to-[#4D7FFF] mb-6 shadow-lg shadow-blue-500/20 relative">
+            <Bot className="w-8 h-8 text-white" />
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute -top-1 -right-1"
+            >
+              <Sparkles className="w-5 h-5 text-yellow-300" />
+            </motion.div>
+          </div>
+          <h1 className="text-4xl font-extrabold tracking-tight text-white mb-3">
+            Let's plan your dream trip
+          </h1>
+          <p className="text-lg text-gray-300">
+            Tell me a bit about what you're looking for, and I'll craft the perfect itinerary.
+          </p>
+        </div>
+
+        {/* Stepper */}
+        <div className="flex items-center justify-between mb-12 relative px-4">
+          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-white/5 -z-10" />
+          <div 
+            className="absolute top-1/2 left-0 h-0.5 bg-[var(--color-accent)] -z-10 transition-all duration-700" 
+            style={{ width: `${((step - 1) / (steps.length - 1)) * 100}%` }} 
+          />
+          {steps.map((s) => (
+            <div key={s.id} className="flex flex-col items-center gap-2">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors ${step >= s.id ? 'bg-[var(--theme-bg-base)] border-[var(--color-accent)] text-[var(--color-accent)] shadow-[0_0_15px_rgba(91,140,255,0.4)]' : 'bg-[var(--theme-bg-surface)] border-white/10 text-gray-300'}`}>
+                <s.icon className="w-5 h-5" />
+              </div>
+              <span className={`text-xs font-semibold ${step >= s.id ? 'text-white' : 'text-gray-300'}`}>
+                {s.title}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Form Container */}
+        <div className="relative overflow-hidden p-8 sm:p-10 bg-[rgba(255,255,255,0.08)] backdrop-blur-[30px] saturate-180 border border-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.15)] rounded-3xl hover:-translate-y-[6px] hover:shadow-[0_16px_40px_rgba(0,0,0,0.2)] hover:bg-[rgba(255,255,255,0.12)] hover:border-white/20 transition-all duration-700">
+          <AnimatePresence mode="wait">
+            {!isGenerating ? (
+              <motion.div
+                key={`step-${step}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {step === 1 && (
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-2">Where do you want to go?</label>
+                      <input type="text" placeholder="e.g. Tokyo, Japan or 'Somewhere tropical'" className="glass-input h-14 text-lg" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-2">Starting City (Optional)</label>
+                      <input type="text" placeholder="Where are you flying from?" className="glass-input h-14" />
+                    </div>
+                  </div>
+                )}
+
+                {step === 2 && (
+                  <div className="space-y-8">
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-4">How long is your trip?</label>
+                      <div className="flex items-center gap-4">
+                        <input type="number" placeholder="Days" className="glass-input h-14 w-24 text-center text-lg" />
+                        <span className="text-gray-300">days</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-4">What's your estimated budget?</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {['Budget', 'Moderate', 'Luxury'].map((b) => (
+                          <div key={b} className="p-4 flex flex-col items-center justify-center gap-2 text-center cursor-pointer group bg-[rgba(255,255,255,0.08)] backdrop-blur-[30px] saturate-180 border border-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.15)] rounded-3xl hover:-translate-y-[6px] hover:shadow-[0_16px_40px_rgba(0,0,0,0.2)] hover:bg-[rgba(255,255,255,0.12)] hover:border-white/20 transition-all duration-700">
+                            <DollarSignIcon count={b === 'Budget' ? 1 : b === 'Moderate' ? 2 : 3} className="text-gray-300 group-hover:text-[var(--color-accent)]" />
+                            <span className="font-semibold text-white">{b}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {step === 3 && (
+                  <div className="space-y-8">
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-4">Travel Style</label>
+                      <div className="grid grid-cols-2 gap-4">
+                        {['Fast-paced', 'Relaxed', 'Family-friendly', 'Solo Explorer'].map((style) => (
+                          <label key={style} className="flex items-center gap-3 p-4 cursor-pointer bg-[rgba(255,255,255,0.08)] backdrop-blur-[30px] saturate-180 border border-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.15)] rounded-3xl hover:-translate-y-[6px] hover:shadow-[0_16px_40px_rgba(0,0,0,0.2)] hover:bg-[rgba(255,255,255,0.12)] hover:border-white/20 transition-all duration-700">
+                            <input type="checkbox" className="w-5 h-5 rounded border-white/20 bg-white/5 text-[var(--color-accent)] focus:ring-[var(--color-accent)]" />
+                            <span className="font-medium text-white">{style}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-white mb-4">Specific Interests</label>
+                      <input type="text" placeholder="e.g. Art museums, fine dining, hiking, hidden gems..." className="glass-input h-14" />
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-10 flex justify-between items-center pt-6 border-t border-white/5">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setStep(Math.max(1, step - 1))}
+                    disabled={step === 1}
+                    className={step === 1 ? 'opacity-0' : ''}
+                  >
+                    Back
+                  </Button>
+                  
+                  {step < 3 ? (
+                    <Button 
+                      onClick={() => setStep(step + 1)}
+                      icon={<ArrowRight className="w-4 h-4" />}
+                      className="px-8 shadow-[0_0_20px_rgba(91,140,255,0.2)]"
+                    >
+                      Next Step
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={handleGenerate}
+                      icon={<Sparkles className="w-4 h-4" />}
+                      className="px-8 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 border-none shadow-[0_0_30px_rgba(139,92,246,0.4)]"
+                    >
+                      Generate Itinerary
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="generating"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-16 text-center"
+              >
+                <div className="relative mb-8">
+                  <div className="absolute inset-0 bg-[var(--color-accent)] rounded-full blur-[30px] opacity-20 animate-pulse" />
+                  <Loader2 className="w-16 h-16 text-[var(--color-accent)] animate-spin relative z-10" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3">Crafting your perfect trip...</h3>
+                <p className="text-gray-300 max-w-sm mx-auto">
+                  Our AI is analyzing thousands of data points to find the best flights, accommodations, and activities for your style.
+                </p>
+                <div className="mt-8 flex gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </PageTransition>
+  );
+}
+
+function DollarSignIcon({ count, className }) {
+  return (
+    <div className={`flex ${className}`}>
+      {[1, 2, 3].map((i) => (
+        <span key={i} className={`text-xl font-bold ${i <= count ? 'opacity-100' : 'opacity-20'}`}>₹</span>
+      ))}
+    </div>
+  );
+}
+

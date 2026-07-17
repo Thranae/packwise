@@ -1,0 +1,93 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+const TripContext = createContext();
+
+export const useTripContext = () => useContext(TripContext);
+
+export const TripProvider = ({ children }) => {
+  const [currentTrip, setCurrentTrip] = useState(null);
+  const [loadingStep, setLoadingStep] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [manualTheme, setManualTheme] = useState(null);
+
+  useEffect(() => {
+    const themeToUse = manualTheme || (currentTrip && currentTrip.theme);
+    if (themeToUse) {
+      document.documentElement.style.setProperty('--trip-primary', themeToUse.primary);
+      document.documentElement.style.setProperty('--trip-secondary', themeToUse.secondary);
+    } else {
+      document.documentElement.style.removeProperty('--trip-primary');
+      document.documentElement.style.removeProperty('--trip-secondary');
+    }
+  }, [currentTrip, manualTheme]);
+
+  const generateTrip = async (prompt) => {
+    setIsGenerating(true);
+    setLoadingStep("Analyzing destination...");
+    
+    try {
+      // Simulate steps for UI
+      setTimeout(() => setLoadingStep("Finding attractions..."), 2000);
+      setTimeout(() => setLoadingStep("Creating itinerary..."), 4000);
+      setTimeout(() => setLoadingStep("Estimating budget & packing list..."), 6000);
+      
+      const response = await fetch('http://localhost:5000/api/trips/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setLoadingStep("Done.");
+        setTimeout(() => {
+          setCurrentTrip(data.data);
+          setManualTheme(null); // Reset manual theme when AI generates a new trip
+          setIsGenerating(false);
+          setLoadingStep(null);
+        }, 500);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error("Failed to generate trip:", error);
+      setIsGenerating(false);
+      setLoadingStep(null);
+      // Handle error visually
+    }
+  };
+
+  const modifyTrip = async (message) => {
+    // Basic implementation for chat updates
+    if (!currentTrip) return;
+    try {
+      const response = await fetch('http://localhost:5000/api/trips/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentTrip, message })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setCurrentTrip(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to modify trip:", error);
+    }
+  };
+
+  return (
+    <TripContext.Provider value={{
+      currentTrip,
+      setCurrentTrip,
+      isGenerating,
+      loadingStep,
+      generateTrip,
+      modifyTrip,
+      manualTheme,
+      setManualTheme
+    }}>
+      {children}
+    </TripContext.Provider>
+  );
+};

@@ -1,0 +1,50 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Geometric Map/Pin Boundary -->
+  <path 
+    d="M24 4L38 18C41.3137 21.3137 41.3137 26.6863 38 30L24 44L10 30C6.68629 26.6863 6.68629 21.3137 10 18L24 4Z" 
+    stroke="url(#pw-grad-main)" 
+    stroke-width="3.5" 
+    stroke-linejoin="round" 
+  />
+  
+  <!-- Inner Fold Lines / Route Path -->
+  <path 
+    d="M24 4V44M10 18L38 18" 
+    stroke="url(#pw-grad-light)" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+    stroke-dasharray="4 4"
+    opacity="0.6"
+  />
+
+  <!-- Central Compass/AI Node -->
+  <path 
+    d="M24 18L27 24L24 30L21 24L24 18Z" 
+    fill="url(#pw-grad-main)" 
+  />
+  <circle cx="24" cy="24" r="1.5" fill="#08111F" />
+
+  <!-- Dynamic Route Sweep -->
+  <path 
+    d="M17 37C17 37 20 28 28 28C36 28 31 11 31 11" 
+    stroke="#FFFFFF" 
+    stroke-width="2.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+  />
+  
+  <!-- Target Dot -->
+  <circle cx="31" cy="11" r="2.5" fill="#FFFFFF" />
+
+  <defs>
+    <linearGradient id="pw-grad-main" x1="10" y1="4" x2="38" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74A6FF" />
+      <stop offset="1" stop-color="#4F7CFF" />
+    </linearGradient>
+    <linearGradient id="pw-grad-light" x1="10" y1="18" x2="38" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.8" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+</svg>

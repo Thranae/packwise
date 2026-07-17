@@ -1,0 +1,304 @@
+import React, { useState, useMemo } from 'react';
+import { Plus, Search, Map, Compass, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { PageTransition } from '@/components/common/PageTransition';
+import { ROUTES } from '@/constants/routes';
+import { TripCard } from '@/components/trips/TripCard';
+
+const MOCK_TRIPS = [
+  {
+    id: 1,
+    title: 'Tokyo & Kyoto Explorer',
+    location: 'Japan',
+    dates: 'Oct 12 - Oct 26, 2026',
+    duration: '14 Days',
+    budget: '₹4,50,000',
+    weather: '18° Sunny',
+    packingProgress: '65%',
+    status: 'Upcoming',
+    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 2,
+    title: 'Swiss Alps Retreat',
+    location: 'Switzerland',
+    dates: 'Dec 05 - Dec 15, 2026',
+    duration: '10 Days',
+    budget: '₹3,20,000',
+    weather: '-2° Snow',
+    packingProgress: '10%',
+    status: 'Planning',
+    image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 3,
+    title: 'Amalfi Coast Roadtrip',
+    location: 'Italy',
+    dates: 'May 10 - May 24, 2027',
+    duration: '14 Days',
+    budget: '₹5,10,000',
+    weather: '22° Sunny',
+    packingProgress: '0%',
+    status: 'Draft',
+    image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 4,
+    title: 'Bali Villa Escape',
+    location: 'Indonesia',
+    dates: 'Aug 01 - Aug 10, 2025',
+    duration: '9 Days',
+    budget: '₹2,10,000',
+    weather: '29° Tropical',
+    packingProgress: '100%',
+    status: 'Completed',
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 5,
+    title: 'Northern Lights Quest',
+    location: 'Iceland',
+    dates: 'Jan 15 - Jan 22, 2027',
+    duration: '7 Days',
+    budget: '₹3,80,000',
+    weather: '-8° Clear',
+    packingProgress: '25%',
+    status: 'Planning',
+    image: 'https://images.unsplash.com/photo-1520769945061-0a448c463865?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 6,
+    title: 'New York City Lights',
+    location: 'USA',
+    dates: 'Nov 20 - Nov 28, 2026',
+    duration: '8 Days',
+    budget: '₹4,20,000',
+    weather: '12° Cloudy',
+    packingProgress: '40%',
+    status: 'Upcoming',
+    image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 7,
+    title: 'Patagonia Hiking',
+    location: 'Chile',
+    dates: 'Feb 10 - Feb 24, 2027',
+    duration: '14 Days',
+    budget: '₹5,50,000',
+    weather: '15° Windy',
+    packingProgress: '5%',
+    status: 'Draft',
+    image: 'https://images.unsplash.com/photo-1502699863489-0b04a8b7dd55?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 8,
+    title: 'Santorini Honeymoon',
+    location: 'Greece',
+    dates: 'Jun 05 - Jun 15, 2025',
+    duration: '10 Days',
+    budget: '₹4,80,000',
+    weather: '26° Sunny',
+    packingProgress: '100%',
+    status: 'Archived',
+    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 9,
+    title: 'Safari Adventure',
+    location: 'Kenya',
+    dates: 'Jul 12 - Jul 22, 2026',
+    duration: '10 Days',
+    budget: '₹6,10,000',
+    weather: '28° Sunny',
+    packingProgress: '80%',
+    status: 'Ongoing',
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 10,
+    title: 'Seoul Tech Tour',
+    location: 'South Korea',
+    dates: 'Oct 01 - Oct 08, 2026',
+    duration: '7 Days',
+    budget: '₹2,50,000',
+    weather: '20° Clear',
+    packingProgress: '50%',
+    status: 'Upcoming',
+    image: 'https://images.unsplash.com/photo-1538669715315-16ef7b338334?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: 11,
+    title: 'Maldives Overwater Villa',
+    location: 'Maldives',
+    dates: 'Mar 10 - Mar 17, 2027',
+    duration: '7 Days',
+    budget: '₹7,50,000',
+    weather: '30° Tropical',
+    packingProgress: '15%',
+    status: 'Planning',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=2070&auto=format&fit=crop',
+  }
+];
+
+const FILTERS = ['All', 'Upcoming', 'Ongoing', 'Completed', 'Draft', 'Archived'];
+
+export default function TripsPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('All');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const filteredTrips = useMemo(() => {
+    return MOCK_TRIPS.filter(trip => {
+      const matchesSearch = 
+        trip.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        trip.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        trip.dates.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesFilter = activeFilter === 'All' || trip.status === activeFilter;
+
+      return matchesSearch && matchesFilter;
+    });
+  }, [searchQuery, activeFilter]);
+
+  return (
+    <PageTransition className="col-span-12">
+      <div className="min-h-screen px-6 md:px-10 lg:px-12 pb-24 pt-6">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          <div className="flex flex-col">
+            <motion.h1 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl font-semibold tracking-tighter text-white drop-shadow-sm mb-3"
+            >
+              My Trips
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-lg font-medium text-white/60 tracking-wide"
+            >
+              Plan, manage and revisit every journey.
+            </motion.p>
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Link to={ROUTES.TRIPS_NEW}>
+              <button className="flex items-center gap-2 h-14 px-8 rounded-full ios-liquid-button group">
+                <Plus className="w-5 h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform ios-3d-icon" />
+                <span className="text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create New Trip</span>
+              </button>
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Search & Filters */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex flex-col gap-6 mb-12"
+        >
+          {/* Liquid Glass Search Bar */}
+          <div className={`
+            relative flex items-center w-full max-w-2xl h-16 rounded-[24px]
+            bg-white/5 backdrop-blur-2xl
+            border border-white/10
+            transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)]
+            ${isSearchFocused 
+              ? 'bg-white/10 border-blue-400/50 shadow-[0_12px_40px_rgba(59,130,246,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] -translate-y-1 scale-[1.02]' 
+              : 'hover:bg-white/10 hover:shadow-[0_12px_30px_rgba(0,0,0,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:border-white/20 hover:-translate-y-0.5'}
+          `}>
+            <div className="pl-6 flex items-center pointer-events-none">
+              <Search className={`w-5 h-5 transition-colors duration-700 ${isSearchFocused ? 'text-blue-400' : 'text-white/50'}`} />
+            </div>
+            <input 
+              type="text" 
+              placeholder="Search by country, city, date, or trip name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+              className="w-full h-full bg-transparent border-none outline-none text-white placeholder-white/40 px-5 font-medium text-[15px]"
+            />
+
+          </div>
+
+          {/* Filter Chips */}
+          <div className="flex items-center gap-4 overflow-x-auto pb-6 pt-2 px-2 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+            {FILTERS.map(filter => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`
+                  relative whitespace-nowrap px-7 py-2.5 rounded-[20px] text-[13px] font-bold tracking-wide
+                  backdrop-blur-2xl border
+                  transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  ${activeFilter === filter 
+                    ? 'bg-gradient-to-b from-white/15 to-white/5 text-white border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-1px_1px_rgba(0,0,0,0.1)] saturate-150' 
+                    : 'text-white/50 ios-glass-pill'
+                  }
+                `}
+              >
+                <span className={`block drop-shadow-md ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Trips Grid */}
+        <AnimatePresence mode="wait">
+          {filteredTrips.length > 0 ? (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { staggerChildren: 0.1 } }}
+              exit={{ opacity: 0 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+            >
+              {filteredTrips.map(trip => (
+                <TripCard key={trip.id} trip={trip} />
+              ))}
+            </motion.div>
+          ) : (
+            /* Empty State */
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center justify-center w-full min-h-[400px] rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] ios-3d-element"
+            >
+              <div className="relative w-24 h-24 mb-6 rounded-[24px] bg-gradient-to-br from-white/10 to-transparent border border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] flex items-center justify-center ios-3d-icon">
+                <Compass className="w-12 h-12 text-white/80 drop-shadow-lg" />
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-[0_0_12px_rgba(59,130,246,0.6)]">
+                  <MapPin className="w-3 h-3 text-white" />
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-semibold tracking-tighter text-white mb-2 drop-shadow-md">No trips yet.</h3>
+              <p className="text-white/60 text-[15px] font-medium mb-8 max-w-sm text-center">
+                Your travel library is empty. Let's change that by planning your next unforgettable adventure.
+              </p>
+              
+              <Link to={ROUTES.TRIPS_NEW}>
+                <button className="flex items-center gap-2 h-12 px-8 rounded-full ios-liquid-button text-white group">
+                  <span className="text-[14px] font-bold tracking-wide">Create your first journey</span>
+                </button>
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </PageTransition>
+  );
+}
