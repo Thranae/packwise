@@ -26,8 +26,8 @@ const PlaceCard = ({ place, onSelect }) => {
   const displayImage = image || place.image;
 
   return (
+  return (
     <motion.div
-      layoutId={`card-${place.name}`}
       onClick={() => onSelect(place)}
       className={`group relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-start shrink-0 ${GLASS_BASE} ${HOVER_EFFECTS}`}
     >
@@ -144,11 +144,11 @@ const PlaceModal = ({ place, onClose }) => {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden [perspective:2000px]">
       {/* Blurred Backdrop */}
       <motion.div 
-        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-        animate={{ opacity: 1, backdropFilter: "blur(24px)" }}
-        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-black/60"
+        className="absolute inset-0 bg-black/60 backdrop-blur-2xl"
         onClick={onClose}
       />
       
@@ -163,14 +163,13 @@ const PlaceModal = ({ place, onClose }) => {
 
       {/* Modal Content */}
       <motion.div
-        layoutId={`card-${place.name}`}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ type: "spring", damping: 25, stiffness: 300, mass: 0.8 }}
-        className={`relative w-full max-w-2xl overflow-hidden rounded-[40px] shadow-[0_64px_128px_rgba(0,0,0,0.6),0_16px_32px_rgba(0,0,0,0.4)] bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-3xl ring-1 ring-white/10 isolate`}
+        className={`relative w-full max-w-2xl overflow-hidden rounded-[32px] sm:rounded-[40px] shadow-[0_64px_128px_rgba(0,0,0,0.6),0_16px_32px_rgba(0,0,0,0.4)] bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-3xl ring-1 ring-white/10 isolate`}
       >
-        <div className="absolute inset-0 rounded-inherit border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1)] pointer-events-none z-20" />
+        <div className="absolute inset-0 rounded-[32px] sm:rounded-[40px] border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] pointer-events-none z-20" />
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
         
         {/* Close Button */}
