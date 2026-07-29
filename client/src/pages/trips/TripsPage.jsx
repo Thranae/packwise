@@ -116,21 +116,22 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center whitespace-nowrap px-5 md:px-7 min-h-[40px] md:min-h-[44px] rounded-[20px] text-[13px] font-bold tracking-wide
-                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-2 md:px-7 min-h-[40px] md:min-h-[44px] rounded-[20px] text-[13px] font-bold tracking-wide
+                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
+                  w-[calc((100vw-56px)/3)] md:w-auto md:whitespace-nowrap
                   ${activeFilter === filter 
                     ? 'text-white ring-1 ring-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] saturate-150 scale-105 z-10' 
                     : 'text-white/60 hover:text-white/90 hover:scale-105'
                   }
                 `}
               >
-                <span className={`block drop-shadow-md capitalize ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+                <span className={`block drop-shadow-md capitalize truncate w-full text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
               </button>
             ))}
           </div>
