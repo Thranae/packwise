@@ -750,7 +750,7 @@ export default function PackingPage() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
                   {/* The Animated Checklist Container - Compact */}
-                  <div className="relative w-[210px] h-[150px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-6 scale-95 sm:scale-100">
+                  <div className="relative w-[180px] h-[120px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-90 sm:scale-100">
                     
                     {/* Header */}
                     <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30">
@@ -831,7 +831,7 @@ export default function PackingPage() {
                     </span>
                     
                     {/* Progress Bar */}
-                    <div className="mt-2.5 w-24 h-1 bg-white/10 rounded-full overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
+                    <div className="mt-1.5 w-20 h-1 bg-white/10 rounded-full overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
                        <motion.div 
                          animate={{ x: ['-100%', '200%'] }} 
                          transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
@@ -898,7 +898,7 @@ export default function PackingPage() {
                 return (
                   <div 
                     key={item.id} 
-                    className={`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-300 group relative ios-3d-element print:break-inside-avoid print:bg-white print:border-b print:border-gray-200 print:text-black print:p-2 ${isPacked ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}
+                    className={`flex items-center gap-2.5 py-1.5 px-3 rounded-xl cursor-pointer transition-all duration-300 group relative ios-3d-element print:break-inside-avoid print:bg-white print:border-b print:border-gray-200 print:text-black print:p-2 ${isPacked ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}
                   >
                     <GripVertical className="w-4 h-4 text-white/20 group-hover:text-white/50 cursor-grab active:cursor-grabbing shrink-0 print:hidden" />
                     
@@ -911,7 +911,7 @@ export default function PackingPage() {
                       {isPacked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
                     </button>
                     
-                    <span className={`text-[15px] font-medium transition-all duration-500 flex-1 ${isPacked ? 'text-white/40 line-through print:text-gray-500' : 'text-white/90 print:text-black'}`}>
+                    <span className={`text-[14px] font-medium transition-all duration-500 flex-1 ${isPacked ? 'text-white/40 line-through print:text-gray-500' : 'text-white/90 print:text-black'}`}>
                       {item.text}
                     </span>
                     
