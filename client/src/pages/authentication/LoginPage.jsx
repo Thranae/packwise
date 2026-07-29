@@ -19,6 +19,7 @@ export default function LoginPage() {
   
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isWakingUp, setIsWakingUp] = useState(false);
   const [rememberMe, setRememberMe] = useState(() => {
     return localStorage.getItem('packwise_remembered_email') ? true : false;
   });
@@ -36,15 +37,24 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data) => {
+    let wakeTimer;
     try {
       if (rememberMe) {
         localStorage.setItem('packwise_remembered_email', data.email);
       } else {
         localStorage.removeItem('packwise_remembered_email');
       }
+      
+      // Free-tier backend cold starts take ~50s. Show a message if it takes >3s.
+      wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
+      
       await login(data);
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
       navigate(ROUTES.OVERVIEW, { replace: true });
     } catch (error) {
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
       toast.error(
         error.response?.data?.message || error.message || 'Invalid email or password.'
       );
@@ -54,6 +64,7 @@ export default function LoginPage() {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setIsGoogleLoading(true);
+      let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
       try {
         const res = await api.post('/auth/google', { tokenId: tokenResponse.access_token });
         const data = res.data;
@@ -61,9 +72,13 @@ export default function LoginPage() {
           // Manually set auth state to match standard login
           localStorage.setItem('token', data.data.token);
           setAuthData(data.data.user, data.data.token);
+          clearTimeout(wakeTimer);
+          setIsWakingUp(false);
           navigate(ROUTES.OVERVIEW, { replace: true });
         }
       } catch (error) {
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
         console.error(error);
         toast.error('Google Sign-in failed. Please try again.');
         setIsGoogleLoading(false);
@@ -176,7 +191,12 @@ export default function LoginPage() {
           disabled={isSubmitting || isGoogleLoading}
           className="w-full h-[46px] rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white text-[14px] font-semibold flex items-center justify-center shadow-lg shadow-[var(--color-accent)]/20 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none mt-1"
         >
-          {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Continue'}
+          {isSubmitting ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>{isWakingUp ? 'Waking up server (can take 50s)...' : 'Logging in...'}</span>
+            </div>
+          ) : 'Continue'}
         </button>
 
         {/* Divider */}
@@ -196,7 +216,12 @@ export default function LoginPage() {
           disabled={isGoogleLoading || isSubmitting}
           className="w-full h-[46px] rounded-[14px] glass-card text-[var(--theme-text-primary)] text-[14px] font-medium flex items-center justify-center gap-2 hover:bg-[var(--theme-bg-surface)] transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
         >
-          {isGoogleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+          {isGoogleLoading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>{isWakingUp ? 'Waking up server (can take 50s)...' : 'Connecting to Google...'}</span>
+            </div>
+          ) : (
             <>
               <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
