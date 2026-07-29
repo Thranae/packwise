@@ -3,7 +3,7 @@ import { STORAGE_KEYS } from '../constants/app';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
-  timeout: 30000,
+  timeout: 120000, // Increased to 120s to allow for Render free-tier cold starts
   headers: {
     'Content-Type': 'application/json',
   },
