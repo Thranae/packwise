@@ -48,44 +48,44 @@ export default function AssistantPage() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+            className="flex w-full sm:w-auto p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[24px] sm:rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
           >
             <button
               onClick={() => setMode('chat')}
-              className={`relative flex items-center gap-3 h-14 px-5 pr-7 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 group ${
+              className={`flex-1 sm:flex-none relative flex items-center justify-center gap-2 sm:gap-3 h-12 sm:h-14 px-3 sm:px-5 sm:pr-7 rounded-[20px] sm:rounded-full font-bold text-[13px] sm:text-[15px] tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 group ${
                 mode === 'chat' ? 'text-white' : 'text-white/50 hover:text-white/90'
               }`}
             >
               {mode === 'chat' && (
                 <motion.div 
                   layoutId="activeSegment"
-                  className="absolute inset-0 bg-white/10 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)] border border-white/10 -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-[20px] sm:rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)] border border-white/10 -z-10"
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 />
               )}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ios-liquid-button ${mode === 'chat' ? 'bg-blue-500/20 border-blue-400/30 shadow-[0_8px_16px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] scale-100' : 'bg-white/5 border-white/10 scale-90 opacity-70 group-hover:opacity-100 group-hover:scale-100 group-hover:border-blue-400/20 group-hover:bg-blue-500/10'}`}>
-                <MessageSquare className={`w-5 h-5 transition-all duration-500 ${mode === 'chat' ? 'text-blue-400 drop-shadow-[0_0_12px_rgba(96,165,250,0.8)]' : 'text-white/50 group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]'}`} />
+              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-[14px] sm:rounded-full flex items-center justify-center transition-all duration-500 ios-liquid-button ${mode === 'chat' ? 'bg-blue-500/20 border-blue-400/30 shadow-[0_8px_16px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] scale-100' : 'bg-white/5 border-white/10 scale-90 opacity-70 group-hover:opacity-100 group-hover:scale-100 group-hover:border-blue-400/20 group-hover:bg-blue-500/10'}`}>
+                <MessageSquare className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-500 ${mode === 'chat' ? 'text-blue-400 drop-shadow-[0_0_12px_rgba(96,165,250,0.8)]' : 'text-white/50 group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]'}`} />
               </div>
-              <span>AI Chat</span>
+              <span className="whitespace-nowrap">AI Chat</span>
             </button>
 
             <button
               onClick={() => setMode('builder')}
-              className={`relative flex items-center gap-3 h-14 px-5 pr-7 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 group ${
+              className={`flex-1 sm:flex-none relative flex items-center justify-center gap-2 sm:gap-3 h-12 sm:h-14 px-3 sm:px-5 sm:pr-7 rounded-[20px] sm:rounded-full font-bold text-[13px] sm:text-[15px] tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 group ${
                 mode === 'builder' ? 'text-white' : 'text-white/50 hover:text-white/90'
               }`}
             >
               {mode === 'builder' && (
                 <motion.div 
                   layoutId="activeSegment"
-                  className="absolute inset-0 bg-white/10 rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)] border border-white/10 -z-10"
+                  className="absolute inset-0 bg-white/10 rounded-[20px] sm:rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.1)] border border-white/10 -z-10"
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 />
               )}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ios-liquid-button ${mode === 'builder' ? 'bg-emerald-500/20 border-emerald-400/30 shadow-[0_8px_16px_rgba(52,211,153,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] scale-100' : 'bg-white/5 border-white/10 scale-90 opacity-70 group-hover:opacity-100 group-hover:scale-100 group-hover:border-emerald-400/20 group-hover:bg-emerald-500/10'}`}>
-                <Map className={`w-5 h-5 transition-all duration-500 ${mode === 'builder' ? 'text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]' : 'text-white/50 group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]'}`} />
+              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-[14px] sm:rounded-full flex items-center justify-center transition-all duration-500 ios-liquid-button ${mode === 'builder' ? 'bg-emerald-500/20 border-emerald-400/30 shadow-[0_8px_16px_rgba(52,211,153,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] scale-100' : 'bg-white/5 border-white/10 scale-90 opacity-70 group-hover:opacity-100 group-hover:scale-100 group-hover:border-emerald-400/20 group-hover:bg-emerald-500/10'}`}>
+                <Map className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-500 ${mode === 'builder' ? 'text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]' : 'text-white/50 group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]'}`} />
               </div>
-              <span>Trip Builder</span>
+              <span className="whitespace-nowrap">Trip Builder</span>
             </button>
           </motion.div>
         </div>

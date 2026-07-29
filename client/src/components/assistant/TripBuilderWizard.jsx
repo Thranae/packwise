@@ -252,22 +252,22 @@ export const TripBuilderWizard = () => {
                     </div>
                     <div>
                       <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Estimated Budget Level</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+                      <div className="grid grid-cols-3 gap-2 sm:gap-5">
                         {['Budget', 'Moderate', 'Luxury'].map((b) => {
                           const isActive = budget === b;
                           return (
                             <div 
                               key={b} 
                               onClick={() => setBudget(b)}
-                              className={`group/budget relative overflow-hidden rounded-[24px] p-4 sm:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                              className={`group/budget relative overflow-hidden rounded-[16px] sm:rounded-[24px] p-2 sm:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                                 isActive 
-                                  ? 'bg-white/[0.12] backdrop-blur-3xl border-[1.5px] border-white/30 border-t-white/60 border-l-white/50 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_4px_12px_rgba(255,255,255,0.3)] scale-[1.02] ring-4 ring-indigo-400/20' 
+                                  ? 'bg-white/[0.12] backdrop-blur-3xl border-[1.5px] border-white/30 border-t-white/60 border-l-white/50 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_4px_12px_rgba(255,255,255,0.3)] scale-[1.02] ring-2 sm:ring-4 ring-indigo-400/20' 
                                   : 'bg-white/[0.03] backdrop-blur-2xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_24px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.2)]'
                               }`}
                             >
                               {isActive && <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />}
                               <DollarSignIcon count={b === 'Budget' ? 1 : b === 'Moderate' ? 2 : 3} isActive={isActive} level={b} />
-                              <span className={`mt-3 text-[14px] sm:text-[15px] font-bold tracking-wide transition-colors duration-500 ${isActive ? 'text-white drop-shadow-md' : 'text-white/60 group-hover/budget:text-white/90'}`}>{b}</span>
+                              <span className={`mt-2 sm:mt-3 text-[11px] sm:text-[15px] font-bold tracking-wide transition-colors duration-500 ${isActive ? 'text-white drop-shadow-md' : 'text-white/60 group-hover/budget:text-white/90'}`}>{b}</span>
                             </div>
                           );
                         })}
