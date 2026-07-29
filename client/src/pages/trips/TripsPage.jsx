@@ -116,15 +116,15 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-4 pt-1 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-2 md:px-7 min-h-[40px] md:min-h-[44px] rounded-[20px] text-[13px] font-bold tracking-wide
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-4 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[12px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-[calc((100vw-56px)/3)] md:w-auto md:whitespace-nowrap outline-none
+                  md:w-auto md:whitespace-nowrap outline-none
                   ${activeFilter === filter 
                     ? 'text-white scale-105 z-10' 
                     : 'text-white/60 hover:text-white/90 hover:scale-105'
@@ -135,11 +135,11 @@ export default function TripsPage() {
                 {activeFilter === filter && (
                   <motion.div
                     layoutId="tripsFilterActive"
-                    className="absolute inset-0 rounded-[20px] bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150 pointer-events-none"
+                    className="absolute inset-0 rounded-full bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150 pointer-events-none"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <span className={`relative z-10 block drop-shadow-md capitalize truncate w-full text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+                <span className={`relative z-10 block drop-shadow-md capitalize truncate text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
               </button>
             ))}
           </div>
