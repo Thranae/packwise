@@ -16,10 +16,15 @@ export function BottomNav() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden pb-4 pt-2 px-4">
-      <div className="w-full h-[72px] rounded-[36px] bg-[#0A0F1E]/20 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-1px_1px_rgba(255,255,255,0.05)] flex items-center justify-around px-2 relative overflow-hidden">
-        {/* Subtle Shine Layer */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5 opacity-50 pointer-events-none" />
+      <div className="w-full h-[72px] relative flex items-center justify-around px-2">
         
+        {/* Glass Background Layer (handles overflow-hidden and rounded corners) */}
+        <div className="absolute inset-0 rounded-[36px] bg-[#0A0F1E]/20 backdrop-blur-[40px] backdrop-saturate-[200%] border border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-1px_1px_rgba(255,255,255,0.05)] overflow-hidden pointer-events-none">
+          {/* Subtle Shine Layer */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5 opacity-50" />
+        </div>
+        
+        {/* Nav Items (Foreground) */}
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -28,7 +33,7 @@ export function BottomNav() {
             <NavLink
               key={item.path}
               to={item.path}
-              className={`relative flex flex-col items-center justify-center w-14 h-full rounded-[20px] transition-all duration-300 ${item.isCenter ? '-mt-7' : ''} group`}
+              className={`relative flex flex-col items-center justify-center w-14 h-full rounded-[20px] transition-all duration-300 z-10 ${item.isCenter ? '-mt-7' : ''} group`}
             >
               {isActive && !item.isCenter && (
                 <motion.div
