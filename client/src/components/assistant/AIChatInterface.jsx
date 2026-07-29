@@ -116,7 +116,7 @@ export const AIChatInterface = () => {
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col h-[calc(100vh-220px)] max-h-[800px] w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
+      className="flex flex-col flex-1 h-full min-h-[400px] w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
     >
       
       {/* Header */}
@@ -224,24 +224,24 @@ export const AIChatInterface = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 sm:p-6 bg-white/[0.02] border-t border-white/5 z-10 relative">
-        <div className="flex items-center gap-3 sm:gap-4">
+      <div className="p-3 sm:p-6 bg-white/[0.02] border-t border-white/5 z-10 relative shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask me anything about your travel plans..." 
-            className="flex-1 w-full h-14 px-6 text-[15px] rounded-[20px] bg-white/5 border border-white/10 text-white placeholder-white/40 outline-none focus:bg-white/10 focus:border-white/20 transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+            className="flex-1 w-full h-12 sm:h-14 px-4 sm:px-6 text-[14px] sm:text-[15px] rounded-[16px] sm:rounded-[20px] bg-white/5 border border-white/10 text-white placeholder-white/40 outline-none focus:bg-white/10 focus:border-white/20 transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
           />
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSend}
             disabled={!input.trim() || isLoading || isExecutingAction}
-            className="w-14 h-14 shrink-0 rounded-[20px] bg-gradient-to-br from-indigo-500 to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-300 shadow-[0_8px_16px_rgba(99,102,241,0.4)]"
+            className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-[16px] sm:rounded-[20px] bg-gradient-to-br from-indigo-500 to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-300 shadow-[0_8px_16px_rgba(99,102,241,0.4)]"
           >
-            <Send className="w-6 h-6 ml-1 text-white" strokeWidth={2.5} />
+            <Send className="w-5 h-5 sm:w-6 sm:h-6 ml-1 text-white" strokeWidth={2.5} />
           </motion.button>
         </div>
       </div>
