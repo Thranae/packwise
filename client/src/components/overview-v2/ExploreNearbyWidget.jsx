@@ -125,10 +125,13 @@ const PlaceCardSkeleton = () => (
   </div>
 );
 
+import { useHaptics } from '@/hooks/useHaptics';
+
 const PlaceModal = ({ place, onClose }) => {
   const { currentTrip } = useTripContext();
   const { playSound } = useSoundEffect();
   const { addToast } = useToast();
+  const { lightTap } = useHaptics();
   const imageQuery = place.imageQuery || `${place.name} ${currentTrip?.destination || ''}`;
   const { image, loading } = useDestinationImage(imageQuery, 'explore');
   const displayImage = image || place.image;
@@ -139,62 +142,61 @@ const PlaceModal = ({ place, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
+  const handleDragEnd = (event, info) => {
+    if (info.offset.y > 100 || info.velocity.y > 500) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden [perspective:2000px]">
+    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-6 overflow-hidden">
       {/* Blurred Frosted Glass Backdrop */}
       <motion.div 
         initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-        animate={{ opacity: 1, backdropFilter: "blur(40px)" }}
+        animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
         exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-white/[0.02] saturate-150"
+        transition={{ duration: 0.5 }}
+        className="absolute inset-0 bg-black/60"
         onClick={onClose}
-      >
-        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
-      </motion.div>
-      
-      {/* 3D Modal Glow Behind */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute w-[80vw] max-w-4xl h-[60vh] bg-gradient-to-br from-blue-500/40 via-indigo-500/30 to-emerald-500/30 blur-[120px] rounded-full mix-blend-screen pointer-events-none"
       />
-
-      {/* Modal Content */}
+      
+      {/* Modal / Bottom Sheet Content */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.85, y: 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`relative w-full max-w-2xl overflow-hidden rounded-[32px] sm:rounded-[40px] shadow-[0_64px_128px_rgba(0,0,0,0.6),0_16px_32px_rgba(0,0,0,0.4)] bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-3xl ring-1 ring-white/10 isolate`}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.4}
+        onDragEnd={handleDragEnd}
+        initial={{ opacity: 0, y: "100%" }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="relative w-full md:w-[80vw] max-w-2xl h-[85vh] md:h-auto md:max-h-[85vh] overflow-hidden rounded-t-[40px] md:rounded-[40px] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] md:shadow-[0_32px_64px_rgba(0,0,0,0.5)] bg-[#0B1120] border-t border-white/20 md:border isolate flex flex-col will-change-transform"
       >
-        <div className="absolute inset-0 rounded-[32px] sm:rounded-[40px] border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] pointer-events-none z-20" />
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+        {/* Drag Pill (Mobile Only) */}
+        <div className="md:hidden absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/30 rounded-full z-[100]" />
         
-        {/* Close Button */}
+        {/* Close Button (Desktop Only) */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all text-white/80 hover:text-white hover:scale-105 active:scale-95"
+          className="hidden md:flex absolute top-4 right-4 z-50 w-10 h-10 items-center justify-center rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-md border border-white/20 transition-all text-white/80 hover:text-white hover:scale-105 active:scale-95"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex flex-col md:flex-row h-full max-h-[80vh]">
+        <div className="flex flex-col md:flex-row flex-1 h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
           {/* Image Section */}
-          <div className="relative w-full md:w-2/5 h-[240px] md:h-auto shrink-0 overflow-hidden">
+          <div className="relative w-full md:w-2/5 h-[35vh] md:h-auto shrink-0 overflow-hidden">
             {loading ? (
               <div className="absolute inset-0 bg-white/5 animate-pulse" />
             ) : (
               <img src={displayImage} alt={place.name} className="absolute inset-0 w-full h-full object-cover" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-gradient-to-r md:from-transparent md:via-black/20 md:to-black/80 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-[#0B1120]/60 to-transparent md:bg-gradient-to-r md:from-transparent md:via-[#0B1120]/60 md:to-[#0B1120] pointer-events-none" />
             
             {/* Top Left Badge */}
-            <div className="absolute top-4 left-4 z-10 [transform-style:preserve-3d]">
-              <div className="ios-liquid-button px-4 py-1.5 rounded-full flex items-center justify-center shadow-md group">
-                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:[transform:translateZ(12px)]">
+            <div className="absolute top-8 md:top-4 left-6 md:left-4 z-10">
+              <div className="ios-liquid-button px-4 py-1.5 rounded-full flex items-center justify-center shadow-md">
+                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-white">
                   {place.category}
                 </span>
               </div>
@@ -202,45 +204,45 @@ const PlaceModal = ({ place, onClose }) => {
           </div>
 
           {/* Content Section */}
-          <div className="relative flex-1 p-6 md:p-8 flex flex-col justify-center overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="relative flex-1 p-6 md:p-8 flex flex-col justify-start md:justify-center -mt-8 md:mt-0 z-20">
             <div className="flex items-center gap-1 text-yellow-400 drop-shadow-md mb-2">
               <Star className="w-4 h-4 fill-current" />
               <span className="text-sm font-bold text-white tracking-wide">{place.rating}</span>
             </div>
             
-            <h2 className="text-3xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mb-4 tracking-tight leading-tight">{place.name}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-white drop-shadow-md mb-4 tracking-tight leading-tight">{place.name}</h2>
             
             <p className="text-sm font-medium text-white/80 leading-relaxed mb-8">
               {place.desc}
             </p>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-8 shrink-0">
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
                 <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-blue-400/20 to-blue-600/5 border border-blue-400/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                   <Navigation className="w-4 h-4 text-blue-300" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-0.5">Distance</div>
-                  <div className="text-sm font-bold text-white drop-shadow-md">{place.distance}</div>
+                  <div className="text-sm font-bold text-white drop-shadow-md truncate">{place.distance}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
                 <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400/20 to-emerald-600/5 border border-emerald-400/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
                   <Clock className="w-4 h-4 text-emerald-300" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-0.5">Travel Time</div>
-                  <div className="text-sm font-bold text-white drop-shadow-md">{place.time}</div>
+                  <div className="text-sm font-bold text-white drop-shadow-md truncate">{place.time}</div>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-3 mt-auto">
-              <button onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(selectedPlace.name + ' ' + selectedPlace.vicinity)}`, '_blank')} className="flex-[2] flex items-center justify-center gap-2 py-3 rounded-2xl ios-liquid-button text-white group hover:!bg-gradient-to-br hover:from-sky-400 hover:to-blue-600 hover:shadow-[0_20px_40px_rgba(14,165,233,0.5),inset_0_2px_6px_rgba(255,255,255,0.6)] hover:-translate-y-2 hover:scale-[1.04] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+            <div className="flex gap-3 mt-auto md:mt-0 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-0 shrink-0">
+              <button onClick={() => { lightTap?.(); window.open(`https://maps.google.com/?q=${encodeURIComponent(place.name + ' ' + place.vicinity)}`, '_blank'); }} className="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-2xl ios-liquid-button text-white group hover:!bg-gradient-to-br hover:from-sky-400 hover:to-blue-600 hover:shadow-[0_20px_40px_rgba(14,165,233,0.5),inset_0_2px_6px_rgba(255,255,255,0.6)] hover:-translate-y-1 transition-all duration-300">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm font-bold drop-shadow-md">Get Directions</span>
               </button>
-              <button onClick={() => { playSound('tap'); addToast('success', `${selectedPlace.name} saved!`); }} className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl ios-liquid-button text-white group/heart">
+              <button onClick={() => { playSound?.('tap'); addToast('success', `${place.name} saved!`); }} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl ios-liquid-button text-white group/heart hover:-translate-y-1 transition-all duration-300">
                 <Heart className="w-4 h-4 group-hover/heart:text-rose-400 group-hover/heart:fill-rose-400/50 transition-colors" />
                 <span className="text-sm font-bold drop-shadow-md group-hover/heart:text-rose-100">Save</span>
               </button>
