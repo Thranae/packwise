@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { LogoIcon } from '@/components/ui/Logo';
 import { useTripContext } from '@/context/TripContext';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import api from '@/services/api';
 
 export const AIAssistantWidget = ({ className = "" }) => {
@@ -49,7 +51,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className={`relative p-4 sm:p-5 flex flex-col justify-between h-[400px] sm:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
+      className={`relative p-4 sm:p-5 flex flex-col justify-between h-[450px] sm:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
     >
       <div className="flex flex-col gap-2 ios-3d-element flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 mb-3">
         
@@ -119,8 +121,22 @@ export const AIAssistantWidget = ({ className = "" }) => {
               >
                 <ArrowLeft className="w-3 h-3" /> Back
               </button>
-              <div className="p-4 rounded-[20px] bg-white/10 border border-white/20 text-sm text-white/90 leading-relaxed shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-                {chatResponse}
+              <div className="p-4 rounded-[20px] bg-white/10 border border-white/20 text-sm text-white/90 leading-relaxed shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] markdown-content">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 space-y-1" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 space-y-1" {...props} />,
+                    li: ({node, ...props}) => <li className="pl-1" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-semibold text-white" {...props} />,
+                    h1: ({node, ...props}) => <h1 className="text-white font-bold text-lg mt-3 mb-1" {...props} />,
+                    h2: ({node, ...props}) => <h2 className="text-white font-bold text-base mt-3 mb-1" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-white font-semibold mt-2 mb-1" {...props} />,
+                  }}
+                >
+                  {chatResponse}
+                </ReactMarkdown>
               </div>
             </motion.div>
           )}
