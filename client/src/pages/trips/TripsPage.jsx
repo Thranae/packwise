@@ -118,18 +118,18 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-4 pt-1 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex items-center justify-between w-full gap-2 md:gap-3 pb-4 pt-1 relative z-20">
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => { setActiveFilter(filter); lightTap(); }}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-4 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
-                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-auto md:whitespace-nowrap outline-none
+                  ios-liquid-button flex-1 relative flex items-center justify-center min-h-[40px] md:min-h-[44px] rounded-full text-[12px] font-bold tracking-wider uppercase
+                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  outline-none
                   ${activeFilter === filter 
-                    ? 'text-white scale-105 z-10' 
-                    : 'text-white/60 hover:text-white/90 hover:scale-105'
+                    ? 'text-white z-10' 
+                    : 'text-white/60 hover:text-white/90'
                   }
                 `}
                 style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -141,7 +141,7 @@ export default function TripsPage() {
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <span className={`relative z-10 block drop-shadow-md capitalize truncate text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+                <span className={`relative z-10 block drop-shadow-md truncate text-center transition-transform duration-500 ${activeFilter === filter ? 'scale-105' : 'ios-3d-element'}`}>{filter}</span>
               </button>
             ))}
           </div>
