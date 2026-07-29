@@ -143,13 +143,13 @@ const PlaceModal = ({ place, onClose }) => {
   }, [onClose]);
 
   const y = useMotionValue(0);
-  const pillWidth = useTransform(y, [0, 200], [48, 80]);
+  const pillWidth = useTransform(y, [0, 150], [70, 120]);
   const pillOpacity = useTransform(y, [0, 100], [0.8, 1]);
   const pillColor = useTransform(y, [0, 100], ["rgba(255,255,255,0.7)", "rgba(255,255,255,1)"]);
 
   const handleDragEnd = (event, info) => {
     // Easier close threshold:
-    if (info.offset.y > 60 || info.velocity.y > 250) {
+    if (info.offset.y > 40 || info.velocity.y > 150) {
       onClose();
     }
   };
@@ -183,7 +183,7 @@ const PlaceModal = ({ place, onClose }) => {
         {/* Drag Pill (Mobile Only) */}
         <motion.div 
           style={{ width: pillWidth, opacity: pillOpacity, backgroundColor: pillColor }}
-          className="md:hidden absolute top-3 left-1/2 -translate-x-1/2 h-1.5 rounded-full z-[100] shadow-[0_2px_4px_rgba(0,0,0,0.5)] border border-white/30" 
+          className="md:hidden absolute top-4 left-1/2 -translate-x-1/2 h-2.5 rounded-full z-[100] shadow-[0_2px_4px_rgba(0,0,0,0.5)] border border-white/30" 
         />
         
         {/* Close Button (Desktop Only) */}
