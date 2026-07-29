@@ -742,36 +742,36 @@ export default function PackingPage() {
         </div>
         
         <div className="grid flex-1 relative">
-              {/* AI Scanner Overlay - The Checklist Auto-Fills Theme */}
+              {/* AI Scanner Overlay - Compact PWA Widget Theme */}
               {isAiLoading && cat.id === 1 && (
-                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/10 flex flex-col items-center justify-center">
+                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-slate-900/90 backdrop-blur-xl border-t border-white/10 flex flex-col items-center justify-center">
                   
                   {/* Minimalist Grid Background */}
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
-                  {/* The Animated Checklist Container */}
-                  <div className="relative w-[230px] h-[260px] bg-slate-800 rounded-2xl border-[3px] border-slate-700 shadow-2xl flex flex-col mt-2 mb-6 overflow-hidden z-10">
+                  {/* The Animated Checklist Container - Compact */}
+                  <div className="relative w-[210px] h-[150px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-6 scale-95 sm:scale-100">
                     
                     {/* Header */}
-                    <div className="w-full h-12 bg-slate-900 border-b-[3px] border-slate-700 flex items-center justify-center px-4 z-30 shadow-md">
-                       <span className="text-[11px] font-bold tracking-[0.2em] text-slate-300">TRIP MANIFEST</span>
+                    <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30">
+                       <span className="text-[9px] font-bold tracking-[0.25em] text-white/50">TRIP MANIFEST</span>
                     </div>
 
                     {/* Scrolling List Area */}
-                    <div className="flex-1 relative w-full overflow-hidden bg-slate-800/50">
+                    <div className="flex-1 relative w-full overflow-hidden bg-transparent">
                       
                       {/* Selection Highlight Box (Static in center) */}
-                      <div className="absolute left-3 right-3 h-[56px] bg-emerald-500/10 border-2 border-emerald-500/40 rounded-xl pointer-events-none z-20 shadow-[inset_0_0_15px_rgba(52,211,153,0.1)]" style={{ top: '68px' }} />
+                      <div className="absolute left-2.5 right-2.5 h-[42px] bg-emerald-500/10 border border-emerald-500/30 rounded-xl pointer-events-none z-20 shadow-[inset_0_0_12px_rgba(52,211,153,0.15)]" style={{ top: '34px' }} />
 
                       {/* Top and Bottom Fade Gradients */}
-                      <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-slate-800 to-transparent z-30 pointer-events-none" />
-                      <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-slate-800 to-transparent z-30 pointer-events-none" />
+                      <div className="absolute top-0 left-0 w-full h-6 bg-gradient-to-b from-[#020617] to-transparent z-30 pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-[#020617] to-transparent z-30 pointer-events-none" />
 
                       {/* The Scrolling Content */}
                       <motion.div 
-                        className="w-[calc(100%-24px)] flex flex-col gap-2 z-10 absolute left-3"
-                        style={{ top: '68px' }}
-                        animate={{ y: [0, 0, -64, -64, -128, -128, -192, -192, -256, -256, -320, -320, -384, -384] }}
+                        className="w-[calc(100%-20px)] flex flex-col gap-2 z-10 absolute left-2.5"
+                        style={{ top: '34px' }}
+                        animate={{ y: [0, 0, -50, -50, -100, -100, -150, -150, -200, -200, -250, -250, -300, -300] }}
                         transition={{ 
                           duration: 4.5, 
                           repeat: Infinity, 
@@ -788,16 +788,16 @@ export default function PackingPage() {
                           { id: 6, label: "ACCESSORIES", icon: Glasses, color: "text-cyan-400 bg-cyan-500/20 border-cyan-500/30" },
                           { id: 7, label: "SHIRTS & TOPS", icon: Shirt, color: "text-blue-400 bg-blue-500/20 border-blue-500/30" }, // Duplicate for seamless loop
                          ].map((item, index) => (
-                           <div key={`list-item-${index}`} className="w-full h-[56px] bg-slate-700/80 rounded-xl flex items-center px-3 shadow-sm border border-slate-600 flex-shrink-0">
+                           <div key={`list-item-${index}`} className="w-full h-[42px] bg-white/5 rounded-xl flex items-center px-2.5 shadow-sm border border-white/5 flex-shrink-0">
                              {/* Item Icon */}
-                             <div className={`w-9 h-9 rounded-lg flex items-center justify-center border ${item.color}`}>
-                               <item.icon className="w-5 h-5 drop-shadow-sm" strokeWidth={2.5} />
+                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${item.color}`}>
+                               <item.icon className="w-4 h-4 drop-shadow-sm" strokeWidth={2.5} />
                              </div>
                              
                              {/* Item Text */}
-                             <div className="flex flex-col ml-3 justify-center">
-                                <span className="text-[10px] font-bold text-slate-200 tracking-wider drop-shadow-sm">{item.label}</span>
-                                <span className="text-[8px] text-slate-400 mt-0.5 font-medium">Auto-sorting...</span>
+                             <div className="flex flex-col ml-2.5 justify-center">
+                                <span className="text-[10px] font-bold text-white tracking-wider drop-shadow-sm truncate max-w-[90px]">{item.label}</span>
+                                <span className="text-[8px] text-white/50 mt-0 font-medium">Auto-sorting...</span>
                              </div>
 
                              {/* The Furious Checkmark! */}
@@ -816,7 +816,7 @@ export default function PackingPage() {
                                  ]
                                }}
                              >
-                                <CheckCircle2 className="w-6 h-6 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]" strokeWidth={3} />
+                                <CheckCircle2 className="w-5 h-5 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]" strokeWidth={3} />
                              </motion.div>
                            </div>
                          ))}
@@ -825,19 +825,16 @@ export default function PackingPage() {
                   </div>
 
                   {/* Gamified Typography */}
-                  <div className="absolute bottom-6 flex flex-col items-center z-30">
-                    <span className="text-[12px] font-bold tracking-[0.25em] text-emerald-400 uppercase drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">
+                  <div className="absolute bottom-5 flex flex-col items-center z-30">
+                    <span className="text-[10px] font-bold tracking-[0.25em] text-emerald-400 uppercase drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]">
                       AUTO-PACKING
-                    </span>
-                    <span className="text-[10px] text-slate-400 mt-2 font-medium tracking-widest uppercase">
-                      Organizing Items...
                     </span>
                     
                     {/* Progress Bar */}
-                    <div className="mt-4 w-28 h-1 bg-slate-800 rounded-full overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
+                    <div className="mt-2.5 w-24 h-1 bg-white/10 rounded-full overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
                        <motion.div 
                          animate={{ x: ['-100%', '200%'] }} 
-                         transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                         transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
                          className="absolute top-0 left-0 w-1/2 h-full bg-emerald-500 rounded-full shadow-[0_0_10px_#34d399]" 
                        />
                     </div>
