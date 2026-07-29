@@ -142,31 +142,33 @@ const PlaceModal = ({ place, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden [perspective:2000px]">
-      {/* Blurred Backdrop */}
+      {/* Blurred Frosted Glass Backdrop */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-black/60 backdrop-blur-2xl"
+        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        animate={{ opacity: 1, backdropFilter: "blur(40px)" }}
+        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute inset-0 bg-[#060b14]/50 saturate-150"
         onClick={onClose}
-      />
+      >
+        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+      </motion.div>
       
       {/* 3D Modal Glow Behind */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className="absolute w-[80vw] max-w-4xl h-[60vh] bg-gradient-to-br from-blue-500/40 via-indigo-500/30 to-emerald-500/30 blur-[120px] rounded-full mix-blend-screen pointer-events-none"
       />
 
       {/* Modal Content */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.85, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300, mass: 0.8 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className={`relative w-full max-w-2xl overflow-hidden rounded-[32px] sm:rounded-[40px] shadow-[0_64px_128px_rgba(0,0,0,0.6),0_16px_32px_rgba(0,0,0,0.4)] bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-3xl ring-1 ring-white/10 isolate`}
       >
         <div className="absolute inset-0 rounded-[32px] sm:rounded-[40px] border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] pointer-events-none z-20" />
