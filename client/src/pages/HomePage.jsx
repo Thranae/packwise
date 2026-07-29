@@ -131,8 +131,8 @@ export default function HomePage() {
               </motion.div>
             </motion.div>
 
-            {/* Hero Right Visuals - 6 Floating Cards */}
-            <div className="lg:col-span-6 relative h-[700px] w-full hidden lg:block perspective-[1200px] z-10">
+            {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
+            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-8 lg:mt-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center">
               
               {/* Center Map / Main Art */}
               <motion.div style={{ y: floatY2 }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
