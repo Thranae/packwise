@@ -252,50 +252,64 @@ export const Navbar = () => {
       {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed top-24 left-4 right-4 z-50 glass-card p-4 sm:hidden flex flex-col gap-2 shadow-2xl"
-          >
-            {isAuthenticated ? (
-              <>
-                <div className="flex items-center gap-3 px-4 py-3 mb-2 border-b border-border-subtle">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-bold text-white">
-                    {getInitials(user?.name || 'Thranae')}
+          <div key="mobile-menu" className="fixed inset-0 z-[90] sm:hidden">
+            {/* Blurred Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => { playSound('tap'); setMobileMenuOpen(false); }}
+              className="absolute inset-0 bg-[#060B14]/60 backdrop-blur-md"
+            />
+            
+            {/* Menu Card */}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute top-[96px] left-4 right-4 bg-[#0A101C]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_40px_100px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+            >
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center gap-3 px-4 py-4 mb-2 border-b border-white/10">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 text-sm font-bold text-white shadow-inner border border-white/20">
+                      {getInitials(user?.name || 'Thranae')}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white">{user?.name || 'Thranae'}</span>
+                      <span className="text-xs text-white/60">{user?.email}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="font-medium text-text-primary">{user?.name || 'Thranae'}</span>
-                    <span className="text-xs text-text-secondary">{user?.email}</span>
-                  </div>
-                </div>
-                {navItems.map((item) => (
-                  <Link key={item.name} to={item.path} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-text-secondary hover:bg-[var(--theme-bg-surface)] hover:text-text-primary transition-colors">
-                    <item.icon className="h-5 w-5" />
-                    {item.name}
+                  {navItems.map((item) => (
+                    <Link key={item.name} to={item.path} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-white/70 hover:bg-white/10 hover:text-white transition-colors font-medium">
+                      <item.icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  ))}
+                  <div className="h-px w-full bg-white/10 my-1" />
+                  <Link to={ROUTES.SETTINGS} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-white/70 hover:bg-white/10 hover:text-white transition-colors font-medium">
+                    <Settings className="h-5 w-5" />
+                    Settings
                   </Link>
-                ))}
-                <Link to={ROUTES.SETTINGS} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-text-secondary hover:bg-[var(--theme-bg-surface)] hover:text-text-primary transition-colors">
-                  <Settings className="h-5 w-5" />
-                  Settings
-                </Link>
-                <button onClick={logout} className="flex items-center w-full gap-3 px-4 py-3 mt-2 rounded-[16px] text-error-500 hover:bg-error-500/10 transition-colors">
-                  <LogOut className="h-5 w-5" />
-                  Log out
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-3 mt-2">
-                <Link to={ROUTES.LOGIN} className="w-full">
-                  <button className="w-full px-5 py-3 rounded-[14px] ios-liquid-button text-white font-medium shadow-md">Log in</button>
-                </Link>
-                <Link to={ROUTES.SIGNUP} className="w-full">
-                  <button className="w-full px-5 py-3 rounded-[14px] ios-liquid-button text-white font-bold shadow-lg">Sign up</button>
-                </Link>
-              </div>
-            )}
-          </motion.div>
+                  <button onClick={logout} className="flex items-center w-full gap-3 px-4 py-3 rounded-[16px] text-red-400 hover:bg-red-500/20 transition-colors font-medium">
+                    <LogOut className="h-5 w-5" />
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col gap-3 mt-2 p-2">
+                  <Link to={ROUTES.LOGIN} className="w-full">
+                    <button className="w-full px-5 py-3.5 rounded-[16px] bg-white/10 hover:bg-white/20 text-white font-bold transition-colors">Log in</button>
+                  </Link>
+                  <Link to={ROUTES.SIGNUP} className="w-full">
+                    <button className="w-full px-5 py-3.5 rounded-[16px] bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white font-bold shadow-lg shadow-blue-500/30 transition-all">Get Started</button>
+                  </Link>
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>
