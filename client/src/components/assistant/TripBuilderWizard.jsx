@@ -104,6 +104,7 @@ export const TripBuilderWizard = () => {
   const [prompt, setPrompt] = useState("");
   const [startCity, setStartCity] = useState("");
   const [duration, setDuration] = useState("");
+  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [budget, setBudget] = useState("Moderate");
   const [styles, setStyles] = useState([]);
   const [males, setMales] = useState(1);
@@ -126,7 +127,7 @@ export const TripBuilderWizard = () => {
     playSound('tap');
     const flightContext = startCity ? ` Flying from ${startCity}.` : "";
     const genderContext = (males > 0 || females > 0) ? ` Travelers: ${males + females} total (${males} male, ${females} female).` : "";
-    const fullPrompt = `Destination: ${prompt}.${flightContext} Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
+    const fullPrompt = `Destination: ${prompt}.${flightContext} Start Date: ${startDate}. Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     await generateTrip(fullPrompt);
     successTap();
     playSound('success');
@@ -231,33 +232,48 @@ export const TripBuilderWizard = () => {
 
                 {step === 2 && (
                   <div className="space-y-5 sm:space-y-6">
-                    <div>
-                      <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">How long is your trip?</label>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 bg-white/[0.03] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)]">
-                          <button 
-                            onClick={() => setDuration(Math.max(1, (parseInt(duration) || 7) - 1))}
-                            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
-                          >
-                            <Minus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
-                          </button>
-                          
-                          <input 
-                            type="number" 
-                            value={duration}
-                            onChange={(e) => setDuration(e.target.value)}
-                            placeholder="7" 
-                            className="w-16 h-12 text-center text-3xl font-black bg-transparent text-white placeholder-white/20 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none drop-shadow-md transition-all duration-300" 
-                          />
-                          
-                          <button 
-                            onClick={() => setDuration((parseInt(duration) || 7) + 1)}
-                            className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
-                          >
-                            <Plus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
-                          </button>
+                    <div className="flex flex-col md:flex-row gap-5 sm:gap-6">
+                      <div className="flex-1">
+                        <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">How long is your trip?</label>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2 bg-white/[0.03] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)]">
+                            <button 
+                              onClick={() => setDuration(Math.max(1, (parseInt(duration) || 7) - 1))}
+                              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
+                            >
+                              <Minus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
+                            </button>
+                            
+                            <input 
+                              type="number" 
+                              value={duration}
+                              onChange={(e) => setDuration(e.target.value)}
+                              placeholder="7" 
+                              className="w-16 h-12 text-center text-3xl font-black bg-transparent text-white placeholder-white/20 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none drop-shadow-md transition-all duration-300" 
+                            />
+                            
+                            <button 
+                              onClick={() => setDuration((parseInt(duration) || 7) + 1)}
+                              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
+                            >
+                              <Plus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
+                            </button>
+                          </div>
+                          <span className="text-xl font-bold text-white/50 tracking-wide drop-shadow-sm ml-2">Days</span>
                         </div>
-                        <span className="text-xl font-bold text-white/50 tracking-wide drop-shadow-sm ml-2">Days</span>
+                      </div>
+                      
+                      <div className="flex-1">
+                        <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Starting Date</label>
+                        <div className="flex items-center bg-white/[0.03] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] h-[68px]">
+                          <input 
+                            type="date" 
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                            className="w-full h-full px-4 bg-transparent text-white font-semibold text-lg outline-none appearance-none cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 [&::-webkit-calendar-picker-indicator]:hover:opacity-100"
+                          />
+                        </div>
                       </div>
                     </div>
                     <div>

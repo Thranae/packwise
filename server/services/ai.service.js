@@ -209,6 +209,7 @@ class AIService {
     const aiPrompt = `Parse the following user trip request: "${prompt}". 
     Determine the best destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
     Determine the number of travelers and their gender directly from the prompt.
+    Extract the requested start date in YYYY-MM-DD format.
     Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.
     Return JSON strictly matching this format:
     {
@@ -218,6 +219,7 @@ class AIService {
       "currency": "EUR",
       "timezone": "Europe/Paris",
       "duration": "7 Days",
+      "startDate": "YYYY-MM-DD",
       "gender": "Female",
       "travelers": 1
     }`;
@@ -228,6 +230,7 @@ class AIService {
       currency: "USD",
       timezone: "UTC",
       duration: "7 Days",
+      startDate: new Date().toISOString().split('T')[0],
       gender: "Not specified",
       travelers: 1
     }, 'json');
