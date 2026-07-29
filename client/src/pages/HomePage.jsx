@@ -70,11 +70,11 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Layout Context */}
-      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-36 lg:pt-40">
+      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-24 sm:pt-28 lg:pt-40">
         
         {/* HERO SECTION */}
         <section className="relative min-h-[70vh] lg:min-h-[90vh] flex flex-col justify-center pb-10 lg:pb-20">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
             
             {/* Hero Left Content */}
             <motion.div 
@@ -83,7 +83,7 @@ export default function HomePage() {
               animate="show"
               className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1"
             >
-              <motion.div variants={fadeInUp} className={`${glassPill} inline-flex items-center gap-3 px-4 py-2 mb-8`}>
+              <motion.div variants={fadeInUp} className={`${glassPill} inline-flex items-center gap-3 px-4 py-2 mb-4 lg:mb-8`}>
                 <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
                 <span className="text-xs font-semibold tracking-wider text-[var(--theme-text-primary)] opacity-90 uppercase">Next Generation Planning</span>
               </motion.div>
@@ -132,10 +132,10 @@ export default function HomePage() {
             </motion.div>
 
             {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
-            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-12 lg:mt-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center order-2">
+            <div className="lg:col-span-6 relative h-[380px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-2 lg:mt-0 transform origin-center order-2">
               
               {/* Center Map / Main Art */}
-              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
+              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[5%] lg:top-[10%] left-[5%] w-[90%] h-[90%] lg:h-[75%] z-20">
                 <div className={`${glassStyle} w-full h-full p-2 flex items-center justify-center relative overflow-hidden group`}>
                   <Image 
                     src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop" 
@@ -181,7 +181,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 3. Flights */}
-              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="absolute bottom-[25%] left-[-10%] z-40">
+              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="absolute bottom-[2%] lg:bottom-[25%] left-[-2%] lg:left-[-10%] z-40">
                 <div className={`${glassStyle} p-5 rotate-y-[10deg] rotate-z-[2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default min-w-[200px] shadow-xl`}>
                   <div className="flex justify-between items-center mb-3">
                     <Plane className="w-5 h-5 text-blue-500" />
