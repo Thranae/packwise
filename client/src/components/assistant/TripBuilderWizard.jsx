@@ -139,15 +139,15 @@ export const TripBuilderWizard = () => {
   ];
 
   return (
-    <div className="w-full flex flex-col lg:flex-row items-start justify-start gap-8 max-w-[1400px]">
-      <div className="flex flex-col items-start w-full lg:flex-1 lg:max-w-4xl relative z-10">
+    <div className="w-full h-full flex flex-col lg:flex-row items-start justify-start gap-8 max-w-[1400px]">
+      <div className="flex flex-col items-start w-full h-full lg:flex-1 lg:max-w-4xl relative z-10">
         {/* Background Ambient Glow */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full blur-[120px] pointer-events-none z-0" />
 
         <motion.div 
           ref={containerRef}
           style={{ rotateX, rotateY, transformPerspective: 1500 }}
-          className="relative w-full ios-glass-card rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 group/card shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col max-h-[calc(100dvh-220px)] lg:max-h-none"
+          className="relative w-full h-full ios-glass-card rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 group/card shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col"
         >
         <motion.div
           className="pointer-events-none absolute -inset-px rounded-[40px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 mix-blend-overlay z-0"

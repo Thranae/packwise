@@ -116,7 +116,7 @@ export const AIChatInterface = () => {
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col flex-1 h-full min-h-[300px] max-h-[calc(100dvh-240px)] lg:max-h-none w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
+      className="flex flex-col flex-1 h-full min-h-[300px] w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
     >
       
       {/* Header */}
