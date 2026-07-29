@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { MapPin, Star, Bot, Navigation, Clock, Heart, ArrowRight, Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
@@ -396,14 +397,17 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
       </div>
 
       {/* Expanded Modal Overlay */}
-      <AnimatePresence>
-        {selectedPlace && (
-          <PlaceModal 
-            place={selectedPlace} 
-            onClose={() => setSelectedPlace(null)} 
-          />
-        )}
-      </AnimatePresence>
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {selectedPlace && (
+            <PlaceModal 
+              place={selectedPlace} 
+              onClose={() => setSelectedPlace(null)} 
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </motion.div>
   );
 };
