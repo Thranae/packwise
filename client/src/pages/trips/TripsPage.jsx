@@ -124,9 +124,9 @@ export default function TripsPage() {
                 key={filter}
                 onClick={() => { setActiveFilter(filter); lightTap(); }}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-4 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-1 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-auto md:whitespace-nowrap outline-none
+                  w-[calc(33.333vw-16px)] md:w-auto md:whitespace-nowrap outline-none
                   ${activeFilter === filter 
                     ? 'text-white scale-105 z-10' 
                     : 'text-white/60 hover:text-white/90 hover:scale-105'
