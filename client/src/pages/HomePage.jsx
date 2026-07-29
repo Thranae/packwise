@@ -307,10 +307,10 @@ export default function HomePage() {
               <motion.div variants={fadeInUp} className={`${glassPill} px-4 py-2 text-sm text-purple-500 dark:text-purple-400 font-medium mb-6 inline-block bg-purple-500/5`}>
                 Workflow
               </motion.div>
-              <motion.h2 variants={fadeInUp} className="text-4xl md:text-5xl font-bold mb-8 leading-tight tracking-tight">
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold mb-6 md:mb-8 leading-tight tracking-tight">
                 From idea to reality in seconds.
               </motion.h2>
-              <div className="space-y-10 mt-12">
+              <div className="space-y-8 md:space-y-10 mt-8 md:mt-12">
                 {[
                   { step: '1', title: 'Define your vision', desc: 'Tell us where, when, and how you want to travel. Set your budget and style.' },
                   { step: '2', title: 'AI Generation', desc: 'Our neural engine crafts a complete, optimized itinerary instantly.' },
@@ -333,7 +333,7 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-            <motion.div variants={scaleIn} className={`${glassStyle} h-[600px] w-full relative overflow-hidden flex flex-col shadow-2xl shadow-blue-500/5 group`}>
+            <motion.div variants={scaleIn} className={`${glassStyle} h-[300px] lg:h-[600px] w-full relative overflow-hidden flex flex-col shadow-2xl shadow-blue-500/5 group`}>
               <Image 
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop" 
                 alt="Mountains" 
@@ -355,12 +355,12 @@ export default function HomePage() {
           >
             <div className="absolute top-[-50%] left-[-10%] w-[1000px] h-[1000px] rounded-full bg-blue-500/5 dark:bg-white/5 blur-[120px] pointer-events-none" />
             
-            <Logo size="lg" className="mb-10 scale-125" />
+            <Logo size="md" className="mb-6 md:mb-10" />
             
-            <h2 className="text-3xl md:text-5xl font-bold max-w-3xl leading-tight mb-8">
+            <h2 className="text-2xl md:text-5xl font-bold max-w-3xl leading-tight mb-4 md:mb-8">
               We believe travel software should be as beautiful as the destinations you visit.
             </h2>
-            <p className="text-xl text-[var(--theme-text-secondary)] max-w-2xl font-light mb-12">
+            <p className="text-base md:text-xl text-[var(--theme-text-secondary)] max-w-2xl font-light mb-8 md:mb-12">
               Voyage Genie isn't just a utility. It's a premium ecosystem designed to remove the friction from exploration, built for the modern traveler.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
