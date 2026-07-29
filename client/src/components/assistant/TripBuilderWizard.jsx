@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
+import { useHaptics } from '@/hooks/useHaptics';
 
 // Removed static POPULAR_LOCATIONS
 
@@ -97,6 +99,8 @@ export const TripBuilderWizard = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const { generateTrip, isGenerating, loadingStep, currentTrip } = useTripContext();
+  const { playSound } = useSoundEffect();
+  const { lightTap, successTap } = useHaptics();
   const [prompt, setPrompt] = useState("");
   const [startCity, setStartCity] = useState("");
   const [duration, setDuration] = useState("");
@@ -118,14 +122,20 @@ export const TripBuilderWizard = () => {
   const { rotateX, rotateY, mouseX, mouseY } = useMouseTilt(containerRef, { maxTilt: 2, stiffness: 200, damping: 30 });
 
   const handleGenerate = async () => {
+    lightTap();
+    playSound('tap');
     const flightContext = startCity ? ` Flying from ${startCity}.` : "";
     const genderContext = (males > 0 || females > 0) ? ` Travelers: ${males + females} total (${males} male, ${females} female).` : "";
     const fullPrompt = `Destination: ${prompt}.${flightContext} Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     await generateTrip(fullPrompt);
+    successTap();
+    playSound('success');
     navigate(ROUTES.TRIPS);
   };
 
   const handleSelectLocation = (loc) => {
+    lightTap();
+    playSound('tap');
     const locString = `${loc.city}, ${loc.country}`;
     if (activeField === 'destination') setPrompt(locString);
     else if (activeField === 'startCity') setStartCity(locString);
@@ -329,7 +339,7 @@ export const TripBuilderWizard = () => {
 
                 <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/10 relative z-10 shrink-0">
                   <button 
-                    onClick={() => setStep(step - 1)}
+                    onClick={() => { lightTap(); playSound('tap'); setStep(step - 1); }}
                     className={`h-12 sm:h-14 px-6 sm:px-8 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.03] backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 text-white/70 hover:bg-white/[0.08] hover:text-white hover:-translate-y-[2px] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_8px_rgba(255,255,255,0.1)]'}`}
                   >
                     Back
@@ -337,7 +347,7 @@ export const TripBuilderWizard = () => {
                   
                   {step < 3 ? (
                     <button 
-                      onClick={() => setStep(step + 1)}
+                      onClick={() => { lightTap(); playSound('tap'); setStep(step + 1); }}
                       className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-white/10 backdrop-blur-2xl border-[1.5px] border-white/20 border-t-white/50 border-l-white/40 text-white font-bold tracking-wide shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/20 hover:scale-[1.02] hover:-translate-y-[2px] transition-all duration-500 group hover:shadow-[0_16px_32px_rgba(0,0,0,0.4),inset_0_6px_16px_rgba(255,255,255,0.3)]"
                     >
                       <span className="text-[14px] sm:text-[15px] font-bold text-white tracking-wide drop-shadow-md">Next Step</span>

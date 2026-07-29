@@ -331,6 +331,21 @@ function AppRoutes() {
 // Root App component — context providers & global overlays
 // ---------------------------------------------------------------------------
 import { GlobalSpotlight } from './components/common/GlobalSpotlight';
+import { SplashScreen } from './components/common/SplashScreen';
+import { useState } from 'react';
+
+function AppContent() {
+  const [splashComplete, setSplashComplete] = useState(false);
+  
+  return (
+    <>
+      <GlobalSpotlight />
+      {!splashComplete && <SplashScreen onComplete={() => setSplashComplete(true)} />}
+      <AppRoutes />
+      <ToastContainer />
+    </>
+  );
+}
 
 export default function App() {
   return (
@@ -340,9 +355,7 @@ export default function App() {
         <TripProvider>
           <ToastProvider>
             <ErrorBoundary>
-              <GlobalSpotlight />
-              <AppRoutes />
-              <ToastContainer />
+              <AppContent />
             </ErrorBoundary>
           </ToastProvider>
         </TripProvider>

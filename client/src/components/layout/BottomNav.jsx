@@ -2,6 +2,8 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutGrid, Map, Sparkles, Compass, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useHaptics } from '@/hooks/useHaptics';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400' },
@@ -13,6 +15,13 @@ const navItems = [
 
 export function BottomNav() {
   const location = useLocation();
+  const { lightTap } = useHaptics();
+  const { playSound } = useSoundEffect();
+
+  const handleNavClick = () => {
+    lightTap();
+    playSound('tap');
+  };
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden pb-4 pt-2 px-4">
@@ -33,6 +42,7 @@ export function BottomNav() {
             <NavLink
               key={item.path}
               to={item.path}
+              onClick={handleNavClick}
               className={`relative flex flex-col items-center justify-center w-14 h-full rounded-[20px] transition-all duration-300 z-10 ${item.isCenter ? '-mt-7' : ''} group`}
             >
               {isActive && !item.isCenter && (
