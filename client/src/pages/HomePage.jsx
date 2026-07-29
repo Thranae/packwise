@@ -380,8 +380,8 @@ export default function HomePage() {
                 className="absolute inset-0 w-full h-full"
               >
                 <Image 
-                  src="https://images.unsplash.com/photo-1516483638261-f40af5ff8134?q=80&w=2070&auto=format&fit=crop" 
-                  alt="Cinque Terre Travel Landscape" 
+                  src="https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Tokyo Cityscape Landscape" 
                   className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 opacity-90 saturate-150"
                 />
               </motion.div>
