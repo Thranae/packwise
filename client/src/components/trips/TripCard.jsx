@@ -100,24 +100,26 @@ export const TripCard = ({ trip }) => {
         hidden: { opacity: 0, scale: 0.95, y: 30, rotateX: 10 },
         show: { opacity: 1, scale: 1, y: 0, rotateX: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className="relative flex flex-col h-[460px] rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer"
+      className="relative flex flex-col h-[460px] rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer transform-gpu [transform-style:preserve-3d] will-change-transform"
       onClick={() => {
         selectTrip(trip._id);
         navigate(ROUTES.OVERVIEW);
       }}
     >
-      {/* Interactive GPU-Optimized Flashlight Effect */}
+      {/* GPU-Accelerated Interactive Flashlight */}
       <motion.div
-        className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-50"
+        className="pointer-events-none absolute w-[600px] h-[600px] -left-[300px] -top-[300px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-50 mix-blend-overlay will-change-transform"
         style={{
-          background: useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.15), transparent 40%)`
+          x: mouseX,
+          y: mouseY,
+          background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%)'
         }}
       />
       
-      {/* Dynamic Glow Effect */}
+      {/* Dynamic Glow Effect (Hardware Accelerated Layer) */}
       <div 
-        className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl"
-        style={{ background: `linear-gradient(to bottom right, ${glowColor}40, transparent)` }}
+        className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl will-change-opacity transform-gpu"
+        style={{ background: `linear-gradient(to bottom right, ${glowColor}40, transparent)`, transform: 'translateZ(0)' }}
       />
       
       {/* Top Half: Image */}

@@ -3,32 +3,35 @@ import React from 'react';
 export const AnimatedBackground = React.memo(() => {
   return (
     <>
-      {/* BACKGROUND - VisionOS Style Freely Moving Aurora */}
+      {/* BACKGROUND - VisionOS Style Freely Moving Aurora (GPU Accelerated) */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes floatWide1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(25vw, 15vh) scale(1.2); }
-          66% { transform: translate(-20vw, 30vh) scale(0.9); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          33% { transform: translate3d(25vw, 15vh, 0) scale(1.2); }
+          66% { transform: translate3d(-20vw, 30vh, 0) scale(0.9); }
         }
         @keyframes floatWide2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-30vw, -20vh) scale(1.3); }
-          66% { transform: translate(25vw, -30vh) scale(0.8); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          33% { transform: translate3d(-30vw, -20vh, 0) scale(1.3); }
+          66% { transform: translate3d(25vw, -30vh, 0) scale(0.8); }
         }
         @keyframes floatWide3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(35vw, -35vh) scale(0.9); }
-          66% { transform: translate(-30vw, 20vh) scale(1.4); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          33% { transform: translate3d(35vw, -35vh, 0) scale(0.9); }
+          66% { transform: translate3d(-30vw, 20vh, 0) scale(1.4); }
         }
         @keyframes floatWide4 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-20vw, 25vh) scale(1.1); }
-          66% { transform: translate(30vw, -15vh) scale(1.2); }
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          33% { transform: translate3d(-20vw, 25vh, 0) scale(1.1); }
+          66% { transform: translate3d(30vw, -15vh, 0) scale(1.2); }
         }
         .vision-blob {
           position: absolute;
           border-radius: 50%;
           pointer-events: none;
+          will-change: transform;
+          backface-visibility: hidden;
+          transform-style: preserve-3d;
         }
       `}} />
       
