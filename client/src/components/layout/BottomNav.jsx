@@ -24,7 +24,7 @@ export function BottomNav() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden pb-4 pt-2 px-4">
+    <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden pb-[calc(1rem+env(safe-area-inset-bottom))] pt-2 px-4">
       <div className="w-full h-[72px] relative flex items-center justify-around px-2">
         
         {/* Glass Background Layer (handles overflow-hidden and rounded corners) */}

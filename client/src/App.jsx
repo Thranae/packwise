@@ -13,8 +13,8 @@ import { Loader2, Compass } from 'lucide-react';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 
-// ---------------------------------------------------------------------------
-// Lazy-loaded pages
+import { WifiOff } from 'lucide-react';
+import { useState, useEffect } from 'react';
 // ---------------------------------------------------------------------------
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/authentication/LoginPage'));
@@ -338,7 +338,42 @@ function AppRoutes() {
 // ---------------------------------------------------------------------------
 import { GlobalSpotlight } from './components/common/GlobalSpotlight';
 import { SplashScreen } from './components/common/SplashScreen';
-import { useState } from 'react';
+
+function OfflineIndicator() {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOffline = () => setIsOffline(true);
+    const handleOnline = () => setIsOffline(false);
+    
+    window.addEventListener('offline', handleOffline);
+    window.addEventListener('online', handleOnline);
+    
+    return () => {
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('online', handleOnline);
+    };
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isOffline && (
+        <motion.div
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -100, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          className="fixed top-0 left-0 right-0 z-[100000] flex justify-center pt-[calc(12px+env(safe-area-inset-top))] pointer-events-none"
+        >
+          <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-black/40 backdrop-blur-3xl border border-white/20 shadow-[0_16px_32px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.3)] ios-3d-element">
+            <WifiOff className="w-4 h-4 text-rose-400" />
+            <span className="text-[12px] font-bold text-white tracking-wide">You're offline — viewing saved trips</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
 function AppContent() {
   const [splashComplete, setSplashComplete] = useState(false);
@@ -346,7 +381,10 @@ function AppContent() {
   return (
     <>
       <GlobalSpotlight />
-      {!splashComplete && <SplashScreen onComplete={() => setSplashComplete(true)} />}
+      <OfflineIndicator />
+      <AnimatePresence mode="wait">
+        {!splashComplete && <SplashScreen onComplete={() => setSplashComplete(true)} />}
+      </AnimatePresence>
       <AppRoutes />
       <ToastContainer />
     </>

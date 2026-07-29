@@ -6,6 +6,7 @@ import { PageTransition } from '@/components/common/PageTransition';
 import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
+import { useHaptics } from '@/hooks/useHaptics';
 
 
 const FILTERS = ['All', 'upcoming', 'completed'];
@@ -15,6 +16,7 @@ export default function TripsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const { lightTap, successTap } = useHaptics();
 
   const filteredTrips = useMemo(() => {
     return trips.filter(trip => {
@@ -75,7 +77,7 @@ export default function TripsPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Link to={`${ROUTES.ASSISTANT}?mode=builder`}>
+            <Link to={`${ROUTES.ASSISTANT}?mode=builder`} onClick={() => successTap()}>
               <button className="flex items-center gap-2 h-12 md:h-14 px-6 md:px-8 rounded-full ios-liquid-button group w-full md:w-auto justify-center">
                 <Plus className="w-5 h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform ios-3d-icon" />
                 <span className="text-[14px] md:text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create New Trip</span>
@@ -120,7 +122,7 @@ export default function TripsPage() {
             {FILTERS.map(filter => (
               <button
                 key={filter}
-                onClick={() => setActiveFilter(filter)}
+                onClick={() => { setActiveFilter(filter); lightTap(); }}
                 className={`
                   ios-liquid-button shrink-0 relative flex items-center justify-center px-2 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
