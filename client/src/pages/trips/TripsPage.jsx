@@ -48,15 +48,15 @@ export default function TripsPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="min-h-screen px-6 md:px-10 lg:px-12 pb-24 pt-6">
+      <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-4 md:pt-6">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-10">
           <div className="flex flex-col">
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl font-semibold tracking-tighter text-white drop-shadow-sm mb-3"
+              className="text-4xl md:text-5xl font-semibold tracking-tighter text-white drop-shadow-sm mb-2 md:mb-3"
             >
               My Trips
             </motion.h1>
@@ -64,7 +64,7 @@ export default function TripsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-lg font-medium text-white/60 tracking-wide"
+              className="text-base md:text-lg font-medium text-white/60 tracking-wide"
             >
               Plan, manage and revisit every journey.
             </motion.p>
@@ -76,9 +76,9 @@ export default function TripsPage() {
             transition={{ delay: 0.2 }}
           >
             <Link to={`${ROUTES.ASSISTANT}?mode=builder`}>
-              <button className="flex items-center gap-2 h-14 px-8 rounded-full ios-liquid-button group">
+              <button className="flex items-center gap-2 h-12 md:h-14 px-6 md:px-8 rounded-full ios-liquid-button group w-full md:w-auto justify-center">
                 <Plus className="w-5 h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform ios-3d-icon" />
-                <span className="text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create New Trip</span>
+                <span className="text-[14px] md:text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create New Trip</span>
               </button>
             </Link>
           </motion.div>
@@ -89,11 +89,11 @@ export default function TripsPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-col gap-6 mb-12"
+          className="flex flex-col gap-5 md:gap-6 mb-8 md:mb-12"
         >
           {/* Liquid Glass Search Bar */}
           <div className={`
-            relative flex items-center w-full max-w-2xl h-16 rounded-[24px]
+            relative flex items-center w-full max-w-2xl h-14 md:h-16 rounded-[20px] md:rounded-[24px]
             bg-white/5 backdrop-blur-2xl
             border border-white/10
             transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)]
@@ -101,28 +101,28 @@ export default function TripsPage() {
               ? 'bg-white/10 border-blue-400/50 shadow-[0_12px_40px_rgba(59,130,246,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] -translate-y-1 scale-[1.02]' 
               : 'hover:bg-white/10 hover:shadow-[0_12px_30px_rgba(0,0,0,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:border-white/20 hover:-translate-y-0.5'}
           `}>
-            <div className="pl-6 flex items-center pointer-events-none">
+            <div className="pl-4 md:pl-6 flex items-center pointer-events-none">
               <Search className={`w-5 h-5 transition-colors duration-700 ${isSearchFocused ? 'text-blue-400' : 'text-white/50'}`} />
             </div>
             <input 
               type="text" 
-              placeholder="Search by country, city, date, or trip name..."
+              placeholder="Search trips..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              className="w-full h-full bg-transparent border-none outline-none text-white placeholder-white/40 px-5 font-medium text-[15px]"
+              className="w-full h-full bg-transparent border-none outline-none text-white placeholder-white/40 px-4 md:px-5 font-medium text-[14px] md:text-[15px]"
             />
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-4 overflow-x-auto pb-6 pt-2 px-2 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-1 scrollbar-none" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`
-                  ios-liquid-button shrink-0 relative whitespace-nowrap px-7 py-2.5 rounded-[20px] text-[13px] font-bold tracking-wide
+                  ios-liquid-button shrink-0 relative flex items-center justify-center whitespace-nowrap px-5 md:px-7 min-h-[40px] md:min-h-[44px] rounded-[20px] text-[13px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                   ${activeFilter === filter 
                     ? 'text-white ring-1 ring-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] saturate-150 scale-105 z-10' 
