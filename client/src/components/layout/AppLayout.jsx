@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { TopHeader } from './TopHeader';
-import { AmbientBackground } from '../common/AmbientBackground';
+import { AnimatedBackground } from '../common/AnimatedBackground';
 import { PullToRefresh } from '../common/PullToRefresh';
 import { ROUTES } from '@/constants/routes';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -15,7 +15,7 @@ export function AppLayout({ children }) {
   
   return (
     <>
-      <AmbientBackground />
+      <AnimatedBackground />
       <GenieCommandPalette />
       <Sidebar />
       <BottomNav />
