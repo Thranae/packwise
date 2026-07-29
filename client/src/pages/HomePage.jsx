@@ -97,7 +97,7 @@ export default function HomePage() {
                 Design the perfect journey. Automate logistics, discover hidden gems, and experience seamless travel tailored exclusively to you.
               </motion.p>
               
-              <motion.div variants={fadeInUp} className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
+              <motion.div variants={fadeInUp} className="hidden lg:flex mt-8 sm:mt-12 flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
                 {isAuthenticated ? (
                   <>
                     <Link to={ROUTES.TRIPS} className="w-full sm:w-auto">
@@ -135,7 +135,7 @@ export default function HomePage() {
             <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-12 lg:mt-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center order-2">
               
               {/* Center Map / Main Art */}
-              <motion.div style={{ y: floatY2 }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
+              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
                 <div className={`${glassStyle} w-full h-full p-2 flex items-center justify-center relative overflow-hidden group`}>
                   <Image 
                     src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop" 
@@ -156,7 +156,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 1. Passport (Hidden on mobile to reduce clutter) */}
-              <motion.div style={{ y: floatY1 }} className="absolute top-[5%] left-[-5%] z-30 hidden lg:block">
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[5%] left-[-5%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[15deg] rotate-z-[-5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/40 to-indigo-500/10 border border-indigo-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -170,7 +170,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 2. Weather */}
-              <motion.div style={{ y: floatY3 }} className="absolute top-[10%] right-[0%] z-30">
+              <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[10%] right-[0%] z-30">
                 <div className={`${glassStyle} p-5 flex flex-col gap-2 rotate-y-[-20deg] rotate-z-[5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="flex items-center justify-between">
                     <CloudSun className="w-8 h-8 text-yellow-500" />
@@ -181,7 +181,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 3. Flights */}
-              <motion.div style={{ y: floatY4 }} className="absolute bottom-[25%] left-[-10%] z-40">
+              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="absolute bottom-[25%] left-[-10%] z-40">
                 <div className={`${glassStyle} p-5 rotate-y-[10deg] rotate-z-[2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default min-w-[200px] shadow-xl`}>
                   <div className="flex justify-between items-center mb-3">
                     <Plane className="w-5 h-5 text-blue-500" />
@@ -198,7 +198,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 4. Suitcase (Hidden on mobile to reduce clutter) */}
-              <motion.div style={{ y: floatY1 }} className="absolute bottom-[5%] left-[20%] z-30 hidden lg:block">
+              <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }} className="absolute bottom-[5%] left-[20%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-3 rotate-y-[5deg] rotate-z-[-2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/40 to-orange-500/10 border border-orange-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -212,7 +212,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 5. Budget */}
-              <motion.div style={{ y: floatY3 }} className="absolute bottom-[10%] right-[5%] z-40">
+              <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }} className="absolute bottom-[10%] right-[5%] z-40">
                 <div className={`${glassStyle} p-5 flex flex-col gap-1 rotate-y-[-15deg] rotate-z-[4deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="group cursor-pointer relative overflow-hidden w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/40 to-emerald-500/10 border border-emerald-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_4px_8px_rgba(0,0,0,0.5)] flex items-center justify-center">
@@ -226,7 +226,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 6. Maps (Hidden on mobile to reduce clutter) */}
-              <motion.div style={{ y: floatY2 }} className="absolute top-[40%] right-[-5%] z-30 hidden lg:block">
+              <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2 }} className="absolute top-[40%] right-[-5%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[-10deg] rotate-z-[-6deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/40 to-purple-500/10 border border-purple-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -240,6 +240,40 @@ export default function HomePage() {
               </motion.div>
 
             </div>
+
+            {/* Hero Mobile Buttons (Rendered below the visual) */}
+            <motion.div variants={fadeInUp} className="lg:hidden col-span-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto order-3 mt-4 z-20">
+              {isAuthenticated ? (
+                <>
+                  <Link to={ROUTES.TRIPS} className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <Map className="w-5 h-5 text-emerald-400" />
+                      My Trips
+                    </button>
+                  </Link>
+                  <Link to={ROUTES.ASSISTANT} className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <Sparkles className="w-5 h-5 text-purple-400" />
+                      AI Planner
+                    </button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to={ROUTES.SIGNUP} className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <MapPin className="w-5 h-5" />
+                      Start Exploring
+                    </button>
+                  </Link>
+                  <a href="#features" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <PlayCircle className="w-5 h-5 opacity-70" /> Explore Features
+                    </button>
+                  </a>
+                </>
+              )}
+            </motion.div>
           </div>
         </section>
 
