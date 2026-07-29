@@ -335,8 +335,8 @@ export default function HomePage() {
             </div>
             <motion.div variants={scaleIn} className={`${glassStyle} h-[300px] lg:h-[600px] w-full relative overflow-hidden flex flex-col shadow-2xl shadow-blue-500/5 group`}>
               <Image 
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop" 
-                alt="Mountains" 
+                src="/assets/ai-travel-ui.jpg" 
+                alt="AI Travel Itinerary Generation" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
