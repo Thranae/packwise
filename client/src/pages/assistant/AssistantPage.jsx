@@ -20,7 +20,7 @@ export default function AssistantPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="min-h-[100dvh] px-4 sm:px-6 md:px-10 lg:px-12 pb-6 sm:pb-12 pt-6 flex flex-col items-start w-full relative z-10">
+      <div className="min-h-[100dvh] px-4 sm:px-6 md:px-10 lg:px-12 pb-28 sm:pb-12 pt-6 flex flex-col items-start w-full relative z-10">
         
         {/* Unified Header & Segmented Control */}
         <div className="w-full max-w-4xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-6 sm:mb-10 z-20 relative">

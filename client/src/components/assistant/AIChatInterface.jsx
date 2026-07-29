@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, Search, MapPin, ArrowUp } from 'lucide-react';
+import { Sparkles, Send, Search, MapPin, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTripContext } from '@/context/TripContext';
 import { useNavigate } from 'react-router-dom';
@@ -116,7 +116,7 @@ export const AIChatInterface = () => {
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col flex-1 h-full min-h-[400px] w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
+      className="flex flex-col flex-1 h-full min-h-[300px] max-h-[calc(100dvh-240px)] lg:max-h-none w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
     >
       
       {/* Header */}
@@ -169,7 +169,7 @@ export const AIChatInterface = () => {
               {msg.role === 'user' ? (
                 <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold text-white shadow-md">YOU</div>
               ) : (
-                <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Bot className="w-3.5 h-3.5" /></div>
+                <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Sparkles className="w-3.5 h-3.5" /></div>
               )}
               <span className="text-xs font-semibold text-white/50 tracking-wider uppercase">
                 {msg.role === 'user' ? 'You' : 'Voyage Genie AI'}
