@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { MapPin, Star, Bot, Navigation, Clock, Heart, ArrowRight, Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -142,8 +142,14 @@ const PlaceModal = ({ place, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
+  const y = useMotionValue(0);
+  const pillWidth = useTransform(y, [0, 200], [48, 80]);
+  const pillOpacity = useTransform(y, [0, 100], [0.8, 1]);
+  const pillColor = useTransform(y, [0, 100], ["rgba(255,255,255,0.7)", "rgba(255,255,255,1)"]);
+
   const handleDragEnd = (event, info) => {
-    if (info.offset.y > 100 || info.velocity.y > 500) {
+    // Easier close threshold:
+    if (info.offset.y > 60 || info.velocity.y > 250) {
       onClose();
     }
   };
@@ -163,17 +169,22 @@ const PlaceModal = ({ place, onClose }) => {
       {/* Modal / Bottom Sheet Content */}
       <motion.div
         drag="y"
+        style={{ y }}
         dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.4}
+        dragElastic={0.8}
         onDragEnd={handleDragEnd}
         initial={{ opacity: 0, y: "100%" }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: "100%" }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        whileDrag={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
         className="relative w-full md:w-[80vw] max-w-2xl h-[85vh] md:h-auto md:max-h-[85vh] overflow-hidden rounded-t-[40px] md:rounded-[40px] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] md:shadow-[0_32px_64px_rgba(0,0,0,0.5)] bg-[#0B1120] border-t border-white/20 md:border isolate flex flex-col will-change-transform"
       >
         {/* Drag Pill (Mobile Only) */}
-        <div className="md:hidden absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/30 rounded-full z-[100]" />
+        <motion.div 
+          style={{ width: pillWidth, opacity: pillOpacity, backgroundColor: pillColor }}
+          className="md:hidden absolute top-3 left-1/2 -translate-x-1/2 h-1.5 rounded-full z-[100] shadow-[0_2px_4px_rgba(0,0,0,0.5)] border border-white/30" 
+        />
         
         {/* Close Button (Desktop Only) */}
         <button 
