@@ -242,7 +242,7 @@ export default function HomePage() {
             </div>
 
             {/* Hero Mobile Buttons (Rendered below the visual) */}
-            <motion.div variants={fadeInUp} className="lg:hidden col-span-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto order-3 mt-4 z-20">
+            <motion.div variants={fadeInUp} className="lg:hidden flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto order-3 mt-4 z-20">
               {isAuthenticated ? (
                 <>
                   <Link to={ROUTES.TRIPS} className="w-full sm:w-auto">
