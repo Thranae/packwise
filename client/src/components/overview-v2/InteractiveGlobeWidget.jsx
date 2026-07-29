@@ -196,7 +196,7 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className={`relative flex flex-col h-[600px] rounded-[32px] overflow-hidden ios-glass-card group cursor-grab active:cursor-grabbing ${className}`}
+      className={`relative flex flex-col h-[350px] sm:h-[500px] lg:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-grab active:cursor-grabbing ${className}`}
     >
       {/* Header Overlay */}
       <div className="absolute top-6 left-6 z-10 ios-3d-element pointer-events-none">
@@ -210,7 +210,7 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
       </div>
 
       {/* Origin Input Overlay */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute bottom-6 left-6 sm:bottom-auto sm:left-auto sm:top-6 sm:right-6 z-20">
         <form onSubmit={handleSetOrigin} className="flex items-center gap-2">
           <input
             type="text"
