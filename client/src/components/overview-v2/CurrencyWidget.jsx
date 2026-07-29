@@ -37,7 +37,7 @@ export const CurrencyWidget = ({ className = "" }) => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className={`relative p-6 flex flex-col justify-between h-[200px] rounded-[32px] cursor-pointer ios-glass-card group ${className}`}
+      className={`relative overflow-hidden p-6 flex flex-col justify-between h-[200px] rounded-[32px] cursor-pointer ios-glass-card group ${className}`}
     >
       {loading ? (
         <div className="flex-1 flex flex-col items-center justify-center text-white/50 animate-pulse">
@@ -46,7 +46,7 @@ export const CurrencyWidget = ({ className = "" }) => {
         </div>
       ) : (
         <>
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between relative z-10">
             <div className="flex flex-col ios-3d-element">
               <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/50 mb-1">Currency</span>
               <span className="text-3xl font-semibold tracking-tighter text-white drop-shadow-sm">{targetCurrency}</span>
@@ -56,7 +56,7 @@ export const CurrencyWidget = ({ className = "" }) => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 ios-3d-element mt-4">
+          <div className="flex flex-col gap-3 ios-3d-element mt-4 relative z-10">
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center group/input">
                 <input 
@@ -86,41 +86,41 @@ export const CurrencyWidget = ({ className = "" }) => {
               <Clock className="w-3.5 h-3.5" />
               <span className="text-xs font-semibold">14-Day Trend</span>
             </div>
+          </div>
 
-            {/* Sparkline Chart */}
-            <div className="mt-2 h-[30px] w-full ios-3d-element relative group/chart">
-              <svg viewBox="0 0 100 30" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="trendGradientUp" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(52,211,153,0.4)" />
-                    <stop offset="100%" stopColor="rgba(52,211,153,0)" />
-                  </linearGradient>
-                  <linearGradient id="trendGradientDown" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(244,63,94,0.4)" />
-                    <stop offset="100%" stopColor="rgba(244,63,94,0)" />
-                  </linearGradient>
-                </defs>
-                {history?.length > 0 && (
-                  <>
-                    <polyline
-                      fill={trend === 'up' ? "url(#trendGradientUp)" : "url(#trendGradientDown)"}
-                      stroke="none"
-                      points={`0,30 ${generateSparkline(history)} 100,30`}
-                      className="opacity-50 transition-opacity duration-500 group-hover/chart:opacity-80"
-                    />
-                    <polyline
-                      fill="none"
-                      stroke={trend === 'up' ? "#34d399" : "#f43f5e"}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      points={generateSparkline(history)}
-                      className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] transition-all duration-700 [stroke-dasharray:1000] [stroke-dashoffset:0]"
-                    />
-                  </>
-                )}
-              </svg>
-            </div>
+          {/* Sparkline Chart (Absolutely positioned at the bottom) */}
+          <div className="absolute bottom-0 left-0 w-full h-[50px] opacity-70 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0">
+            <svg viewBox="0 0 100 30" className="w-full h-full" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="trendGradientUp" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(52,211,153,0.4)" />
+                  <stop offset="100%" stopColor="rgba(52,211,153,0)" />
+                </linearGradient>
+                <linearGradient id="trendGradientDown" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(244,63,94,0.4)" />
+                  <stop offset="100%" stopColor="rgba(244,63,94,0)" />
+                </linearGradient>
+              </defs>
+              {history?.length > 0 && (
+                <>
+                  <polyline
+                    fill={trend === 'up' ? "url(#trendGradientUp)" : "url(#trendGradientDown)"}
+                    stroke="none"
+                    points={`0,30 ${generateSparkline(history)} 100,30`}
+                    className="opacity-60 transition-opacity duration-500"
+                  />
+                  <polyline
+                    fill="none"
+                    stroke={trend === 'up' ? "#34d399" : "#f43f5e"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    points={generateSparkline(history)}
+                    className="drop-shadow-[0_0_6px_rgba(52,211,153,0.6)] transition-all duration-700 [stroke-dasharray:1000] [stroke-dashoffset:0]"
+                  />
+                </>
+              )}
+            </svg>
           </div>
         </>
       )}
