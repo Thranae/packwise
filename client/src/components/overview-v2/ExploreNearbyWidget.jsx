@@ -141,7 +141,7 @@ const PlaceModal = ({ place, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden perspective-[2000px]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden [perspective:2000px]">
       {/* Blurred Backdrop */}
       <motion.div 
         initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
@@ -163,11 +163,11 @@ const PlaceModal = ({ place, onClose }) => {
 
       {/* Modal Content */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 40, rotateX: 15 }}
-        animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 40, rotateX: -15 }}
-        transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-        style={{ transformStyle: "preserve-3d" }}
+        layoutId={`card-${place.name}`}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300, mass: 0.8 }}
         className={`relative w-full max-w-2xl overflow-hidden rounded-[40px] shadow-[0_64px_128px_rgba(0,0,0,0.6),0_16px_32px_rgba(0,0,0,0.4)] bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-3xl ring-1 ring-white/10 isolate`}
       >
         <div className="absolute inset-0 rounded-inherit border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1)] pointer-events-none z-20" />
