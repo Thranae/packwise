@@ -126,7 +126,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(STORAGE_KEYS.TOKEN);
     setUser(null);
     setIsAuthenticated(false);
-    navigate(ROUTES.LOGIN);
+    navigate(ROUTES.HOME);
   }, [navigate]);
 
   /**
