@@ -42,12 +42,18 @@ const FlightsPage = lazy(() => import('./pages/flights/FlightsPage'));
 // ---------------------------------------------------------------------------
 function Spinner() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-[#060B14]">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-[1000] flex min-h-[100dvh] w-full items-center justify-center bg-[#060B14]"
+    >
       <div className="flex flex-col items-center gap-6">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="relative w-24 h-24 rounded-[32px] overflow-hidden ios-glass-card flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_2px_5px_rgba(255,255,255,0.2)]"
         >
           {/* Liquid Shimmer Sweep */}
@@ -65,7 +71,7 @@ function Spinner() {
           <span className="text-[13px] font-semibold tracking-[0.15em] uppercase text-white/50 animate-pulse">Loading Workspace</span>
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
