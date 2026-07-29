@@ -54,9 +54,13 @@ export function BottomNav() {
               )}
               
               {item.isCenter ? (
-                <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-500 flex items-center justify-center shadow-[0_8px_24px_rgba(99,102,241,0.5),inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4)] border border-white/20 relative z-20 group-hover:scale-105 transition-transform duration-500">
-                  <Icon size={26} className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" />
-                  <div className="absolute top-1 right-1 w-2 h-2 bg-emerald-400 rounded-full border border-indigo-500 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <div className="relative group-hover:scale-110 transition-transform duration-500 z-20">
+                  {/* Spinning magical aura ring behind the button */}
+                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-blue-400 via-purple-500 to-emerald-400 opacity-40 blur-[8px] -z-10 animate-[spin_4s_linear_infinite]" />
+                  <div className="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-500 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4)] border border-white/20 relative">
+                    <Icon size={26} className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" />
+                    <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-[1.5px] border-indigo-600 shadow-[0_0_12px_rgba(52,211,153,1)] animate-pulse" />
+                  </div>
                 </div>
               ) : (
                 <div className={`relative z-10 flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'scale-105' : ''}`}>
