@@ -81,7 +81,7 @@ export default function HomePage() {
               variants={staggerContainer}
               initial="hidden"
               animate="show"
-              className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-2 lg:order-1"
+              className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1"
             >
               <motion.div variants={fadeInUp} className={`${glassPill} inline-flex items-center gap-3 px-4 py-2 mb-8`}>
                 <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
@@ -132,7 +132,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
-            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mb-8 lg:mb-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center order-1 lg:order-2">
+            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-12 lg:mt-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center order-2">
               
               {/* Center Map / Main Art */}
               <motion.div style={{ y: floatY2 }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
@@ -155,8 +155,8 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* 1. Passport */}
-              <motion.div style={{ y: floatY1 }} className="absolute top-[5%] left-[-5%] z-30">
+              {/* 1. Passport (Hidden on mobile to reduce clutter) */}
+              <motion.div style={{ y: floatY1 }} className="absolute top-[5%] left-[-5%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[15deg] rotate-z-[-5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/40 to-indigo-500/10 border border-indigo-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -197,8 +197,8 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* 4. Suitcase */}
-              <motion.div style={{ y: floatY1 }} className="absolute bottom-[5%] left-[20%] z-30">
+              {/* 4. Suitcase (Hidden on mobile to reduce clutter) */}
+              <motion.div style={{ y: floatY1 }} className="absolute bottom-[5%] left-[20%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-3 rotate-y-[5deg] rotate-z-[-2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/40 to-orange-500/10 border border-orange-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -225,8 +225,8 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              {/* 6. Maps */}
-              <motion.div style={{ y: floatY2 }} className="absolute top-[40%] right-[-5%] z-30">
+              {/* 6. Maps (Hidden on mobile to reduce clutter) */}
+              <motion.div style={{ y: floatY2 }} className="absolute top-[40%] right-[-5%] z-30 hidden lg:block">
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[-10deg] rotate-z-[-6deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/40 to-purple-500/10 border border-purple-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
