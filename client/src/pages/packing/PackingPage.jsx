@@ -750,7 +750,7 @@ export default function PackingPage() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
                   {/* The Animated Checklist Container - Compact */}
-                  <div className="relative w-[180px] h-[120px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-90 sm:scale-100">
+                  <div className="relative w-[200px] h-[135px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-95 sm:scale-100">
                     
                     {/* Header */}
                     <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30">
@@ -891,7 +891,7 @@ export default function PackingPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              className={`col-start-1 row-start-1 p-3 sm:p-4 ${cat.id === 1 || cat.id === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1' : 'flex flex-col gap-1'}`}
+              className={`col-start-1 row-start-1 p-3 sm:p-4 overflow-y-auto max-h-[300px] md:max-h-[400px] custom-scrollbar ${cat.id === 1 || cat.id === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1' : 'flex flex-col gap-1'}`}
             >
               {cat.items.map(item => {
                 const isPacked = packedItems.has(item.id);
