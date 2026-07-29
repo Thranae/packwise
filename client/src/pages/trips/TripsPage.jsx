@@ -122,9 +122,9 @@ export default function TripsPage() {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-3 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[12px] font-bold tracking-wide
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-2 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-[calc((100vw-48px)/3)] md:w-auto md:whitespace-nowrap outline-none
+                  w-[calc((100vw-64px)/3)] md:w-auto md:whitespace-nowrap outline-none
                   ${activeFilter === filter 
                     ? 'text-white scale-105 z-10' 
                     : 'text-white/60 hover:text-white/90 hover:scale-105'

@@ -11,7 +11,7 @@ import { ROUTES } from './constants/routes';
 import { cn } from './utils/cn';
 import { Loader2, Compass } from 'lucide-react';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { ReactLenis } from 'lenis/react';
+
 
 // ---------------------------------------------------------------------------
 // Lazy-loaded pages
@@ -355,8 +355,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-      <ThemeProvider>
+    <ThemeProvider>
       <AuthProvider>
         <TripProvider>
           <ToastProvider>
@@ -367,6 +366,5 @@ export default function App() {
         </TripProvider>
       </AuthProvider>
     </ThemeProvider>
-    </ReactLenis>
   );
 }
