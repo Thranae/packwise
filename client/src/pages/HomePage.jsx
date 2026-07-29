@@ -371,56 +371,76 @@ export default function HomePage() {
               variants={scaleIn} 
               whileHover={{ rotateY: -4, rotateX: 4, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className={`${glassStyle} h-[300px] lg:h-[600px] w-full relative overflow-hidden flex flex-col shadow-2xl shadow-blue-500/10 group [transform-style:preserve-3d] [perspective:1200px]`}
+              className={`${glassStyle} h-[350px] lg:h-[600px] w-full relative overflow-hidden flex flex-col shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1)] group [transform-style:preserve-3d] [perspective:1200px] bg-black`}
             >
-              {/* Animated Background Image */}
+              {/* Dynamic Animated Background Image */}
               <motion.div 
-                animate={{ scale: [1, 1.05, 1] }} 
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                animate={{ scale: [1, 1.1, 1] }} 
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-0 w-full h-full"
               >
                 <Image 
-                  src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop" 
-                  alt="AI Travel Generation Landscape" 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+                  src="https://images.unsplash.com/photo-1516483638261-f40af5ff8134?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Cinque Terre Travel Landscape" 
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 opacity-90 saturate-150"
                 />
               </motion.div>
 
-              {/* 3D Noise Texture and Gradients */}
-              <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.75%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-transparent to-purple-500/20 mix-blend-overlay pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-0" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/90 via-[#020617]/20 to-transparent pointer-events-none z-0" />
-
-              {/* 3D Floating Elements */}
+              {/* 3D Noise Texture, Vignette & Color Gradients */}
+              <div className="absolute inset-0 opacity-[0.25] pointer-events-none mix-blend-overlay z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+              
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/40 via-transparent to-purple-600/40 mix-blend-overlay pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000 z-0" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/95 via-[#020617]/40 to-transparent pointer-events-none z-0" />
+              
+              {/* Scanning Laser Line Animation */}
               <motion.div 
-                className="absolute top-[15%] left-[5%] sm:left-[10%] z-20 [transform:translateZ(30px)]"
-                animate={{ y: [0, -10, 0], rotateZ: [0, 2, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_15px_rgba(96,165,250,0.8)] z-10 opacity-0 group-hover:opacity-100"
+                animate={{ top: ['0%', '100%', '0%'] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              />
+
+              {/* 3D Floating Interactive Elements */}
+              <motion.div 
+                className="absolute top-[15%] left-[5%] sm:left-[10%] z-20 [transform:translateZ(40px)]"
+                animate={{ y: [0, -15, 0], rotateZ: [0, 3, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_16px_32px_rgba(0,0,0,0.5)] backdrop-blur-2xl border-white/20 bg-white/10 group-hover:[transform:translateZ(50px)] transition-transform duration-700`}>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-400/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)]">
-                    <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-3xl border-white/30 bg-white/10 group-hover:[transform:translateZ(60px)] transition-transform duration-700`}>
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/30 flex items-center justify-center border border-blue-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_15px_rgba(59,130,246,0.6)] overflow-hidden">
+                    <div className="absolute inset-0 bg-blue-400/20 animate-ping opacity-50" />
+                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-blue-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
                   </div>
                   <div className="flex flex-col pr-2">
-                    <span className="text-xs sm:text-sm font-bold text-white drop-shadow-md">Route Optimized</span>
-                    <span className="text-[10px] sm:text-xs text-white/80 font-medium">AI found 3 hidden gems</span>
+                    <span className="text-xs sm:text-sm font-extrabold text-white drop-shadow-lg tracking-wide">AI Synthesizing</span>
+                    <span className="text-[10px] sm:text-xs text-blue-200 font-semibold tracking-wider">Processing 1M+ data points</span>
                   </div>
                 </div>
               </motion.div>
 
               <motion.div 
-                className="absolute bottom-[20%] right-[5%] sm:right-[10%] z-20 [transform:translateZ(40px)]"
-                animate={{ y: [0, 12, 0], rotateZ: [0, -2, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-[25%] right-[5%] sm:right-[10%] z-20 [transform:translateZ(60px)]"
+                animate={{ y: [0, 15, 0], rotateZ: [0, -3, 0] }}
+                transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               >
-                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_16px_32px_rgba(0,0,0,0.5)] backdrop-blur-2xl border-white/20 bg-white/10 group-hover:[transform:translateZ(70px)] transition-transform duration-700`}>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-400/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)]">
-                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-3xl border-white/30 bg-white/10 group-hover:[transform:translateZ(90px)] transition-transform duration-700`}>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/30 flex items-center justify-center border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_15px_rgba(16,185,129,0.6)]">
+                    <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
                   </div>
                   <div className="flex flex-col pr-2">
-                    <span className="text-xs sm:text-sm font-bold text-white drop-shadow-md">Itinerary Ready</span>
-                    <span className="text-[10px] sm:text-xs text-white/80 font-medium">Syncing to all devices...</span>
+                    <span className="text-xs sm:text-sm font-extrabold text-white drop-shadow-lg tracking-wide">Route Optimized</span>
+                    <span className="text-[10px] sm:text-xs text-emerald-200 font-semibold tracking-wider">Saved 45 mins of travel</span>
                   </div>
+                </div>
+              </motion.div>
+              
+              {/* 3D Central Globe Element */}
+              <motion.div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 [transform:translateZ(80px)]"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <div className="w-32 h-32 sm:w-48 sm:h-48 rounded-full border border-white/20 border-dashed flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-[2px]">
+                   <Globe className="w-12 h-12 sm:w-16 sm:h-16 text-white/40" />
                 </div>
               </motion.div>
             </motion.div>
