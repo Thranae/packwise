@@ -8,7 +8,7 @@ import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
 
 
-const FILTERS = ['All', 'upcoming', 'ongoing', 'completed', 'draft', 'archived', 'planning'];
+const FILTERS = ['All', 'upcoming', 'completed'];
 
 export default function TripsPage() {
   const { trips } = useTripContext();
