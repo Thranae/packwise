@@ -2,17 +2,17 @@ import React, { useState, useRef } from 'react';
 import { Sparkles, Send, Map, Wallet, MapPin, Box, Bot, Loader2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
-import { useAI } from '@/hooks/useAI';
 import { useTripContext } from '@/context/TripContext';
+import api from '@/services/api';
 
 export const AIAssistantWidget = ({ className = "" }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [chatResponse, setChatResponse] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   
   const cardRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(cardRef, { maxTilt: 4, stiffness: 250, damping: 25 });
-  const { chatAssistant, loading } = useAI();
   const { currentTrip } = useTripContext();
 
   const suggestions = [
@@ -23,11 +23,20 @@ export const AIAssistantWidget = ({ className = "" }) => {
   ];
 
   const handleSend = async (text = inputValue) => {
-    if (!text.trim() || loading) return;
+    if (!text.trim() || isLoading) return;
     setInputValue("");
     setChatResponse(null);
-    const response = await chatAssistant(text, currentTrip);
-    setChatResponse(response);
+    setIsLoading(true);
+    try {
+      const res = await api.post('/ai/chat', { message: text, context: currentTrip });
+      const reply = res.data?.reply;
+      setChatResponse(reply || 'I received your message but couldn\'t generate a detailed response. Please try again!');
+    } catch (err) {
+      console.error('AI Widget error:', err);
+      setChatResponse('Sorry, I\'m having trouble connecting right now. Please try again in a moment!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -44,7 +53,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
       <div className="flex flex-col gap-2 ios-3d-element h-[480px] overflow-y-auto custom-scrollbar pr-2">
         
         <AnimatePresence mode="wait">
-          {!chatResponse && !loading ? (
+          {!chatResponse && !isLoading ? (
             <motion.div 
               key="default-view"
               initial={{ opacity: 0 }}
@@ -85,7 +94,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
                 ))}
               </div>
             </motion.div>
-          ) : loading ? (
+          ) : isLoading ? (
             <motion.div 
               key="loading"
               initial={{ opacity: 0 }}
@@ -134,12 +143,12 @@ export const AIAssistantWidget = ({ className = "" }) => {
             placeholder="Ask Voyage Genie AI..."
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            disabled={loading}
+            disabled={isLoading}
             className="w-full h-full bg-transparent border-none outline-none text-white placeholder-white/40 px-5 font-medium text-[13px]"
           />
           <button 
             onClick={() => handleSend()}
-            disabled={loading}
+            disabled={isLoading}
             className={`
             absolute right-2 w-9 h-9 flex items-center justify-center rounded-full
             transition-all duration-700
