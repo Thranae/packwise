@@ -50,8 +50,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
       variants={{
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-      }}
-      className={`relative p-4 sm:p-5 flex flex-col justify-between h-[450px] sm:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
+      className={`relative p-4 sm:p-5 flex flex-col justify-between h-[400px] sm:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
     >
       <div className="flex flex-col gap-2 ios-3d-element flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 mb-3">
         
