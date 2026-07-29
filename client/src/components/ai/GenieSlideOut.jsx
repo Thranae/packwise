@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Send, Bot, User, Loader2 } from 'lucide-react';
+import { Sparkles, X, Send, User, Loader2 } from 'lucide-react';
+import { LogoIcon } from '@/components/ui/Logo';
 import api from '@/services/api';
 
 export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
@@ -111,7 +112,7 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                 <div key={msg.id} className={`flex gap-3 ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-lg ${msg.type === 'user' ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-gradient-to-br from-cyan-500 to-blue-600'}`}>
-                    {msg.type === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-white" />}
+                    {msg.type === 'user' ? <User className="w-4 h-4 text-white" /> : <LogoIcon size="sm" className="text-white drop-shadow-sm scale-90" />}
                   </div>
                   
                   {/* Bubble */}
@@ -129,7 +130,7 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
               {isLoading && (
                 <div className="flex gap-3 flex-row">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-lg bg-gradient-to-br from-cyan-500 to-blue-600">
-                    <Bot className="w-4 h-4 text-white" />
+                    <LogoIcon size="sm" className="text-white drop-shadow-sm scale-90" />
                   </div>
                   <div className="max-w-[80%] rounded-2xl p-4 text-sm font-medium shadow-md bg-white/10 text-white/90 rounded-tl-sm backdrop-blur-md border border-white/10">
                     <div className="flex items-center gap-2">

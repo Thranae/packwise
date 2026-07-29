@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Send, Map, Wallet, MapPin, Box, Bot, Loader2, ArrowLeft } from 'lucide-react';
+import { Sparkles, Send, Map, Wallet, MapPin, Box, Loader2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
+import { LogoIcon } from '@/components/ui/Logo';
 import { useTripContext } from '@/context/TripContext';
 import api from '@/services/api';
 
@@ -64,7 +65,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
                 <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-white/30 shadow-[0_4px_24px_rgba(168,85,247,0.5)] ios-3d-icon">
-                  <Bot className="w-7 h-7 text-white drop-shadow-lg" />
+                  <LogoIcon size="md" className="text-white drop-shadow-lg scale-90" />
                   <div className="absolute top-1 right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                 </div>
                 <div className="flex flex-col text-center bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[20px] p-3 mx-2 hover:bg-white/10 transition-all duration-700 cursor-default group">
