@@ -80,7 +80,7 @@ export const PullToRefresh = ({ children }) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-full"
+      className="relative w-full min-h-screen flex flex-col"
     >
       {/* The Pull Indicator */}
       <AnimatePresence>
@@ -110,7 +110,7 @@ export const PullToRefresh = ({ children }) => {
       <motion.div
         animate={{ y: (isPulling && !isRefreshing) ? (pullProgress * (MAX_PULL/2)) : 0 }}
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="w-full h-full"
+        className="w-full min-h-screen flex flex-col flex-1"
       >
         {children}
       </motion.div>
