@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Send, Bot, User } from 'lucide-react';
+import { Sparkles, X, Send, Bot, User, Loader2 } from 'lucide-react';
+import api from '@/services/api';
 
 export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
   const [messages, setMessages] = useState([
     { id: 1, type: 'bot', text: 'Hi! I am Voyage Genie. How can I help you plan your next adventure?' }
   ]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     if (isOpen && initialQuery) {
@@ -14,20 +17,47 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
     }
   }, [isOpen, initialQuery]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const newMsg = { id: Date.now(), type: 'user', text: input };
-    setMessages([...messages, newMsg]);
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+    const userText = input.trim();
+    const newMsg = { id: Date.now(), type: 'user', text: userText };
+    setMessages(prev => [...prev, newMsg]);
     setInput('');
-    
-    // Simulate AI response
-    setTimeout(() => {
-      setMessages(prev => [...prev, { 
-        id: Date.now() + 1, 
-        type: 'bot', 
-        text: `I can certainly help you with that! As an AI assistant in training, I'm analyzing your request about "${newMsg.text}". Stay tuned for magical itineraries!` 
+    setIsLoading(true);
+
+    try {
+      // Build conversation history for context
+      const history = messages
+        .filter(m => m.id !== 1) // skip the initial greeting
+        .map(m => ({ role: m.type === 'user' ? 'user' : 'assistant', content: m.text }));
+      history.push({ role: 'user', content: userText });
+
+      const res = await api.post('/ai/chat', {
+        message: userText,
+        history,
+      });
+
+      const reply = res.data?.reply || res.data?.message || res.data?.response || 'I received your message but couldn\'t generate a response. Please try again!';
+
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: reply,
       }]);
-    }, 1500);
+    } catch (err) {
+      console.error('Genie AI error:', err);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: 'Sorry, I\'m having trouble connecting right now. Please check your connection and try again!',
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -94,6 +124,23 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                   </div>
                 </div>
               ))}
+
+              {/* Loading indicator */}
+              {isLoading && (
+                <div className="flex gap-3 flex-row">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-lg bg-gradient-to-br from-cyan-500 to-blue-600">
+                    <Bot className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="max-w-[80%] rounded-2xl p-4 text-sm font-medium shadow-md bg-white/10 text-white/90 rounded-tl-sm backdrop-blur-md border border-white/10">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
+                      <span className="text-white/60">Genie is thinking...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
             </div>
 
             {/* Input Area */}
@@ -106,11 +153,13 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask anything..."
                   autoFocus
-                  className="w-full bg-white/5 border border-white/10 rounded-full py-4 pl-6 pr-14 text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all shadow-inner font-medium text-sm"
+                  disabled={isLoading}
+                  className="w-full bg-white/5 border border-white/10 rounded-full py-4 pl-6 pr-14 text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all shadow-inner font-medium text-sm disabled:opacity-50"
                 />
                 <button 
                   onClick={handleSend}
-                  className="absolute right-2 w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center text-white transition-colors shadow-lg"
+                  disabled={isLoading}
+                  className="absolute right-2 w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-400 flex items-center justify-center text-white transition-colors shadow-lg disabled:opacity-50 disabled:hover:bg-blue-500"
                 >
                   <Send className="w-4 h-4 -ml-0.5" />
                 </button>

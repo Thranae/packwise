@@ -478,7 +478,7 @@ export default function HomePage() {
               © {new Date().getFullYear()} Voyage Genie AI. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <span className="text-xs font-semibold tracking-widest text-[var(--theme-text-secondary)] opacity-70 uppercase">Designed in California</span>
+              <span className="text-xs font-semibold tracking-widest text-[var(--theme-text-secondary)] opacity-70 uppercase">Designed in Tamilnadu</span>
             </div>
           </div>
         </footer>
