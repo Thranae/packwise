@@ -258,9 +258,9 @@ export default function ProfilePage() {
           <motion.div variants={fadeInUp} className="lg:col-span-8 flex flex-col gap-8">
             
             {/* Personal Details */}
-            <div className="ios-glass-card p-8 md:p-10 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
+            <div className="ios-glass-card p-6 md:p-8 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
               
-              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-10">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
                 <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-inner">
                     <User className="w-5 h-5 text-blue-400" />
@@ -282,11 +282,11 @@ export default function ProfilePage() {
                 </button>
               </div>
 
-              <div className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              <div className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
                   {/* Full Name */}
                   <div className="group/input relative">
-                    <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-2 ml-1 transition-colors group-focus-within/input:text-blue-400">Full Name</label>
+                    <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-1.5 ml-1 transition-colors group-focus-within/input:text-blue-400">Full Name</label>
                     <div className="relative">
                       <input 
                         type="text" 
@@ -294,14 +294,14 @@ export default function ProfilePage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full h-14 bg-white/5 border border-white/10 rounded-[16px] px-5 text-white font-medium focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner"
+                        className="w-full h-12 bg-white/5 border border-white/10 rounded-[14px] px-5 text-white font-medium focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner"
                       />
                     </div>
                   </div>
                   
                   {/* Display Name */}
                   <div className="group/input relative">
-                    <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-2 ml-1 transition-colors group-focus-within/input:text-purple-400">Display Name</label>
+                    <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-1.5 ml-1 transition-colors group-focus-within/input:text-purple-400">Display Name</label>
                     <div className="relative">
                       <input 
                         type="text" 
@@ -309,7 +309,7 @@ export default function ProfilePage() {
                         value={formData.displayName}
                         onChange={handleInputChange}
                         disabled={!isEditing}
-                        className="w-full h-14 bg-white/5 border border-white/10 rounded-[16px] px-5 text-white font-medium focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
+                        className="w-full h-12 bg-white/5 border border-white/10 rounded-[14px] px-5 text-white font-medium focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
                       />
                     </div>
                   </div>
@@ -317,7 +317,7 @@ export default function ProfilePage() {
 
                 {/* Email Address */}
                 <div className="group/input relative">
-                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-2 ml-1 flex items-center gap-2 transition-colors group-focus-within/input:text-emerald-400">
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-1.5 ml-1 flex items-center gap-2 transition-colors group-focus-within/input:text-emerald-400">
                     Email Address
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   </label>
@@ -329,14 +329,14 @@ export default function ProfilePage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className="w-full h-14 bg-white/5 border border-white/10 rounded-[16px] pl-14 pr-5 text-white font-medium focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
+                      className="w-full h-12 bg-white/5 border border-white/10 rounded-[14px] pl-14 pr-5 text-white font-medium focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
                     />
                   </div>
                 </div>
 
                 {/* Home Airport */}
                 <div className="group/input relative">
-                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-2 ml-1 transition-colors group-focus-within/input:text-blue-400">Home Airport (Optional)</label>
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-1.5 ml-1 transition-colors group-focus-within/input:text-blue-400">Home Airport (Optional)</label>
                   <div className="relative">
                     <Plane className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 transition-colors group-focus-within/input:text-blue-400" />
                     <input 
@@ -346,7 +346,7 @@ export default function ProfilePage() {
                       onChange={handleInputChange}
                       placeholder="e.g. SFO, LHR, JFK"
                       disabled={!isEditing}
-                      className="w-full h-14 bg-white/5 border border-white/10 rounded-[16px] pl-14 pr-5 text-white font-medium focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
+                      className="w-full h-12 bg-white/5 border border-white/10 rounded-[14px] pl-14 pr-5 text-white font-medium focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
                     />
                   </div>
                 </div>
@@ -354,18 +354,18 @@ export default function ProfilePage() {
             </div>
 
             {/* Travel Preferences Section */}
-            <div className="ios-glass-card p-8 md:p-10 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
-              <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight mb-8">
+            <div className="ios-glass-card p-6 md:p-8 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
+              <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 shadow-inner">
                   <Compass className="w-5 h-5 text-cyan-400" />
                 </div>
                 Travel Preferences
               </h3>
 
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {/* Budget Preference */}
                 <div>
-                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-3 ml-1 flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-emerald-400" />
                     Budget Level
                   </label>
@@ -392,7 +392,7 @@ export default function ProfilePage() {
 
                 {/* Travel Style */}
                 <div>
-                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-3 ml-1 flex items-center gap-2">
                     <Compass className="w-4 h-4 text-cyan-400" />
                     Travel Style
                   </label>
@@ -417,7 +417,7 @@ export default function ProfilePage() {
 
                 {/* Dietary Restrictions */}
                 <div>
-                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-3 ml-1 flex items-center gap-2">
                     <Utensils className="w-4 h-4 text-orange-400" />
                     Dietary Restrictions
                   </label>
@@ -443,8 +443,8 @@ export default function ProfilePage() {
             </div>
 
             {/* Security Section */}
-            <div className="ios-glass-card p-8 md:p-10 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
-              <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight mb-8">
+            <div className="ios-glass-card p-6 md:p-8 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
+              <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center border border-white/10 shadow-inner">
                   <Shield className="w-5 h-5 text-emerald-400" />
                 </div>
