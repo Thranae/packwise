@@ -76,7 +76,9 @@ export default function SignupPage() {
     >
       {/* Real Top Logo */}
       <div className="mb-3 flex justify-start">
-        <img src="/pwa-192x192.png" alt="Voyage Genie" className="w-12 h-12 rounded-[12px] shadow-sm object-cover" />
+        <div className="w-12 h-12 rounded-[14px] flex items-center justify-center bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20 shadow-sm">
+          <LogoIcon size="sm" className="text-[var(--color-accent)]" />
+        </div>
       </div>
 
       {/* Heading & Subtitle */}
