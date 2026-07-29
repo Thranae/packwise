@@ -26,7 +26,6 @@ const PlaceCard = ({ place, onSelect }) => {
   const displayImage = image || place.image;
 
   return (
-  return (
     <motion.div
       onClick={() => onSelect(place)}
       className={`group relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-start shrink-0 ${GLASS_BASE} ${HOVER_EFFECTS}`}
