@@ -64,9 +64,9 @@ export const AIAssistantWidget = ({ className = "" }) => {
             >
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
-                <div className="relative w-14 h-14 rounded-[20px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl">
-                  <LogoIcon size="md" className="scale-95 drop-shadow-xl" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <div className="relative w-12 h-12 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl">
+                  <Sparkles className="w-6 h-6 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.6)]" />
+                  <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                 </div>
                 <div className="flex flex-col text-center bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[20px] p-3 mx-2 hover:bg-white/10 transition-all duration-700 cursor-default group">
                   <h3 className="text-lg font-semibold tracking-tighter text-white group-hover:scale-105 transition-transform duration-700 mb-0.5 drop-shadow-md">Voyage Genie AI</h3>
@@ -77,22 +77,22 @@ export const AIAssistantWidget = ({ className = "" }) => {
               </div>
 
               {/* Quick Suggestions */}
-              <div className="flex flex-col gap-3 mt-2 px-1 pb-4">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/50 ml-1">Suggested</span>
-                {suggestions.map((item, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => handleSend(item.label)}
-                    className="flex items-center gap-3 w-full p-3 rounded-[16px] ios-liquid-button group"
-                  >
-                    <div className="w-8 h-8 rounded-[10px] bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors shrink-0">
+              <div className="flex flex-col gap-2 mt-1 px-1 pb-2">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50 ml-1 mb-0.5">Suggested</span>
+                <div className="grid grid-cols-2 gap-2">
+                  {suggestions.map((item, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => handleSend(item.label)}
+                      className="flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-[14px] bg-white/5 hover:bg-white/10 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group transition-all duration-300"
+                    >
                       <item.icon className="w-4 h-4 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)] group-hover:scale-110 transition-transform" />
-                    </div>
-                    <span className="text-[14px] font-semibold text-white/80 group-hover:text-white transition-colors">
-                      {item.label}
-                    </span>
-                  </button>
-                ))}
+                      <span className="text-[11px] font-medium text-white/80 group-hover:text-white transition-colors text-center leading-tight">
+                        {item.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ) : isLoading ? (
