@@ -70,7 +70,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Layout Context */}
-      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-24 lg:pt-40">
+      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-36 lg:pt-40">
         
         {/* HERO SECTION */}
         <section className="relative min-h-[70vh] lg:min-h-[90vh] flex flex-col justify-center pb-10 lg:pb-20">
@@ -81,7 +81,7 @@ export default function HomePage() {
               variants={staggerContainer}
               initial="hidden"
               animate="show"
-              className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20"
+              className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-2 lg:order-1"
             >
               <motion.div variants={fadeInUp} className={`${glassPill} inline-flex items-center gap-3 px-4 py-2 mb-8`}>
                 <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
@@ -132,7 +132,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
-            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-8 lg:mt-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center">
+            <div className="lg:col-span-6 relative h-[450px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mb-8 lg:mb-0 transform scale-90 sm:scale-100 lg:scale-100 origin-center order-1 lg:order-2">
               
               {/* Center Map / Main Art */}
               <motion.div style={{ y: floatY2 }} className="absolute top-[10%] left-[5%] w-[90%] h-[75%] z-20">
