@@ -85,19 +85,7 @@ const MOCK_TRIPS = [
     travelers: 3,
     status: 'planning',
   },
-  {
-    _id: "mock-7",
-    destination: 'Rio Carnival',
-    country: 'Brazil',
-    startDate: '2022-02-25T00:00:00Z',
-    endDate: '2022-03-05T00:00:00Z',
-    duration: '8 Days',
-    budget: 3500,
-    currency: 'BRL',
-    timezone: 'America/Sao_Paulo',
-    travelers: 4,
-    status: 'archived',
-  },
+
   {
     _id: "mock-8",
     destination: 'Dubai Luxury Escape',
