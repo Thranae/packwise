@@ -270,15 +270,15 @@ export const HeroSection = () => {
           <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end justify-between w-full md:w-auto mt-4 md:mt-0 gap-4 md:gap-6 ios-3d-element">
             <div className="flex gap-2 sm:gap-3 md:gap-4 justify-between sm:justify-start">
               {/* Weather Glass Pill */}
-              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/10 md:bg-white/5 backdrop-blur-xl border border-white/20 md:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] min-w-[70px]">
+              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] min-w-[70px]">
                 {renderWeatherIcon(weather?.current?.icon, "w-4 h-4 md:w-6 md:h-6 mb-1 drop-shadow-md")}
-                <span className="text-[11px] md:text-sm font-bold text-white whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
+                <span className="text-[11px] md:text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
               </div>
               
               {/* Budget Glass Pill */}
-              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/10 md:bg-white/5 backdrop-blur-xl border border-white/20 md:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] min-w-[80px]">
-                <Wallet className="w-4 h-4 md:w-6 md:h-6 text-emerald-400 mb-1" />
-                <span className="text-[11px] md:text-sm font-bold text-white whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
+              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] min-w-[80px]">
+                <Wallet className="w-4 h-4 md:w-6 md:h-6 text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-1" />
+                <span className="text-[11px] md:text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
               </div>
             </div>
 
