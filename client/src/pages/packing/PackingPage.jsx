@@ -750,7 +750,7 @@ export default function PackingPage() {
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
                   {/* The Animated Checklist Container - Compact */}
-                  <div className="relative w-[200px] h-[135px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-95 sm:scale-100">
+                  <div className="relative w-[220px] h-[150px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-100">
                     
                     {/* Header */}
                     <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30">
@@ -803,18 +803,22 @@ export default function PackingPage() {
                              {/* The Furious Checkmark! */}
                              <motion.div
                                className="ml-auto text-emerald-400"
-                               animate={{ scale: [0, 0, 1.4, 1], opacity: [0, 0, 1, 1] }}
-                               transition={{
-                                 duration: 4.5,
-                                 repeat: Infinity,
-                                 ease: ["linear", "linear", "backOut", "linear"],
-                                 times: [
-                                   0,
-                                   index === 0 ? 0.001 : index * 0.16,
-                                   Math.min(1, index * 0.16 + 0.04),
-                                   1
-                                 ]
-                               }}
+                               animate={index === 0 ? { scale: 1, opacity: 1 } : { scale: [0, 0, 1.4, 1], opacity: [0, 0, 1, 1] }}
+                               transition={
+                                 index === 0 
+                                 ? { duration: 0 }
+                                 : {
+                                     duration: 4.5,
+                                     repeat: Infinity,
+                                     ease: ["linear", "linear", "backOut", "linear"],
+                                     times: [
+                                       0,
+                                       index * 0.16,
+                                       Math.min(0.99, index * 0.16 + 0.04),
+                                       1
+                                     ]
+                                   }
+                               }
                              >
                                 <CheckCircle2 className="w-5 h-5 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]" strokeWidth={3} />
                              </motion.div>
