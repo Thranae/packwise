@@ -147,7 +147,7 @@ export const TripBuilderWizard = () => {
         <motion.div 
           ref={containerRef}
           style={{ rotateX, rotateY, transformPerspective: 1500 }}
-          className="relative w-full ios-glass-card rounded-[40px] p-5 sm:p-8 group/card shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10"
+          className="relative w-full ios-glass-card rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 group/card shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col max-h-[calc(100dvh-220px)] lg:max-h-none"
         >
         <motion.div
           className="pointer-events-none absolute -inset-px rounded-[40px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 mix-blend-overlay z-0"
@@ -156,7 +156,7 @@ export const TripBuilderWizard = () => {
           }}
         />
 
-        <div className="flex items-center justify-between mb-6 relative z-10 px-2 sm:px-6">
+        <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10 px-2 sm:px-6 shrink-0">
           <div className="absolute top-1/2 left-6 right-6 h-[3px] bg-white/5 rounded-full -z-10" />
           <div 
             className="absolute top-1/2 left-6 h-[3px] bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full -z-10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_0_15px_rgba(59,130,246,0.6)]" 
@@ -184,7 +184,7 @@ export const TripBuilderWizard = () => {
           })}
         </div>
 
-        <div className="relative z-10 mt-16 sm:mt-12">
+        <div className="relative z-10 mt-2 sm:mt-6 flex-1 overflow-y-auto pb-4 scrollbar-hide px-1 sm:px-2" style={{ scrollbarWidth: 'none' }}>
           <AnimatePresence mode="wait">
             {!isGenerating ? (
               <motion.div
@@ -327,7 +327,7 @@ export const TripBuilderWizard = () => {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between mt-8 sm:mt-10 pt-6 border-t border-white/10 relative z-10">
+                <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/10 relative z-10 shrink-0">
                   <button 
                     onClick={() => setStep(step - 1)}
                     className={`h-12 sm:h-14 px-6 sm:px-8 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.03] backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 text-white/70 hover:bg-white/[0.08] hover:text-white hover:-translate-y-[2px] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_8px_rgba(255,255,255,0.1)]'}`}
