@@ -159,6 +159,11 @@ function ToastContainer() {
 function AppRoutes() {
   const location = useLocation();
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
   return (
     <Suspense fallback={<Spinner />}>
       <Routes location={location} key={location.pathname}>
