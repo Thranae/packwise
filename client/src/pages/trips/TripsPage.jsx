@@ -53,12 +53,12 @@ export default function TripsPage() {
       <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-4 md:pt-6">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-10">
+        <div className="flex flex-row items-center justify-between gap-4 mb-6 md:mb-10">
           <div className="flex flex-col">
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-5xl font-semibold tracking-tighter text-white drop-shadow-sm mb-2 md:mb-3"
+              className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tighter text-white drop-shadow-sm mb-1"
             >
               My Trips
             </motion.h1>
@@ -66,9 +66,9 @@ export default function TripsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-base md:text-lg font-medium text-white/60 tracking-wide"
+              className="text-sm md:text-lg font-medium text-white/60 tracking-wide"
             >
-              Plan, manage and revisit every journey.
+              Plan, manage and revisit.
             </motion.p>
           </div>
           
@@ -78,9 +78,9 @@ export default function TripsPage() {
             transition={{ delay: 0.2 }}
           >
             <Link to={`${ROUTES.ASSISTANT}?mode=builder`} onClick={() => successTap()}>
-              <button className="flex items-center gap-2 h-12 md:h-14 px-6 md:px-8 rounded-full ios-liquid-button group w-full md:w-auto justify-center">
-                <Plus className="w-5 h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform ios-3d-icon" />
-                <span className="text-[14px] md:text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create New Trip</span>
+              <button className="flex items-center justify-center gap-2 w-12 h-12 md:w-auto md:h-14 md:px-8 rounded-full ios-liquid-button group bg-white/10 border border-white/20 shadow-[0_8px_16px_rgba(0,0,0,0.3)] hover:bg-white/20">
+                <Plus className="w-6 h-6 md:w-5 md:h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform ios-3d-icon" />
+                <span className="hidden md:inline text-[15px] font-semibold text-white tracking-wide drop-shadow-md ios-3d-element">Create Trip</span>
               </button>
             </Link>
           </motion.div>
