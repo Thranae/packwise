@@ -33,6 +33,9 @@ app.use('/api', routes);
 app.use('/api/flights', flightRoutes);   // Feature 2: Flight Tracker
 app.use('/api/export', exportRoutes);    // Feature 6: PDF Export
 
+// Ping route to keep the free-tier server awake via cron services
+app.get('/api/ping', (req, res) => res.status(200).json({ status: 'ok', message: 'Server is awake' }));
+
 app.use('/uploads', express.static('uploads'));
 
 // Serve frontend static files in production
