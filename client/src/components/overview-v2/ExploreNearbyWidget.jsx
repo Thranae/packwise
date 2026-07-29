@@ -28,7 +28,7 @@ const PlaceCard = ({ place, onSelect }) => {
   return (
     <motion.div
       onClick={() => onSelect(place)}
-      className={`group relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-start shrink-0 ${GLASS_BASE} ${HOVER_EFFECTS}`}
+      className={`group relative w-full shrink-0 h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-center ${GLASS_BASE} ${HOVER_EFFECTS}`}
     >
       {loading ? (
         <div className="absolute inset-0 bg-white/5 animate-pulse" />
@@ -107,7 +107,7 @@ const PlaceCard = ({ place, onSelect }) => {
 };
 
 const PlaceCardSkeleton = () => (
-  <div className={`relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden shrink-0 snap-start ${GLASS_BASE}`}>
+  <div className={`relative w-full h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden shrink-0 snap-center ${GLASS_BASE}`}>
     <div className="absolute inset-0 bg-white/[0.03] animate-pulse" />
     <motion.div 
       initial={{ x: '-100%' }}
