@@ -57,15 +57,18 @@ export const Navbar = () => {
         className="fixed top-[16px] sm:top-[24px] left-3 right-3 sm:left-6 sm:right-6 md:left-8 md:right-8 z-[100] pointer-events-none flex justify-center"
       >
         <header
-          className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700"
+          className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700 overflow-hidden"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.08)',
-            backdropFilter: 'blur(28px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15)'
+            backgroundColor: 'rgba(255, 255, 255, 0.02)',
+            backdropFilter: 'blur(60px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(60px) saturate(200%)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.25)',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 6px rgba(0,0,0,0.5)'
           }}
         >
+          {/* Subtle noise texture for frosted liquid look */}
+          <div className="absolute inset-0 opacity-[0.15] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
           {/* Left: Logo */}
           <Link to={isAuthenticated ? ROUTES.OVERVIEW : ROUTES.HOME} className="flex-shrink-0 z-10 relative pl-2 hover:scale-105 transition-transform duration-700">
             <Logo size="sm" />
