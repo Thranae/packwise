@@ -351,10 +351,11 @@ export const TopHeader = () => {
         <div className="relative" ref={notificationsRef}>
           <button 
             onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="relative flex items-center justify-center w-[52px] h-[52px] rounded-[24px] bg-[rgba(255,255,255,0.03)] backdrop-blur-2xl border border-[rgba(255,255,255,0.1)] border-t-[rgba(255,255,255,0.2)] shadow-[0_10px_40px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.06)] hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group"
           >
-            <Bell className="w-5 h-5 text-white/80" />
-            <div className="absolute top-[14px] right-[14px] w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 rounded-full transition-opacity duration-500" />
+            <Bell className="w-[18px] h-[18px] md:w-5 md:h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute top-[8px] right-[10px] w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.9)] border border-[#020617]" />
           </button>
 
           <AnimatePresence>
@@ -409,13 +410,14 @@ export const TopHeader = () => {
         <div className="relative" ref={profileMenuRef}>
           <button 
             onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-            className="flex items-center justify-center w-[52px] h-[52px] rounded-[24px] overflow-hidden ml-2 bg-gradient-to-br from-white/20 to-white/5 border border-[rgba(255,255,255,0.2)] border-t-[rgba(255,255,255,0.4)] shadow-[0_10px_40px_rgba(0,0,0,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full overflow-hidden ml-1 md:ml-2 bg-gradient-to-br from-blue-500/20 to-purple-500/10 border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group"
           >
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
             {user?.profileImage ? (
-              <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
+              <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover relative z-0" />
             ) : (
-              <div className="w-full h-full bg-blue-500/20 flex items-center justify-center">
-                <span className="text-white font-bold drop-shadow-md">{getInitials(user?.name || 'User')}</span>
+              <div className="w-full h-full bg-blue-500/10 flex items-center justify-center relative z-0">
+                <span className="text-white text-[13px] md:text-sm font-bold drop-shadow-md">{getInitials(user?.name || 'User')}</span>
               </div>
             )}
           </button>
