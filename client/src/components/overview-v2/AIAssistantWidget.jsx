@@ -49,9 +49,9 @@ export const AIAssistantWidget = ({ className = "" }) => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className={`relative p-5 flex flex-col justify-between h-[600px] rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
+      className={`relative p-4 sm:p-5 flex flex-col justify-between h-[400px] sm:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden ios-glass-card group cursor-pointer ${className}`}
     >
-      <div className="flex flex-col gap-2 ios-3d-element h-[480px] overflow-y-auto custom-scrollbar pr-2">
+      <div className="flex flex-col gap-2 ios-3d-element flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-2 mb-3">
         
         <AnimatePresence mode="wait">
           {!chatResponse && !isLoading ? (
@@ -64,9 +64,9 @@ export const AIAssistantWidget = ({ className = "" }) => {
             >
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-white/30 shadow-[0_4px_24px_rgba(168,85,247,0.5)] ios-3d-icon">
-                  <LogoIcon size="md" className="text-white drop-shadow-lg scale-90" />
-                  <div className="absolute top-1 right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <div className="relative w-14 h-14 rounded-[20px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl">
+                  <LogoIcon size="md" className="scale-95 drop-shadow-xl" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                 </div>
                 <div className="flex flex-col text-center bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[20px] p-3 mx-2 hover:bg-white/10 transition-all duration-700 cursor-default group">
                   <h3 className="text-lg font-semibold tracking-tighter text-white group-hover:scale-105 transition-transform duration-700 mb-0.5 drop-shadow-md">Voyage Genie AI</h3>
@@ -128,9 +128,9 @@ export const AIAssistantWidget = ({ className = "" }) => {
       </div>
 
       {/* Floating Chat Input */}
-      <div className="shrink-0 mt-auto pt-3 ios-3d-element">
+      <div className="shrink-0 mt-auto pt-1 ios-3d-element">
         <div className={`
-          relative flex items-center w-full rounded-[20px] h-[56px]
+          relative flex items-center w-full rounded-[16px] sm:rounded-[20px] h-[48px] sm:h-[56px]
           bg-white/5 backdrop-blur-md
           border border-white/10
           transition-all duration-700
