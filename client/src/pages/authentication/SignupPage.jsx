@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
-import { LogoIcon } from '@/components/ui/Logo';
+import { LogoIcon, Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
@@ -75,10 +75,10 @@ export default function SignupPage() {
       className="w-full flex flex-col font-sans"
     >
       {/* Real Top Logo */}
-      <div className="mb-3 flex justify-start">
-        <div className="w-12 h-12 rounded-[14px] flex items-center justify-center bg-[var(--color-accent)]/10 text-[var(--color-accent)] border border-[var(--color-accent)]/20 shadow-sm">
-          <LogoIcon size="lg" className="text-[var(--color-accent)]" />
-        </div>
+      <div className="mb-6 flex justify-start">
+        <Link to={ROUTES.HOME} className="hover:opacity-80 transition-opacity">
+          <Logo size="md" />
+        </Link>
       </div>
 
       {/* Heading & Subtitle */}
