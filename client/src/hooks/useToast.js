@@ -11,6 +11,7 @@ export const useToast = () => {
 
   return {
     toasts,
+    addToast,
     removeToast,
     success: (message) => addToast(message, 'success'),
     error: (message) => addToast(message, 'error'),

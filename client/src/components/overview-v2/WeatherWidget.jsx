@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { CloudSun, Wind, Droplets, Loader2, CloudRain, CloudLightning, Sun, CloudFog } from 'lucide-react';
+import { CloudSun, Wind, Droplets, Loader2, CloudRain, CloudLightning, Sun, CloudFog, Cloud, Snowflake, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
@@ -12,9 +12,22 @@ export const WeatherWidget = ({ className = "" }) => {
   const { currentTrip } = useTripContext();
   const { weather, loading, error } = useLiveWeather(currentTrip?.destination);
 
-  const getIconUrl = (iconCode) => {
-    if (!iconCode) return null;
-    return `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  const renderWeatherIcon = (iconCode, className) => {
+    if (!iconCode) return <CloudSun className={`${className} text-yellow-400`} />;
+    const code = iconCode.substring(0, 2);
+    const isNight = iconCode.endsWith('n');
+    switch (code) {
+      case '01': return isNight ? <Moon className={`${className} text-blue-200`} /> : <Sun className={`${className} text-yellow-400`} />;
+      case '02': return <CloudSun className={`${className} text-yellow-400`} />;
+      case '03': 
+      case '04': return <Cloud className={`${className} text-slate-300`} />;
+      case '09':
+      case '10': return <CloudRain className={`${className} text-blue-400`} />;
+      case '11': return <CloudLightning className={`${className} text-purple-400`} />;
+      case '13': return <Snowflake className={`${className} text-blue-200`} />;
+      case '50': return <CloudFog className={`${className} text-slate-400`} />;
+      default: return <CloudSun className={`${className} text-yellow-400`} />;
+    }
   };
 
   return (
@@ -50,11 +63,7 @@ export const WeatherWidget = ({ className = "" }) => {
               </span>
             </div>
             <div className="w-12 h-12 rounded-[16px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] ios-3d-icon shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:-translate-y-1 group-hover:bg-white/10 group-hover:border-white/20 group-hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_8px_16px_rgba(0,0,0,0.3)]">
-              {weather?.current?.icon ? (
-                <img src={getIconUrl(weather.current.icon)} alt={weather.current.condition} className="w-10 h-10 object-contain drop-shadow-lg transition-transform duration-700 group-hover:scale-110" />
-              ) : (
-                <CloudSun className="w-6 h-6 text-yellow-400 drop-shadow-md transition-transform duration-700 group-hover:scale-110" />
-              )}
+              {renderWeatherIcon(weather?.current?.icon, "w-10 h-10 drop-shadow-md transition-transform duration-700 group-hover:scale-110")}
             </div>
           </div>
 

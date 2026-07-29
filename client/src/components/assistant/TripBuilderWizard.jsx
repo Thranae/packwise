@@ -102,6 +102,8 @@ export const TripBuilderWizard = () => {
   const [duration, setDuration] = useState("");
   const [budget, setBudget] = useState("Moderate");
   const [styles, setStyles] = useState([]);
+  const [males, setMales] = useState(1);
+  const [females, setFemales] = useState(0);
   
   // Side Panel State
   const [suggestions, setSuggestions] = useState([]);
@@ -117,7 +119,8 @@ export const TripBuilderWizard = () => {
 
   const handleGenerate = async () => {
     const flightContext = startCity ? ` Flying from ${startCity}.` : "";
-    const fullPrompt = `Destination: ${prompt}.${flightContext} Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.`;
+    const genderContext = (males > 0 || females > 0) ? ` Travelers: ${males + females} total (${males} male, ${females} female).` : "";
+    const fullPrompt = `Destination: ${prompt}.${flightContext} Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     await generateTrip(fullPrompt);
     navigate(ROUTES.TRIPS);
   };
@@ -299,6 +302,27 @@ export const TripBuilderWizard = () => {
                     <div className="group">
                       <label className="block text-[15px] font-bold text-white/90 mb-3 tracking-wide">Specific Interests <span className="text-white/40 font-medium">(Optional)</span></label>
                       <input type="text" placeholder="e.g. Art museums, fine dining, hiking..." className="w-full h-16 px-6 text-lg rounded-[20px] bg-white/[0.03] backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white placeholder-white/30 focus:bg-white/[0.08] focus:border-white/20 focus:ring-4 focus:ring-indigo-400/10 transition-all duration-500 shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)] outline-none group-hover:bg-white/[0.06]" />
+                    </div>
+                    <div>
+                      <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Who is traveling? <span className="text-white/40 font-medium">(For Packing List)</span></label>
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03] backdrop-blur-2xl border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                          <span className="font-bold text-white/80 tracking-wide">Male Travelers</span>
+                          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                            <button onClick={() => setMales(Math.max(0, males - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
+                            <span className="w-6 text-center font-black text-lg text-white">{males}</span>
+                            <button onClick={() => setMales(males + 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Plus className="w-4 h-4 text-white" /></button>
+                          </div>
+                        </div>
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03] backdrop-blur-2xl border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                          <span className="font-bold text-white/80 tracking-wide">Female Travelers</span>
+                          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                            <button onClick={() => setFemales(Math.max(0, females - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
+                            <span className="w-6 text-center font-black text-lg text-white">{females}</span>
+                            <button onClick={() => setFemales(females + 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Plus className="w-4 h-4 text-white" /></button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}

@@ -1,16 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { MapPin, Clock, CloudSun, DollarSign, Wallet, Box, Sparkles, BoxSelect, Map, Calculator } from 'lucide-react';
+import { MapPin, Clock, CloudSun, CloudRain, DollarSign, Wallet, Box, Sparkles, BoxSelect, Map, Calculator, FileDown, Download, Share2, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
 import { useLiveWeather, useLiveCurrency } from '@/hooks/useLiveApis';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 export const CommandCenterWidget = ({ className = "" }) => {
   const cardRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(cardRef, { maxTilt: 5, stiffness: 250, damping: 25 });
+  const { playSound } = useSoundEffect();
+  const navigate = useNavigate();
   
   const { currentTrip } = useTripContext();
-  const { weather } = useLiveWeather(currentTrip?.destination);
+  const dest = currentTrip?.destination?.split('&')[0];
+  const { weather } = useLiveWeather(dest);
   const targetCurrency = currentTrip?.currency || 'EUR';
   const { exchangeRate } = useLiveCurrency(targetCurrency, 'INR');
   
@@ -38,6 +44,8 @@ export const CommandCenterWidget = ({ className = "" }) => {
         } catch (e) {
           setLocalTime('--:--');
         }
+      } else {
+        setLocalTime('--:--');
       }
     };
     
@@ -45,6 +53,35 @@ export const CommandCenterWidget = ({ className = "" }) => {
     const timer = setInterval(updateTime, 60000);
     return () => clearInterval(timer);
   }, [currentTrip?.timezone]);
+
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportStory = async (e) => {
+    e.stopPropagation();
+    playSound('tap');
+    setIsExporting(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const element = document.getElementById('story-export-template');
+      if (element) {
+        const canvas = await html2canvas(element, { 
+          scale: 1, 
+          useCORS: true, 
+          logging: false,
+          backgroundColor: null
+        });
+        const imgData = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = `${dest || 'Trip'}-Story.png`;
+        link.href = imgData;
+        link.click();
+      }
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <motion.div 
@@ -146,22 +183,77 @@ export const CommandCenterWidget = ({ className = "" }) => {
             <span className="text-xs font-bold text-purple-400">100%</span>
           </div>
         </div>
-        
+      </div>
+
+      {/* Hidden 9:16 Export Template */}
+      <div 
+        id="story-export-template" 
+        className="fixed top-[-9999px] left-[-9999px] w-[1080px] h-[1920px] bg-gradient-to-br from-slate-900 via-[#030712] to-blue-950 flex flex-col items-center justify-between p-24 font-sans"
+        style={{ zIndex: -100 }}
+      >
+        <div className="flex flex-col items-center gap-8 mt-12 w-full">
+          <div className="w-40 h-40 rounded-full bg-white/5 flex items-center justify-center border border-white/10 shadow-[inset_0_2px_10px_rgba(255,255,255,0.2)]">
+            <MapPin className="w-20 h-20 text-blue-400" />
+          </div>
+          <h1 className="text-[120px] font-black text-white tracking-tighter text-center leading-tight drop-shadow-2xl capitalize">
+            {dest || "My Trip"}
+          </h1>
+          <p className="text-4xl text-white/50 font-semibold tracking-widest uppercase mt-4">
+            Voyage Genie
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-16 w-full px-12">
+          {/* Weather Card */}
+          <div className="w-full bg-white/5 border border-white/10 rounded-[64px] p-16 flex items-center justify-between shadow-2xl">
+            <div className="flex flex-col">
+              <span className="text-3xl text-white/40 font-bold uppercase tracking-widest mb-4">Live Weather</span>
+              <span className="text-[100px] text-white font-black tracking-tighter">{weather?.current?.temp ?? '--'}°</span>
+              <span className="text-4xl text-blue-300 font-semibold uppercase tracking-wider capitalize">{weather?.current?.condition || 'Clear'}</span>
+            </div>
+            <CloudRain className="w-48 h-48 text-blue-400 opacity-80" />
+          </div>
+
+          {/* Budget Card */}
+          <div className="w-full bg-white/5 border border-white/10 rounded-[64px] p-16 flex items-center justify-between shadow-2xl">
+            <div className="flex flex-col">
+              <span className="text-3xl text-white/40 font-bold uppercase tracking-widest mb-4">Travel Budget</span>
+              <div className="flex items-baseline gap-4">
+                <span className="text-[100px] text-white font-black tracking-tighter">{currentTrip?.budget || 0}</span>
+                <span className="text-5xl text-blue-300 font-bold uppercase">{targetCurrency}</span>
+              </div>
+            </div>
+            <Download className="w-48 h-48 text-emerald-400 opacity-80" />
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center gap-6 mb-24">
+          <div className="flex gap-4">
+            <div className="w-4 h-4 rounded-full bg-blue-500" />
+            <div className="w-4 h-4 rounded-full bg-purple-500" />
+            <div className="w-4 h-4 rounded-full bg-emerald-500" />
+          </div>
+          <span className="text-3xl font-bold tracking-[0.3em] text-white/30 uppercase">Ready For Takeoff</span>
+        </div>
       </div>
 
       {/* Bottom Quick Actions */}
-      <div className="grid grid-cols-3 gap-2 mt-auto ios-3d-element">
-        <button className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group">
+      <div className="grid grid-cols-2 gap-2 mt-auto ios-3d-element">
+        <button onClick={() => { playSound('tap'); navigate(ROUTES.PACKING); }} className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group">
           <BoxSelect className="w-3.5 h-3.5 text-white/60 group-hover:text-white" />
           <span className="text-[11px] font-bold text-white/80 group-hover:text-white tracking-wide">Pack</span>
         </button>
-        <button className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group">
+        <button onClick={() => { playSound('tap'); navigate(ROUTES.BUDGET); }} className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group">
           <Calculator className="w-3.5 h-3.5 text-white/60 group-hover:text-white" />
           <span className="text-[11px] font-bold text-white/80 group-hover:text-white tracking-wide">Budget</span>
         </button>
-        <button className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group">
-          <Map className="w-3.5 h-3.5 text-white/60 group-hover:text-white" />
-          <span className="text-[11px] font-bold text-white/80 group-hover:text-white tracking-wide">Plan</span>
+        <button onClick={() => { playSound('tap'); navigate(ROUTES.CALENDAR); }} className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/30 transition-colors">
+          <Map className="w-3.5 h-3.5 text-purple-400 group-hover:text-white" />
+          <span className="text-[11px] font-bold text-purple-300 group-hover:text-white tracking-wide">Itinerary / Calendar</span>
+        </button>
+        <button onClick={handleExportStory} disabled={isExporting} className="flex items-center justify-center gap-1.5 py-2 rounded-[16px] ios-liquid-button group bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/30 transition-colors">
+          {isExporting ? <Loader2 className="w-3.5 h-3.5 text-blue-400 animate-spin" /> : <Download className="w-3.5 h-3.5 text-blue-400 group-hover:text-white transition-colors" />}
+          <span className="text-[11px] font-bold text-blue-300 group-hover:text-white tracking-wide">{isExporting ? 'Exporting...' : 'Export Story'}</span>
         </button>
       </div>
     </motion.div>

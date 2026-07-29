@@ -14,8 +14,25 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
   const { currentTrip } = useTripContext();
 
   const [coords, setCoords] = useState(null);
+  const [originCoords, setOriginCoords] = useState({ lat: 51.5074, lng: -0.1278 }); // London default
+  const [originInput, setOriginInput] = useState("");
+  const [isSearchingOrigin, setIsSearchingOrigin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [countries, setCountries] = useState({ features: [] });
+  const [globeSize, setGlobeSize] = useState({ width: 800, height: 600 });
+
+  // Track container size for responsive globe
+  useEffect(() => {
+    if (!cardRef.current) return;
+    const ro = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setGlobeSize({ width: Math.round(width), height: Math.round(height) });
+      }
+    });
+    ro.observe(cardRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   // Fetch GeoJSON removed for realistic map
 
@@ -29,7 +46,15 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
     const fetchCoords = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(currentTrip.destination)}&format=json&limit=1`);
+        const query = currentTrip.destination.split('&')[0].trim();
+        let res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`);
+        
+        // Fallback: search just the first word (e.g. 'Dubai' instead of 'Dubai Luxury Escape')
+        if (!res.data || res.data.length === 0) {
+           const firstWord = query.split(' ')[0];
+           res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(firstWord)}&format=json&limit=1`);
+        }
+
         if (res.data && res.data.length > 0) {
           const lat = parseFloat(res.data[0].lat);
           const lng = parseFloat(res.data[0].lon);
@@ -41,9 +66,13 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
               globeEl.current.pointOfView({ lat, lng, altitude: 1.5 }, 2000);
             }
           }, 500);
+        } else {
+          // Default to London if completely fails
+          setCoords({ lat: 51.5074, lng: -0.1278 });
         }
       } catch (err) {
         console.error("Geocoding failed for globe:", err);
+        setCoords({ lat: 51.5074, lng: -0.1278 });
       } finally {
         setLoading(false);
       }
@@ -51,6 +80,26 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
 
     fetchCoords();
   }, [currentTrip?.destination]);
+
+  const handleSetOrigin = async (e) => {
+    e.preventDefault();
+    if (!originInput.trim()) return;
+    setIsSearchingOrigin(true);
+    try {
+      const res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(originInput.trim())}&format=json&limit=1`);
+      if (res.data && res.data.length > 0) {
+        setOriginCoords({
+          lat: parseFloat(res.data[0].lat),
+          lng: parseFloat(res.data[0].lon)
+        });
+      }
+    } catch (err) {
+      console.error("Geocoding failed for origin:", err);
+    } finally {
+      setIsSearchingOrigin(false);
+      setOriginInput("");
+    }
+  };
 
   // Inject 3D Space Dust
   useEffect(() => {
@@ -130,6 +179,15 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
     color: ['#60a5fa', '#3b82f6', '#1d4ed8', 'transparent'] // Blue glowing ripples
   }] : [];
 
+  // Flight Path Arc Data
+  const arcsData = coords ? [{
+    startLat: originCoords.lat,
+    startLng: originCoords.lng,
+    endLat: coords.lat,
+    endLng: coords.lng,
+    color: ['rgba(56, 189, 248, 0)', 'rgba(56, 189, 248, 1)'] // Glowing sky blue arc
+  }] : [];
+
   return (
     <motion.div 
       ref={cardRef}
@@ -151,6 +209,21 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
         </span>
       </div>
 
+      {/* Origin Input Overlay */}
+      <div className="absolute top-6 right-6 z-20">
+        <form onSubmit={handleSetOrigin} className="flex items-center gap-2">
+          <input
+            type="text"
+            value={originInput}
+            onChange={(e) => setOriginInput(e.target.value)}
+            placeholder="Set Origin City..."
+            className="w-40 h-8 px-3 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-white/40 focus:outline-none focus:bg-white/20 transition-colors backdrop-blur-md"
+            disabled={isSearchingOrigin}
+          />
+          {isSearchingOrigin && <Loader2 className="w-4 h-4 text-white animate-spin" />}
+        </form>
+      </div>
+
       {/* Loading Overlay */}
       {loading && !coords && (
         <div className="absolute inset-0 z-20 bg-black/40 backdrop-blur-sm flex items-center justify-center">
@@ -162,8 +235,8 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
       <div className="w-full h-full bg-[#030712] absolute inset-0 -z-10 flex items-center justify-center pt-8 overflow-hidden">
         <Globe
           ref={globeEl}
-          width={800} 
-          height={600}
+          width={globeSize.width} 
+          height={globeSize.height}
           globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           backgroundColor="rgba(0,0,0,0)"
@@ -179,6 +252,16 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
           ringMaxRadius="size"
           ringPropagationSpeed={3}
           ringRepeatPeriod={800}
+
+          // Flight Path Animation
+          arcsData={arcsData}
+          arcColor={(d) => d.color}
+          arcDashLength={0.5}
+          arcDashGap={0.2}
+          arcDashInitialGap={() => Math.random()}
+          arcDashAnimateTime={2000}
+          arcAltitude={0.25}
+          arcStroke={0.8}
         />
       </div>
       

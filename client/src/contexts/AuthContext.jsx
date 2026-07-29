@@ -139,6 +139,20 @@ export function AuthProvider({ children }) {
     setUser((prev) => (prev ? { ...prev, ...userData } : userData));
   }, []);
 
+  /**
+   * Directly set auth data (user + token) from external auth flows (e.g. Google OAuth).
+   * @param {object} userData - The user object from the API.
+   * @param {string} token - The JWT token.
+   */
+  const setAuthData = useCallback((userData, token) => {
+    localStorage.setItem(STORAGE_KEYS.TOKEN, JSON.stringify(token));
+    setUser(userData);
+    setIsAuthenticated(true);
+    if (userData?.theme) {
+      setTheme(userData.theme);
+    }
+  }, [setTheme]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -149,6 +163,7 @@ export function AuthProvider({ children }) {
         signup,
         logout,
         updateUser,
+        setAuthData,
       }}
     >
       {children}

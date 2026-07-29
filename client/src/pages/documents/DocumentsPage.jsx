@@ -3,6 +3,7 @@ import { FileText, Upload, File as FileIcon, MoreVertical, CreditCard, Ticket } 
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { Button } from '@/components/ui/Button';
+import { useToast } from '@/hooks/useToast';
 
 const DOCUMENTS = [
   { id: 1, title: 'Passport (Thranae)', type: 'ID', size: '2.4 MB', updated: 'Oct 01', icon: CreditCard, color: 'text-blue-400', bg: 'bg-blue-500/10' },
@@ -21,6 +22,7 @@ const fadeUp = {
 };
 
 export default function DocumentsPage() {
+  const { addToast } = useToast();
   return (
     <PageTransition>
       {/* Header */}
@@ -53,7 +55,7 @@ export default function DocumentsPage() {
             </div>
             <h3 className="text-xl font-bold text-text-primary mb-2">Upload Document</h3>
             <p className="text-sm text-text-secondary mb-6">Drag and drop your files here or click to browse.</p>
-            <Button variant="secondary" className="px-6">Select File</Button>
+            <Button variant="secondary" className="px-6" onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToast('info', '✨ Feature coming soon!'); }}>Select File</Button>
             <p className="text-xs text-text-secondary mt-4 opacity-70">Supported formats: PDF, JPG, PNG (Max 10MB)</p>
           </div>
         </motion.div>
@@ -71,7 +73,7 @@ export default function DocumentsPage() {
                 <div className={`w-12 h-12 rounded-xl ${doc.bg} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                   <doc.icon className={`w-6 h-6 ${doc.color}`} />
                 </div>
-                <button className="text-text-secondary hover:text-text-primary p-1">
+                <button className="text-text-secondary hover:text-text-primary p-1" onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToast('info', '✨ Feature coming soon!'); }}>
                   <MoreVertical className="w-5 h-5" />
                 </button>
               </div>

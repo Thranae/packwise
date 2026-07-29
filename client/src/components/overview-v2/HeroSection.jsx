@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock, CloudSun, Wallet, ArrowRight, Navigation, Loader2 } from 'lucide-react';
+import { Calendar, MapPin, Clock, CloudSun, Wallet, ArrowRight, Navigation, Loader2, Sun, Cloud, CloudRain, CloudLightning, Snowflake, CloudFog, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Map, { Source, Marker } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -8,6 +8,8 @@ import { useTripContext } from '@/context/TripContext';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useLiveWeather } from '@/hooks/useLiveApis';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -71,6 +73,7 @@ const geocodeDestination = async (destination) => {
 };
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
   const cardRef = useRef(null);
   const globeEl = useRef(null);
   const [showMap, setShowMap] = useState(false);
@@ -99,7 +102,7 @@ export const HeroSection = () => {
   // We don't need space dust for MapLibre
   const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
 
-  // Load image
+  // Pass raw destination — the server extracts the city name for precision
   const { image: destinationImage, loading: imageLoading } = useDestinationImage(currentTrip?.destination);
 
   if (!currentTrip) return null;
@@ -108,6 +111,24 @@ export const HeroSection = () => {
 
   const gData = coords ? [{ lat: coords.lat, lng: coords.lng, size: 20, color: '#60a5fa' }] : [];
 
+  const renderWeatherIcon = (iconCode, className) => {
+    if (!iconCode) return <CloudSun className={`${className} text-yellow-400`} />;
+    const code = iconCode.substring(0, 2);
+    const isNight = iconCode.endsWith('n');
+    switch (code) {
+      case '01': return isNight ? <Moon className={`${className} text-blue-200`} /> : <Sun className={`${className} text-yellow-400`} />;
+      case '02': return <CloudSun className={`${className} text-yellow-400`} />;
+      case '03': 
+      case '04': return <Cloud className={`${className} text-slate-300`} />;
+      case '09':
+      case '10': return <CloudRain className={`${className} text-blue-400`} />;
+      case '11': return <CloudLightning className={`${className} text-purple-400`} />;
+      case '13': return <Snowflake className={`${className} text-blue-200`} />;
+      case '50': return <CloudFog className={`${className} text-slate-400`} />;
+      default: return <CloudSun className={`${className} text-yellow-400`} />;
+    }
+  };
+
   return (
     <motion.div 
       ref={cardRef}
@@ -115,7 +136,7 @@ export const HeroSection = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full h-[416px] rounded-[32px] p-8 flex flex-col justify-end group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer"
+      className="relative w-full h-[460px] sm:h-auto sm:min-h-[380px] md:h-[416px] rounded-[24px] md:rounded-[32px] p-5 md:p-8 flex flex-col justify-end group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden"
     >
       {/* Background Container */}
       <div className="absolute inset-0 rounded-[32px] overflow-hidden -z-10">
@@ -207,38 +228,38 @@ export const HeroSection = () => {
       <div className="relative z-10 w-full p-8 flex flex-col justify-end h-full">
         {/* Removed absolute positioning for button */}
 
-        <div className="flex items-end justify-between w-full">
+        <div className="flex flex-col md:flex-row md:items-end justify-between w-full gap-6 md:gap-0">
           {/* Left: Destination & Dates */}
-          <div className="flex flex-col gap-2 ios-3d-element">
+          <div className="flex flex-col gap-1 md:gap-2 ios-3d-element">
             <div className="flex items-center gap-2 text-white/80">
-              <MapPin className="w-5 h-5 text-blue-400" />
-              <span className="text-lg font-medium tracking-wide">{currentTrip.country}</span>
+              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
+              <span className="text-xs md:text-lg font-medium tracking-wide">{currentTrip.country}</span>
             </div>
-            <h1 className="text-5xl font-semibold tracking-tighter text-white drop-shadow-md">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-tighter text-white drop-shadow-md leading-tight">
               {currentTrip.destination}
             </h1>
-            <div className="flex items-center gap-6 mt-2">
-              <div className="flex items-center gap-2 text-white/90">
-                <Calendar className="w-5 h-5 text-white/70" />
-                <span className="text-base font-medium">{formatDate(currentTrip.startDate)} - {formatDate(currentTrip.endDate)}</span>
+            <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-6 mt-2">
+              <div className="flex items-center gap-1.5 text-white/90">
+                <Calendar className="w-3.5 h-3.5 md:w-5 md:h-5 text-white/70" />
+                <span className="text-[11px] md:text-base font-medium whitespace-nowrap">{formatDate(currentTrip.startDate)} - {formatDate(currentTrip.endDate)}</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90">
+              <div className="hidden sm:flex items-center gap-2 text-white/90">
                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-                <span className="text-base font-medium">{getDuration(currentTrip.startDate, currentTrip.endDate)}</span>
+                <span className="text-sm md:text-base font-medium">{getDuration(currentTrip.startDate, currentTrip.endDate)}</span>
               </div>
             </div>
             
             {/* View Map Button (Moved from top-left) */}
-            <div className="mt-5 z-50 flex pointer-events-auto">
+            <div className="mt-4 md:mt-5 z-50 flex pointer-events-auto">
               <button 
                 onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-                className="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-[18px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:-translate-y-1 hover:bg-sky-400 hover:border-sky-300 hover:shadow-[0_16px_48px_rgba(56,189,248,0.5),inset_0_2px_4px_rgba(255,255,255,0.6)] active:translate-y-0 active:shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+                className="group relative overflow-hidden flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 rounded-[14px] md:rounded-[18px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:-translate-y-1 hover:bg-sky-400 hover:border-sky-300 hover:shadow-[0_16px_48px_rgba(56,189,248,0.5),inset_0_2px_4px_rgba(255,255,255,0.6)] active:translate-y-0 active:shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
               >
                 {/* Liquid Glare Sweep */}
                 <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 group-hover:translate-x-[150%] transition-transform duration-[1200ms] ease-in-out pointer-events-none" />
                 
-                <Navigation className="w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
-                <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10">
+                <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
+                <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.2em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10">
                   {showMap ? 'Hide Map' : 'View Map'}
                 </span>
               </button>
@@ -246,29 +267,25 @@ export const HeroSection = () => {
           </div>
 
           {/* Right: Metrics & CTA */}
-          <div className="flex flex-col items-end gap-6 ios-3d-element">
-            <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end justify-between w-full md:w-auto mt-4 md:mt-0 gap-4 md:gap-6 ios-3d-element">
+            <div className="flex gap-2 sm:gap-3 md:gap-4 justify-between sm:justify-start">
               {/* Weather Glass Pill */}
-              <div className="flex flex-col items-center justify-center px-5 py-3 rounded-[16px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
-                {weather?.current?.icon ? (
-                  <img src={`http://openweathermap.org/img/wn/${weather.current.icon}.png`} alt="weather" className="w-6 h-6 object-contain drop-shadow-md mb-1" />
-                ) : (
-                  <CloudSun className="w-6 h-6 text-yellow-400 mb-1" />
-                )}
-                <span className="text-sm font-bold text-white">{weather?.current?.temp ?? '--'}°C</span>
+              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/10 md:bg-white/5 backdrop-blur-xl border border-white/20 md:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] min-w-[70px]">
+                {renderWeatherIcon(weather?.current?.icon, "w-4 h-4 md:w-6 md:h-6 mb-1 drop-shadow-md")}
+                <span className="text-[11px] md:text-sm font-bold text-white whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
               </div>
               
               {/* Budget Glass Pill */}
-              <div className="flex flex-col items-center justify-center px-5 py-3 rounded-[16px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
-                <Wallet className="w-6 h-6 text-emerald-400 mb-1" />
-                <span className="text-sm font-bold text-white">{currentTrip.budget} {currentTrip.currency}</span>
+              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/10 md:bg-white/5 backdrop-blur-xl border border-white/20 md:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] min-w-[80px]">
+                <Wallet className="w-4 h-4 md:w-6 md:h-6 text-emerald-400 mb-1" />
+                <span className="text-[11px] md:text-sm font-bold text-white whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
               </div>
             </div>
 
-            <button className="group/btn flex items-center gap-3 px-6 py-3.5 rounded-[16px] ios-liquid-button">
-              <span className="text-sm font-bold text-white">Continue Planning</span>
-              <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center transition-transform duration-700 group-hover/btn:translate-x-1">
-                <ArrowRight className="w-4 h-4" />
+            <button onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} className="group/btn flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-3.5 rounded-[12px] md:rounded-[16px] ios-liquid-button w-full sm:w-auto justify-center z-10 relative">
+              <span className="text-sm font-bold text-white">Continue</span>
+              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white text-black flex items-center justify-center transition-transform duration-700 group-hover/btn:translate-x-1 shrink-0">
+                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
               </div>
             </button>
           </div>

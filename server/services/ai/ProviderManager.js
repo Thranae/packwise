@@ -22,10 +22,10 @@ class ProviderManager {
       id: 'gemini',
       name: 'Google Gemini',
       apiKey: process.env.GEMINI_API_KEY,
-      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
-      model: 'gemini-flash-latest',
+      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+      model: 'gemini-2.0-flash',
       priority: 1,
-      supportsStreaming: false, // Could be true, but false for simplicity in this version
+      supportsStreaming: false,
       supportsToolCalling: true,
       supportsJSONMode: true,
       supportsVision: true
@@ -68,7 +68,7 @@ class ProviderManager {
       name: 'Groq',
       apiKey: process.env.GROQ_API_KEY,
       baseUrl: 'https://api.groq.com/openai/v1/chat/completions',
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile',
       priority: 3,
       supportsStreaming: true,
       supportsToolCalling: true,

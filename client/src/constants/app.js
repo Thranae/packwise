@@ -12,7 +12,7 @@ export const THEMES = {
   DARK: 'dark',
 };
 
-export const DEFAULT_THEME = THEMES.LIGHT;
+export const DEFAULT_THEME = THEMES.DARK;
 
 export const GENDER_OPTIONS = [
   { value: 'male', label: 'Male' },

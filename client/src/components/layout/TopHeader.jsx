@@ -1,21 +1,73 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Sparkles, Bell, Moon, Globe, ChevronDown, User, Settings, LogOut } from 'lucide-react';
+import { Search, Sparkles, Bell, Globe, User, Settings, LogOut, Mic, Map, Book, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useAuth } from '@/hooks/useAuth';
+import { useTripContext } from '@/context/TripContext';
+import { useAI } from '@/hooks/useAI';
 import { ROUTES } from '@/constants/routes';
 import { getInitials } from '@/utils/formatters';
+import { GenieSlideOut } from '../ai/GenieSlideOut';
+import { LogoIcon } from '@/components/ui/Logo';
+import api from '@/services/api';
 
 export const TopHeader = () => {
   const { user, logout } = useAuth();
+  const { currentTrip, packedItems, generateTrip } = useTripContext();
+  const { getPackingList } = useAI();
+  const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
+  const [query, setQuery] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [slideOutOpen, setSlideOutOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [packingData, setPackingData] = useState(null);
+  
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSearchingAI, setIsSearchingAI] = useState(false);
+
+  useEffect(() => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsSearchingAI(true);
+      const q = query.toLowerCase();
+      let results = [];
+      
+      try {
+        const res = await api.post('/ai/resolve-destination', { query: q });
+        if (res.status >= 200 && res.status < 300) {
+          results = res.data.data || [];
+        }
+      } catch(e) {
+        console.error(e);
+      }
+      setSuggestions(results);
+      setIsSearchingAI(false);
+    }, 400); // debounce
+    return () => clearTimeout(timer);
+  }, [query]);
+  
   const headerRef = useRef(null);
   const profileMenuRef = useRef(null);
   const notificationsRef = useRef(null);
   
+  useEffect(() => {
+    if (currentTrip?.destination) {
+      getPackingList(currentTrip.destination, currentTrip.weather || 'Sunny').then(setPackingData);
+    }
+  }, [currentTrip?.destination]);
+
+  const totalItemsList = packingData?.categories?.flatMap(cat => cat.items) || [];
+  const total = totalItemsList.length;
+  const packed = totalItemsList.filter(item => item.packed || packedItems?.has(item.name || item.text)).length;
+  const percentage = total > 0 ? (packed / total) * 100 : 0;
+  const dashOffset = 100.5 - (percentage / 100) * 100.5;
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
@@ -39,11 +91,19 @@ export const TopHeader = () => {
     <motion.header 
       ref={headerRef}
       whileHover={{ y: -2, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className="relative z-50 w-full flex items-center justify-between h-[72px] mt-6 px-6 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[36px]"
+      className="relative z-50 w-full flex items-center justify-between h-[60px] lg:h-[72px] mt-2 lg:mt-6 px-4 lg:px-6 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[24px] lg:rounded-[36px]"
     >
       
+      {/* Mobile Logo */}
+      <div className="md:hidden flex items-center gap-2">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/20 shadow-inner">
+          <LogoIcon size="sm" />
+        </div>
+        <span className="text-white font-bold text-sm tracking-wide">Voyage Genie</span>
+      </div>
+
       {/* Search Bar (occupies ~60% of available space) */}
-      <div className="flex-1 flex justify-center max-w-[60%] ml-8">
+      <div className="hidden md:flex flex-1 justify-center max-w-[60%] ml-4 lg:ml-8">
         <div 
           className={`
             relative flex items-center w-full h-[52px] rounded-[24px] 
@@ -55,15 +115,173 @@ export const TopHeader = () => {
           `}
         >
           <div className="pl-5 flex items-center pointer-events-none text-white/50">
-            <Sparkles className={`w-5 h-5 transition-colors duration-700 ${isFocused ? 'text-blue-400' : ''}`} />
+            <Sparkles className={`w-5 h-5 transition-colors duration-700 ${isFocused || isListening ? 'text-blue-400' : ''}`} />
           </div>
           <input
             type="text"
-            placeholder="Ask Voyage Genie AI to search..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && query.trim()) {
+                setSlideOutOpen(true);
+                setIsFocused(false);
+              }
+            }}
+            placeholder={isListening ? "Listening..." : "Ask Voyage Genie AI to search..."}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             className="w-full bg-transparent border-none outline-none text-white placeholder-white/80 px-4 font-bold text-[15px] drop-shadow-sm"
           />
+
+          {/* Voice Search Button */}
+          <button 
+            onClick={() => {
+              if (isListening) {
+                setIsListening(false);
+              } else {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                  alert("Voice search is not supported in your browser.");
+                  return;
+                }
+                setIsListening(true);
+                setQuery('');
+                
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = true;
+                
+                recognition.onresult = (event) => {
+                  let interimTranscript = '';
+                  for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                      setQuery(event.results[i][0].transcript);
+                      setIsListening(false);
+                      setTimeout(() => setSlideOutOpen(true), 500);
+                    } else {
+                      interimTranscript += event.results[i][0].transcript;
+                      setQuery(interimTranscript);
+                    }
+                  }
+                };
+                
+                recognition.onerror = (event) => {
+                  console.error('Speech recognition error', event.error);
+                  setIsListening(false);
+                };
+                
+                recognition.onend = () => {
+                  setIsListening(false);
+                };
+                
+                recognition.start();
+              }
+            }}
+            className="pr-4 flex items-center justify-center h-full relative"
+          >
+            {isListening && (
+              <div className="absolute inset-0 flex items-center justify-center pr-4">
+                <span className="flex gap-0.5 items-center justify-center">
+                  <motion.span animate={{ height: [4, 16, 4] }} transition={{ repeat: Infinity, duration: 0.8 }} className="w-1 bg-blue-400 rounded-full" />
+                  <motion.span animate={{ height: [4, 24, 4] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.2 }} className="w-1 bg-purple-400 rounded-full" />
+                  <motion.span animate={{ height: [4, 12, 4] }} transition={{ repeat: Infinity, duration: 0.8, delay: 0.4 }} className="w-1 bg-emerald-400 rounded-full" />
+                </span>
+              </div>
+            )}
+            <Mic className={`w-5 h-5 transition-all duration-300 hover:scale-110 ${isListening ? 'opacity-0' : 'text-white/60 hover:text-white'}`} />
+          </button>
+
+          {/* Rich Auto-Complete Dropdown */}
+          <AnimatePresence>
+            {isFocused && query && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                className="absolute top-[60px] left-0 w-full bg-[#0F172A]/90 backdrop-blur-[40px] border border-white/10 rounded-[24px] shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden z-[100]"
+              >
+                <div className="p-2 flex flex-col">
+                  {/* AI Quick Suggestion */}
+                  <button 
+                    onMouseDown={() => setSlideOutOpen(true)}
+                    className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-white/10 transition-colors text-left group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500 flex items-center justify-center shrink-0">
+                        <Sparkles className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">Ask Genie about "{query}"</span>
+                        <span className="text-xs text-white/50">Press Enter to chat</span>
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-white/30 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                  </button>
+                  
+                  <div className="h-px w-full bg-white/10 my-2" />
+
+                  {/* Dynamic AI Suggestions */}
+                  {isSearchingAI ? (
+                    <div className="w-full flex items-center justify-center p-4">
+                      <div className="flex items-center gap-2 text-white/50">
+                        <Sparkles className="w-4 h-4 animate-spin" />
+                        <span className="text-xs font-semibold">AI is searching the globe...</span>
+                      </div>
+                    </div>
+                  ) : suggestions.length > 0 ? (
+                    <div className="flex flex-col gap-1">
+                      <span className="px-4 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/40">Suggested Destinations</span>
+                      {suggestions.map((sug, idx) => (
+                        <button 
+                          key={idx}
+                          onMouseDown={(e) => { 
+                            e.preventDefault();
+                            generateTrip(`${sug.name}, ${sug.location}`);
+                            navigate(ROUTES.TRIPS);
+                            setIsFocused(false);
+                            setQuery('');
+                          }}
+                          className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-white/10 transition-colors text-left group"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10 text-lg shadow-inner">
+                              {sug.icon}
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+                                Plan trip to <span className="font-black text-emerald-400">{sug.name}</span>
+                              </span>
+                              <span className="text-xs text-white/50 capitalize">{sug.type} • {sug.location}</span>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <button 
+                      onMouseDown={(e) => { 
+                        e.preventDefault();
+                        generateTrip(query);
+                        navigate(ROUTES.TRIPS);
+                        setIsFocused(false);
+                        setQuery('');
+                      }}
+                      className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-white/10 transition-colors text-left group"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                          <Map className="w-5 h-5 text-white/50" />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">Plan trip to <span className="font-black text-emerald-400">{query}</span></span>
+                        </div>
+                      </div>
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
         </div>
       </div>
@@ -84,17 +302,17 @@ export const TopHeader = () => {
                 strokeWidth="3" strokeLinecap="round"
                 strokeDasharray="100.5"
                 initial={{ strokeDashoffset: 100.5 }}
-                animate={{ strokeDashoffset: 12 }} /* Roughly 88% */
+                animate={{ strokeDashoffset: dashOffset }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[9px] font-bold text-white drop-shadow-md">88%</span>
+              <span className="text-[9px] font-bold text-white drop-shadow-md">{Math.round(percentage)}%</span>
             </div>
           </div>
           <div className="flex flex-col justify-center">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/60 leading-none mb-1">Status</span>
-            <span className="text-[12px] font-bold text-white drop-shadow-md leading-none group-hover:text-emerald-400 transition-colors">Ready</span>
+            <span className="text-[12px] font-bold text-white drop-shadow-md leading-none group-hover:text-emerald-400 transition-colors">{percentage === 100 ? 'Ready' : 'Packing'}</span>
           </div>
         </div>
 
@@ -246,6 +464,8 @@ export const TopHeader = () => {
         </div>
 
       </div>
+      
+      <GenieSlideOut isOpen={slideOutOpen} onClose={() => setSlideOutOpen(false)} initialQuery={query} />
     </motion.header>
   );
 };

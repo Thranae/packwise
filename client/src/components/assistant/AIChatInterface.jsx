@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, Search, MapPin, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTripContext } from '@/context/TripContext';
+import { useNavigate } from 'react-router-dom';
 
 export const AIChatInterface = () => {
   const containerRef = useRef(null);
@@ -15,6 +17,10 @@ export const AIChatInterface = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isExecutingAction, setIsExecutingAction] = useState(false);
+  
+  const { currentTrip, generateTrip } = useTripContext();
+  const navigate = useNavigate();
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -25,25 +31,75 @@ export const AIChatInterface = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/ai/chat', {
+      // Simulate 5 seconds of typing delay before making the request
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      const res = await fetch('/api/ai/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, context: messages.map(m => m.content).join('\n') })
+        body: JSON.stringify({ 
+          message: userMessage, 
+          context: { 
+            previousMessages: messages.map(m => m.content).join('\n'),
+            currentTrip: currentTrip ? { destination: currentTrip.destination, status: currentTrip.status } : null
+          }
+        })
       });
       
-      const data = await res.json();
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let botReply = '';
       
-      const reply = data.reply || "I'm having trouble connecting to my neural network right now. Try again?";
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setIsLoading(false); // Stop the loading animation immediately, we are streaming now
 
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: reply,
-      }]);
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        
+        const lines = chunk.split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+            try {
+              const data = JSON.parse(line.slice(6));
+              const text = data.choices[0]?.delta?.content || '';
+              botReply += text;
+              
+              // Check for action tag incrementally
+              const actionMatch = botReply.match(/\[ACTION:\s*GENERATE_TRIP\s*\|\s*destination:\s*([^\]]+)\]/i);
+              
+              if (actionMatch && !isExecutingAction) {
+                const destination = actionMatch[1].trim();
+                setIsExecutingAction(true);
+                // Remove the tag from the visible reply
+                botReply = botReply.replace(actionMatch[0], '').trim();
+                
+                // Trigger the generation
+                setTimeout(async () => {
+                   setMessages(prev => [...prev, { role: 'assistant', content: `Generating your trip to ${destination}...` }]);
+                   await generateTrip(`Destination: ${destination}`);
+                   navigate('/trips');
+                }, 500);
+              }
+
+              setMessages(prev => {
+                const newMsgs = [...prev];
+                // Don't show the raw tag to the user while streaming
+                newMsgs[newMsgs.length - 1].content = botReply.replace(/\[ACTION:.*$/i, '').trim();
+                return newMsgs;
+              });
+            } catch (e) {
+              console.error("Stream parse error", e);
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "Oops, something went wrong on my end. Please make sure my Gemini integration is active!",
+        content: "Oops, something went wrong on my end. Please make sure my AI integration is active!",
       }]);
     } finally {
       setIsLoading(false);
@@ -182,7 +238,7 @@ export const AIChatInterface = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleSend}
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || isExecutingAction}
             className="w-14 h-14 shrink-0 rounded-[20px] bg-gradient-to-br from-indigo-500 to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-300 shadow-[0_8px_16px_rgba(99,102,241,0.4)]"
           >
             <Send className="w-6 h-6 ml-1 text-white" strokeWidth={2.5} />

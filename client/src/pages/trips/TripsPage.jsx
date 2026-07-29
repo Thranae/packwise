@@ -18,6 +18,9 @@ export default function TripsPage() {
 
   const filteredTrips = useMemo(() => {
     return trips.filter(trip => {
+      // Guard against corrupted null entries
+      if (!trip || !trip._id) return false;
+
       if (!searchQuery && activeFilter === 'All') return true;
       
       const search = searchQuery.toLowerCase().trim();
@@ -25,7 +28,6 @@ export default function TripsPage() {
       const country = trip.country?.toLowerCase() || '';
       const status = trip.status?.toLowerCase() || '';
       
-      // Date formatting for search
       const startDateStr = trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : '';
       const endDateStr = trip.endDate ? new Date(trip.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : '';
       const monthYearStr = trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toLowerCase() : '';
@@ -120,7 +122,7 @@ export default function TripsPage() {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`
-                  ios-liquid-button relative whitespace-nowrap px-7 py-2.5 rounded-[20px] text-[13px] font-bold tracking-wide
+                  ios-liquid-button shrink-0 relative whitespace-nowrap px-7 py-2.5 rounded-[20px] text-[13px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                   ${activeFilter === filter 
                     ? 'text-white ring-1 ring-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] saturate-150 scale-105 z-10' 

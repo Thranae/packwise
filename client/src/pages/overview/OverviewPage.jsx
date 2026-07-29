@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
 
-import { HeroSection } from '@/components/overview-v2/HeroSection';
 import { WeatherWidget } from '@/components/overview-v2/WeatherWidget';
 import { CurrencyWidget } from '@/components/overview-v2/CurrencyWidget';
 import { BudgetWidget } from '@/components/overview-v2/BudgetWidget';
@@ -12,7 +11,10 @@ import { PackingWidget } from '@/components/overview-v2/PackingWidget';
 import { CommandCenterWidget } from '@/components/overview-v2/CommandCenterWidget';
 import { ExploreNearbyWidget } from '@/components/overview-v2/ExploreNearbyWidget';
 import { AIAssistantWidget } from '@/components/overview-v2/AIAssistantWidget';
-import { InteractiveGlobeWidget } from '@/components/overview-v2/InteractiveGlobeWidget';
+import { TripScoreWidget } from '@/components/overview-v2/TripScoreWidget';
+
+const HeroSection = React.lazy(() => import('@/components/overview-v2/HeroSection').then(m => ({ default: m.HeroSection })));
+const InteractiveGlobeWidget = React.lazy(() => import('@/components/overview-v2/InteractiveGlobeWidget').then(m => ({ default: m.InteractiveGlobeWidget })));
 
 const staggerContainer = {
   hidden: { opacity: 0, y: 10, scale: 0.98 },
@@ -53,7 +55,9 @@ export default function OverviewPage() {
       className="col-span-12 grid grid-cols-12 gap-6"
     >
       <div className="col-span-12 lg:col-span-8">
-        <HeroSection />
+        <React.Suspense fallback={<div className="w-full h-[400px] rounded-[32px] ios-glass-card animate-pulse" />}>
+          <HeroSection />
+        </React.Suspense>
       </div>
       <CommandCenterWidget className="col-span-12 lg:col-span-4" />
 
@@ -62,8 +66,15 @@ export default function OverviewPage() {
       <BudgetWidget className="col-span-12 sm:col-span-6 lg:col-span-3" />
       <PackingWidget className="col-span-12 sm:col-span-6 lg:col-span-3" />
 
-      <InteractiveGlobeWidget className="col-span-12 lg:col-span-8 lg:col-start-1" />
+      <div className="col-span-12 lg:col-span-8 lg:col-start-1">
+        <React.Suspense fallback={<div className="w-full h-[400px] rounded-[32px] ios-glass-card animate-pulse" />}>
+          <InteractiveGlobeWidget />
+        </React.Suspense>
+      </div>
+      
       <AIAssistantWidget className="col-span-12 lg:col-span-4" />
+
+      <TripScoreWidget className="col-span-12 lg:col-span-6" />
 
       <ExploreNearbyWidget className="col-span-12" />
     </motion.div>

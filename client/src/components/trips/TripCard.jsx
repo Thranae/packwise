@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
-import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, Copy, Share2, Trash2, Heart } from 'lucide-react';
+import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, Copy, Share2, Trash2, Heart, FileDown, Plane } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -8,6 +8,8 @@ import { useImageColor } from '@/hooks/useImageColor';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useToast } from '@/hooks/useToast';
+import { useState, useEffect } from 'react';
+import api from '@/services/api';
 
 // Simple formatter
 const formatDate = (dateString) => {
@@ -28,10 +30,54 @@ export const TripCard = ({ trip }) => {
   const { addToast } = useToast();
   const { rotateX, rotateY, mouseX, mouseY } = useMouseTilt(cardRef, { maxTilt: 6, stiffness: 250, damping: 25 });
   
-  // Use dynamic image hook
+  // Pass the raw destination — the server extracts the most specific term (city name)
   const { image: destinationImage, loading: imageLoading } = useDestinationImage(trip.destination);
   const displayImage = trip.heroImage || destinationImage;
   const glowColor = useImageColor(displayImage);
+  
+  const [tripScore, setTripScore] = useState(null);
+  
+  useEffect(() => {
+    if (!trip._id || trip._id.startsWith('mock')) return;
+    api.get(`/ai/trip-score/${trip._id}`)
+      .then(res => res.data)
+      .then(data => {
+        if (data && data.overallScore) setTripScore(data);
+      })
+      .catch(() => {}); // silent fail for now
+  }, [trip._id]);
+  
+  const handleDownloadPDF = async (e) => {
+    e.stopPropagation();
+    try {
+      addToast('info', 'Generating PDF...');
+      const url = `/api/export/trips/${trip._id}/pdf`;
+      window.open(url, '_blank');
+      addToast('success', 'PDF downloaded successfully!');
+    } catch (err) {
+      addToast('error', 'Failed to generate PDF');
+    }
+  };
+  
+  const handleTrackFlights = async (e) => {
+    e.stopPropagation();
+    try {
+      addToast('info', 'Enabling flight tracking...');
+      const res = await api.post('/flights/track', {
+        tripId: trip._id,
+        origin: "JFK", // Usually provided by user profile
+        destination: trip.destination,
+        date: trip.startDate
+      });
+      if (res.status >= 200 && res.status < 300) {
+        addToast('success', 'Flight tracking enabled!');
+      } else {
+        throw new Error("Failed");
+      }
+    } catch (err) {
+      addToast('error', 'Failed to enable flight tracking');
+    }
+  };
   
   const getStatusColor = (status) => {
     const base = "bg-clip-text text-transparent bg-gradient-to-br";
@@ -97,10 +143,18 @@ export const TripCard = ({ trip }) => {
               {trip.status}
             </span>
           </div>
+
+          {tripScore && (
+            <div className="absolute top-0 right-14 px-3 py-1.5 flex items-center gap-1.5 rounded-[12px] bg-black/40 backdrop-blur-md border border-white/20 shadow-lg cursor-default group/score" title={tripScore.label}>
+              <div className={`w-2 h-2 rounded-full ${tripScore.overallScore >= 80 ? 'bg-emerald-400' : tripScore.overallScore >= 50 ? 'bg-amber-400' : 'bg-red-400'} animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]`} />
+              <span className="text-[11px] font-bold text-white tracking-wide">{tripScore.overallScore}%</span>
+            </div>
+          )}
+          
           
           {/* Quick Actions Dropdown (Hover revealed) */}
-          <div className="relative group/menu">
-            <button onClick={(e) => { e.stopPropagation(); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center justify-center text-white transition-all duration-700">
+          <div className="relative group/menu" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+            <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center justify-center text-white transition-all duration-700">
               <MoreHorizontal className="w-5 h-5" />
             </button>
             <div className="absolute top-full right-0 mt-2 w-40 p-2 rounded-[20px] bg-black/60 backdrop-blur-xl border border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.2)] opacity-0 invisible translate-y-2 group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 z-50 flex flex-col gap-1">
@@ -112,6 +166,12 @@ export const TripCard = ({ trip }) => {
               </button>
               <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(window.location.origin + ROUTES.OVERVIEW); addToast('success', 'Link copied to clipboard!'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                 <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
+              </button>
+              <button onClick={handleDownloadPDF} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <FileDown className="w-4 h-4 shrink-0 text-blue-400" /> <span className="text-xs font-semibold text-blue-400">Export PDF</span>
+              </button>
+              <button onClick={handleTrackFlights} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <Plane className="w-4 h-4 shrink-0 text-amber-400" /> <span className="text-xs font-semibold text-amber-400">Track Flights</span>
               </button>
               <button onClick={(e) => { e.stopPropagation(); toggleFavoriteTrip(trip._id); addToast('success', trip.isFavorite ? 'Removed from favorites' : 'Added to favorites'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                 <Heart className={`w-4 h-4 shrink-0 ${trip.isFavorite ? 'fill-red-500 text-red-500' : ''}`} /> <span className="text-xs font-semibold">{trip.isFavorite ? 'Unfavorite' : 'Favourite'}</span>

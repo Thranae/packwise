@@ -21,6 +21,10 @@ export const useMouseTilt = (ref, config = { maxTilt: 15, stiffness: 300, dampin
   const rotateY = useTransform(springX, [-0.5, 0.5], [-config.maxTilt, config.maxTilt]);
 
   useEffect(() => {
+    // Disable spatial 3D effects on touch devices to prevent Chromium flickering bugs on PWA
+    const isHoverable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isHoverable) return;
+
     const handleMouseMove = (e) => {
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();

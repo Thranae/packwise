@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { User, Camera, Mail, Shield, CheckCircle2, Loader2, Plane, MapPin, Map, CalendarDays, Edit3, Save } from 'lucide-react';
+import { User, Camera, Mail, Shield, CheckCircle2, Loader2, Plane, MapPin, Map, CalendarDays, Edit3, Save, Compass, DollarSign, Utensils } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { getInitials } from '@/utils/formatters';
 import * as userService from '@/services/user.service';
 
 export default function ProfilePage() {
   const { user, updateUser } = useAuth();
   const toast = useToast();
+  const { playSound } = useSoundEffect();
   const userName = user?.name || 'Thranae';
   const userEmail = user?.email || 'hello@thranae.com';
   const profileImage = user?.profileImage;
@@ -22,6 +24,9 @@ export default function ProfilePage() {
     displayName: user?.displayName || user?.name?.split(' ')[0] || '',
     email: user?.email || '',
     homeAirport: user?.homeAirport || '',
+    dietaryRestrictions: user?.dietaryRestrictions || [],
+    budgetPreference: user?.budgetPreference || 'moderate',
+    travelStyle: user?.travelStyle || [],
   });
 
   const fileInputRef = useRef(null);
@@ -85,6 +90,47 @@ export default function ProfilePage() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
+  const togglePreference = async (type, value) => {
+    if (!isEditing) {
+      toast.info('Click "Edit Profile" to change preferences');
+      return;
+    }
+    playSound('tap');
+    
+    // Calculate new state
+    let newValue;
+    if (type === 'budgetPreference') {
+      newValue = value;
+    } else {
+      const currentList = formData[type] || [];
+      const index = currentList.indexOf(value);
+      if (index === -1) {
+        newValue = [...currentList, value];
+      } else {
+        newValue = currentList.filter(item => item !== value);
+      }
+    }
+
+    // Update local state immediately for snappy UI
+    setFormData(prev => ({ ...prev, [type]: newValue }));
+
+    // Auto-save to backend
+    try {
+      const response = await userService.updateProfile({ ...formData, [type]: newValue });
+      if (response.success && response.data) {
+        updateUser(response.data);
+        playSound('success');
+      }
+    } catch (error) {
+      // Revert on failure
+      setFormData(prev => ({ ...prev, [type]: formData[type] }));
+      toast.error('Failed to save preference');
+    }
+  };
+
+  const DIETARY_OPTIONS = ['Vegetarian', 'Vegan', 'Halal', 'Kosher', 'Gluten-Free', 'Nut Allergy', 'Dairy-Free'];
+  const STYLE_OPTIONS = ['Adventure', 'Relaxation', 'Culture', 'Nightlife', 'Food', 'Nature', 'Shopping'];
 
   const staggerContainer = {
     hidden: { opacity: 0 },
@@ -302,6 +348,95 @@ export default function ProfilePage() {
                       disabled={!isEditing}
                       className="w-full h-14 bg-white/5 border border-white/10 rounded-[16px] pl-14 pr-5 text-white font-medium focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed placeholder-white/30 shadow-inner" 
                     />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Travel Preferences Section */}
+            <div className="ios-glass-card p-8 md:p-10 rounded-[32px] relative overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)]">
+              <h3 className="text-2xl font-bold text-white flex items-center gap-3 tracking-tight mb-8">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center border border-white/10 shadow-inner">
+                  <Compass className="w-5 h-5 text-cyan-400" />
+                </div>
+                Travel Preferences
+              </h3>
+
+              <div className="space-y-8">
+                {/* Budget Preference */}
+                <div>
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-emerald-400" />
+                    Budget Level
+                  </label>
+                  <div className="flex gap-3">
+                    {[
+                      { id: 'budget', label: 'Budget', icon: <DollarSign className="w-4 h-4" /> },
+                      { id: 'moderate', label: 'Moderate', icon: <div className="flex"><DollarSign className="w-4 h-4"/><DollarSign className="w-4 h-4 -ml-2"/></div> },
+                      { id: 'luxury', label: 'Luxury', icon: <div className="flex"><DollarSign className="w-4 h-4"/><DollarSign className="w-4 h-4 -ml-2"/><DollarSign className="w-4 h-4 -ml-2"/></div> }
+                    ].map(b => (
+                      <button 
+                        key={b.id} 
+                        onClick={() => togglePreference('budgetPreference', b.id)}
+                        className={`flex-1 flex flex-col items-center justify-center gap-2 py-4 rounded-[20px] transition-all duration-300
+                        ${formData.budgetPreference === b.id 
+                          ? 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border-emerald-500/50 text-emerald-400 shadow-[0_0_16px_rgba(16,185,129,0.2)]' 
+                          : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10'} border`}
+                      >
+                        <div className={formData.budgetPreference === b.id ? 'text-emerald-400' : 'text-white/40'}>{b.icon}</div>
+                        <span className="text-sm font-bold">{b.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Travel Style */}
+                <div>
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                    <Compass className="w-4 h-4 text-cyan-400" />
+                    Travel Style
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {STYLE_OPTIONS.map(style => {
+                      const isSelected = formData.travelStyle.includes(style);
+                      return (
+                        <button 
+                          key={style}
+                          onClick={() => togglePreference('travelStyle', style)}
+                          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300
+                            ${isSelected 
+                              ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.3)]' 
+                              : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10'} border`}
+                        >
+                          {style}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Dietary Restrictions */}
+                <div>
+                  <label className="block text-[13px] font-bold text-white/50 uppercase tracking-wider mb-4 ml-1 flex items-center gap-2">
+                    <Utensils className="w-4 h-4 text-orange-400" />
+                    Dietary Restrictions
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {DIETARY_OPTIONS.map(diet => {
+                      const isSelected = formData.dietaryRestrictions.includes(diet);
+                      return (
+                        <button 
+                          key={diet}
+                          onClick={() => togglePreference('dietaryRestrictions', diet)}
+                          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300
+                            ${isSelected 
+                              ? 'bg-orange-500/20 text-orange-400 border-orange-500/30 shadow-[0_0_12px_rgba(249,115,22,0.3)]' 
+                              : 'bg-white/5 text-white/60 border-white/10 hover:bg-white/10'} border`}
+                        >
+                          {diet}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

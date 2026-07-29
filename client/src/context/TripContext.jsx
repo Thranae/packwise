@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import api from '../services/api';
 
 const TripContext = createContext();
 
@@ -141,7 +142,13 @@ const MOCK_TRIPS = [
 export const TripProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const savedTrips = localStorage.getItem('packwise_trips');
-  const initialTrips = savedTrips ? JSON.parse(savedTrips) : MOCK_TRIPS;
+  let parsedTrips = savedTrips ? JSON.parse(savedTrips) : MOCK_TRIPS;
+  // Guard: filter out any null/undefined entries from corrupted localStorage
+  if (!Array.isArray(parsedTrips) || parsedTrips.some(t => !t || !t._id)) {
+    parsedTrips = MOCK_TRIPS;
+    localStorage.removeItem('packwise_trips');
+  }
+  const initialTrips = parsedTrips;
   const [trips, setTrips] = useState(initialTrips);
   
   const savedCurrentTripId = localStorage.getItem('packwise_current_trip_id');
@@ -164,17 +171,31 @@ export const TripProvider = ({ children }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [manualTheme, setManualTheme] = useState(null);
 
+  const savedPackedItems = localStorage.getItem('packwise_packed_items');
+  const initialPackedItems = savedPackedItems ? new Set(JSON.parse(savedPackedItems)) : new Set();
+  const [packedItems, setPackedItems] = useState(initialPackedItems);
+
+  useEffect(() => {
+    localStorage.setItem('packwise_packed_items', JSON.stringify(Array.from(packedItems)));
+  }, [packedItems]);
+
+  const togglePackedItem = useCallback((itemId) => {
+    setPackedItems(prev => {
+      const newSet = new Set(prev);
+      const isPacked = !newSet.has(itemId);
+      if (isPacked) newSet.add(itemId);
+      else newSet.delete(itemId);
+      return newSet;
+    });
+  }, []);
+
   // Fetch trips from backend to sync with the web
   const fetchTrips = useCallback(async () => {
     try {
       setLoadingTrips(true);
-      const res = await fetch('http://localhost:5000/api/trips', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
+      const res = await api.get('/trips');
+      if (res.status === 200) {
+        const data = res.data;
         // If web sync returns real trips, use them! Otherwise fallback to mock data
         if (data && data.length > 0) {
           setTrips(data);
@@ -198,6 +219,47 @@ export const TripProvider = ({ children }) => {
   useEffect(() => {
     fetchTrips();
   }, [fetchTrips]);
+
+  // Sync offline trips when user logs in
+  useEffect(() => {
+    const syncOfflineTrips = async () => {
+      if (!isAuthenticated) return;
+      
+      const localTrips = trips.filter(t => String(t._id).startsWith('local-'));
+      if (localTrips.length === 0) return;
+      
+      let updatedTrips = [...trips];
+      let didSync = false;
+      
+      for (const trip of localTrips) {
+        try {
+          const tripToUpload = { ...trip };
+          delete tripToUpload._id; // Let backend generate real ID
+          
+          const res = await api.post('/trips', tripToUpload);
+          const data = res.data;
+          if (res.status === 200 && data.data) {
+            // Replace the local trip with the synced cloud trip
+            updatedTrips = updatedTrips.map(t => t._id === trip._id ? data.data : t);
+            didSync = true;
+          }
+        } catch (err) {
+          console.error("Failed to sync local trip", err);
+        }
+      }
+      
+      if (didSync) {
+        setTrips(updatedTrips);
+        // Update currentTrip if it was synced
+        if (currentTrip && String(currentTrip._id).startsWith('local-')) {
+          const syncedCurrent = updatedTrips.find(t => t.destination === currentTrip.destination && t.startDate === currentTrip.startDate);
+          if (syncedCurrent) setCurrentTrip(syncedCurrent);
+        }
+      }
+    };
+    
+    syncOfflineTrips();
+  }, [isAuthenticated]);
 
   // Persist trips to localStorage whenever they change
   useEffect(() => {
@@ -231,13 +293,9 @@ export const TripProvider = ({ children }) => {
       setTimeout(() => setLoadingStep("Finding attractions..."), 1500);
       setTimeout(() => setLoadingStep("Creating itinerary..."), 3000);
       
-      const res = await fetch('http://localhost:5000/api/ai/trip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
-      });
+      const res = await api.post('/ai/trip', { prompt });
       
-      const aiData = await res.json();
+      const aiData = res.data;
       
       setLoadingStep("Done.");
       setTimeout(() => {
@@ -245,8 +303,8 @@ export const TripProvider = ({ children }) => {
         // The prompt format is "Destination: City, Country. Duration: ..."
         const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
 
-        const newTrip = {
-          _id: "trip-" + Date.now(),
+        const newTripData = {
+          ...aiData,
           destination: aiData.destination || fallbackDest,
           country: aiData.country || "Unknown",
           startDate: new Date().toISOString(),
@@ -255,15 +313,38 @@ export const TripProvider = ({ children }) => {
           budget: aiData.budget || 3000,
           currency: aiData.currency || "USD",
           timezone: aiData.timezone || "UTC",
-          travelers: 2,
+          gender: aiData.gender || "Not specified",
+          travelers: aiData.travelers || 1,
           status: "planning"
         };
         
-        setTrips(prev => [newTrip, ...prev]);
-        setCurrentTrip(newTrip);
-        setManualTheme(null);
-        setIsGenerating(false);
-        setLoadingStep(null);
+        // Save to DB
+        api.post('/trips', newTripData).then(async res => {
+          const data = res.data;
+          if (res.status === 200 && data.data) {
+            const newTrip = data.data;
+            setTrips(prev => [newTrip, ...prev]);
+            setCurrentTrip(newTrip);
+          } else {
+            console.error("Failed to save trip to DB:", data);
+            // If API fails (e.g. 401 Unauthorized), save it locally so the app still works
+            newTripData._id = "local-" + Date.now();
+            setTrips(prev => [newTripData, ...prev]);
+            setCurrentTrip(newTripData);
+          }
+          setManualTheme(null);
+          setIsGenerating(false);
+          setLoadingStep(null);
+        }).catch(err => {
+          console.error("Network error saving trip to DB:", err);
+          newTripData._id = "local-" + Date.now();
+          setTrips(prev => [newTripData, ...prev]);
+          setCurrentTrip(newTripData);
+          setManualTheme(null);
+          setIsGenerating(false);
+          setLoadingStep(null);
+        });
+        
       }, 500);
     } catch (error) {
       console.error("Failed to generate trip:", error);
@@ -273,26 +354,60 @@ export const TripProvider = ({ children }) => {
   };
 
   const modifyTrip = async (message) => {
-    console.log("Mock modifyTrip with message:", message);
-  };
-
-  const deleteTrip = (tripId) => {
-    setTrips(prev => prev.filter(t => t._id !== tripId));
-    if (currentTrip?._id === tripId) setCurrentTrip(null);
-  };
-
-  const duplicateTrip = (tripId) => {
-    const tripToDuplicate = trips.find(t => t._id === tripId);
-    if (tripToDuplicate) {
-      const newTrip = { ...tripToDuplicate, _id: "trip-" + Date.now(), destination: `${tripToDuplicate.destination} (Copy)` };
-      setTrips(prev => [newTrip, ...prev]);
+    if (!currentTrip) return;
+    setIsGenerating(true);
+    setLoadingStep("Modifying trip...");
+    try {
+      const res = await api.post('/trips/chat', { currentTrip, message });
+      const data = res.data;
+      if (res.status === 200 && data.data) {
+        setTrips(prev => prev.map(t => t._id === data.data._id ? data.data : t));
+        setCurrentTrip(data.data);
+      } else {
+        console.error("Failed to modify trip:", data);
+      }
+    } catch (error) {
+      console.error("Network error modifying trip:", error);
+    } finally {
+      setIsGenerating(false);
+      setLoadingStep(null);
     }
   };
 
-  const toggleFavoriteTrip = (tripId) => {
-    setTrips(prev => prev.map(t => t._id === tripId ? { ...t, isFavorite: !t.isFavorite } : t));
-    if (currentTrip?._id === tripId) {
-      setCurrentTrip(prev => ({ ...prev, isFavorite: !prev.isFavorite }));
+  const deleteTrip = async (tripId) => {
+    try {
+      await api.delete(`/trips/${tripId}`);
+      setTrips(prev => prev.filter(t => t._id !== tripId));
+      if (currentTrip?._id === tripId) setCurrentTrip(null);
+    } catch (error) {
+      console.error("Failed to delete trip:", error);
+    }
+  };
+
+  const duplicateTrip = async (tripId) => {
+    try {
+      const res = await api.post(`/trips/${tripId}/duplicate`);
+      const data = res.data;
+      if (data.data) {
+        setTrips(prev => [data.data, ...prev]);
+      }
+    } catch (error) {
+      console.error("Failed to duplicate trip:", error);
+    }
+  };
+
+  const toggleFavoriteTrip = async (tripId) => {
+    try {
+      const res = await api.patch(`/trips/${tripId}/favorite`);
+      const data = res.data;
+      if (data.data) {
+        setTrips(prev => prev.map(t => t._id === tripId ? data.data : t));
+        if (currentTrip?._id === tripId) {
+          setCurrentTrip(data.data);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
     }
   };
 
@@ -311,7 +426,9 @@ export const TripProvider = ({ children }) => {
       duplicateTrip,
       toggleFavoriteTrip,
       manualTheme,
-      setManualTheme
+      setManualTheme,
+      packedItems,
+      togglePackedItem
     }}>
       {children}
     </TripContext.Provider>

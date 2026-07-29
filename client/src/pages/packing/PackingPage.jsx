@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Plus, CheckCircle2, Circle, MoreVertical, Sparkles, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Wand2, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints } from 'lucide-react';
+import { Package, Plus, CheckCircle2, Circle, MoreVertical, Sparkles, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Wand2, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints, GripVertical, Check, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import axios from 'axios';
 import { PageTransition } from '@/components/common/PageTransition';
 import { Button } from '@/components/ui/Button';
 import { useTripContext } from '@/context/TripContext';
+import { useToast } from '@/hooks/useToast';
 
 const INITIAL_CATEGORIES = [
   {
@@ -97,14 +98,14 @@ const generateDateOptions = (startDateStr) => {
    return options;
 };
 
-const DestinationImageWidget = ({ currentTrip }) => {
+const DestinationImageWidget = React.memo(({ currentTrip }) => {
   const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
         const dest = currentTrip?.destination?.split('&')[0] || "Tokyo";
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        const API_URL = import.meta.env.VITE_API_URL || '/api';
         const response = await axios.get(`${API_URL}/images/search`, { params: { query: `${dest} landscape` } });
         if (response.data.success && response.data.data.imageUrl) {
           setImageUrl(response.data.data.imageUrl);
@@ -139,9 +140,9 @@ const DestinationImageWidget = ({ currentTrip }) => {
       </div>
     </motion.div>
   );
-};
+});
 
-const SpatialCard = ({ src, rot, onClick }) => {
+const SpatialCard = React.memo(({ src, rot, onClick, gender }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -153,34 +154,39 @@ const SpatialCard = ({ src, rot, onClick }) => {
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
+
+  const isMen = gender === 'men';
 
   return (
     <div className={`flex-grow basis-[200px] md:basis-[250px] h-[300px] md:h-[400px] ${rot} hover:rotate-0 transition-transform duration-500 ease-out hover:z-50 group`}>
-      <motion.div 
+      <motion.div
         style={{ rotateX, rotateY, transformPerspective: 1000 }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className="w-full h-full relative cursor-pointer transition-all duration-500 ease-out hover:scale-[1.03] hover:-translate-y-3 rounded-[26px] p-[3px] bg-white/5 border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_8px_24px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:border-white/40 hover:shadow-[-8px_24px_40px_rgba(0,0,0,0.6),inset_2px_4px_8px_rgba(255,255,255,0.5),inset_-2px_-4px_8px_rgba(0,0,0,0.3)] backdrop-blur-3xl saturate-150 transform-gpu"
       >
+        {/* Push-pin */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-rose-500 shadow-[0_4px_8px_rgba(0,0,0,0.8),inset_0_-2px_4px_rgba(0,0,0,0.3)] z-30 border border-rose-700">
            <div className="w-1 h-1 bg-white/80 rounded-full absolute top-0.5 left-1 shadow-sm" />
         </div>
-        
+
+        {/* Gender badge */}
+        <div className={`absolute top-3 right-3 z-30 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider border backdrop-blur-md shadow-lg ${
+          isMen
+            ? 'bg-blue-500/30 border-blue-400/50 text-blue-200'
+            : 'bg-pink-500/30 border-pink-400/50 text-pink-200'
+        }`}>
+          {isMen ? '♂ Men' : '♀ Women'}
+        </div>
+
         <div className="w-full h-full relative rounded-[24px] overflow-hidden shadow-inner">
-          <img src={src} alt="Outfit inspiration" className="w-full h-full object-cover transform group-hover:scale-[1.12] transition-transform duration-[1500ms] ease-out" loading="lazy" />
-          
+          <img src={src} alt={`${gender} outfit inspiration`} className="w-full h-full object-cover transform group-hover:scale-[1.12] transition-transform duration-[1500ms] ease-out" loading="lazy" />
+
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-[#0F172A]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 z-20">
             <button onClick={onClick} className="ios-liquid-button bg-white/[0.15] hover:bg-white/[0.25] backdrop-blur-[24px] border border-white/30 border-t-white/60 shadow-[0_4px_12px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] text-white font-bold py-3 px-4 rounded-[16px] flex items-center justify-center gap-2 hover:-translate-y-0.5 transition-all">
               <Plus className="w-4 h-4" /> Save Style Idea
@@ -190,13 +196,17 @@ const SpatialCard = ({ src, rot, onClick }) => {
       </motion.div>
     </div>
   );
-};
+});
+
 
 // Track visited trips globally so we don't repeat the animation during a session
 const visitedTrips = new Set();
 
 export default function PackingPage() {
   const { currentTrip } = useTripContext();
+  const { addToast } = useToast();
+  const [activeView, setActiveView] = useState('list'); // 'list' | 'moodboard'
+  console.log("PackingPage rendering...");
   const [categories, setCategories] = useState(INITIAL_CATEGORIES);
   const [shoppingItems, setShoppingItems] = useState([
     { id: 1, text: 'Travel Adapter', packed: false },
@@ -230,6 +240,48 @@ export default function PackingPage() {
   // AI & Weather State (Silent Loading)
   const [weatherData, setWeatherData] = useState(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  
+  // Magic Pack State
+  const [isMagicPacking, setIsMagicPacking] = useState(false);
+
+  const handleMagicPack = () => {
+    if (isMagicPacking) return;
+    setIsMagicPacking(true);
+    
+    // Simulate AI thinking and analyzing weather/destination
+    setTimeout(() => {
+      setCategories(prev => {
+        const newCats = [...prev];
+        const condition = weatherData?.current?.condition?.toLowerCase() || "";
+        
+        // Contextual Suggestions
+        const suggestions = [];
+        if (condition.includes('rain') || condition.includes('drizzle') || condition.includes('shower')) {
+          suggestions.push({ catId: 1, text: 'Heavy Duty Umbrella' });
+          suggestions.push({ catId: 1, text: 'Waterproof Boots' });
+        } else if (condition.includes('sun') || condition.includes('clear') || (weatherData?.current?.temp > 25)) {
+          suggestions.push({ catId: 3, text: 'Aloe Vera Gel' });
+          suggestions.push({ catId: 1, text: 'Extra Swimwear' });
+        } else if (weatherData?.current?.temp < 10) {
+          suggestions.push({ catId: 1, text: 'Thermal Base Layers' });
+          suggestions.push({ catId: 1, text: 'Hand Warmers' });
+        } else {
+          suggestions.push({ catId: 2, text: 'Portable Wi-Fi Hotspot' });
+          suggestions.push({ catId: 3, text: 'Hydration Tablets' });
+        }
+        
+        suggestions.forEach(s => {
+          const catIndex = newCats.findIndex(c => c.id === s.catId);
+          if (catIndex >= 0 && !newCats[catIndex].items.some(i => i.text === s.text)) {
+             newCats[catIndex].items.unshift({ id: Date.now() + Math.random(), text: s.text + ' ✨', packed: false });
+          }
+        });
+        
+        return newCats;
+      });
+      setIsMagicPacking(false);
+    }, 1500);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -245,7 +297,7 @@ export default function PackingPage() {
       const startTime = Date.now();
       
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+        const API_URL = import.meta.env.VITE_API_URL || '/api';
         
         // 1. Fetch Weather
         const weatherRes = await axios.get(`${API_URL}/weather/${encodeURIComponent(destinationStr)}`);
@@ -267,11 +319,14 @@ export default function PackingPage() {
               if (aiCat && aiCat.items && aiCat.items.length > 0) {
                 return {
                   ...baseCat,
-                  items: aiCat.items.map((item, j) => ({
-                    id: parseInt(`${baseCat.id}0${j}`),
-                    text: item.name || item.text,
-                    packed: !!item.packed
-                  }))
+                  items: aiCat.items.map((item, j) => {
+                    const text = item.name || item.text;
+                    return {
+                      id: text,
+                      text: text,
+                      packed: !!item.packed
+                    };
+                  })
                 };
               }
               return baseCat;
@@ -298,91 +353,111 @@ export default function PackingPage() {
     return () => { isMounted = false; };
   }, [currentTrip?._id]);
 
-  // Mood Board logic
-
+  // Mood Board logic — place-specific, 50/50 men/women, show whatever is found
   const fetchMoodboard = async (pageToFetch = moodboardPage) => {
-    if (moodboardImages.length > 0 && pageToFetch === moodboardPage) return;
+    if (isFetchingMoodboard) return;
     setIsFetchingMoodboard(true);
+    setMoodboardImages([]);
     try {
-      const destination = currentTrip?.destination?.split('&')[0].split(',')[0] || "Tokyo";
-      
-      const queryMen = `men fashion ${destination}`;
-      const queryWomen = `women fashion ${destination}`;
-      
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const [resMen, resWomen] = await Promise.all([
-        axios.get(`${API_URL}/images/moodboard`, { params: { query: queryMen, page: pageToFetch } }),
-        axios.get(`${API_URL}/images/moodboard`, { params: { query: queryWomen, page: pageToFetch } })
-      ]);
-      
-      if (resMen.data.success && resWomen.data.success) {
-        const menImages = resMen.data.data.images || [];
-        const womenImages = resWomen.data.data.images || [];
-        
-        const interleaved = [];
-        const seenUrls = new Set();
-        
-        let mIndex = 0;
-        let wIndex = 0;
-        let pairsCount = 0;
-        
-        // Loop until we get 15 unique pairs (30 images) OR we run out of images in either array
-        while (pairsCount < 15 && mIndex < menImages.length && wIndex < womenImages.length) {
-          // Find next unique woman image
-          while (wIndex < womenImages.length && seenUrls.has(womenImages[wIndex])) {
-            wIndex++;
+      // Use the FULL destination string for geographic context
+      const fullDest = currentTrip?.destination?.split('&')[0].trim() || 'Tokyo';
+      const cityPart   = fullDest.split(',')[0].trim();
+      const regionPart = fullDest.includes(',') ? fullDest.split(',').slice(1).join(',').trim() : fullDest;
+
+      const API_URL = '/api';
+      const MAX_PAIRS = 10; // up to 10 women + 10 men = 20 images
+
+      /**
+       * Fetch images for ONE query from the backend.
+       * Returns [] if query returned no relevant images.
+       */
+      const fetchFor = async (query) => {
+        try {
+          const r = await axios.get(`${API_URL}/images/moodboard`, { params: { query, page: pageToFetch } });
+          // Accept any results — hasResults=true means the API found something relevant
+          if (r.data?.success && r.data?.data?.hasResults) {
+            return r.data.data.images || [];
           }
-          const wImg = womenImages[wIndex];
-          
-          // Find next unique man image
-          while (mIndex < menImages.length && (seenUrls.has(menImages[mIndex]) || menImages[mIndex] === wImg)) {
-            mIndex++;
+          return [];
+        } catch { return []; }
+      };
+
+      /**
+       * Run ALL queries for a gender IN PARALLEL and accumulate every
+       * image found. Deduplicates across all results.
+       * Shows whatever was found — even if it's just 2-4 images.
+       * Only returns empty if truly 0 images found across all queries.
+       */
+      const fetchGenderImages = async (gender) => {
+        const g = gender === 'men' ? 'men' : 'women';
+
+        // All queries run simultaneously — geographically anchored at every level
+        const queries = [
+          `${g} traditional clothing ${cityPart}`,
+          `${g} traditional clothing ${fullDest}`,
+          `${g} traditional clothing ${regionPart}`,
+          `${g} local fashion ${regionPart}`,
+          `${g} casual street style ${regionPart}`,
+          `${g} outdoor lifestyle ${regionPart}`,
+        ];
+
+        // Fire ALL queries in parallel for speed
+        const results = await Promise.allSettled(queries.map(q => fetchFor(q)));
+
+        // Accumulate and deduplicate ALL images found across every query
+        const seen = new Set();
+        const accumulated = [];
+        for (const res of results) {
+          if (res.status === 'fulfilled') {
+            for (const url of res.value) {
+              if (!seen.has(url)) {
+                seen.add(url);
+                accumulated.push(url);
+              }
+            }
           }
-          const mImg = menImages[mIndex];
-          
-          // If we found both a unique woman and unique man image, add them as a pair
-          if (wImg && mImg) {
-            interleaved.push(wImg);
-            seenUrls.add(wImg);
-            interleaved.push(mImg);
-            seenUrls.add(mImg);
-            pairsCount++;
-          }
-          
-          wIndex++;
-          mIndex++;
         }
 
-        // If we still don't have 15 pairs (30 images), fill the rest with generic high quality fashion fallbacks
-        if (pairsCount < 15) {
-          const fallbacks = [
-            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80",
-            "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
-            "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&q=80",
-            "https://images.unsplash.com/photo-1509631179647-0c1158a409ec?w=800&q=80",
-            "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=80",
-            "https://images.unsplash.com/photo-1485230895905-ef05ba62ebfd?w=800&q=80",
-            "https://images.unsplash.com/photo-1506152983158-b4a74a01c721?w=800&q=80",
-            "https://images.unsplash.com/photo-1550614000-4b95d466f168?w=800&q=80"
-          ];
-          let fbIndex = 0;
-          while (pairsCount < 15) {
-            // Push same fallback twice for visual padding, or two different fallbacks if available
-            interleaved.push(fallbacks[fbIndex % fallbacks.length]);
-            interleaved.push(fallbacks[(fbIndex + 1) % fallbacks.length]);
-            fbIndex += 2;
-            pairsCount++;
-          }
-        }
-        
-        setMoodboardImages(interleaved);
+        console.log(`[Moodboard] ${g} for "${fullDest}": ${accumulated.length} total images found`);
+        return accumulated; // Return ALL found — even if just 2 or 4
+      };
+
+      // Fetch both genders simultaneously
+      const [menImages, womenImages] = await Promise.all([
+        fetchGenderImages('men'),
+        fetchGenderImages('women'),
+      ]);
+
+      // Build interleaved [{url, gender}] array, strictly alternating ♀ ♂
+      const interleaved = [];
+      const seenUrls = new Set();
+      let mIdx = 0, wIdx = 0, pairs = 0;
+
+      while (pairs < MAX_PAIRS) {
+        while (wIdx < womenImages.length && seenUrls.has(womenImages[wIdx])) wIdx++;
+        while (mIdx < menImages.length && (seenUrls.has(menImages[mIdx]) || menImages[mIdx] === womenImages[wIdx])) mIdx++;
+
+        const wImg = womenImages[wIdx];
+        const mImg = menImages[mIdx];
+
+        if (wImg) { interleaved.push({ url: wImg, gender: 'women' }); seenUrls.add(wImg); wIdx++; }
+        if (mImg) { interleaved.push({ url: mImg, gender: 'men' }); seenUrls.add(mImg); mIdx++; }
+
+        if (!wImg && !mImg) break; // Both pools exhausted — show what we have
+        pairs++;
       }
+
+      // Display whatever was found — 2, 6, 10, or 20 images
+      setMoodboardImages(interleaved);
     } catch (error) {
-      console.error("Failed to fetch moodboard", error);
+      console.error('Moodboard fetch error:', error);
     } finally {
       setIsFetchingMoodboard(false);
     }
   };
+
+
+
 
   const dateOptions = generateDateOptions(currentTrip?.startDate);
   const [pickerDate, setPickerDate] = useState(dateOptions[0]?.value || new Date().toISOString().split('T')[0]);
@@ -446,7 +521,7 @@ export default function PackingPage() {
          finalSchedule = new Date(customSchedule).toISOString();
       }
 
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
       const response = await axios.post(`${API_URL}/sms/remind`, { 
         phoneNumber: reminderPhone,
         departureTime: currentTrip.startDate,
@@ -470,7 +545,7 @@ export default function PackingPage() {
     
     setIsSettingReminder(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
       await axios.post(`${API_URL}/sms/cancel`, { phoneNumber: reminderPhone });
       setReminderSet(false);
       setShowReminderInput(false);
@@ -534,7 +609,7 @@ export default function PackingPage() {
     const userMessage = categoryChatInput;
     setCategoryChatInput("");
     
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const API_URL = import.meta.env.VITE_API_URL || '/api';
     const cat = categories.find(c => c.id === catId);
     const context = {
       destination: currentTrip?.destination?.split('&')[0] || "Unknown",
@@ -568,36 +643,66 @@ export default function PackingPage() {
       setCategoryChatHistory(prev => [...prev, { 
         role: 'assistant', 
         content: "I'm having trouble connecting to my AI core right now. Please try again in a moment.",
-        suggestion: null
       }]);
     }
   };
+
+  const { togglePackedItem, packedItems } = useTripContext();
 
   const handleAddCategoryItem = (catId, text) => {
     setCategories(categories.map(cat => {
       if (cat.id !== catId) return cat;
       return {
         ...cat,
-        items: [...cat.items, { id: Date.now(), text, packed: false }]
+        items: [...cat.items, { id: text, text, packed: false }]
       };
     }));
   };
 
   const toggleItem = (categoryId, itemId) => {
-    setCategories(categories.map(cat => {
-      if (cat.id !== categoryId) return cat;
-      return {
-        ...cat,
-        items: cat.items.map(item => 
-          item.id === itemId ? { ...item, packed: !item.packed } : item
-        )
-      };
-    }));
+    togglePackedItem(itemId);
+  };
+
+  const deleteItem = (catId, itemId) => {
+    setCategories(categories.map(cat => 
+      cat.id === catId ? { ...cat, items: cat.items.filter(i => i.id !== itemId) } : cat
+    ));
+  };
+
+  const handleAiSwap = async (categoryId, item) => {
+    try {
+      setCategories(prev => prev.map(cat => 
+        cat.id === categoryId 
+          ? { ...cat, items: cat.items.map(i => i.id === item.id ? { ...i, text: 'Finding alternative...' } : i) }
+          : cat
+      ));
+
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const res = await axios.post(`${API_URL}/ai/packing/alternative`, {
+        destination: currentTrip?.destination,
+        item: item.text
+      });
+
+      const alternative = res.data.alternative || "Generic Item";
+
+      setCategories(prev => prev.map(cat => 
+        cat.id === categoryId 
+          ? { ...cat, items: cat.items.map(i => i.id === item.id ? { ...i, id: alternative, text: alternative } : i) }
+          : cat
+      ));
+    } catch (err) {
+      console.error(err);
+      setCategories(prev => prev.map(cat => 
+        cat.id === categoryId 
+          ? { ...cat, items: cat.items.map(i => i.id === item.id ? { ...i, text: item.text } : i) }
+          : cat
+      ));
+    }
   };
 
   const totalItems = categories.reduce((acc, cat) => acc + cat.items.length, 0);
-  const packedItems = categories.reduce((acc, cat) => acc + cat.items.filter(i => i.packed).length, 0);
-  const progressPercent = totalItems === 0 ? 0 : Math.round((packedItems / totalItems) * 100);
+  const totalPacked = categories.reduce((acc, cat) => acc + cat.items.filter(i => packedItems.has(i.id)).length, 0);
+  const progressPercent = totalItems === 0 ? 0 : Math.round((totalPacked / totalItems) * 100);
 
   // SVG circular progress calculation
   const radius = 40;
@@ -605,7 +710,7 @@ export default function PackingPage() {
   const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
 
   const renderCategoryCard = (cat, index) => {
-    const isComplete = cat.items.every(i => i.packed) && cat.items.length > 0;
+    const isComplete = cat.items.every(i => packedItems.has(i.id)) && cat.items.length > 0;
     const colors = [
       'from-pink-500 to-rose-400',
       'from-blue-500 to-indigo-500',
@@ -630,7 +735,7 @@ export default function PackingPage() {
             <div className="ios-3d-element">
               <h3 className="text-xl font-bold text-white drop-shadow-sm">{cat.name}</h3>
               <span className="text-xs font-semibold text-white/50 tracking-wide">
-                {cat.items.filter(i => i.packed).length} OF {cat.items.length} PACKED
+                {cat.items.filter(i => packedItems.has(i.id)).length} OF {cat.items.length} PACKED
               </span>
             </div>
           </div>
@@ -791,36 +896,52 @@ export default function PackingPage() {
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
               className={`col-start-1 row-start-1 p-3 sm:p-4 ${cat.id === 1 || cat.id === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1' : 'flex flex-col gap-1'}`}
             >
-              {cat.items.map(item => (
-                <div 
-                  key={item.id} 
-                  onClick={() => toggleItem(cat.id, item.id)}
-                  className="flex items-center gap-4 p-3 hover:bg-white/[0.04] rounded-2xl cursor-pointer transition-all duration-300 group relative ios-3d-element"
-                >
-                  <div className="shrink-0 relative w-6 h-6 flex items-center justify-center">
-                    {item.packed ? (
-                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }}>
-                        <CheckCircle2 className="w-6 h-6 text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]" strokeWidth={2.5} />
-                      </motion.div>
-                    ) : (
-                      <Circle className="w-6 h-6 text-white/20 group-hover:text-white/40 group-hover:scale-110 transition-all duration-300" strokeWidth={2} />
-                    )}
+              {cat.items.map(item => {
+                const isPacked = packedItems.has(item.id);
+                return (
+                  <div 
+                    key={item.id} 
+                    className={`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-300 group relative ios-3d-element print:break-inside-avoid print:bg-white print:border-b print:border-gray-200 print:text-black print:p-2 ${isPacked ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}
+                  >
+                    <GripVertical className="w-4 h-4 text-white/20 group-hover:text-white/50 cursor-grab active:cursor-grabbing shrink-0 print:hidden" />
+                    
+                    <button 
+                      onClick={() => toggleItem(cat.id, item.id)}
+                      className={`shrink-0 relative w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        isPacked ? 'bg-emerald-500 border-emerald-500' : 'border-white/30 hover:border-white/60'
+                      }`}
+                    >
+                      {isPacked && <Check className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
+                    </button>
+                    
+                    <span className={`text-[15px] font-medium transition-all duration-500 flex-1 ${isPacked ? 'text-white/40 line-through print:text-gray-500' : 'text-white/90 print:text-black'}`}>
+                      {item.text}
+                    </span>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {!isPacked && (
+                        <button 
+                          onClick={() => handleAiSwap(cat.id, item)}
+                          title="AI Suggest Alternative"
+                          className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/20 text-white/40 hover:text-white transition-colors"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      <button 
+                        onClick={() => deleteItem(cat.id, item.id)}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-500/20 text-white/40 hover:text-red-400 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <span className={`text-[15px] font-medium transition-all duration-500 flex-1 ${item.packed ? 'text-white/40' : 'text-white/90'}`}>
-                    {item.text}
-                  </span>
-                  {/* Strike-through line */}
-                  <motion.div 
-                    className="absolute left-14 right-4 h-[2px] bg-white/20 rounded-full origin-left"
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    animate={{ scaleX: item.packed ? 1 : 0, opacity: item.packed ? 1 : 0 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                  />
-                </div>
-              ))}
+                );
+              })}
               
               <div className="col-span-full p-3 mt-1 flex flex-wrap gap-3 justify-center sm:justify-start">
-                <button className="ios-liquid-button px-4 rounded-xl flex items-center gap-2 text-[14px] font-bold text-white/60 hover:text-white transition-colors py-2 group">
+                <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToast('info', '✨ Feature coming soon!'); }} className="ios-liquid-button px-4 rounded-xl flex items-center gap-2 text-[14px] font-bold text-white/60 hover:text-white transition-colors py-2 group">
                   <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" strokeWidth={3} /> 
                   Add Item
                 </button>
@@ -868,9 +989,13 @@ export default function PackingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <button className="h-12 px-6 rounded-[20px] ios-liquid-button bg-gradient-to-tr from-blue-500 to-indigo-500 border border-white/40 hover:from-blue-400 hover:to-indigo-400 flex items-center gap-2 text-white font-bold tracking-wide transition-all duration-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_8px_16px_rgba(59,130,246,0.5)] hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_12px_24px_rgba(59,130,246,0.6)] hover:-translate-y-[2px] active:translate-y-0 group">
-              <Sparkles className="w-5 h-5 drop-shadow-md group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
-              AI Suggest Items
+            <button 
+              onClick={handleMagicPack}
+              disabled={isMagicPacking || isAiLoading}
+              className="h-12 px-6 rounded-[20px] ios-liquid-button bg-gradient-to-tr from-blue-500 to-indigo-500 border border-white/40 hover:from-blue-400 hover:to-indigo-400 flex items-center gap-2 text-white font-bold tracking-wide transition-all duration-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_8px_16px_rgba(59,130,246,0.5)] hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),0_12px_24px_rgba(59,130,246,0.6)] hover:-translate-y-[2px] active:translate-y-0 group disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <Wand2 className={`w-5 h-5 drop-shadow-md transition-transform duration-300 ${isMagicPacking ? 'animate-bounce text-yellow-300' : 'group-hover:rotate-12 group-hover:scale-110'}`} strokeWidth={2.5} />
+              {isMagicPacking ? 'Analyzing...' : 'Magic Pack'}
             </button>
           </motion.div>
         </div>
@@ -996,10 +1121,10 @@ export default function PackingPage() {
 
               <div className="text-center mb-6">
                 <h2 className="text-xl font-bold text-white mb-1">Ready for takeoff</h2>
-                <p className="text-sm font-medium text-white/50">{packedItems} of {totalItems} items packed</p>
+                <p className="text-sm font-medium text-white/50">{totalPacked} of {totalItems} items packed</p>
               </div>
 
-              <button className="ios-liquid-button w-full h-12 rounded-[20px] text-white font-bold text-[14px] tracking-wide flex items-center justify-center gap-2 group">
+              <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToast('info', '✨ Feature coming soon!'); }} className="ios-liquid-button w-full h-12 rounded-[20px] text-white font-bold text-[14px] tracking-wide flex items-center justify-center gap-2 group">
                 <Plus className="w-5 h-5 text-white/50 group-hover:text-white transition-colors" />
                 Add Category
               </button>
@@ -1367,9 +1492,17 @@ export default function PackingPage() {
             
             {/* Header and Refresh Button */}
             <div className="flex justify-between items-center w-full px-2 mt-4 mb-2">
-              <h2 className="text-xl md:text-2xl font-bold text-white tracking-wide flex items-center gap-2 drop-shadow-md">
-                <Sparkles className="w-5 h-5 text-indigo-400" /> {currentTrip?.destination?.split('&')[0]} Street Style
-              </h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl md:text-2xl font-bold text-white tracking-wide flex items-center gap-2 drop-shadow-md">
+                  <Sparkles className="w-5 h-5 text-indigo-400" /> {currentTrip?.destination?.split('&')[0]} Street Style
+                </h2>
+                {!isFetchingMoodboard && moodboardImages.length > 0 && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/10 border border-white/20 text-white/60 tracking-wider">
+                    {moodboardImages.length} styles
+                  </span>
+                )}
+              </div>
+
               <button 
                 onClick={() => {
                   const nextPage = moodboardPage + 1;
@@ -1396,35 +1529,52 @@ export default function PackingPage() {
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-6 md:gap-8">
+            <div className="flex flex-wrap justify-start gap-6 md:gap-8">
               {isFetchingMoodboard ? (
-              [...Array(30)].map((_, i) => (
+              [...Array(20)].map((_, i) => (
                 <div key={i} className="flex-grow basis-[250px] h-[350px] ios-glass-card bg-white/5 animate-pulse rounded-[24px] border border-white/10" />
               ))
             ) : moodboardImages.length > 0 ? (
-              moodboardImages.map((src, i) => {
+              moodboardImages.map((item, i) => {
                 const rotations = ['rotate-[-2deg]', 'rotate-[2deg]', 'rotate-[-1deg]', 'rotate-[1deg]', 'rotate-[-3deg]', 'rotate-[3deg]'];
                 const rot = rotations[i % rotations.length];
+                // Support both legacy string format and new {url, gender} object format
+                const src = typeof item === 'string' ? item : item.url;
+                const gender = typeof item === 'object' ? item.gender : (i % 2 === 0 ? 'women' : 'men');
                 return (
-                  <SpatialCard 
-                    key={i} 
-                    src={src} 
-                    rot={rot} 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      setCategories(prev => { 
-                        const newCats = [...prev]; 
-                        newCats[0].items.unshift({ id: Date.now(), text: 'New Item Suggestion', packed: false }); 
-                        return newCats; 
-                      }); 
-                    }} 
+                  <SpatialCard
+                    key={i}
+                    src={src}
+                    rot={rot}
+                    gender={gender}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCategories(prev => {
+                        const newCats = [...prev];
+                        newCats[0].items.unshift({ id: Date.now(), text: 'New Item Suggestion', packed: false });
+                        return newCats;
+                      });
+                    }}
                   />
                 );
               })
             ) : (
-              <div className="flex-grow flex flex-col items-center justify-center py-32 w-full ios-glass-card rounded-[32px]">
-                <Sparkles className="w-16 h-16 text-white/20 mb-6 drop-shadow-md" />
-                <p className="text-white/60 text-xl font-medium tracking-wide">No outfit inspiration found for this destination.</p>
+              <div className="flex-grow flex flex-col items-center justify-center py-24 w-full ios-glass-card rounded-[32px] gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-2">
+                  <Shirt className="w-8 h-8 text-white/20" />
+                </div>
+                <p className="text-white/70 text-lg font-semibold tracking-wide text-center">
+                  No local outfit images found for this destination
+                </p>
+                <p className="text-white/40 text-sm text-center max-w-sm leading-relaxed">
+                  Stock photo libraries may not have enough local style photos for <span className="text-white/60 font-medium">{currentTrip?.destination?.split('&')[0]}</span>. This is intentional — we only show images that truly match your destination.
+                </p>
+                <button
+                  onClick={() => { setMoodboardPage(1); fetchMoodboard(1); }}
+                  className="mt-2 px-6 py-2.5 rounded-full text-sm font-bold bg-white/10 border border-white/20 text-white/70 hover:bg-white/20 hover:text-white transition-all flex items-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" /> Try Again
+                </button>
               </div>
             )}
           </div>

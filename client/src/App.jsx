@@ -20,7 +20,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/authentication/LoginPage'));
 const SignupPage = lazy(() => import('./pages/authentication/SignupPage'));
 
-import OverviewPage from './pages/overview/OverviewPage';
+const OverviewPage = lazy(() => import('./pages/overview/OverviewPage'));
 const CostIntelligencePage = lazy(() => import('./pages/budget/CostIntelligencePage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
@@ -28,10 +28,14 @@ const OnboardingPage = lazy(() => import('./pages/authentication/OnboardingPage'
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // New Modules
-import TripsPage from './pages/trips/TripsPage';
+const TripsPage = lazy(() => import('./pages/trips/TripsPage'));
 const PackingPage = lazy(() => import('./pages/packing/PackingPage'));
 const DocumentsPage = lazy(() => import('./pages/documents/DocumentsPage'));
 const AssistantPage = lazy(() => import('./pages/assistant/AssistantPage'));
+const ExplorePage = lazy(() => import('./pages/explore/ExplorePage'));
+const CalendarPage = lazy(() => import('./pages/calendar/CalendarPage'));
+const JournalPage = lazy(() => import('./pages/journal/JournalPage'));
+const FlightsPage = lazy(() => import('./pages/flights/FlightsPage'));
 
 // ---------------------------------------------------------------------------
 // Full-page loading spinner (Liquid Shimmer)
@@ -272,6 +276,46 @@ function AppRoutes() {
               <ProtectedRoute>
                 <AppLayout>
                   <AssistantPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.EXPLORE}
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <ExplorePage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.CALENDAR}
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CalendarPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.JOURNAL}
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <JournalPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.FLIGHTS}
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <FlightsPage />
                 </AppLayout>
               </ProtectedRoute>
             }

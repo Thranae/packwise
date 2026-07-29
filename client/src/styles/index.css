@@ -150,8 +150,8 @@ h3, h4, h5, h6 {
   }
   
   .dark .glass-input {
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .glass-input:focus-within {
@@ -162,33 +162,27 @@ h3, h4, h5, h6 {
 
   /* iOS 26 3D Liquid Glass - Fluid & Thick */
   .ios-glass-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.001) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-top-color: rgba(255, 255, 255, 0.4);
-    border-left-color: rgba(255, 255, 255, 0.25);
+    background: 
+      linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.5);
+    border-left-color: rgba(255, 255, 255, 0.3);
     border-right-color: rgba(255, 255, 255, 0.05);
     border-bottom-color: rgba(255, 255, 255, 0.02);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), inset 0 2px 3px rgba(255, 255, 255, 0.3), inset 0 0 24px rgba(255, 255, 255, 0.04), inset 0 -1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 30px 60px rgba(0, 0, 0, 0.4), 
+      inset 0 3px 6px rgba(255, 255, 255, 0.3), 
+      inset 0 0 30px rgba(255, 255, 255, 0.05), 
+      inset 0 -2px 6px rgba(0, 0, 0, 0.2);
     transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     transform-style: preserve-3d;
     perspective: 1200px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transform: translateZ(0);
-  }
-
-  .ios-glass-card:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
-    box-shadow: -15px 40px 80px rgba(59, 130, 246, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.4), inset 0 0 40px rgba(255, 255, 255, 0.08), inset 0 -2px 6px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.15);
-    border-top-color: rgba(255, 255, 255, 0.5);
-    border-left-color: rgba(255, 255, 255, 0.35);
-    z-index: 50;
   }
 
   .ios-3d-element, .ios-3d-icon {
@@ -198,13 +192,33 @@ h3, h4, h5, h6 {
     -webkit-backface-visibility: hidden;
   }
 
-  .ios-glass-card:hover .ios-3d-element {
-    transform: translateZ(30px);
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .ios-glass-card:hover {
+      background: 
+        linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 
+        -15px 40px 80px rgba(59, 130, 246, 0.25), 
+        inset 0 4px 8px rgba(255, 255, 255, 0.5), 
+        inset 0 0 40px rgba(255, 255, 255, 0.1), 
+        inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+      border-color: rgba(255, 255, 255, 0.15);
+      border-top-color: rgba(255, 255, 255, 0.6);
+      border-left-color: rgba(255, 255, 255, 0.4);
+      z-index: 50;
+    }
 
-  .ios-glass-card:hover .ios-3d-icon {
-    transform: translateZ(50px);
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    .ios-glass-card:hover .ios-3d-element {
+      transform: translateZ(30px);
+    }
+
+    .ios-glass-card:hover .ios-3d-icon {
+      transform: translateZ(50px);
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
   }
 
   /* Compact 3D Liquid Glass Pill */
@@ -346,4 +360,49 @@ h3, h4, h5, h6 {
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .vision-blob,
+  .pointer-events-none,
+  button,
+  .ios-liquid-button,
+  .sidebar,
+  header {
+    display: none !important;
+  }
+  .ios-glass-card {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    color: black !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .ios-glass-card h3, .ios-glass-card span, .ios-glass-card p {
+    color: black !important;
+    text-shadow: none !important;
+  }
+  .ios-3d-element, .ios-3d-icon {
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  .text-white, .text-white\/90, .text-white\/50, .text-white\/60 {
+    color: black !important;
+  }
+  svg {
+    filter: none !important;
+  }
+  .col-span-12, .lg\:col-span-8, .lg\:col-span-4 {
+    display: block !important;
+    width: 100% !important;
+  }
 }

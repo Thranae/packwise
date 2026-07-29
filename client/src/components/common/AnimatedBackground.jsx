@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const AnimatedBackground = () => {
+export const AnimatedBackground = React.memo(() => {
   return (
     <>
       {/* BACKGROUND - VisionOS Style Freely Moving Aurora */}
@@ -28,20 +28,19 @@ export const AnimatedBackground = () => {
         .vision-blob {
           position: absolute;
           border-radius: 50%;
-          filter: blur(140px);
           pointer-events: none;
         }
       `}} />
       
-      <div className="fixed inset-0 z-0 bg-[#020617] overflow-hidden pointer-events-none transition-colors duration-1000">
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020617] transition-colors duration-700">
         {/* Soft White Moonlight Glows */}
-        <div className="vision-blob bg-white opacity-20" style={{ width: '50vw', height: '50vw', top: '-10%', left: '-10%', animation: 'floatWide1 20s ease-in-out infinite' }} />
-        <div className="vision-blob bg-white opacity-15" style={{ width: '40vw', height: '40vw', bottom: '10%', right: '10%', animation: 'floatWide3 25s ease-in-out infinite' }} />
+        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)', width: '50vw', height: '50vw', top: '-10%', left: '-10%', animation: 'floatWide1 20s ease-in-out infinite' }} />
+        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', width: '40vw', height: '40vw', bottom: '10%', right: '10%', animation: 'floatWide3 25s ease-in-out infinite' }} />
         
         {/* Deep Dark Combos (Slate & Indigo) that suit the background */}
-        <div className="vision-blob bg-slate-700 opacity-40" style={{ width: '60vw', height: '60vw', top: '20%', left: '20%', animation: 'floatWide2 22s ease-in-out infinite' }} />
-        <div className="vision-blob bg-indigo-900 opacity-50" style={{ width: '70vw', height: '70vw', bottom: '-20%', right: '-20%', animation: 'floatWide4 28s ease-in-out infinite' }} />
-        <div className="vision-blob bg-zinc-800 opacity-40" style={{ width: '55vw', height: '55vw', top: '-20%', right: '10%', animation: 'floatWide1 24s ease-in-out infinite reverse' }} />
+        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(51,65,85,0.4) 0%, transparent 70%)', width: '60vw', height: '60vw', top: '20%', left: '20%', animation: 'floatWide2 22s ease-in-out infinite' }} />
+        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(49,46,129,0.5) 0%, transparent 70%)', width: '70vw', height: '70vw', bottom: '-20%', right: '-20%', animation: 'floatWide4 28s ease-in-out infinite' }} />
+        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(39,39,42,0.4) 0%, transparent 70%)', width: '55vw', height: '55vw', top: '-20%', right: '10%', animation: 'floatWide1 24s ease-in-out infinite reverse' }} />
         
         {/* Dotted Texture Overlay */}
         <div 
@@ -54,4 +53,4 @@ export const AnimatedBackground = () => {
       </div>
     </>
   );
-};
+});

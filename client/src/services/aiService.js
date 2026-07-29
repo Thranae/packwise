@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Ensure this matches your server port
-const API_BASE_URL = 'http://localhost:5000/api/ai';
+// Use relative URL to go through the Vite proxy (configured in vite.config.js)
+const API_BASE_URL = '/api/ai';
 
 const aiApiClient = axios.create({
   baseURL: API_BASE_URL,

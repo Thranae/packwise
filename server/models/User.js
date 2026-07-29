@@ -27,9 +27,16 @@ const userSchema = new mongoose.Schema(
         'Please provide a valid email address',
       ],
     },
+    googleId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function() {
+        return !this.googleId;
+      },
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
     },
@@ -56,6 +63,19 @@ const userSchema = new mongoose.Schema(
         message: '{VALUE} is not a valid theme',
       },
       default: 'dark',
+    },
+    dietaryRestrictions: {
+      type: [String],
+      default: [],
+    },
+    budgetPreference: {
+      type: String,
+      enum: ['budget', 'moderate', 'luxury'],
+      default: 'moderate',
+    },
+    travelStyle: {
+      type: [String],
+      default: [],
     },
     profileImage: {
       type: String,

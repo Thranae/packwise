@@ -16,8 +16,9 @@ export const useLiveWeather = (destination) => {
     const fetchWeather = async () => {
       setLoading(true);
       try {
+        const API_URL = import.meta.env.VITE_API_URL || '/api';
         // Fetch weather from our dedicated backend service
-        const res = await axios.get(`/api/weather/${encodeURIComponent(destination)}`);
+        const res = await axios.get(`${API_URL}/weather/${encodeURIComponent(destination)}`);
         
         setWeather(res.data);
         setError(null);
@@ -43,7 +44,11 @@ export const useLiveCurrency = (targetCurrency, baseCurrency = 'USD') => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!targetCurrency) {
+    if (!targetCurrency || targetCurrency === baseCurrency) {
+      if (targetCurrency === baseCurrency) {
+        setExchangeRate(1);
+        setHistory(Array(14).fill(1));
+      }
       setLoading(false);
       return;
     }
@@ -51,13 +56,28 @@ export const useLiveCurrency = (targetCurrency, baseCurrency = 'USD') => {
     const fetchCurrency = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`/api/currency/trend/${targetCurrency}?baseCurrency=${baseCurrency}&days=14`);
+        const endDate = new Date().toISOString().split('T')[0];
+        const startDate = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
         
-        setExchangeRate(res.data.rate.toFixed(2));
-        setTrend(res.data.trend);
-        setHistory(res.data.history || []);
+        // Fetch 14-day history from open-source Frankfurter API
+        const res = await axios.get(`https://api.frankfurter.app/${startDate}..${endDate}?from=${baseCurrency}&to=${targetCurrency}`);
+        
+        const ratesObj = res.data.rates;
+        const historyValues = Object.values(ratesObj).map(rate => rate[targetCurrency]);
+        
+        if (historyValues.length > 0) {
+          const latestRate = historyValues[historyValues.length - 1];
+          const previousRate = historyValues.length > 1 ? historyValues[historyValues.length - 2] : latestRate;
+          
+          setExchangeRate(latestRate);
+          setTrend(latestRate >= previousRate ? 'up' : 'down');
+          setHistory(historyValues);
+        }
       } catch (err) {
-        console.error("Live Currency Error:", err);
+        console.error("Live Currency Error (Frankfurter):", err);
+        // Fallback to mock data if API fails
+        setExchangeRate(0.012);
+        setHistory([0.011, 0.0115, 0.012, 0.0118, 0.012]);
       } finally {
         setLoading(false);
       }

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Sparkles, Globe } from 'lucide-react';
+import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Sparkles, Globe, Book } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { ROUTES } from '@/constants/routes';
 import { Logo } from '../ui/Logo';
 import { Button } from '../ui/Button';
@@ -13,6 +14,7 @@ import { getInitials } from '@/utils/formatters';
 const navItems = [
   { name: 'Overview', path: ROUTES.OVERVIEW, icon: LayoutDashboard, hoverColor: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
   { name: 'Trips', path: '/trips', icon: Map, hoverColor: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
+  { name: 'Journal', path: ROUTES.JOURNAL, icon: Book, hoverColor: 'group-hover:text-pink-400 group-hover:drop-shadow-[0_0_8px_rgba(244,114,182,0.8)]' },
   { name: 'Packing', path: '/packing', icon: Package, hoverColor: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]' },
   { name: 'Budget', path: ROUTES.BUDGET, icon: Banknote, hoverColor: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]' },
   { name: 'AI', path: '/assistant', icon: Bot, hoverColor: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
@@ -20,6 +22,7 @@ const navItems = [
 
 export const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { playSound } = useSoundEffect();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -75,6 +78,7 @@ export const Navbar = () => {
                 <NavLink
                   key={item.name}
                   to={item.path}
+                  onClick={() => playSound('tap')}
                   className={({ isActive }) =>
                     cn(
                       'relative overflow-hidden group flex items-center justify-center px-4 py-2 text-sm font-bold rounded-full transition-all duration-700',
@@ -110,7 +114,7 @@ export const Navbar = () => {
                 <>
                   <div className="relative" ref={notificationsRef}>
                     <button 
-                      onClick={() => setNotificationsOpen(!notificationsOpen)}
+                      onClick={() => { playSound('tap'); setNotificationsOpen(!notificationsOpen); }}
                       className="relative overflow-hidden group flex h-[40px] w-[40px] items-center justify-center rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.3)] hover:scale-110 hover:-translate-y-1 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] transition-all duration-700"
                     >
                       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -165,7 +169,7 @@ export const Navbar = () => {
 
                   <div className="relative" ref={profileMenuRef}>
                     <button 
-                      onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                      onClick={() => { playSound('tap'); setProfileMenuOpen(!profileMenuOpen); }}
                       className="relative overflow-hidden group flex ml-1 h-[40px] w-[40px] rounded-full bg-gradient-to-br from-[#5B8CFF] to-[#4D7FFF] border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.3)] hover:scale-110 hover:-translate-y-1 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(79,124,255,0.5)] transition-all duration-700"
                     >
                       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out z-20" />
@@ -235,7 +239,7 @@ export const Navbar = () => {
 
             {/* Mobile Menu Toggle */}
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => { playSound('tap'); setMobileMenuOpen(!mobileMenuOpen); }}
               className="ml-2 relative overflow-hidden group flex h-[40px] w-[40px] items-center justify-center text-white bg-gradient-to-br from-white/10 to-white/5 border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.3)] rounded-full hover:scale-105 hover:-translate-y-1 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] sm:hidden transition-all duration-700"
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />

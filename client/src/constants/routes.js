@@ -14,4 +14,8 @@ export const ROUTES = {
   ASSISTANT: '/assistant',
   BUDGET: '/budget',
   DOCUMENTS: '/documents',
+  EXPLORE: '/explore',
+  CALENDAR: '/calendar',
+  JOURNAL: '/journal',
+  FLIGHTS: '/flights',
 };

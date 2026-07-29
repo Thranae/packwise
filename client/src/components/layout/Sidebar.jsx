@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
-import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass } from 'lucide-react';
+import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/Logo';
 import { motion } from 'framer-motion';
 export const GLASS = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] rounded-[24px]";
@@ -16,6 +16,7 @@ const navItems = [
   { label: 'Budget', path: '/budget', icon: Wallet, colorClass: 'group-hover:text-green-400 group-hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]' },
   { label: 'Explore', path: '/explore', icon: Compass, colorClass: 'group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' },
   { label: 'Journal', path: '/journal', icon: FileText, colorClass: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]' },
+  { label: 'Flights', path: '/flights', icon: Plane, colorClass: 'group-hover:text-sky-400 group-hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]' },
   { label: 'Profile', path: '/profile', icon: User, colorClass: 'group-hover:text-rose-400 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.8)]' },
   { label: 'Settings', path: '/settings', icon: Settings, colorClass: 'group-hover:text-gray-300 group-hover:drop-shadow-[0_0_8px_rgba(209,213,219,0.8)]' },
 ];
@@ -30,11 +31,11 @@ export function Sidebar() {
       ref={sidebarRef}
       style={{ rotateX, rotateY, transformPerspective: 1200 }}
       whileHover={{ y: -4, scale: 1.01, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className="fixed left-6 top-6 h-[calc(100vh-3rem)] w-[240px] z-50 flex flex-col rounded-[24px] overflow-hidden ios-glass-card"
+      className="hidden lg:flex fixed left-6 top-6 h-[calc(100vh-3rem)] w-[240px] z-50 flex-col rounded-[24px] overflow-hidden ios-glass-card"
     >
       {/* Logo */}
       <div className="px-4 pt-5 pb-4">
-        <Link to="/overview" className="flex items-center gap-2.5 group cursor-pointer">
+        <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
           <motion.div
             className={`bg-white/10 rounded-xl p-1.5 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:bg-gradient-to-br group-hover:from-white/20 group-hover:to-white/5 group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_16px_rgba(0,0,0,0.2)]`}
             whileHover={{ rotate: 15, scale: 1.05 }}

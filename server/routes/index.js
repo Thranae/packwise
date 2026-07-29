@@ -8,6 +8,8 @@ import currencyRoutes from './currency.routes.js';
 import aiRoutes from './ai.routes.js';
 import smsRoutes from './smsRoutes.js';
 
+import exportRoutes from './export.routes.js';
+
 const router = express.Router();
 
 router.use('/auth', authRoutes);
@@ -18,5 +20,7 @@ router.use('/weather', weatherRoutes);
 router.use('/currency', currencyRoutes);
 router.use('/ai', aiRoutes);
 router.use('/sms', smsRoutes);
+router.use('/export', exportRoutes);
 
 export default router;
+

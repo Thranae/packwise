@@ -4,11 +4,14 @@ import { motion } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
 import { useAI } from '@/hooks/useAI';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 export const PackingWidget = ({ className = "" }) => {
-  const { currentTrip } = useTripContext();
+  const { currentTrip, packedItems } = useTripContext();
   const { getPackingList, loading } = useAI();
   const [packingData, setPackingData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentTrip?.destination) {
@@ -16,8 +19,9 @@ export const PackingWidget = ({ className = "" }) => {
     }
   }, [currentTrip?.destination]);
 
-  const total = packingData?.categories?.reduce((acc, cat) => acc + cat.items.length, 0) || 0;
-  const packed = 0; // Will be tracked in DB later
+  const totalItemsList = packingData?.categories?.flatMap(cat => cat.items) || [];
+  const total = totalItemsList.length;
+  const packed = totalItemsList.filter(item => item.packed || packedItems.has(item.name || item.text)).length;
   const remaining = total - packed;
   const percentage = total > 0 ? (packed / total) * 100 : 0;
   
@@ -37,6 +41,7 @@ export const PackingWidget = ({ className = "" }) => {
         hidden: { opacity: 0, y: 20 },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
       }}
+      onClick={() => navigate(ROUTES.PACKING)}
       className={`relative p-6 flex flex-col justify-between h-[200px] rounded-[32px] cursor-pointer ios-glass-card group ${className}`}
     >
       <div className="flex items-start justify-between">

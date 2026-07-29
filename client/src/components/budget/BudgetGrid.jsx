@@ -1,8 +1,28 @@
 import React from 'react';
-import { BedDouble, Utensils, Car, Landmark, ShoppingBag, ShieldAlert, FileText, Wifi, BatteryCharging, CloudSun, ShieldCheck, RefreshCw, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  BedDouble, Utensils, Car, Landmark, ShoppingBag, ShieldAlert,
+  FileText, Wifi, BatteryCharging, CloudSun, ShieldCheck, RefreshCw,
+  TrendingUp, ArrowRight
+} from 'lucide-react';
 import { COUNTRY_DATA } from '@/utils/costEngine';
 
-export const BudgetGrid = ({ summary, breakdown, inputs, rates }) => {
+const Card = ({ title, icon: Icon, iconColor, children, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 16 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.45, delay }}
+    className="ios-glass-card rounded-[32px] p-6 flex flex-col gap-4 group"
+  >
+    <div className="flex items-center gap-2">
+      <Icon className={`w-4 h-4 ${iconColor}`} />
+      <span className="text-[11px] font-bold uppercase tracking-widest text-white/60">{title}</span>
+    </div>
+    {children}
+  </motion.div>
+);
+
+export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => {
   if (!summary || !breakdown || !rates) return null;
 
   const originCurrency = 'INR';
@@ -11,173 +31,189 @@ export const BudgetGrid = ({ summary, breakdown, inputs, rates }) => {
   const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
 
   const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
-  const formatAmount = (val) => new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(val * rateMultiplier));
-  const formatDest = (val) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(val));
+  const fmtOrigin = (val) =>
+    new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(val * rateMultiplier));
+  const fmtDest = (val) =>
+    new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(val));
 
-  // Daily budget items
   const dailyItems = [
-    { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: 'text-blue-400' },
-    { name: 'Food', val: breakdown.food, icon: Utensils, color: 'text-orange-400' },
-    { name: 'Transport', val: breakdown.transport, icon: Car, color: 'text-emerald-400' },
-    { name: 'Activities', val: breakdown.attractions, icon: Landmark, color: 'text-purple-400' },
-    { name: 'Shopping', val: breakdown.shopping, icon: ShoppingBag, color: 'text-pink-400' },
-    { name: 'Emergency', val: (summary.emergencyReserve / inputs.days), icon: ShieldAlert, color: 'text-red-400' }
+    { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: 'text-blue-400', bg: 'bg-blue-500/15' },
+    { name: 'Food', val: breakdown.food, icon: Utensils, color: 'text-orange-400', bg: 'bg-orange-500/15' },
+    { name: 'Transport', val: breakdown.transport, icon: Car, color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
+    { name: 'Activities', val: breakdown.attractions, icon: Landmark, color: 'text-purple-400', bg: 'bg-purple-500/15' },
+    { name: 'Shopping', val: breakdown.shopping, icon: ShoppingBag, color: 'text-pink-400', bg: 'bg-pink-500/15' },
+    { name: 'Emergency', val: summary.emergencyReserve / inputs.days, icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/15' },
   ];
 
-  // Pie chart calculation
   const total = summary.totalBudget;
   const cats = [
     { name: 'Hotel', val: breakdown.hotel * inputs.days, color: '#60A5FA' },
     { name: 'Food', val: breakdown.food * inputs.days, color: '#F97316' },
     { name: 'Transport', val: breakdown.transport * inputs.days, color: '#34D399' },
-    { name: 'Other', val: total - ((breakdown.hotel + breakdown.food + breakdown.transport) * inputs.days), color: '#9CA3AF' }
+    { name: 'Other', val: total - (breakdown.hotel + breakdown.food + breakdown.transport) * inputs.days, color: '#9CA3AF' },
   ];
-  
-  let currentOffset = 0;
+  let offset = 0;
   const pieData = cats.map(c => {
     const pct = (c.val / total) * 100;
-    const offset = currentOffset;
-    currentOffset += pct;
-    return { ...c, pct, offset };
+    const o = offset;
+    offset += pct;
+    return { ...c, pct, offset: o };
   });
 
+  const recs = [
+    { icon: FileText, color: 'text-blue-400', bg: 'bg-blue-500/15', label: 'Visa', value: 'E-Visa Suggested' },
+    { icon: Wifi, color: 'text-emerald-400', bg: 'bg-emerald-500/15', label: 'Connectivity', value: 'eSIM Recommended' },
+    { icon: BatteryCharging, color: 'text-amber-400', bg: 'bg-amber-500/15', label: 'Power Adapter', value: 'Type A / B' },
+    { icon: CloudSun, color: 'text-orange-400', bg: 'bg-orange-500/15', label: 'Avg Weather', value: '18°C – 24°C' },
+  ];
+
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
-      
-      {/* 1. Daily Budget */}
-      <div className="bg-[#121826] border border-white/5 rounded-2xl p-6 flex flex-col shadow-sm">
-        <h3 className="text-[13px] font-bold text-white mb-5 flex items-center gap-2">
-           <BedDouble className="w-4 h-4 text-blue-400" /> Daily Budget Breakdown
-        </h3>
-        <div className="flex flex-col gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      {/* 1. Daily Breakdown */}
+      <Card title="Daily Breakdown" icon={BedDouble} iconColor="text-blue-400" delay={0.05}>
+        <div className="flex flex-col gap-1">
           {dailyItems.map((item, i) => (
-            <div key={i} className="flex items-center justify-between group">
+            <div key={i} className="flex items-center justify-between py-2 px-2 rounded-xl hover:bg-white/5 transition-colors">
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center ${item.color}`}>
-                  <item.icon className="w-3.5 h-3.5" />
+                <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center shrink-0 border border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] backdrop-blur-md`}>
+                  <item.icon className={`w-4 h-4 ${item.color} drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)]`} />
                 </div>
-                <span className="text-[11px] font-bold text-white/70 group-hover:text-white transition-colors">{item.name}</span>
+                <span className="text-sm font-medium text-white/80">{item.name}</span>
               </div>
               <div className="flex flex-col items-end">
-                 <span className="text-sm font-bold text-white tracking-tight">{originSymbol} {formatAmount(item.val)}</span>
-                 <span className="text-[9px] font-bold text-white/40">≈ {destSymbol}{formatDest(item.val)}</span>
+                <span className="text-sm font-bold text-white">{originSymbol} {fmtOrigin(item.val)}</span>
+                <span className="text-[10px] text-white/35">≈ {destSymbol}{fmtDest(item.val)}</span>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* 2. Currency Converter */}
-      <div className="bg-[#121826] border border-white/5 rounded-2xl p-6 flex flex-col shadow-sm">
-        <h3 className="text-[13px] font-bold text-white mb-5 flex items-center gap-2">
-           <RefreshCw className="w-4 h-4 text-emerald-400" /> Live Converter
-        </h3>
-        <div className="bg-[#1A202C] border border-white/5 rounded-xl p-4 flex flex-col gap-4 mb-4">
-          <div className="flex justify-between items-center text-[10px] font-bold text-white/50 uppercase tracking-wider">
-            <span>You pay ({originCurrency})</span>
-            <span>They get ({destCurrency})</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-white">{originSymbol} 10,000</span>
-            <ArrowRight className="w-5 h-5 text-white/20" />
-            <span className="text-2xl font-bold text-white">{destSymbol} {formatDest(10000 / rateMultiplier)}</span>
-          </div>
-          <div className="w-full h-px bg-white/5 my-1" />
-          <div className="flex items-center gap-2 text-[11px] font-bold text-emerald-400">
-            <TrendingUp className="w-3.5 h-3.5" /> 1 {destCurrency} = {originSymbol}{rateMultiplier.toFixed(2)}
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 mt-auto">
-          <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Quick Amounts</span>
-          <div className="flex gap-2">
-            {[1000, 5000, 10000].map(amt => (
-              <div key={amt} className="flex-1 bg-white/5 border border-white/5 rounded-lg p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/10 transition-colors">
-                <span className="text-xs font-bold text-white">{originSymbol}{amt}</span>
-                <span className="text-[10px] font-medium text-white/50">{destSymbol}{formatDest(amt / rateMultiplier)}</span>
+      <Card title="Live Converter" icon={RefreshCw} iconColor="text-emerald-400" delay={0.1}>
+        <div className="flex flex-col gap-4">
+          {/* Big conversion */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between text-[10px] font-semibold text-white/40 uppercase tracking-wider">
+              <span>You pay ({originCurrency})</span>
+              <span>They get ({destCurrency})</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xl font-bold text-white">{originSymbol} 10,000</span>
+              <div className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
               </div>
-            ))}
+              <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                {destSymbol} {fmtDest(10000 / rateMultiplier)}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 pt-1 border-t border-white/10">
+              <TrendingUp className="w-3.5 h-3.5" />
+              1 {destCurrency} = {originSymbol}{rateMultiplier.toFixed(2)}
+            </div>
+          </div>
+
+          {/* Quick amounts */}
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Quick Amounts</span>
+            <div className="flex gap-2">
+              {[1000, 5000, 10000].map(amt => (
+                <div key={amt} className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-colors cursor-pointer">
+                  <p className="text-xs font-bold text-white">{originSymbol}{amt.toLocaleString()}</p>
+                  <p className="text-[10px] text-white/40">{destSymbol}{fmtDest(amt / rateMultiplier)}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </Card>
 
-      {/* 3. Budget Breakdown Pie Chart */}
-      <div className="bg-[#121826] border border-white/5 rounded-2xl p-6 flex flex-col shadow-sm">
-        <h3 className="text-[13px] font-bold text-white mb-5 flex items-center gap-2">
-           <Landmark className="w-4 h-4 text-purple-400" /> Category Breakdown
-        </h3>
-        <div className="flex items-center gap-6 flex-1">
+      {/* 3. Category Breakdown */}
+      <Card title="Category Breakdown" icon={Landmark} iconColor="text-purple-400" delay={0.15}>
+        <div className="flex items-center gap-6">
+          {/* Donut */}
           <div className="w-[120px] h-[120px] relative shrink-0">
-             {/* Simple SVG Pie representation */}
-             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-               {pieData.map((slice, i) => (
-                 <circle
-                   key={i}
-                   cx="50"
-                   cy="50"
-                   r="40"
-                   fill="transparent"
-                   stroke={slice.color}
-                   strokeWidth="20"
-                   strokeDasharray={`${slice.pct * 2.51327} 251.327`}
-                   strokeDashoffset={-(slice.offset * 2.51327)}
-                 />
-               ))}
-             </svg>
+            <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)]">
+              <defs>
+                <filter id="liquidTube" x="-20%" y="-20%" width="140%" height="140%">
+                  {/* Drop shadow */}
+                  <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#000" floodOpacity="0.4" result="shadow"/>
+                  {/* Inner highlight to create 3D tube effect */}
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                  <feOffset dx="-2" dy="-2" result="offsetBlur"/>
+                  <feComposite in="SourceAlpha" in2="offsetBlur" operator="out" result="highlight"/>
+                  <feFlood floodColor="white" floodOpacity="0.5" result="highlightColor"/>
+                  <feComposite in="highlightColor" in2="highlight" operator="in" result="highlightMask"/>
+                  {/* Merge graphic with highlight and shadow */}
+                  <feMerge>
+                    <feMergeNode in="shadow"/>
+                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="highlightMask"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              {pieData.map((slice, i) => (
+                <motion.circle
+                  key={i}
+                  initial={{ strokeDasharray: '0 251.327' }}
+                  animate={{ strokeDasharray: `${slice.pct * 2.51327} 251.327` }}
+                  transition={{ duration: 0.9, delay: i * 0.15, ease: 'easeOut' }}
+                  cx="50" cy="50" r="40"
+                  fill="transparent"
+                  stroke={slice.color}
+                  strokeWidth="18"
+                  strokeDashoffset={-(slice.offset * 2.51327)}
+                  filter="url(#liquidTube)"
+                  style={{ strokeLinecap: 'round' }}
+                />
+              ))}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Total</span>
+              <span className="text-xs font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{destSymbol}{fmtDest(total / rateMultiplier)}</span>
+            </div>
           </div>
-          <div className="flex flex-col gap-3 flex-1">
+
+          {/* Legend */}
+          <div className="flex flex-col gap-2 flex-1">
             {pieData.map((slice, i) => (
               <div key={i} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: slice.color }} />
-                  <span className="text-[11px] font-bold text-white/70">{slice.name}</span>
+                  <div className="w-3 h-3 rounded-full shrink-0 shadow-[0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.6)]" style={{ backgroundColor: slice.color }} />
+                  <span className="text-sm text-white/70">{slice.name}</span>
                 </div>
-                <div className="flex items-center gap-3">
-                   <span className="text-[11px] font-bold text-white">{originSymbol} {formatAmount(slice.val / rateMultiplier)}</span>
-                   <span className="text-[10px] font-bold text-white/40 w-6 text-right">{Math.round(slice.pct)}%</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-white">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</span>
+                  <span className="text-xs text-white/35 w-7 text-right">{Math.round(slice.pct)}%</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </Card>
 
-      {/* 4. Travel Recommendations */}
-      <div className="bg-[#121826] border border-white/5 rounded-2xl p-6 flex flex-col shadow-sm">
-        <h3 className="text-[13px] font-bold text-white mb-5 flex items-center gap-2">
-           <ShieldCheck className="w-4 h-4 text-emerald-400" /> Travel Recommendations
-        </h3>
-        <div className="grid grid-cols-2 gap-3 flex-1">
-           <div className="bg-[#1A202C] border border-white/5 rounded-xl p-3 flex items-start gap-3">
-             <FileText className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-             <div className="flex flex-col gap-0.5">
-               <span className="text-[10px] font-bold text-white/40 uppercase">Visa</span>
-               <span className="text-[11px] font-bold text-white leading-tight">E-Visa Required</span>
-             </div>
-           </div>
-           <div className="bg-[#1A202C] border border-white/5 rounded-xl p-3 flex items-start gap-3">
-             <Wifi className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-             <div className="flex flex-col gap-0.5">
-               <span className="text-[10px] font-bold text-white/40 uppercase">Internet</span>
-               <span className="text-[11px] font-bold text-white leading-tight">eSIM Recommended</span>
-             </div>
-           </div>
-           <div className="bg-[#1A202C] border border-white/5 rounded-xl p-3 flex items-start gap-3">
-             <BatteryCharging className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-             <div className="flex flex-col gap-0.5">
-               <span className="text-[10px] font-bold text-white/40 uppercase">Adapter</span>
-               <span className="text-[11px] font-bold text-white leading-tight">Type A / B</span>
-             </div>
-           </div>
-           <div className="bg-[#1A202C] border border-white/5 rounded-xl p-3 flex items-start gap-3">
-             <CloudSun className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
-             <div className="flex flex-col gap-0.5">
-               <span className="text-[10px] font-bold text-white/40 uppercase">Weather</span>
-               <span className="text-[11px] font-bold text-white leading-tight">18°C - 24°C Avg</span>
-             </div>
-           </div>
+      {/* 4. Smart Recommendations */}
+      <Card title="Smart Recommendations" icon={ShieldCheck} iconColor="text-emerald-400" delay={0.2}>
+        <div className="grid grid-cols-2 gap-3">
+          {recs.map((r, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -3 }}
+              className="bg-white/5 border border-white/10 rounded-xl p-3.5 flex flex-col gap-2 hover:bg-white/8 transition-all cursor-pointer"
+            >
+              <div className={`w-8 h-8 rounded-lg ${r.bg} flex items-center justify-center border border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] backdrop-blur-md`}>
+                <r.icon className={`w-4 h-4 ${r.color} drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)]`} />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{r.label}</p>
+                <p className="text-sm font-semibold text-white mt-0.5">{r.value}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </Card>
 
     </div>
   );
-};
+});

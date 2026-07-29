@@ -65,6 +65,16 @@ const TripSchema = new mongoose.Schema({
       color: String,
       stroke: String
     }]
+  },
+
+  // Feature 7: AI Post-Trip Memory Journal
+  memoryJournal: {
+    title: String,
+    story: String,
+    highlights: [String],
+    shareableCaption: String,
+    mood: String,
+    generatedAt: { type: Date }
   }
 }, { timestamps: true });
 

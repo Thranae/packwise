@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { DollarSign, ArrowRightLeft, Clock, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -12,6 +12,7 @@ export const CurrencyWidget = ({ className = "" }) => {
   const { currentTrip } = useTripContext();
   const targetCurrency = currentTrip?.currency || 'EUR';
   const { exchangeRate, trend, history, loading } = useLiveCurrency(targetCurrency, 'INR');
+  const [baseAmount, setBaseAmount] = useState('1');
 
   const generateSparkline = (data) => {
     if (!data || data.length === 0) return '';
@@ -57,12 +58,22 @@ export const CurrencyWidget = ({ className = "" }) => {
 
           <div className="flex flex-col gap-3 ios-3d-element mt-4">
             <div className="flex items-center gap-3">
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-white/90">1 INR</span>
+              <div className="flex flex-col items-center group/input">
+                <input 
+                  type="number"
+                  value={baseAmount}
+                  onChange={(e) => setBaseAmount(e.target.value)}
+                  className="bg-transparent border-b border-white/20 hover:border-white/40 w-12 text-sm font-semibold text-white/90 focus:outline-none focus:border-emerald-400 text-center pb-0.5 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="1"
+                  min="0"
+                />
+                <span className="text-[9px] text-white/50 uppercase tracking-widest mt-1">INR</span>
               </div>
-              <ArrowRightLeft className="w-4 h-4 text-white/40" />
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-white">{exchangeRate} {targetCurrency}</span>
+              <ArrowRightLeft className="w-4 h-4 text-white/40 shrink-0" />
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-lg font-bold text-white truncate">
+                  {exchangeRate ? (parseFloat(baseAmount || 0) * exchangeRate).toFixed(2) : '...'} {targetCurrency}
+                </span>
               </div>
               {trend === 'up' ? (
                 <TrendingUp className="w-4 h-4 text-emerald-400 ml-auto" />

@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateTrip, modifyTrip, getUserTrips } from '../controllers/trip.controller.js';
+import { generateTrip, modifyTrip, getUserTrips, createTrip, deleteTrip, duplicateTrip, toggleFavorite } from '../controllers/trip.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -13,7 +13,19 @@ router.post('/generate', generateTrip);
 // Modify an existing trip via chat
 router.post('/chat', modifyTrip);
 
+// Create a trip directly
+router.post('/', createTrip);
+
 // Get all trips for the logged in user
 router.get('/', getUserTrips);
+
+// Delete a trip
+router.delete('/:id', deleteTrip);
+
+// Duplicate a trip
+router.post('/:id/duplicate', duplicateTrip);
+
+// Toggle favorite status
+router.patch('/:id/favorite', toggleFavorite);
 
 export default router;

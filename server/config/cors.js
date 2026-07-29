@@ -7,12 +7,8 @@ const allowedOrigins =
 
 const corsOptions = {
   origin(origin, callback) {
-    // Allow requests with no origin (e.g. mobile apps, curl, Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
-    }
+    // Allow all origins to ensure the PWA works on any network, IP, or tunnel
+    callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

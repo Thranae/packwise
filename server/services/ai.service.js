@@ -20,16 +20,35 @@ class AIService {
     }
   }
 
+  async getPackingAlternative(destination, item) {
+    const prompt = `
+      The user is packing for a trip to ${destination || 'an unknown destination'}.
+      They have an item on their packing list: "${item}".
+      Suggest ONE single specific alternative item that might be better suited for this trip, lighter, or more versatile.
+      Return ONLY the name of the alternative item. No explanation, no quotes, no markdown, just the item name (e.g., Merino Wool T-Shirt).
+    `;
+    try {
+      const text = await AIRouter.routeRequest(prompt, 'lightweight', false);
+      return text.trim().replace(/['"]/g, '');
+    } catch (error) {
+      console.error("Packing Alternative Error:", error.message);
+      return "Generic Alternative";
+    }
+  }
+
   async generateTripPlan(destination, days) {
     const prompt = `Create a high-level trip plan for ${days} days in ${destination}. Return JSON with { title: String, summary: String, highlights: [String] }`;
     return this._generateJson(prompt, { title: `Trip to ${destination}`, summary: "Ready to plan your trip!", highlights: [] }, 'planning');
   }
 
-  async generatePackingList(destination, weather, duration) {
+  async generatePackingList(destination, weather, duration, gender = 'Not specified') {
     const durationText = duration ? `for a ${duration} trip` : 'for a trip';
+    const genderText = gender && gender !== 'Not specified' ? `The travelers are: ${gender}.` : `The travelers' gender is not specified (provide unisex items).`;
+    
     const prompt = `Create a smart, comprehensive packing list ${durationText} to ${destination}. The current weather forecast is: ${JSON.stringify(weather)}. 
-    Analyze the climate and suggest appropriate items tailored to the destination and weather.
-    CRITICAL: You must adapt the clothing style to the destination's cultural fashion trends. For example, if it's a European destination, suggest "Old Money" styling like linen shirts and tailored pants. If it's a tropical beach, suggest breezy, vibrant resort wear. Ensure the clothing items reflect the local vibe!
+    ${genderText}
+    Analyze the climate and suggest appropriate items tailored to the destination, weather, and gender.
+    CRITICAL: You must adapt the clothing style to the destination's cultural fashion trends AND the specified gender. For example, if it's a European destination for a female, suggest elegant linen dresses or blouses. If it's a tropical beach for a male, suggest breezy resort wear shirts. Ensure the clothing items reflect the local vibe!
     CRITICAL: Calculate exact quantities for clothing based on the trip duration (e.g., "Linen Shirts (x7)" for a 7-day trip).
     You MUST include exactly 3 categories named exactly: "Clothing", "Electronics", and "Toiletries".
     "Clothing" MUST contain at least 12-15 specific items. "Electronics" MUST contain at least 5-8 items. "Toiletries" MUST contain at least 5-8 items.
@@ -189,7 +208,8 @@ class AIService {
   async generateFullTrip(prompt) {
     const aiPrompt = `Parse the following user trip request: "${prompt}". 
     Determine the best destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
-    Assume a 7-day trip if duration is not specified.
+    Determine the number of travelers and their gender directly from the prompt.
+    Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.
     Return JSON strictly matching this format:
     {
       "destination": "City Name",
@@ -197,7 +217,9 @@ class AIService {
       "budget": 2000,
       "currency": "EUR",
       "timezone": "Europe/Paris",
-      "duration": "7 Days"
+      "duration": "7 Days",
+      "gender": "Female",
+      "travelers": 1
     }`;
     return this._generateJson(aiPrompt, {
       destination: prompt ? prompt.split('.')[0].replace('Destination: ', '').trim() : "Unknown Destination",
@@ -205,7 +227,9 @@ class AIService {
       budget: 3000,
       currency: "USD",
       timezone: "UTC",
-      duration: "7 Days"
+      duration: "7 Days",
+      gender: "Not specified",
+      travelers: 1
     }, 'json');
   }
 
@@ -259,7 +283,19 @@ class AIService {
       return fallback;
     };
 
-    const aiPrompt = `Recommend 6 popular ${category} for a tourist visiting ${destination}. Return JSON as an array of objects: [{ "name": "Name of Place", "category": "${category}", "rating": "4.5", "distance": "2.5 km", "time": "15m", "desc": "Brief 1 sentence description" }]`;
+    const aiPrompt = `You are a world-class travel expert with deep knowledge of real places. Recommend exactly 6 real, famous ${category} for tourists visiting ${destination}. 
+    These MUST be real, well-known locations that actually exist in ${destination}.
+    For each place, provide a very specific "imageQuery" that will return accurate, real photographs when searched on stock photo sites (e.g., "Eiffel Tower Paris night lights", "Shibuya Crossing Tokyo crowd").
+    Return ONLY a valid JSON array of exactly 6 objects:
+    [{ 
+      "name": "REAL place name (e.g. Shibuya Crossing, not 'The Grand Market')", 
+      "category": "${category}", 
+      "rating": "4.7", 
+      "distance": "2.5 km", 
+      "time": "15m", 
+      "desc": "1 sentence accurate description of this real place",
+      "imageQuery": "specific photo search query for this exact place (e.g. 'Shibuya Crossing Tokyo Japan')"
+    }]`;
     const result = await this._generateJson(aiPrompt, null, 'lightweight'); // Use Mistral or Groq for quick lightweight data
     
     if (!result || !Array.isArray(result) || result.length === 0) {
@@ -274,18 +310,19 @@ class AIService {
   }
 
   async generateMoodboardPrompts(destination, count) {
-    const prompt = `Generate exactly ${count} highly descriptive visual prompts for hyper-realistic fashion photography street style outfits suitable for a trip to ${destination}. 
-    Make half of the prompts for men and half for women. 
-    Each prompt should be a detailed string describing the outfit, setting, and lighting. 
+    const prompt = `Generate exactly ${count} short, highly relevant photo search queries for fashion street style outfits suitable for a trip to ${destination}.
+    These queries will be passed directly to a stock photo API (like Pexels or Pixabay), so they must be concise (3-6 words max) and focus on the subject.
+    Make half of the queries for men's fashion and half for women's fashion.
+    For example, DO NOT write "A hyperrealistic street style photograph...". DO write "women fashion street style ${destination}" or "men casual outfit ${destination}".
     Return JSON strictly matching this format:
     {
       "prompts": [
-        "A hyperrealistic street style photograph of a woman wearing...",
-        "A hyperrealistic street style photograph of a man wearing..."
+        "women fashion winter coat ${destination}",
+        "men casual summer outfit ${destination}"
       ]
     }`;
     const fallbackPrompts = Array.from({ length: count }).map((_, i) => 
-      `Hyperrealistic fashion photography street style outfit in ${destination}, high fashion, cinematic lighting, highly detailed ${i}`
+      `${i % 2 === 0 ? 'women' : 'men'} fashion street style outfit ${destination}`
     );
     return this._generateJson(prompt, { prompts: fallbackPrompts }, 'json');
   }
@@ -317,6 +354,55 @@ class AIService {
       return offlineFallback(message, context);
     }
   }
+
+  async travelAssistantStream(message, context) {
+    const prompt = `You are PackWise AI, an expert travel assistant. 
+Context: ${JSON.stringify(context)}. 
+User says: "${message}". 
+Respond helpfully and concisely.
+
+CRITICAL INSTRUCTION: If the user asks you to plan a trip, generate an itinerary, or create a travel plan for a specific destination, you MUST include a special action tag at the very end of your response in this exact format:
+[ACTION: GENERATE_TRIP | destination: City, Country]
+For example, if they say "Plan a weekend getaway to Paris", your response should be helpful and end with:
+[ACTION: GENERATE_TRIP | destination: Paris, France]`;
+    return AIRouter.routeRequestStream(prompt, 'casual');
+  }
+
+  /**
+   * Feature 7: AI Post-Trip Memory Journal
+   * Generates a narrative travel story based on completed trip itinerary.
+   */
+  async generateMemoryJournal(trip) {
+    const itinerarySummary = (trip.itinerary || [])
+      .map(day => `Day ${day.day} (${day.title}): ${(day.activities || []).map(a => a.place || a.description).filter(Boolean).join(', ')}`)
+      .join('\n');
+
+    const prompt = `You are a creative travel writer. Based on the following completed trip itinerary to ${trip.destination}, ${trip.country}:
+
+${itinerarySummary || 'A wonderful trip with various activities and experiences.'}
+
+Duration: ${trip.duration || 'Multiple days'} | Travelers: ${trip.travelers || 1}
+
+Write a beautiful, personal travel memory journal. Return JSON strictly matching this format:
+{
+  "title": "A memorable, poetic trip title (e.g. 'Cherry Blossoms and Ramen Dreams')",
+  "story": "2-3 vivid paragraphs narrating the trip as a personal travel story. Use first-person plural (we/our). Make it feel warm, nostalgic, and inspiring.",
+  "highlights": ["Top moment 1", "Top moment 2", "Top moment 3"],
+  "shareableCaption": "A short 1-sentence Instagram-style caption for the trip",
+  "mood": "One word describing the trip vibe (e.g. Adventurous, Romantic, Cultural)"
+}`;
+
+    const fallback = {
+      title: `Memories from ${trip.destination}`,
+      story: `Our trip to ${trip.destination} was an unforgettable adventure filled with discovery and wonder. Every moment brought new experiences that we'll cherish for a lifetime.`,
+      highlights: ['Amazing local cuisine', 'Breathtaking scenery', 'Unforgettable cultural experiences'],
+      shareableCaption: `An unforgettable journey through ${trip.destination} 🌍✈️`,
+      mood: 'Adventurous'
+    };
+
+    return this._generateJson(prompt, fallback, 'planning');
+  }
 }
 
 export default new AIService();
+
