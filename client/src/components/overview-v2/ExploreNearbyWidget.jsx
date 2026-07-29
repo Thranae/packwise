@@ -329,7 +329,7 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
       className={`relative p-6 flex flex-col h-[520px] rounded-[32px] overflow-hidden ios-glass-card shadow-[0_24px_48px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)] [transform-style:preserve-3d] ${className}`}
     >
       {/* Header */}
-      <div className="flex flex-col gap-4 shrink-0 mb-4 [transform:translateZ(30px)]">
+      <div className="flex flex-col gap-4 shrink-0 mb-4 z-20">
         <div className="flex items-start justify-between">
           <div className="flex flex-col">
             <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/50 mb-1">Discover</span>
