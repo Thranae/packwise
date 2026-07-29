@@ -70,7 +70,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Layout Context */}
-      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-24 sm:pt-28 lg:pt-40">
+      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-32 sm:pt-36 lg:pt-48">
         
         {/* HERO SECTION */}
         <section className="relative min-h-[70vh] lg:min-h-[90vh] flex flex-col justify-center pb-10 lg:pb-20">

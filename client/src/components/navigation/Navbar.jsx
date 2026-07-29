@@ -54,10 +54,10 @@ export const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-[24px] left-0 right-0 z-[100] pointer-events-none"
+        className="fixed top-[16px] sm:top-[24px] left-3 right-3 sm:left-6 sm:right-6 md:left-8 md:right-8 z-[100] pointer-events-none flex justify-center"
       >
         <header
-          className="relative flex items-center justify-between w-full max-w-[1200px] mx-auto px-6 h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700"
+          className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.08)',
             backdropFilter: 'blur(28px) saturate(180%)',
