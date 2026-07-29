@@ -184,7 +184,7 @@ export const TripBuilderWizard = () => {
           })}
         </div>
 
-        <div className="relative z-10 mt-2 sm:mt-6 flex-1 overflow-y-auto pb-4 scrollbar-hide px-1 sm:px-2" style={{ scrollbarWidth: 'none' }}>
+        <div className="relative z-10 mt-2 sm:mt-6 flex-1 min-h-0 overflow-y-auto pb-4 scrollbar-hide px-1 sm:px-2" style={{ scrollbarWidth: 'none' }}>
           <AnimatePresence mode="wait">
             {!isGenerating ? (
               <motion.div

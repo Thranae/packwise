@@ -158,7 +158,7 @@ export const AIChatInterface = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col gap-6 z-10 relative scrollbar-hide">
+      <div className="flex-1 min-h-0 overflow-y-auto p-6 sm:p-8 flex flex-col gap-6 z-10 relative scrollbar-hide">
         {messages.map((msg, idx) => (
           <motion.div 
             key={idx}
