@@ -95,7 +95,7 @@ export const TopHeader = () => {
     >
       
       {/* Mobile Logo */}
-      <div className="md:hidden flex items-center gap-2">
+      <div className="md:hidden flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.HOME)}>
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/20 shadow-inner">
           <LogoIcon size="sm" />
         </div>

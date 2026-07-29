@@ -70,10 +70,10 @@ export default function HomePage() {
       <Navbar />
 
       {/* Main Layout Context */}
-      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-12 pt-32 lg:pt-40">
+      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-24 lg:pt-40">
         
         {/* HERO SECTION */}
-        <section className="relative min-h-[90vh] flex flex-col justify-center pb-20">
+        <section className="relative min-h-[70vh] lg:min-h-[90vh] flex flex-col justify-center pb-10 lg:pb-20">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             
             {/* Hero Left Content */}
@@ -88,16 +88,16 @@ export default function HomePage() {
                 <span className="text-xs font-semibold tracking-wider text-[var(--theme-text-primary)] opacity-90 uppercase">Next Generation Planning</span>
               </motion.div>
               
-              <motion.h1 variants={fadeInUp} className="text-6xl sm:text-7xl lg:text-[88px] font-semibold tracking-tighter leading-[1.05] text-[var(--theme-text-primary)]">
+              <motion.h1 variants={fadeInUp} className="text-4xl sm:text-6xl lg:text-[88px] font-semibold tracking-tighter leading-[1.05] text-[var(--theme-text-primary)]">
                 Travel Smarter <br className="hidden lg:block" />
                 with AI.
               </motion.h1>
               
-              <motion.p variants={fadeInUp} className="mt-8 text-xl sm:text-2xl text-[var(--theme-text-secondary)] max-w-xl font-light leading-relaxed">
+              <motion.p variants={fadeInUp} className="mt-4 sm:mt-8 text-base sm:text-xl lg:text-2xl text-[var(--theme-text-secondary)] max-w-xl font-light leading-relaxed">
                 Design the perfect journey. Automate logistics, discover hidden gems, and experience seamless travel tailored exclusively to you.
               </motion.p>
               
-              <motion.div variants={fadeInUp} className="mt-12 flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
+              <motion.div variants={fadeInUp} className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
                 {isAuthenticated ? (
                   <>
                     <Link to={ROUTES.TRIPS} className="w-full sm:w-auto">
@@ -244,13 +244,13 @@ export default function HomePage() {
         </section>
 
         {/* FEATURES */}
-        <section id="features" className="py-32 relative z-20">
+        <section id="features" className="py-16 lg:py-32 relative z-20">
           <motion.div 
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="text-center mb-20 flex flex-col items-center"
+            className="text-center mb-10 lg:mb-20 flex flex-col items-center"
           >
             <motion.div variants={fadeInUp} className="group cursor-pointer relative overflow-hidden px-5 py-2 text-sm font-bold text-blue-400 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(59,130,246,0.2)] rounded-full mb-6 inline-flex items-center justify-center hover:-translate-y-1 hover:scale-105 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(59,130,246,0.4)] hover:text-white transition-all duration-700">
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -258,7 +258,7 @@ export default function HomePage() {
                 <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Intelligent Tools
               </span>
             </motion.div>
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-semibold tracking-tighter">Everything you need.<br/>Nothing you don't.</motion.h2>
+            <motion.h2 variants={fadeInUp} className="text-3xl md:text-6xl font-semibold tracking-tighter">Everything you need.<br/>Nothing you don't.</motion.h2>
           </motion.div>
           
           <motion.div 
@@ -295,13 +295,13 @@ export default function HomePage() {
         </section>
 
         {/* HOW IT WORKS */}
-        <section id="how-it-works" className="py-32">
+        <section id="how-it-works" className="py-16 lg:py-32">
           <motion.div 
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="grid lg:grid-cols-2 gap-20 items-center"
+            className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center"
           >
             <div>
               <motion.div variants={fadeInUp} className={`${glassPill} px-4 py-2 text-sm text-purple-500 dark:text-purple-400 font-medium mb-6 inline-block bg-purple-500/5`}>
@@ -345,13 +345,13 @@ export default function HomePage() {
         </section>
 
         {/* WHY PACKWISE */}
-        <section id="why-us" className="py-32">
+        <section id="why-us" className="py-16 lg:py-32">
           <motion.div 
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
             variants={scaleIn}
-            className={`${glassStyle} p-12 md:p-20 relative overflow-hidden flex flex-col items-center text-center shadow-2xl shadow-blue-500/5`}
+            className={`${glassStyle} p-8 md:p-20 relative overflow-hidden flex flex-col items-center text-center shadow-2xl shadow-blue-500/5`}
           >
             <div className="absolute top-[-50%] left-[-10%] w-[1000px] h-[1000px] rounded-full bg-blue-500/5 dark:bg-white/5 blur-[120px] pointer-events-none" />
             
@@ -378,7 +378,7 @@ export default function HomePage() {
         </section>
 
         {/* STATISTICS */}
-        <section className="py-20 border-y border-[var(--theme-border-subtle)]">
+        <section className="py-12 lg:py-20 border-y border-[var(--theme-border-subtle)]">
           <motion.div 
             initial="hidden"
             whileInView="show"
@@ -401,7 +401,7 @@ export default function HomePage() {
         </section>
 
         {/* TESTIMONIALS */}
-        <section id="testimonials" className="py-32">
+        <section id="testimonials" className="py-16 lg:py-32">
           <motion.div 
             initial="hidden"
             whileInView="show"
@@ -446,8 +446,8 @@ export default function HomePage() {
         </section>
 
         {/* FOOTER */}
-        <footer className="pt-20 pb-10 border-t border-[var(--theme-border-subtle)] mt-10">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
+        <footer className="pt-12 lg:pt-20 pb-10 border-t border-[var(--theme-border-subtle)] mt-6 lg:mt-10">
+          <div className="grid md:grid-cols-4 gap-8 lg:gap-12 mb-10 lg:mb-16">
             <div className="md:col-span-2">
               <Logo size="md" className="mb-6" />
               <p className="text-[var(--theme-text-secondary)] text-sm max-w-sm font-light leading-relaxed">
