@@ -116,7 +116,7 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-1 scrollbar-none" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex items-center gap-3 md:gap-4 overflow-x-auto pb-6 pt-2 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {FILTERS.map(filter => (
               <button
                 key={filter}
