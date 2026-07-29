@@ -157,10 +157,10 @@ export const TripBuilderWizard = () => {
         <motion.div 
           ref={containerRef}
           style={{ rotateX, rotateY, transformPerspective: 1500 }}
-          className="relative w-full h-full ios-glass-card rounded-[32px] sm:rounded-[40px] p-5 sm:p-8 group/card shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col"
+          className="relative w-full h-full ios-glass-card rounded-[24px] sm:rounded-[32px] p-4 sm:p-6 group/card shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col min-h-0"
         >
         <motion.div
-          className="pointer-events-none absolute -inset-px rounded-[40px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 mix-blend-overlay z-0"
+          className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 mix-blend-overlay z-0"
           style={{
             background: useMotionTemplate`radial-gradient(800px circle at ${mouseX}px ${mouseY}px, rgba(255,255,255,0.1), transparent 40%)`
           }}

@@ -118,28 +118,14 @@ export const AIChatInterface = () => {
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col flex-1 h-full min-h-[300px] w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[40px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
+      className="flex flex-col flex-1 h-full min-h-0 w-full max-w-4xl overflow-hidden relative bg-white/[0.03] backdrop-blur-[40px] rounded-[24px] sm:rounded-[32px] border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] transition-shadow duration-700 z-10"
     >
       
       {/* Header */}
-      <div className="p-6 border-b border-white/10 bg-white/[0.02] flex items-center justify-between z-10 relative">
-        <div className="flex items-center gap-4">
-          <div className="relative w-12 h-12 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)] flex items-center justify-center overflow-hidden">
-            {/* Reactive AI Core Orb */}
-            <motion.div 
-              animate={{ 
-                scale: isLoading ? [1, 1.2, 1] : [1, 1.05, 1],
-                opacity: isLoading ? [0.6, 1, 0.6] : [0.4, 0.6, 0.4],
-                rotate: isLoading ? 360 : 0
-              }}
-              transition={{ 
-                duration: isLoading ? 1.5 : 4, 
-                repeat: Infinity, 
-                ease: isLoading ? "easeInOut" : "linear" 
-              }}
-              className={`absolute inset-2 rounded-full blur-[8px] ${isLoading ? 'bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500' : 'bg-gradient-to-r from-blue-400/50 to-purple-500/50'}`}
-            />
-            <div className="absolute w-4 h-4 bg-white/80 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] z-10" />
+      <div className="p-4 sm:p-5 border-b border-white/10 bg-white/[0.02] flex items-center justify-between z-10 relative shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-[14px] bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg relative">
+            <Sparkles className="w-5 h-5 text-white" />
             <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-2 border-[#060b14] rounded-full z-20 ${isLoading ? 'bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.8)]' : 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'}`} />
           </div>
           <div>

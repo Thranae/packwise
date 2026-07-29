@@ -19,8 +19,8 @@ export default function AssistantPage() {
   }, [mode, searchParams, setSearchParams]);
 
   return (
-    <PageTransition className="col-span-12">
-      <div className="h-[100dvh] overflow-hidden px-4 sm:px-6 md:px-10 lg:px-12 pb-[90px] sm:pb-12 pt-6 flex flex-col items-start w-full relative z-10">
+    <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0">
+      <div className="h-full min-h-0 overflow-hidden px-4 sm:px-6 md:px-10 lg:px-12 pb-[90px] sm:pb-12 pt-6 flex flex-col items-start w-full relative z-10">
         
         {/* Unified Header & Segmented Control */}
         <div className="w-full max-w-4xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-10 z-20 relative shrink-0">

@@ -22,8 +22,8 @@ export function AppLayout({ children }) {
       <PullToRefresh>
         <div className="relative z-10 flex flex-col min-h-screen px-4 pb-28 pt-2 lg:pl-[288px] lg:pr-8 lg:pb-8 lg:pt-0 w-full overflow-hidden">
           {!hideTopHeader && <TopHeader />}
-          <main className={`flex-1 w-full ${hideTopHeader ? 'mt-0' : 'mt-4 lg:mt-6'}`}>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full relative">
+          <main className={`flex-1 flex flex-col min-h-0 w-full ${hideTopHeader ? 'mt-0' : 'mt-4 lg:mt-6'}`}>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0 relative">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={location.pathname}
