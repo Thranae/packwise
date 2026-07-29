@@ -9,12 +9,11 @@ import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useToast } from '@/hooks/useToast';
 
 // Reusable styling constants for exact match to current glass
-const GLASS_BASE = "bg-white/[0.02] border-0 shadow-[0_8px_32px_rgba(0,0,0,0.2)] ring-1 ring-white/10 before:absolute before:inset-0 before:rounded-inherit before:border before:border-white/20 before:shadow-[inset_0_2px_3px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] before:pointer-events-none before:z-20";
+const GLASS_BASE = "bg-white/[0.02] border-0 shadow-[0_8px_32px_rgba(0,0,0,0.2)] ring-1 ring-white/10 before:absolute before:inset-0 before:rounded-[24px] before:border before:border-white/20 before:shadow-[inset_0_2px_3px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] before:pointer-events-none before:z-20";
 const HOVER_EFFECTS = "transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:ring-white/30";
 
 const PlaceCard = ({ place, onSelect }) => {
   const { currentTrip } = useTripContext();
-  const [isTapped, setIsTapped] = useState(false);
   
   // Extract just the city name to avoid the backend's comma truncation logic
   const rawDest = currentTrip?.destination || '';
@@ -27,15 +26,15 @@ const PlaceCard = ({ place, onSelect }) => {
 
   return (
     <motion.div
-      layout
-      onClick={() => setIsTapped(!isTapped)}
-      className={`group relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-start shrink-0 ${GLASS_BASE} ${HOVER_EFFECTS} ${isTapped ? 'ring-white/30 shadow-[0_16px_48px_rgba(0,0,0,0.4)] -translate-y-2' : ''}`}
+      layoutId={`card-${place.name}`}
+      onClick={() => onSelect(place)}
+      className={`group relative min-w-[85%] sm:min-w-[calc(50%-8px)] md:min-w-[300px] h-[260px] sm:h-[320px] rounded-[24px] overflow-hidden cursor-pointer transform-gpu isolate [backface-visibility:hidden] antialiased snap-start shrink-0 ${GLASS_BASE} ${HOVER_EFFECTS}`}
     >
       {loading ? (
         <div className="absolute inset-0 bg-white/5 animate-pulse" />
       ) : (
         <div 
-          className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 ${isTapped ? 'scale-110' : ''}`}
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
           style={{ backgroundImage: `url("${displayImage || ''}")` }}
         />
       )}
@@ -48,9 +47,9 @@ const PlaceCard = ({ place, onSelect }) => {
       
       {/* Gradients */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 pointer-events-none" />
-      <div className={`absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none ${isTapped ? 'opacity-100' : ''}`} />
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
       
-      <div className={`absolute inset-x-0 bottom-0 p-5 flex flex-col justify-end transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-[52px] group-hover:translate-y-0 ${isTapped ? 'translate-y-0' : ''}`}>
+      <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col justify-end transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-[52px] group-hover:translate-y-0">
         
         <div className="flex flex-col gap-2 min-h-[52px] justify-start shrink-0">
           <div className="flex items-center justify-between z-10 [transform-style:preserve-3d]">
@@ -67,7 +66,7 @@ const PlaceCard = ({ place, onSelect }) => {
           <h3 className="text-lg font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] line-clamp-2 leading-tight">{place.name}</h3>
         </div>
 
-        <div className={`flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 ${isTapped ? 'opacity-100' : ''}`}>
+        <div className="flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
           <p className="text-xs font-medium text-white/80 line-clamp-2 leading-relaxed">
             {place.desc}
           </p>
@@ -90,14 +89,14 @@ const PlaceCard = ({ place, onSelect }) => {
           </div>
 
           <div className="flex items-center gap-2 mt-2">
-            <button 
-              onClick={(e) => { e.stopPropagation(); onSelect(place); }}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[14px] ios-liquid-button text-white group/btn"
-            >
+            <div className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-[14px] ios-liquid-button text-white group/btn">
               <span className="text-xs font-bold drop-shadow-md z-10">Details</span>
               <ArrowRight className="w-3.5 h-3.5 text-white/90 group-hover/btn:text-white [filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.4))] transition-colors z-10" />
-            </button>
-            <button className="w-9 h-9 shrink-0 flex items-center justify-center rounded-[14px] ios-liquid-button text-white group/heart">
+            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); /* Optional: handle quick save here */ }} 
+              className="w-9 h-9 shrink-0 flex items-center justify-center rounded-[14px] ios-liquid-button text-white group/heart"
+            >
               <Heart className="w-4 h-4 text-white/80 group-hover/heart:text-rose-400 group-hover/heart:fill-rose-400/50 [filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.4))] transition-colors z-10" />
             </button>
           </div>
