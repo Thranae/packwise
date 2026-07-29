@@ -363,14 +363,22 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`ios-liquid-button shrink-0 whitespace-nowrap px-4 py-2 rounded-[14px] text-[13px] font-medium shadow-md transition-all duration-300
+              className={`ios-liquid-button shrink-0 whitespace-nowrap px-4 py-2 rounded-[14px] text-[13px] font-medium shadow-md transition-all duration-300 relative outline-none
                 ${activeFilter === filter 
-                  ? 'text-white border border-white/40 ring-1 ring-white/20 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]' 
+                  ? 'text-white' 
                   : 'text-white/70 border border-transparent hover:text-white hover:border-white/20'
                 }
               `}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
-              {filter}
+              {activeFilter === filter && (
+                <motion.div
+                  layoutId="exploreFilterActive"
+                  className="absolute inset-0 rounded-[14px] bg-white/10 ring-1 ring-white/20 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] border border-white/40 pointer-events-none"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{filter}</span>
             </button>
           ))}
         </div>

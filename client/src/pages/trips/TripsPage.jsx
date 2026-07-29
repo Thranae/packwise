@@ -124,14 +124,22 @@ export default function TripsPage() {
                 className={`
                   ios-liquid-button shrink-0 relative flex items-center justify-center px-2 md:px-7 min-h-[40px] md:min-h-[44px] rounded-[20px] text-[13px] font-bold tracking-wide
                   transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-[calc((100vw-56px)/3)] md:w-auto md:whitespace-nowrap
+                  w-[calc((100vw-56px)/3)] md:w-auto md:whitespace-nowrap outline-none
                   ${activeFilter === filter 
-                    ? 'text-white ring-1 ring-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)] saturate-150 scale-105 z-10' 
+                    ? 'text-white scale-105 z-10' 
                     : 'text-white/60 hover:text-white/90 hover:scale-105'
                   }
                 `}
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                <span className={`block drop-shadow-md capitalize truncate w-full text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+                {activeFilter === filter && (
+                  <motion.div
+                    layoutId="tripsFilterActive"
+                    className="absolute inset-0 rounded-[20px] bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150 pointer-events-none"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className={`relative z-10 block drop-shadow-md capitalize truncate w-full text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
               </button>
             ))}
           </div>
