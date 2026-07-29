@@ -63,7 +63,7 @@ export default function HomePage() {
   const floatY4 = useTransform(scrollY, [0, 1000], [0, -200]);
 
   return (
-    <div className="bg-[#020617] min-h-screen text-white overflow-hidden font-sans selection:bg-white/20 selection:text-white transition-colors duration-700">
+    <div className="bg-[#020617] min-h-screen text-white overflow-x-hidden font-sans selection:bg-white/20 selection:text-white transition-colors duration-700">
       
       <AnimatedBackground />
 
