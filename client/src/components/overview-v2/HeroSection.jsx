@@ -136,7 +136,7 @@ export const HeroSection = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full h-[460px] sm:h-auto sm:min-h-[380px] md:h-[416px] rounded-[24px] md:rounded-[32px] p-5 md:p-8 flex flex-col justify-end group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden"
+      className="relative w-full h-[380px] sm:h-auto sm:min-h-[340px] md:h-[400px] rounded-[24px] md:rounded-[32px] p-5 md:p-8 flex flex-col justify-end group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden"
     >
       {/* Background Container */}
       <div className="absolute inset-0 rounded-[32px] overflow-hidden -z-10">
@@ -228,7 +228,7 @@ export const HeroSection = () => {
       <div className="relative z-10 w-full p-8 flex flex-col justify-end h-full">
         {/* Removed absolute positioning for button */}
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between w-full gap-6 md:gap-0">
+        <div className="flex flex-col md:flex-row md:items-end justify-between w-full gap-4 md:gap-0">
           {/* Left: Destination & Dates */}
           <div className="flex flex-col gap-1 md:gap-2 ios-3d-element">
             <div className="flex items-center gap-2 text-white/80">
@@ -250,7 +250,7 @@ export const HeroSection = () => {
             </div>
             
             {/* View Map Button (Moved from top-left) */}
-            <div className="mt-4 md:mt-5 z-50 flex pointer-events-auto">
+            <div className="mt-3 md:mt-5 z-50 flex pointer-events-auto">
               <button 
                 onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
                 className="group relative overflow-hidden flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 rounded-[14px] md:rounded-[18px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:-translate-y-1 hover:bg-sky-400 hover:border-sky-300 hover:shadow-[0_16px_48px_rgba(56,189,248,0.5),inset_0_2px_4px_rgba(255,255,255,0.6)] active:translate-y-0 active:shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
@@ -267,7 +267,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Right: Metrics & CTA */}
-          <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end justify-between w-full md:w-auto mt-4 md:mt-0 gap-4 md:gap-6 ios-3d-element">
+          <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end justify-between w-full md:w-auto mt-3 md:mt-0 gap-3 md:gap-6 ios-3d-element">
             <div className="flex gap-2 sm:gap-3 md:gap-4 justify-between sm:justify-start">
               {/* Weather Glass Pill */}
               <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] min-w-[70px]">
