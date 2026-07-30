@@ -50,61 +50,63 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
         <Calendar className="w-5 h-5 text-white/50 pointer-events-none" />
       </button>
 
-      <AnimatePresence>
-        {isOpen && createPortal(
-          <>
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm"
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
-                <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
-                <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 text-white" /></button>
-              </div>
-              
-              <div className="grid grid-cols-7 gap-2 mb-2">
-                {weekdays.map(w => <div key={w} className="text-center text-xs font-bold text-white/40 pb-2">{w}</div>)}
-              </div>
-              
-              <div className="grid grid-cols-7 gap-2">
-                {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
-                {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => {
-                  const thisDate = new Date(year, month, d);
-                  thisDate.setHours(0,0,0,0);
-                  const isPast = thisDate < today;
-                  const isSelected = thisDate.getTime() === selectedDate.getTime();
-                  const isToday = thisDate.getTime() === today.getTime();
-                  
-                  return (
-                    <button
-                      key={d}
-                      disabled={isPast}
-                      onClick={() => handleSelectDate(d)}
-                      className={`
-                        relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-all duration-300
-                        ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
-                        ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 scale-110 z-10 border border-white/30' : ''}
-                        ${!isSelected && !isPast ? 'hover:bg-white/10 hover:scale-105 hover:border hover:border-white/20' : ''}
-                        ${isToday && !isSelected ? 'ring-2 ring-indigo-500/50 text-white' : ''}
-                      `}
-                    >
-                      {d}
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </>,
-          document.body
-        )}
-      </AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center">
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                onClick={() => setIsOpen(false)}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
+                  <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
+                  <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 text-white" /></button>
+                </div>
+                
+                <div className="grid grid-cols-7 gap-2 mb-2">
+                  {weekdays.map(w => <div key={w} className="text-center text-xs font-bold text-white/40 pb-2">{w}</div>)}
+                </div>
+                
+                <div className="grid grid-cols-7 gap-2">
+                  {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
+                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => {
+                    const thisDate = new Date(year, month, d);
+                    thisDate.setHours(0,0,0,0);
+                    const isPast = thisDate < today;
+                    const isSelected = thisDate.getTime() === selectedDate.getTime();
+                    const isToday = thisDate.getTime() === today.getTime();
+                    
+                    return (
+                      <button
+                        key={d}
+                        disabled={isPast}
+                        onClick={() => handleSelectDate(d)}
+                        className={`
+                          relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-all duration-300
+                          ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
+                          ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 scale-110 z-10 border border-white/30' : ''}
+                          ${!isSelected && !isPast ? 'hover:bg-white/10 hover:scale-105 hover:border hover:border-white/20' : ''}
+                          ${isToday && !isSelected ? 'ring-2 ring-indigo-500/50 text-white' : ''}
+                        `}
+                      >
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

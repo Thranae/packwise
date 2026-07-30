@@ -8,6 +8,7 @@ export const SplashScreen = ({ onComplete }) => {
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [shouldHide, setShouldHide] = useState(false);
   const [phase, setPhase] = useState(0);
+  const [isLogoPopping, setIsLogoPopping] = useState(false);
 
   // Show for at least 8 seconds for the full premium animation
   useEffect(() => {
@@ -17,13 +18,15 @@ export const SplashScreen = ({ onComplete }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Phase progression for staggered reveal
+  // Phase progression for staggered reveal and logo pop
   useEffect(() => {
+    const p1 = setTimeout(() => setIsLogoPopping(true), 600);    // Logo pops up
     const t1 = setTimeout(() => setPhase(1), 1200);   // Show name
+    const p2 = setTimeout(() => setIsLogoPopping(false), 2500);  // Logo settles straight
     const t2 = setTimeout(() => setPhase(2), 2800);   // Show tagline + progress
     const t3 = setTimeout(() => setPhase(3), 5000);   // Show status text
     const t4 = setTimeout(() => setPhase(4), 7000);   // Ready shimmer
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    return () => { clearTimeout(p1); clearTimeout(p2); clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, []);
 
   // Skip if already seen this session
@@ -68,9 +71,9 @@ export const SplashScreen = ({ onComplete }) => {
             {/* Very subtle static glow behind the icon */}
             <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
             
-            {/* The icon stays perfectly straight and stable */}
+            {/* The icon pops up dynamically, then settles perfectly straight */}
             <div className="relative z-10 scale-[1.2]">
-              <LogoIcon size="xl" className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]" />
+              <LogoIcon size="xl" className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]" isHoverSimulated={isLogoPopping} />
             </div>
           </motion.div>
           

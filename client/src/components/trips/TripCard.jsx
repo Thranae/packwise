@@ -193,27 +193,30 @@ export const TripCard = ({ trip }) => {
                       try {
                         const { Filesystem, Directory } = await import('@capacitor/filesystem');
                         
-                        // Fetch the image
-                        const response = await fetch(displayImage);
-                        const blob = await response.blob();
-                        
-                        // Convert to base64
-                        const base64Data = await new Promise((resolve, reject) => {
-                          const reader = new FileReader();
-                          reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                          reader.onerror = reject;
-                          reader.readAsDataURL(blob);
-                        });
-                        
+                        let imgUrl = displayImage;
+                        if (imgUrl.startsWith('/')) {
+                          imgUrl = window.location.origin + imgUrl;
+                        }
+
                         const fileName = `voyage-genie-${trip._id}-${Date.now()}.jpg`;
                         
-                        const result = await Filesystem.writeFile({
+                        // Use native download to bypass web CORS restrictions
+                        const result = await Filesystem.downloadFile({
+                          url: imgUrl,
                           path: fileName,
-                          data: base64Data,
                           directory: Directory.Cache
                         });
                         
-                        localFileUri = result.uri;
+                        // Ensure we have a valid URI for sharing
+                        if (result.path) {
+                          const uriResult = await Filesystem.getUri({
+                            path: result.path,
+                            directory: Directory.Cache
+                          });
+                          localFileUri = uriResult.uri;
+                        } else if (result.uri) {
+                          localFileUri = result.uri;
+                        }
                       } catch (imgErr) {
                         console.warn('Could not attach image to share', imgErr);
                       }

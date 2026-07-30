@@ -94,11 +94,11 @@ export const TripProvider = ({ children }) => {
     localStorage.setItem('packwise_packed_items', JSON.stringify(Array.from(packedItems)));
   }, [packedItems]);
 
+  // Remove dummy notifications and only use real ones
   const savedNotifications = localStorage.getItem('packwise_notifications');
-  const defaultNotifications = [
-    { id: 'welcome-1', title: 'Welcome to Voyage Genie', message: 'Start planning your next trip with the power of AI.', type: 'welcome', timestamp: Date.now() - 7200000, read: false }
-  ];
-  const initialNotifications = savedNotifications ? JSON.parse(savedNotifications) : defaultNotifications;
+  const initialNotifications = savedNotifications ? 
+    JSON.parse(savedNotifications).filter(n => n.id !== '1' && n.id !== '2' && n.id !== 'welcome-1') : 
+    [];
   
   const [notifications, setNotifications] = useState(initialNotifications);
 
