@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">VoyageGenie</string>
-    <string name="title_activity_main">VoyageGenie</string>
+    <string name="app_name">Voyage Genie</string>
+    <string name="title_activity_main">Voyage Genie</string>
     <string name="package_name">com.voyagegenie.app</string>
     <string name="custom_url_scheme">com.voyagegenie.app</string>
     <string name="server_client_id">251191916495-p6clibvcoaaoqbu8l5l1n6lndqf5ql2e.apps.googleusercontent.com</string>
