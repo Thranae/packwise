@@ -17,6 +17,11 @@ if (Capacitor.isNativePlatform()) {
   StatusBar.setOverlaysWebView({ overlay: true }).catch(() => {});
   // Set a CSS class so we can apply native-specific padding
   document.documentElement.classList.add('native-app');
+  if (Capacitor.getPlatform() === 'android') {
+    document.documentElement.classList.add('native-android');
+  } else if (Capacitor.getPlatform() === 'ios') {
+    document.documentElement.classList.add('native-ios');
+  }
 }
 
 // Register the PWA service worker and automatically update it

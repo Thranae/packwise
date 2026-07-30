@@ -381,6 +381,48 @@ input:-webkit-autofill:active{
   100% { transform: translateX(100%); }
 }
 
+/* Native Android Performance Optimizations (60FPS "Smooth like Butter") */
+@layer utilities {
+  html.native-android .ios-glass-card,
+  html.native-android .ios-glass-pill,
+  html.native-android .ios-liquid-button,
+  html.native-android .glass-card {
+    /* Disable heavy GPU blur calculation */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    
+    /* Use a solid but polished fallback background */
+    background: var(--theme-bg-surface) !important;
+    background-color: color-mix(in srgb, var(--theme-bg-base) 90%, white) !important;
+    
+    /* Hardware acceleration flags to prevent paint bottlenecks */
+    transform: translateZ(0) !important;
+    will-change: transform, opacity !important;
+    
+    /* Simplify shadows */
+    box-shadow: var(--theme-shadow) !important;
+  }
+
+  html.native-android .ios-glass-card:hover,
+  html.native-android .ios-glass-pill:hover,
+  html.native-android .ios-liquid-button:hover,
+  html.native-android .glass-card:hover {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Disable nested complex 3D hover effects on Android to save frame rates */
+  html.native-android .ios-glass-card [class*="hover:bg-white"],
+  html.native-android .ios-glass-card .lucide:hover {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: translateY(-1px) !important;
+    animation: none !important;
+  }
+}
+
 /* Print Styles */
 @media print {
   body {
