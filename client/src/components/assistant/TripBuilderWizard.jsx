@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar } from 'lucide-react';
+import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
 import { motion, AnimatePresence, useMotionTemplate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -134,28 +134,62 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
     setIsLocalSearching(true);
     const timeoutId = setTimeout(async () => {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(value)}&limit=6&addressdetails=1`);
-        if (!res.ok) throw new Error('API Error');
-        const data = await res.json();
-        
-        const parsed = data.map(item => {
-          const addr = item.address || {};
-          const mainName = addr.city || addr.town || addr.village || addr.state || item.name;
-          const country = addr.country || '';
-          let icon = "📍";
-          if (country.includes('France')) icon = "🗼";
-          else if (country.includes('Japan')) icon = "🌸";
-          else if (country.includes('Italy')) icon = "🏛️";
-          else if (country.includes('United States') || country.includes('USA')) icon = "🗽";
-          else if (country.includes('Indonesia')) icon = "🏖️";
-          else if (country.includes('United Arab Emirates')) icon = "🏙️";
-          else if (country.includes('United Kingdom') || country.includes('UK')) icon = "🎡";
-          else if (country.includes('Australia')) icon = "🦘";
+        const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
+        let unique = [];
 
-          return { city: mainName, country, icon };
-        });
+        if (MAPTILER_KEY) {
+          const res = await fetch(`https://api.maptiler.com/geocoding/${encodeURIComponent(value)}.json?key=${MAPTILER_KEY}&limit=6`);
+          if (!res.ok) throw new Error('MapTiler API Error');
+          const json = await res.json();
+          
+          unique = (json.features || []).map(f => {
+            const mainName = f.text || f.place_name?.split(',')[0] || "Unknown Place";
+            const context = f.context || [];
+            const countryObj = context.find(c => c.id.startsWith('country'));
+            const country = countryObj ? countryObj.text : (f.place_name !== mainName ? f.place_name : '');
+            
+            let Icon = MapPin;
+            let iconBg = "bg-blue-500/20";
+            let iconColor = "text-blue-400";
+            
+            const type = f.place_type ? f.place_type[0] : '';
+            const props = f.properties || {};
+            
+            if (type === 'poi' || type === 'park' || props.kind === 'park') {
+              Icon = TreePine;
+              iconBg = "bg-emerald-500/20";
+              iconColor = "text-emerald-400";
+            } else if (type === 'city' || type === 'municipality') {
+              Icon = Building2;
+              iconBg = "bg-purple-500/20";
+              iconColor = "text-purple-400";
+            } else if (type === 'country') {
+              Icon = Globe2;
+              iconBg = "bg-indigo-500/20";
+              iconColor = "text-indigo-400";
+            } else if (type === 'airport') {
+              Icon = Plane;
+              iconBg = "bg-sky-500/20";
+              iconColor = "text-sky-400";
+            }
 
-        const unique = parsed.filter((v, i, a) => a.findIndex(t => (t.city === v.city && t.country === v.country)) === i);
+            return { city: mainName, country, Icon, iconBg, iconColor };
+          });
+        } else {
+          // Fallback to nominatim
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(value)}&limit=6&addressdetails=1`);
+          if (!res.ok) throw new Error('API Error');
+          const data = await res.json();
+          
+          const parsed = data.map(item => {
+            const addr = item.address || {};
+            const mainName = addr.city || addr.town || addr.village || addr.state || item.name;
+            const country = addr.country || '';
+            return { city: mainName, country, Icon: MapPin, iconBg: "bg-blue-500/20", iconColor: "text-blue-400" };
+          });
+          unique = parsed.filter((v, i, a) => a.findIndex(t => (t.city === v.city && t.country === v.country)) === i);
+        }
+
         setSuggestions(unique);
         setShowDropdown(true);
       } catch (err) {
@@ -177,7 +211,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
   };
 
   return (
-    <div className={`group relative ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
+    <div className={`group relative ${disabled ? 'opacity-50 pointer-events-none' : ''} ${showDropdown ? 'z-[100]' : 'z-10'}`}>
       <label className="block text-[14px] font-bold text-white/90 mb-2 tracking-wide">{label}</label>
       <div className="relative z-20">
         <input 
@@ -187,11 +221,14 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
             userTypedValue.current = e.target.value;
             onChange(e.target.value);
           }}
-          onFocus={onFocus}
+          onFocus={() => {
+            onFocus?.();
+            if (suggestions.length > 0) setShowDropdown(true);
+          }}
           placeholder={placeholder}
           autoFocus={autoFocus}
           disabled={disabled}
-          className="w-full h-14 pl-6 pr-14 text-base rounded-[18px] bg-white/[0.05] backdrop-blur-2xl border-[1.5px] border-white/10 border-t-white/40 border-l-white/30 text-white placeholder-white/40 focus:bg-white/[0.12] focus:border-white/40 focus:border-t-white/60 focus:ring-4 focus:ring-indigo-400/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:bg-white/[0.08] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.25)] hover:-translate-y-[2px] outline-none" 
+          className="w-full h-14 pl-6 pr-14 text-base rounded-[18px] bg-white/[0.05] backdrop-blur-2xl border-[1.5px] border-white/10 border-t-white/40 border-l-white/30 text-white placeholder-white/40 focus:bg-white/[0.12] focus:border-white/40 focus:border-t-white/60 focus:ring-4 focus:ring-indigo-400/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:bg-white/[0.08] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.25)] hover:-translate-y-[2px] outline-none relative z-20" 
         />
         {isLocalSearching && (
           <div className="absolute right-5 top-1/2 -translate-y-1/2 z-30 pointer-events-none">
@@ -200,26 +237,37 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
         )}
         <AnimatePresence>
           {showDropdown && suggestions.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute left-0 right-0 top-full mt-2 bg-[#0f172a]/95 backdrop-blur-3xl border-[1.5px] border-white/20 rounded-[24px] p-2 z-[100] shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
-            >
-              {suggestions.map((loc, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSelect(loc)}
-                  className="w-full text-left px-4 py-3 rounded-[16px] hover:bg-white/10 transition-colors flex items-center gap-3"
-                >
-                  <span className="text-2xl drop-shadow-md">{loc.icon}</span>
-                  <div>
-                    <div className="text-white font-bold text-[15px]">{loc.city}</div>
-                    {loc.country && <div className="text-white/50 text-[12px] font-medium">{loc.country}</div>}
-                  </div>
-                </button>
-              ))}
-            </motion.div>
+            <>
+              {/* Invisible overlay to catch outside clicks and close the dropdown */}
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="fixed inset-0 z-40" 
+                onClick={(e) => { e.stopPropagation(); setShowDropdown(false); }} 
+              />
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="absolute left-0 right-0 top-full mt-2 bg-[#0f172a]/95 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 rounded-[24px] p-2 z-[100] shadow-[0_30px_60px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.1)] overflow-hidden"
+              >
+                {suggestions.map((loc, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSelect(loc)}
+                    className="w-full text-left px-4 py-3 rounded-[16px] hover:bg-white/10 transition-colors flex items-center gap-4 group/item"
+                  >
+                    <div className={`w-10 h-10 rounded-xl ${loc.iconBg} flex items-center justify-center shrink-0 group-hover/item:scale-110 transition-transform duration-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)]`}>
+                      <loc.Icon className={`w-5 h-5 ${loc.iconColor}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-white font-bold text-[15px] truncate">{loc.city}</div>
+                      {loc.country && <div className="text-white/50 text-[12px] font-medium truncate">{loc.country}</div>}
+                    </div>
+                  </button>
+                ))}
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
