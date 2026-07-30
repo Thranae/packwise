@@ -27,7 +27,7 @@ export const TopHeader = () => {
   
   const [suggestions, setSuggestions] = useState([]);
   const [isSearchingAI, setIsSearchingAI] = useState(false);
-  const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap();
+  const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap(() => navigate(ROUTES.HOME));
 
   useEffect(() => {
     if (query.length < 3) {
@@ -96,9 +96,9 @@ export const TopHeader = () => {
     >
       
       {/* Mobile Logo */}
-      <div className="md:hidden flex items-center gap-2 cursor-pointer" onClick={() => navigate(ROUTES.HOME)}>
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/20 shadow-inner">
-          <LogoIcon size="sm" />
+      <div className="md:hidden flex items-center gap-2 cursor-pointer" onPointerDown={handlePointerDown}>
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/20 shadow-inner group">
+          <LogoIcon size="sm" isHoverSimulated={isHoverSimulated} />
         </div>
         <span className="text-white font-bold text-sm tracking-wide">Voyage Genie</span>
       </div>
