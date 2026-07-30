@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Send, User, Loader2 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/Logo';
 import api from '@/services/api';
+import ReactMarkdown from 'react-markdown';
 
 export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
   const [messages, setMessages] = useState([
@@ -116,13 +117,30 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                   </div>
                   
                   {/* Bubble */}
-                  <div className={`max-w-[80%] rounded-2xl p-4 text-sm font-medium shadow-md ${
-                    msg.type === 'user' 
-                      ? 'bg-blue-600/90 text-white rounded-tr-sm backdrop-blur-md border border-blue-500/50' 
-                      : 'bg-white/10 text-white/90 rounded-tl-sm backdrop-blur-md border border-white/10'
-                  }`}>
-                    {msg.text}
-                  </div>
+                  <div className={`p-4 shadow-xl text-left overflow-hidden ${
+                          msg.type === 'user' 
+                            ? 'rounded-[20px] rounded-tr-sm bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border border-blue-400/30 text-white' 
+                            : 'rounded-[20px] rounded-tl-sm ios-glass-card border border-white/10 text-white'
+                        }`}>
+                          {msg.type === 'user' ? (
+                            <p className="leading-relaxed whitespace-pre-wrap text-[14px] font-medium">{msg.text}</p>
+                          ) : (
+                            <ReactMarkdown
+                              components={{
+                                p: ({node, ...props}) => <p className="leading-relaxed text-[14px] font-medium mb-2 last:mb-0" {...props} />,
+                                strong: ({node, ...props}) => <strong className="font-black text-emerald-400 drop-shadow-sm" {...props} />,
+                                ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                                li: ({node, ...props}) => <li className="text-[14px] font-medium marker:text-blue-400" {...props} />,
+                                h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 text-blue-400" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="text-md font-bold mb-2 text-white/90" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="text-sm font-bold mb-1 text-white/80" {...props} />,
+                              }}
+                            >
+                              {msg.text}
+                            </ReactMarkdown>
+                          )}
+                        </div>
                 </div>
               ))}
 
@@ -132,12 +150,22 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                   <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-lg bg-gradient-to-br from-cyan-500 to-blue-600">
                     <LogoIcon size="sm" className="text-white drop-shadow-sm scale-90" />
                   </div>
-                  <div className="max-w-[80%] rounded-2xl p-4 text-sm font-medium shadow-md bg-white/10 text-white/90 rounded-tl-sm backdrop-blur-md border border-white/10">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
-                      <span className="text-white/60">Genie is thinking...</span>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="flex flex-col max-w-[90%] self-start items-start"
+                  >
+                    <div className="flex items-center gap-2 mb-1 px-1">
+                      <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Sparkles className="w-3 h-3 text-white animate-pulse" /></div>
+                      <span className="text-[10px] font-semibold text-white/50 tracking-wider uppercase">Voyage Genie AI</span>
                     </div>
-                  </div>
+                    <div className="p-4 shadow-xl text-left rounded-[20px] rounded-tl-sm ios-glass-card border border-white/10 text-white flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </motion.div>
                 </div>
               )}
 
