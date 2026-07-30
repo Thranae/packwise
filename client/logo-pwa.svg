@@ -1,26 +1,29 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="100" fill="#020617" />
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f8fafc" />
+    </linearGradient>
+    <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="115" fill="url(#bg-grad)" />
   <g transform="translate(106, 106) scale(6.25)">
-    <defs>
-      <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#ffffff" />
-        <stop offset="40%" stop-color="#e2e8f0" />
-        <stop offset="100%" stop-color="#64748b" />
-      </linearGradient>
-      <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#93c5fd" />
-        <stop offset="100%" stop-color="#3b82f6" />
-      </linearGradient>
-    </defs>
-    <path d="M18 12V6 M30 12V6" stroke="url(#metallic)" stroke-width="2.5" stroke-linecap="round" />
-    <path d="M15 6H33" stroke="url(#metallic)" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M18 12V6 M30 12V6" stroke="url(#metallic)" stroke-width="3" stroke-linecap="round" />
+    <path d="M15 6H33" stroke="url(#metallic)" stroke-width="4" stroke-linecap="round" />
     <rect x="10" y="12" width="28" height="30" rx="4" stroke="url(#metallic)" stroke-width="3" stroke-linejoin="round" />
-    <path d="M16 18V36 M32 18V36" stroke="url(#metallic)" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
-    <circle cx="15" cy="44" r="2" fill="url(#metallic)" />
-    <circle cx="33" cy="44" r="2" fill="url(#metallic)" />
+    <path d="M16 18V36 M32 18V36" stroke="url(#metallic)" stroke-width="2" stroke-linecap="round" opacity="0.9" />
+    <circle cx="15" cy="44" r="2.5" fill="url(#metallic)" />
+    <circle cx="33" cy="44" r="2.5" fill="url(#metallic)" />
     <g>
-      <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="url(#pin-grad)" />
-      <circle cx="24" cy="22" r="2.5" fill="white" />
+      <path d="M24 15C27.866 15 31 18.134 31 22C31 26.5 24 33 24 33C24 33 17 26.5 17 22C17 18.134 20.134 15 24 15Z" fill="url(#pin-grad)" />
+      <circle cx="24" cy="21.5" r="3" fill="white" />
     </g>
   </g>
 </svg>
