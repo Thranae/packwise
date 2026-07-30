@@ -175,20 +175,20 @@ export const TripCard = ({ trip }) => {
                 <button onClick={async (e) => { 
                   e.stopPropagation(); 
                   setIsMenuOpen(false); 
-                  try {
-                    addToast('info', 'Opening share options...');
-                    await Share.share({
-                      title: `${trip.destination} Trip`,
-                      text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                      url: window.location.origin,
-                      dialogTitle: 'Share Trip with Buddies',
-                    });
-                  } catch (err) {
-                    console.warn('Native share failed or dismissed', err);
-                    if (navigator.clipboard) {
-                      navigator.clipboard.writeText(window.location.origin);
-                      addToast('success', 'Link copied to clipboard!');
-                    }
+                    try {
+                      addToast('info', 'Opening share options...');
+                      await Share.share({
+                        title: `${trip.destination} Trip`,
+                        text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
+                        url: 'https://voyagegenie.app',
+                        dialogTitle: 'Share Trip with Buddies',
+                      });
+                    } catch (err) {
+                      console.warn('Native share failed or dismissed', err);
+                      if (navigator.clipboard) {
+                        navigator.clipboard.writeText('https://voyagegenie.app');
+                        addToast('success', 'Link copied to clipboard!');
+                      }
                   }
                 }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
