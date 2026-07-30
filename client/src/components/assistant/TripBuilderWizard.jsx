@@ -85,7 +85,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                     
                     return (
                       <button
-                        key={d}
+                        key={`${year}-${month}-${d}`}
                         disabled={isPast}
                         onClick={() => handleSelectDate(d)}
                         className={`
