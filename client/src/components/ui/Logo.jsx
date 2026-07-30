@@ -84,16 +84,18 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
       if (isAnimating) return;
       setIsAnimating(true);
       
-      // Premium 3D flip + glow animation sequence
+      // Premium pulse + wiggle animation
       controls.start({
-        rotateY: [0, 360],
-        scale: [1, 1.3, 1],
+        scale: [1, 1.25, 0.95, 1.1, 1],
+        rotate: [0, -8, 8, -4, 0],
         filter: [
           'drop-shadow(0px 0px 0px rgba(79,124,255,0))',
-          'drop-shadow(0px 0px 40px rgba(79,124,255,1))',
+          'drop-shadow(0px 0px 24px rgba(79,124,255,0.8))',
+          'drop-shadow(0px 0px 16px rgba(79,124,255,0.4))',
+          'drop-shadow(0px 0px 8px rgba(79,124,255,0.2))',
           'drop-shadow(0px 0px 0px rgba(79,124,255,0))'
         ],
-        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
+        transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
       }).then(() => setIsAnimating(false));
     } else {
       // Single Tap candidate
@@ -118,7 +120,7 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
       className={cn('group flex items-center gap-3 cursor-pointer', className)}
       onPointerDown={handlePointerDown}
       animate={controls}
-      style={{ transformStyle: 'preserve-3d' }}
+      style={{ willChange: 'transform, filter' }}
     >
       <LogoIcon size={size} className="text-text-primary" />
       {showText && (
