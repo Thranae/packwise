@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/utils/cn';
-import { motion, useAnimation } from 'framer-motion';
 
 /**
  * Official Voyage Genie Logo (Suitcase + Location Pin)
@@ -25,7 +24,7 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg" 
-      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
+      className={cn('logo-svg shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
     >
       <defs>
         <linearGradient id={metallicId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -40,10 +39,10 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       </defs>
 
       {/* Telescopic Handle Poles (Animate up on hover) */}
-      <path d="M18 12V6 M30 12V6" stroke={`url(#${metallicId})`} strokeWidth="2.5" strokeLinecap="round" className="transition-transform duration-700 group-hover:-translate-y-1" />
+      <path d="M18 12V6 M30 12V6" stroke={`url(#${metallicId})`} strokeWidth="2.5" strokeLinecap="round" className="logo-handle transition-transform duration-700 group-hover:-translate-y-1" />
       
       {/* Handle Grip (Animate up on hover) */}
-      <path d="M15 6H33" stroke={`url(#${metallicId})`} strokeWidth="3.5" strokeLinecap="round" className="transition-transform duration-700 group-hover:-translate-y-1" />
+      <path d="M15 6H33" stroke={`url(#${metallicId})`} strokeWidth="3.5" strokeLinecap="round" className="logo-handle transition-transform duration-700 group-hover:-translate-y-1" />
       
       {/* Suitcase Body (Taller than wide, hard-shell) */}
       <rect x="10" y="12" width="28" height="30" rx="4" stroke={`url(#${metallicId})`} strokeWidth="3" strokeLinejoin="round" />
@@ -56,7 +55,7 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       <circle cx="33" cy="44" r="2" fill={`url(#${metallicId})`} />
 
       {/* Integrated Location Pin (Blue Accent) - Bounces up on hover */}
-      <g className="transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-3 origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+      <g className="logo-pin transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-3 origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
         <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill={`url(#${pinGradId})`} className="transition-all duration-700" />
         <circle cx="24" cy="22" r="2.5" fill="white" />
       </g>
@@ -65,10 +64,10 @@ export const LogoIcon = ({ className, size = 'md' }) => {
 };
 
 export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
-  const controls = useAnimation();
-  const [isAnimating, setIsAnimating] = React.useState(false);
+  const [isHoverSimulated, setIsHoverSimulated] = React.useState(false);
   const lastTapRef = React.useRef(0);
   const clickTimeoutRef = React.useRef(null);
+  const hoverTimeoutRef = React.useRef(null);
 
   const handlePointerDown = (e) => {
     // Only handle primary touches/clicks
@@ -78,24 +77,15 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
     const DOUBLE_TAP_DELAY = 300;
 
     if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
-      // Double Tap detected
+      // Double Tap detected — simulate hover state
       if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
-      lastTapRef.current = 0; // reset
-      if (isAnimating) return;
-      setIsAnimating(true);
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      lastTapRef.current = 0;
       
-      // Animate to match the desktop hover state, then return
-      controls.start({
-        scale: [1, 1.1, 1.1, 1],
-        rotate: [0, 8, 8, 0],
-        filter: [
-          'drop-shadow(0px 2px 4px rgba(0,0,0,0.4))',
-          'drop-shadow(0px 4px 16px rgba(79,124,255,0.8))',
-          'drop-shadow(0px 4px 16px rgba(79,124,255,0.8))',
-          'drop-shadow(0px 2px 4px rgba(0,0,0,0.4))'
-        ],
-        transition: { duration: 0.9, times: [0, 0.3, 0.7, 1], ease: [0.16, 1, 0.3, 1] }
-      }).then(() => setIsAnimating(false));
+      setIsHoverSimulated(true);
+      hoverTimeoutRef.current = setTimeout(() => {
+        setIsHoverSimulated(false);
+      }, 900);
     } else {
       // Single Tap candidate
       lastTapRef.current = now;
@@ -115,19 +105,17 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
   };
 
   return (
-    <motion.div 
-      className={cn('group flex items-center gap-3 cursor-pointer', className)}
+    <div 
+      className={cn('group flex items-center gap-3 cursor-pointer', isHoverSimulated && 'logo-hover-active', className)}
       onPointerDown={handlePointerDown}
-      animate={controls}
-      style={{ willChange: 'transform, filter' }}
     >
       <LogoIcon size={size} className="text-text-primary" />
       {showText && (
-        <span className={cn('font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', textSizes[size])}>
-          Voyage Genie<span className="text-[var(--color-accent)] inline-block transition-transform duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125">.</span>
+        <span className={cn('logo-text font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', textSizes[size])}>
+          Voyage Genie<span className="logo-dot text-[var(--color-accent)] inline-block transition-transform duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125">.</span>
         </span>
       )}
-    </motion.div>
+    </div>
   );
 };
 
