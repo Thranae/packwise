@@ -962,12 +962,10 @@ export default function PackingPage() {
                   <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" strokeWidth={3} /> 
                   Add Item
                 </button>
-                {(cat.id === 1 || cat.id === 2) && (
-                  <button onClick={() => openCategoryAi(cat.id, cat.name)} className="ios-liquid-button px-4 rounded-xl flex items-center gap-2 text-[14px] font-bold text-blue-300 hover:text-blue-100 transition-colors py-2 group">
-                    <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" /> 
-                    Ask AI
-                  </button>
-                )}
+                <button onClick={() => openCategoryAi(cat.id, cat.name)} className="ios-liquid-button px-4 rounded-xl flex items-center gap-2 text-[14px] font-bold text-blue-300 hover:text-blue-100 transition-colors py-2 group">
+                  <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" /> 
+                  Ask AI
+                </button>
               </div>
             </motion.div>
           )}
