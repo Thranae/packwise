@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 import { db } from '../db/db';
 
-const TripContext = createContext();
+export const TripContext = createContext();
 
 const MOCK_TRIPS = [
   {
