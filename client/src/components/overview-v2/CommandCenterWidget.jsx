@@ -5,6 +5,7 @@ import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
 import { useLiveWeather, useLiveCurrency } from '@/hooks/useLiveApis';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
+import { useToast } from '@/hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 
@@ -12,9 +13,10 @@ export const CommandCenterWidget = ({ className = "" }) => {
   const cardRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(cardRef, { maxTilt: 5, stiffness: 250, damping: 25 });
   const { playSound } = useSoundEffect();
+  const { addToast } = useToast();
   const navigate = useNavigate();
   
-  const { currentTrip } = useTripContext();
+  const { currentTrip, addNotification } = useTripContext();
   const dest = currentTrip?.destination?.split('&')[0];
   const { weather } = useLiveWeather(dest);
   const targetCurrency = currentTrip?.currency || 'EUR';
@@ -60,24 +62,48 @@ export const CommandCenterWidget = ({ className = "" }) => {
     e.stopPropagation();
     playSound('tap');
     setIsExporting(true);
+    addToast('info', 'Generating Story Image...');
     try {
       const html2canvas = (await import('html2canvas')).default;
       const element = document.getElementById('story-export-template');
       if (element) {
+        // html2canvas needs the element to be somewhat in flow, but we can't show it.
         const canvas = await html2canvas(element, { 
           scale: 1, 
           useCORS: true, 
           logging: false,
-          backgroundColor: null
+          backgroundColor: null,
+          windowWidth: 1080,
+          windowHeight: 1920
         });
         const imgData = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.download = `${dest || 'Trip'}-Story.png`;
-        link.href = imgData;
-        link.click();
+        
+        try {
+          if (navigator.share) {
+            const blob = await (await fetch(imgData)).blob();
+            const file = new File([blob], `${dest || 'Trip'}-Story.png`, { type: 'image/png' });
+            await navigator.share({
+              title: `${dest || 'Trip'} Story`,
+              files: [file]
+            });
+            addToast('success', 'Story shared successfully!');
+          } else {
+            const link = document.createElement('a');
+            link.download = `${dest || 'Trip'}-Story.png`;
+            link.href = imgData;
+            link.click();
+            addToast('success', 'Story downloaded!');
+          }
+        } catch (shareErr) {
+          // Fallback if share is canceled or fails
+          console.warn(shareErr);
+        }
+        
+        addNotification('Story Exported', `Your 9:16 story for ${dest || 'your trip'} is ready to share.`, 'pdf');
       }
     } catch (err) {
       console.error("Export failed:", err);
+      addToast('error', 'Failed to generate story.');
     } finally {
       setIsExporting(false);
     }
