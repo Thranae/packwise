@@ -216,7 +216,7 @@ export const TripCard = ({ trip }) => {
                     const shareOptions = {
                       title: `${trip.destination} Trip`,
                       text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                      url: 'https://voyagegenie.app',
+                      url: `https://voyagegenie.app/shared/${trip._id}`,
                       dialogTitle: 'Share Trip with Buddies',
                     };
 
@@ -228,7 +228,7 @@ export const TripCard = ({ trip }) => {
                   } catch (err) {
                     console.warn('Native share failed or dismissed', err);
                     if (navigator.clipboard) {
-                      navigator.clipboard.writeText('https://voyagegenie.app');
+                      navigator.clipboard.writeText(`https://voyagegenie.app/shared/${trip._id}`);
                       addToast('success', 'Link copied to clipboard!');
                     }
                   }

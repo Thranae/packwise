@@ -72,7 +72,7 @@ const geocodeDestination = async (destination) => {
   return { lat: 36.1011, lng: -112.1129 };
 };
 
-export const HeroSection = () => {
+export const HeroSection = ({ isSharedView = false }) => {
   const navigate = useNavigate();
   const cardRef = useRef(null);
   const globeEl = useRef(null);
@@ -273,20 +273,32 @@ export const HeroSection = () => {
           {/* View Map Button */}
           <button 
             onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-all duration-300 ${showMap ? '!bg-blue-500 !border-blue-400 shadow-[0_4px_12px_rgba(59,130,246,0.5)]' : ''}`}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full transition-all duration-300 ${showMap ? '!bg-blue-400 !text-white !border-blue-400 shadow-[0_4px_12px_rgba(96,165,250,0.5)] scale-95' : 'ios-liquid-button'}`}
+            style={showMap ? { background: '#60a5fa', color: 'white' } : {}}
           >
-            <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" />
-            <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
+            <Navigation className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-colors ${showMap ? 'text-white' : 'text-white'}`} />
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
           </button>
           
-          {/* Continue Button */}
-          <button 
-            onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} 
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full ios-liquid-button group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600"
-          >
-            <span className="text-xs md:text-sm font-bold text-white">Continue</span>
-            <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-white transition-transform duration-500 group-hover/btn:translate-x-1" />
-          </button>
+          {/* Continue / Create Journey Button */}
+          {isSharedView ? (
+            <button 
+              onClick={(e) => { e.stopPropagation(); navigate(ROUTES.LOGIN); }} 
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full ios-liquid-button group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-500 hover:to-emerald-400 shadow-[0_8px_16px_rgba(52,211,153,0.3)] !border-none"
+              style={{ background: 'linear-gradient(to right, #2563eb, #10b981)' }}
+            >
+              <span className="text-xs md:text-sm font-extrabold text-white">Create your Journey</span>
+              <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-white transition-transform duration-500 group-hover/btn:translate-x-1" />
+            </button>
+          ) : (
+            <button 
+              onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} 
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full ios-liquid-button group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600"
+            >
+              <span className="text-xs md:text-sm font-bold text-white">Continue</span>
+              <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-white transition-transform duration-500 group-hover/btn:translate-x-1" />
+            </button>
+          )}
         </div>
       </div>
     </motion.div>

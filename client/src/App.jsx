@@ -192,6 +192,9 @@ function AppRoutes() {
             }
           />
 
+          {/* Public Shared Trip Page */}
+          <Route path="/shared/:tripId" element={<SharedTripPage />} />
+
           <Route
             path={ROUTES.ONBOARDING}
             element={
