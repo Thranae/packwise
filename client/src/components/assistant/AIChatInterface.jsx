@@ -32,6 +32,8 @@ export const AIChatInterface = () => {
     setIsLoading(true);
 
     try {
+      // Intentional fake delay to simulate 'thinking' per user request
+      await new Promise(resolve => setTimeout(resolve, 4000));
 
       const res = await fetch('/api/ai/chat/stream', {
         method: 'POST',

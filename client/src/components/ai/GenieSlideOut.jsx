@@ -38,6 +38,9 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
         .map(m => ({ role: m.type === 'user' ? 'user' : 'assistant', content: m.text }));
       history.push({ role: 'user', content: userText });
 
+      // Intentional fake delay to simulate 'thinking' per user request
+      await new Promise(resolve => setTimeout(resolve, 4000));
+
       const res = await api.post('/ai/chat', {
         message: userText,
         history,
