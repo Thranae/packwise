@@ -77,19 +77,40 @@ export const SplashScreen = ({ onComplete }) => {
             </div>
           </motion.div>
           
-          {/* App Name minimal text with elegant reveal */}
+          {/* App Name — same font as landing page with staggered letter animation */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={phase >= 1 ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={phase >= 1 ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center gap-3"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.2em] text-white/90 uppercase">
-              Voyage Genie
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tighter text-white/90 flex overflow-hidden">
+              {'Voyage Genie'.split('').map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={phase >= 1 ? { y: 0, opacity: 1 } : {}}
+                  transition={{ duration: 0.6, delay: 0.05 * i, ease: [0.16, 1, 0.3, 1] }}
+                  className={char === ' ' ? 'w-2' : ''}
+                >
+                  {char === ' ' ? '\u00A0' : char}
+                </motion.span>
+              ))}
+              <motion.span
+                initial={{ y: 30, opacity: 0 }}
+                animate={phase >= 1 ? { y: 0, opacity: 1 } : {}}
+                transition={{ duration: 0.6, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="text-blue-400"
+              >.</motion.span>
             </h1>
-            <p className="text-[11px] sm:text-[12px] font-medium tracking-[0.3em] text-white/40 uppercase mt-1">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={phase >= 2 ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-[11px] sm:text-[12px] font-light tracking-[0.25em] text-white/35 uppercase"
+            >
               Your AI Travel Companion
-            </p>
+            </motion.p>
           </motion.div>
         </div>
 

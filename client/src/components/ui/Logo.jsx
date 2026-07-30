@@ -41,25 +41,23 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
           <stop offset="100%" stopColor="#3b82f6" />
         </linearGradient>
 
-        {/* Soft feathered white glow for suitcase */}
+        {/* Subtle feathered white glow for suitcase */}
         <filter id={suitcaseGlowId} x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-          <feFlood floodColor="#c4b5fd" floodOpacity="0.7" result="color" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+          <feFlood floodColor="#ffffff" floodOpacity="0.35" result="color" />
           <feComposite in="color" in2="blur" operator="in" result="glow" />
           <feMerge>
-            <feMergeNode in="glow" />
             <feMergeNode in="glow" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
 
-        {/* Soft feathered blue glow for map pin */}
+        {/* Subtle feathered sky blue glow for map pin */}
         <filter id={pinGlowId} x="-80%" y="-80%" width="260%" height="260%" filterUnits="objectBoundingBox">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
-          <feFlood floodColor="#3b82f6" floodOpacity="0.85" result="color" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+          <feFlood floodColor="#7dd3fc" floodOpacity="0.5" result="color" />
           <feComposite in="color" in2="blur" operator="in" result="glow" />
           <feMerge>
-            <feMergeNode in="glow" />
             <feMergeNode in="glow" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
