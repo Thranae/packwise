@@ -136,161 +136,157 @@ export const HeroSection = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full h-[380px] sm:h-auto sm:min-h-[340px] md:h-[400px] rounded-[24px] md:rounded-[32px] p-5 md:p-8 flex flex-col justify-end group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden"
+      className="relative w-full rounded-[24px] md:rounded-[32px] flex flex-col group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden ios-glass-card"
     >
-      {/* Background Container */}
-      <div className="absolute inset-0 rounded-[32px] overflow-hidden -z-10">
-        <AnimatePresence mode="wait">
-          {!showMap ? (
-            <motion.div 
-              key="image"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
-              className="absolute inset-0"
-            >
-              {imageLoading ? (
-                <div className="absolute inset-0 bg-white/5 animate-pulse" />
-              ) : (
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:scale-105"
-                  style={{ backgroundImage: `url(${displayImage})` }}
-                />
-              )}
-              {/* Soft Dark Overlay for Text Readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="map"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
-              className="absolute inset-0 bg-[#030712] flex flex-col justify-center items-center overflow-hidden"
-            >
-              {!coords ? (
-                <div className="absolute inset-0 z-20 flex items-center justify-center">
-                  <Loader2 className="w-8 h-8 text-white animate-spin opacity-50" />
-                </div>
-              ) : !MAPTILER_KEY ? (
-                <div className="absolute inset-0 bg-[#030712] flex flex-col justify-center items-center p-8 text-center z-20">
-                  <MapPin className="w-10 h-10 text-white/20 mb-3" />
-                  <h3 className="text-white font-medium mb-1">MapTiler API Key Required</h3>
-                  <div className="text-white/50 text-xs max-w-xs">Please add your VITE_MAPTILER_API_KEY to the client/.env file to view the 3D Satellite Map.</div>
-                </div>
-              ) : (
-                <div className="absolute inset-0 pointer-events-auto">
-                  <Map
-                    key={currentTrip._id}
-                    initialViewState={{
-                      longitude: coords.lng,
-                      latitude: coords.lat,
-                      zoom: 12.5,
-                      pitch: 65,
-                      bearing: -20
-                    }}
-                    mapStyle={`https://api.maptiler.com/maps/streets-v2-dark/style.json?key=${MAPTILER_KEY}`}
-                    terrain={{ source: 'maptiler-terrain', exaggeration: 1.5 }}
-                    attributionControl={false}
-                  >
-                    <Source
-                      id="maptiler-terrain"
-                      type="raster-dem"
-                      url={`https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`}
-                      tileSize={256}
-                    />
-                    <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
-                      <div className="relative group cursor-pointer flex flex-col items-center justify-end h-16 w-16">
-                        {/* Animated Ground Glow/Shadow */}
-                        <div className="absolute bottom-1 w-6 h-2 bg-red-500/40 blur-[4px] rounded-[100%] animate-pulse" />
-                        
-                        {/* The Pin with glow and gentle bobbing animation */}
-                        <div className="text-4xl drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-[bounce_2s_infinite] relative z-10 hover:-translate-y-2 transition-transform duration-300">
-                          📍
-                        </div>
-                        
-                        {/* Tooltip on hover */}
-                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F172A]/90 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 border border-white/20 shadow-2xl whitespace-nowrap pointer-events-none z-20">
-                          {currentTrip.destination.split('&')[0].replace('Explorer', '').trim()}
-                        </div>
-                      </div>
-                    </Marker>
-                  </Map>
-                </div>
-              )}
-              {/* Overlay for map readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent pointer-events-none z-[400]" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
       {/* Liquid Glass Border Stroke Overlay */}
-      <div className="absolute inset-0 rounded-[32px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
+      <div className="absolute inset-0 rounded-[24px] md:rounded-[32px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
 
-      {/* Main Content Area */}
-      <div className="relative z-10 w-full p-8 flex flex-col justify-end h-full">
-        {/* Removed absolute positioning for button */}
-
-        <div className="flex flex-col md:flex-row md:items-end justify-between w-full gap-4 md:gap-0">
-          {/* Left: Destination & Dates */}
-          <div className="flex flex-col gap-1 md:gap-2 ios-3d-element">
-            <div className="flex items-center gap-2 text-white/80">
-              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-              <span className="text-xs md:text-lg font-medium tracking-wide">{currentTrip.country}</span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-semibold tracking-tighter text-white drop-shadow-md leading-tight">
-              {currentTrip.destination}
-            </h1>
-            <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-6 mt-2">
-              <div className="flex items-center gap-1.5 text-white/90">
-                <Calendar className="w-3.5 h-3.5 md:w-5 md:h-5 text-white/70" />
-                <span className="text-[11px] md:text-base font-medium whitespace-nowrap">{formatDate(currentTrip.startDate)} - {formatDate(currentTrip.endDate)}</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-2 text-white/90">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
-                <span className="text-sm md:text-base font-medium">{getDuration(currentTrip.startDate, currentTrip.endDate)}</span>
-              </div>
-            </div>
-            
-            {/* View Map Button (Moved from top-left) */}
-            <div className="mt-3 md:mt-5 z-50 flex pointer-events-auto">
-              <button 
-                onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-                className="group relative overflow-hidden flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 rounded-[14px] md:rounded-[18px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:-translate-y-1 hover:bg-sky-400 hover:border-sky-300 hover:shadow-[0_16px_48px_rgba(56,189,248,0.5),inset_0_2px_4px_rgba(255,255,255,0.6)] active:translate-y-0 active:shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-[400ms] ease-[cubic-bezier(0.23,1,0.32,1)]"
+      {/* TOP SECTION: Image/Map & Title */}
+      <div className="relative w-full h-[220px] md:h-[260px] flex flex-col justify-end p-5 md:p-8">
+        
+        {/* Background Container */}
+        <div className="absolute inset-0 overflow-hidden -z-10">
+          <AnimatePresence mode="wait">
+            {!showMap ? (
+              <motion.div 
+                key="image"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
+                className="absolute inset-0"
               >
-                {/* Liquid Glare Sweep */}
-                <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 group-hover:translate-x-[150%] transition-transform duration-[1200ms] ease-in-out pointer-events-none" />
-                
-                <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
-                <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.2em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10">
-                  {showMap ? 'Hide Map' : 'View Map'}
-                </span>
-              </button>
-            </div>
+                {imageLoading ? (
+                  <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                ) : (
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:scale-105"
+                    style={{ backgroundImage: `url(${displayImage})` }}
+                  />
+                )}
+                {/* Soft Dark Overlay for Text Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="map"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
+                className="absolute inset-0 bg-[#030712] flex flex-col justify-center items-center overflow-hidden"
+              >
+                {!coords ? (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center">
+                    <Loader2 className="w-8 h-8 text-white animate-spin opacity-50" />
+                  </div>
+                ) : !MAPTILER_KEY ? (
+                  <div className="absolute inset-0 bg-[#030712] flex flex-col justify-center items-center p-8 text-center z-20">
+                    <MapPin className="w-10 h-10 text-white/20 mb-3" />
+                    <h3 className="text-white font-medium mb-1">MapTiler API Key Required</h3>
+                    <div className="text-white/50 text-xs max-w-xs">Please add your VITE_MAPTILER_API_KEY to the client/.env file to view the 3D Satellite Map.</div>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 pointer-events-auto">
+                    <Map
+                      key={currentTrip._id}
+                      initialViewState={{
+                        longitude: coords.lng,
+                        latitude: coords.lat,
+                        zoom: 12.5,
+                        pitch: 65,
+                        bearing: -20
+                      }}
+                      mapStyle={`https://api.maptiler.com/maps/streets-v2-dark/style.json?key=${MAPTILER_KEY}`}
+                      terrain={{ source: 'maptiler-terrain', exaggeration: 1.5 }}
+                      attributionControl={false}
+                    >
+                      <Source
+                        id="maptiler-terrain"
+                        type="raster-dem"
+                        url={`https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=${MAPTILER_KEY}`}
+                        tileSize={256}
+                      />
+                      <Marker longitude={coords.lng} latitude={coords.lat} anchor="bottom">
+                        <div className="relative group cursor-pointer flex flex-col items-center justify-end h-16 w-16">
+                          {/* Animated Ground Glow/Shadow */}
+                          <div className="absolute bottom-1 w-6 h-2 bg-red-500/40 blur-[4px] rounded-[100%] animate-pulse" />
+                          
+                          {/* The Pin with glow and gentle bobbing animation */}
+                          <div className="text-4xl drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-[bounce_2s_infinite] relative z-10 hover:-translate-y-2 transition-transform duration-300">
+                            📍
+                          </div>
+                          
+                          {/* Tooltip on hover */}
+                          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F172A]/90 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 border border-white/20 shadow-2xl whitespace-nowrap pointer-events-none z-20">
+                            {currentTrip.destination.split('&')[0].replace('Explorer', '').trim()}
+                          </div>
+                        </div>
+                      </Marker>
+                    </Map>
+                  </div>
+                )}
+                {/* Overlay for map readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/90 via-transparent to-transparent pointer-events-none z-[400]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Title Content */}
+        <div className="relative z-10 flex flex-col gap-1 md:gap-2 ios-3d-element">
+          <div className="flex items-center gap-2 text-white/90">
+            <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
+            <span className="text-xs md:text-lg font-bold tracking-wide">{currentTrip.country}</span>
           </div>
-
-          {/* Right: Metrics & CTA */}
-          <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end justify-between w-full md:w-auto mt-3 md:mt-0 gap-3 md:gap-6 ios-3d-element">
-            <div className="flex gap-2 sm:gap-3 md:gap-4 justify-between sm:justify-start">
-              {/* Weather Glass Pill */}
-              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] min-w-[70px]">
-                {renderWeatherIcon(weather?.current?.icon, "w-4 h-4 md:w-6 md:h-6 mb-1 drop-shadow-md")}
-                <span className="text-[11px] md:text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
-              </div>
-              
-              {/* Budget Glass Pill */}
-              <div className="flex-1 sm:flex-none flex flex-col items-center justify-center px-3 py-2 md:px-5 md:py-3 rounded-[12px] md:rounded-[16px] bg-white/30 backdrop-blur-3xl saturate-200 border border-white/40 border-t-white/80 border-l-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)] min-w-[80px]">
-                <Wallet className="w-4 h-4 md:w-6 md:h-6 text-emerald-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-1" />
-                <span className="text-[11px] md:text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
-              </div>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white drop-shadow-lg leading-tight">
+            {currentTrip.destination}
+          </h1>
+          <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-6 mt-1">
+            <div className="flex items-center gap-1.5 text-white/90 font-semibold drop-shadow-md">
+              <Calendar className="w-3.5 h-3.5 md:w-5 md:h-5 text-emerald-400" />
+              <span className="text-[11px] md:text-base whitespace-nowrap">{formatDate(currentTrip.startDate)} - {formatDate(currentTrip.endDate)}</span>
             </div>
-
-            <button onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} className="group/btn flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-3.5 rounded-[12px] md:rounded-[16px] ios-liquid-button w-full sm:w-auto justify-center z-10 relative">
-              <span className="text-sm font-bold text-white">Continue</span>
-              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white text-black flex items-center justify-center transition-transform duration-700 group-hover/btn:translate-x-1 shrink-0">
-                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
-              </div>
-            </button>
+            <div className="hidden sm:flex items-center gap-2 text-white/90 font-semibold drop-shadow-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-white/60" />
+              <span className="text-sm md:text-base">{getDuration(currentTrip.startDate, currentTrip.endDate)}</span>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* BOTTOM SECTION: Controls */}
+      <div className="relative z-10 w-full p-4 md:p-6 bg-white/[0.03] border-t border-white/10 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
         
+        {/* Left: Metrics */}
+        <div className="flex gap-2 sm:gap-3 ios-3d-element w-full sm:w-auto">
+          {/* Weather */}
+          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            {renderWeatherIcon(weather?.current?.icon, "w-4 h-4 md:w-5 md:h-5 drop-shadow-md")}
+            <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
+          </div>
+          
+          {/* Budget */}
+          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            <Wallet className="w-4 h-4 md:w-5 md:h-5 text-emerald-400 drop-shadow-md" />
+            <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
+          </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex gap-2 sm:gap-3 ios-3d-element w-full sm:w-auto">
+          {/* View Map Button */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all duration-300"
+          >
+            <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="text-xs md:text-sm font-bold uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
+          </button>
+          
+          {/* Continue Button */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} 
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-[12px] ios-liquid-button group/btn relative overflow-hidden"
+          >
+            <span className="text-xs md:text-sm font-bold text-white">Continue</span>
+            <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-white transition-transform duration-500 group-hover/btn:translate-x-1" />
+          </button>
+        </div>
       </div>
     </motion.div>
   );
