@@ -272,7 +272,7 @@ export const HeroSection = () => {
           {/* View Map Button */}
           <button 
             onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-all duration-300"
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-all duration-300 ${showMap ? '!bg-blue-500 !border-blue-400 shadow-[0_4px_12px_rgba(59,130,246,0.5)]' : ''}`}
           >
             <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" />
             <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
