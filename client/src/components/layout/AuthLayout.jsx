@@ -5,7 +5,6 @@ import { ROUTES } from '@/constants/routes';
 import { LogoIcon } from '../ui/Logo';
 import { Cloud, Plane, FileCheck } from 'lucide-react';
 import { Image } from '../ui/Image';
-import { ThemeToggle } from '../navigation/ThemeToggle';
 import { AnimatedBackground } from '../common/AnimatedBackground';
 
 export const AuthLayout = ({ children }) => {
@@ -14,11 +13,6 @@ export const AuthLayout = ({ children }) => {
       
       {/* Global Background */}
       <AnimatedBackground />
-
-      {/* Floating Theme Toggle (Top Right) */}
-      <div className="absolute top-8 right-8 z-30">
-        <ThemeToggle />
-      </div>
       
       {/* Ambient background glows - Simplified to prevent lag */}
       <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-blue-500/20 rounded-full blur-[60px] pointer-events-none" />
