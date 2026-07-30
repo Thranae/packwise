@@ -419,7 +419,8 @@ export const TripProvider = ({ children }) => {
       manualTheme,
       setManualTheme,
       packedItems,
-      togglePackedItem
+      togglePackedItem,
+      fetchTrips
     }}>
       {children}
     </TripContext.Provider>

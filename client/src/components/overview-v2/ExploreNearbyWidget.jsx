@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { MapPin, Star, Bot, Navigation, Clock, Heart, ArrowRight, Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation } from 'framer-motion';
+import { useHaptics } from '@/hooks/useHaptics';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -125,16 +126,15 @@ const PlaceCardSkeleton = () => (
   </div>
 );
 
-import { useHaptics } from '@/hooks/useHaptics';
-
 const PlaceModal = ({ place, onClose }) => {
   const { currentTrip } = useTripContext();
   const { playSound } = useSoundEffect();
   const { addToast } = useToast();
-  const { lightTap } = useHaptics();
+  const { lightTap, mediumTap } = useHaptics();
   const imageQuery = place.imageQuery || `${place.name} ${currentTrip?.destination || ''}`;
   const { image, loading } = useDestinationImage(imageQuery, 'explore');
   const displayImage = image || place.image;
+  const controls = useAnimation();
 
   useEffect(() => {
     const handleEscape = (e) => { if (e.key === 'Escape') onClose(); };
@@ -148,9 +148,15 @@ const PlaceModal = ({ place, onClose }) => {
   const pillColor = useTransform(y, [0, 100], ["rgba(255,255,255,0.7)", "rgba(255,255,255,1)"]);
 
   const handleDragEnd = (event, info) => {
-    // Very easy close threshold:
-    if (info.offset.y > 20 || info.velocity.y > 50) {
-      onClose();
+    if (info.offset.y > 60 || info.velocity.y > 20) {
+      mediumTap();
+      controls.start({ y: '100%', opacity: 0, transition: { duration: 0.2, ease: "easeOut" } }).then(() => {
+        onClose();
+        y.set(0);
+      });
+    } else {
+      lightTap();
+      controls.start({ y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 25 } });
     }
   };
 

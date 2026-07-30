@@ -7,12 +7,14 @@ import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
 import { useHaptics } from '@/hooks/useHaptics';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { PullToRefresh } from '@/components/common/PullToRefresh';
 
 
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
 
 export default function TripsPage() {
-  const { trips } = useTripContext();
+  const { trips, loadingTrips, fetchTrips } = useTripContext();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -50,7 +52,8 @@ export default function TripsPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-4 md:pt-6">
+      <PullToRefresh onRefresh={fetchTrips}>
+        <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-4 md:pt-6">
         
         {/* Header Section */}
         <div className="flex flex-row items-start justify-between gap-4 mb-8 md:mb-10 mt-2">
@@ -148,9 +151,21 @@ export default function TripsPage() {
           </div>
         </motion.div>
 
-        {/* Trips Grid */}
+        {/* Trips Grid or Skeletons */}
         <AnimatePresence mode="wait">
-          {filteredTrips.length > 0 ? (
+          {loadingTrips ? (
+            <motion.div
+              key="skeletons"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+            >
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <Skeleton key={i} className="h-[400px] w-full rounded-[32px]" />
+              ))}
+            </motion.div>
+          ) : filteredTrips.length > 0 ? (
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
@@ -188,7 +203,8 @@ export default function TripsPage() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+        </div>
+      </PullToRefresh>
     </PageTransition>
   );
 }

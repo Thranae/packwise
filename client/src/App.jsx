@@ -1,4 +1,5 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
+import { InstallPromptWidget } from '@/components/pwa/InstallPromptWidget';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -392,6 +393,7 @@ function AppContent() {
         {!splashComplete && <SplashScreen onComplete={() => setSplashComplete(true)} />}
       </AnimatePresence>
       <AppRoutes />
+      <InstallPromptWidget />
       <ToastContainer />
     </>
   );

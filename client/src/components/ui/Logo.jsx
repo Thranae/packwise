@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
+import { useHaptics } from '@/hooks/useHaptics';
 
 /**
  * Official Voyage Genie Logo (Suitcase + Location Pin)
@@ -65,6 +66,7 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
 
 export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
   const [isHoverSimulated, setIsHoverSimulated] = React.useState(false);
+  const { mediumTap } = useHaptics();
   const lastTapRef = React.useRef(0);
   const clickTimeoutRef = React.useRef(null);
   const hoverTimeoutRef = React.useRef(null);
@@ -82,6 +84,7 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
       lastTapRef.current = 0;
       
+      mediumTap();
       setIsHoverSimulated(true);
       hoverTimeoutRef.current = setTimeout(() => {
         setIsHoverSimulated(false);

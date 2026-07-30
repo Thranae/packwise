@@ -14,7 +14,27 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         clientsClaim: true,
-        skipWaiting: true
+        skipWaiting: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'unsplash-images',
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            urlPattern: /\/api\/(trips|user)/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'api-cache',
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          }
+        ]
       },
       manifest: {
         name: 'Voyage Genie - AI Travel Companion',
@@ -25,16 +45,23 @@ export default defineConfig({
         display: 'standalone',
         start_url: '/',
         icons: [
+          { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+        ],
+        shortcuts: [
           {
-            src: '/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            name: "New Trip",
+            short_name: "New",
+            description: "Create a new AI-generated trip",
+            url: "/onboarding",
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }]
           },
           {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
+            name: "My Trips",
+            short_name: "Trips",
+            description: "View your saved trips",
+            url: "/trips",
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }]
           }
         ]
       }
