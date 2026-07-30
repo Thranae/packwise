@@ -1,10 +1,13 @@
 import express from 'express';
-import { generateTrip, modifyTrip, getUserTrips, createTrip, deleteTrip, duplicateTrip, toggleFavorite } from '../controllers/trip.controller.js';
+import { generateTrip, modifyTrip, getUserTrips, createTrip, deleteTrip, duplicateTrip, toggleFavorite, getPublicTrip } from '../controllers/trip.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// Apply auth middleware to all trip routes
+// Public route for shared trips
+router.get('/public/:id', getPublicTrip);
+
+// Apply auth middleware to all other trip routes
 router.use(authMiddleware);
 
 // Generate a new trip based on prompt

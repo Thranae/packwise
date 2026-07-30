@@ -94,3 +94,15 @@ export const toggleFavorite = catchAsync(async (req, res) => {
   await trip.save();
   ApiResponse.send(res, 200, 'Trip favorite toggled', trip);
 });
+
+export const getPublicTrip = catchAsync(async (req, res) => {
+  // Find trip by ID, lean() for performance
+  const trip = await Trip.findById(req.params.id).lean();
+  
+  if (!trip) return ApiResponse.send(res, 404, 'Trip not found');
+  
+  // Strip out the user ID to ensure privacy, but return all public trip data
+  delete trip.user;
+  
+  ApiResponse.send(res, 200, 'Public trip fetched successfully', trip);
+});
