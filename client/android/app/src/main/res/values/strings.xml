@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VoyageGenie</string>
+    <string name="title_activity_main">VoyageGenie</string>
+    <string name="package_name">com.voyagegenie.app</string>
+    <string name="custom_url_scheme">com.voyagegenie.app</string>
+</resources>
