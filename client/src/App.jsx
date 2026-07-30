@@ -53,22 +53,29 @@ function Spinner() {
       transition={{ duration: 0.4 }}
       className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#030712]"
     >
-      {/* Centered Logo Container */}
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-28 h-28 rounded-[36px] bg-white/[0.02] border border-white/5 flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.05)] ios-glass-card group"
-        >
-          {/* Subtle pulse ring */}
-          <motion.div 
-            animate={{ scale: [1, 1.4], opacity: [0.15, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
-            className="absolute inset-0 rounded-[36px] border border-blue-400/20 pointer-events-none"
-          />
-          <LogoIcon size="xl" isHoverSimulated={true} className="w-14 h-14 z-10" />
-        </motion.div>
+      <div className="flex-1 flex flex-col items-center justify-center relative w-full h-full">
+        {/* Stunning Minimalist Animation */}
+        <div className="relative flex items-center justify-center w-32 h-32 mb-12">
+            {/* Expanding pulse rings */}
+            <motion.div 
+              animate={{ scale: [1, 2.5], opacity: [0.3, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+              className="absolute inset-0 rounded-full border-[1.5px] border-blue-400/50"
+            />
+            <motion.div 
+              animate={{ scale: [1, 2], opacity: [0.3, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut", delay: 1.25 }}
+              className="absolute inset-0 rounded-full border-[1.5px] border-indigo-400/50"
+            />
+            {/* Center glowing app logo */}
+            <motion.div 
+              animate={{ scale: [0.95, 1.05, 0.95] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="relative z-10 w-20 h-20 bg-white/[0.05] border border-white/10 rounded-full backdrop-blur-2xl flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.3),inset_0_2px_10px_rgba(255,255,255,0.2)] group"
+            >
+              <LogoIcon size="lg" isHoverSimulated={true} className="w-10 h-10 text-white z-10 pointer-events-none" />
+            </motion.div>
+        </div>
       </div>
 
       {/* Powered By Footer */}

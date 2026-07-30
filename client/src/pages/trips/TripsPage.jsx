@@ -9,9 +9,6 @@ import { useTripContext } from '@/context/TripContext';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { PullToRefresh } from '@/components/common/PullToRefresh';
-
-
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
 
 export default function TripsPage() {
@@ -56,7 +53,7 @@ export default function TripsPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <PullToRefresh onRefresh={fetchTrips}>
+      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide bg-[#030712] relative z-0">
         <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-[calc(24px+env(safe-area-inset-top))] md:pt-8">
         
         {/* Header Section */}
@@ -208,7 +205,7 @@ export default function TripsPage() {
           )}
         </AnimatePresence>
         </div>
-      </PullToRefresh>
+      </div>
     </PageTransition>
   );
 }
