@@ -14,7 +14,16 @@ import api from '@/services/api';
 
 export const TopHeader = () => {
   const { user, logout } = useAuth();
-  const { currentTrip, packedItems, generateTrip } = useTripContext();
+  const { currentTrip, packedItems, generateTrip, notifications, markNotificationsAsRead } = useTripContext();
+  const unreadCount = notifications ? notifications.filter(n => !n.read).length : 0;
+  
+  const getTimeAgo = (timestamp) => {
+    const diff = Date.now() - timestamp;
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    return `${Math.floor(diff / 86400000)}d ago`;
+  };
   const { getPackingList } = useAI();
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
@@ -354,11 +363,13 @@ export const TopHeader = () => {
         <div className="relative" ref={notificationsRef}>
           <button 
             onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group"
+            className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.3)] transition-colors duration-300 group"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 rounded-full transition-opacity duration-500" />
-            <Bell className="w-[18px] h-[18px] md:w-5 md:h-5 text-white drop-shadow-md group-hover:scale-110 transition-transform duration-500" />
-            <div className="absolute top-[8px] right-[10px] w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.9)] border border-[#020617]" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 rounded-full transition-opacity duration-300" />
+            <Bell className="w-[18px] h-[18px] md:w-5 md:h-5 text-white drop-shadow-md transition-colors duration-300" />
+            {unreadCount > 0 && (
+              <div className="absolute top-[8px] right-[10px] w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.9)] border border-[#020617]" />
+            )}
           </button>
 
           <AnimatePresence>
@@ -372,37 +383,33 @@ export const TopHeader = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white tracking-tight">Notifications</h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">2 New</span>
+                  {unreadCount > 0 && (
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full">{unreadCount} New</span>
+                  )}
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  {/* Notification 1 */}
-                  <div className="flex gap-3 items-start p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Sparkles className="w-4 h-4 text-emerald-400" />
+                <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                  {notifications && notifications.length > 0 ? notifications.map((notif) => (
+                    <div key={notif.id} className={`flex gap-3 items-start p-2 rounded-xl transition-colors cursor-pointer group ${notif.read ? 'hover:bg-white/5 opacity-70' : 'bg-white/5 hover:bg-white/10'}`}>
+                      <div className={`w-8 h-8 rounded-full ${notif.type === 'pdf' ? 'bg-purple-500/20 border-purple-500/30' : 'bg-emerald-500/20 border-emerald-500/30'} border flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        {notif.type === 'pdf' ? <Globe className="w-4 h-4 text-purple-400" /> : <Sparkles className="w-4 h-4 text-emerald-400" />}
+                      </div>
+                      <div className="flex flex-col gap-1 w-full">
+                        <div className="flex justify-between items-center w-full">
+                           <span className={`text-sm font-bold text-white transition-colors ${notif.type === 'pdf' ? 'group-hover:text-purple-400' : 'group-hover:text-emerald-400'}`}>{notif.title}</span>
+                           {!notif.read && <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />}
+                        </div>
+                        <span className="text-xs text-white/60 leading-relaxed">{notif.message}</span>
+                        <span className="text-[10px] text-white/40 font-medium">{getTimeAgo(notif.timestamp)}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">Tokyo Itinerary Ready</span>
-                      <span className="text-xs text-white/60 leading-relaxed">Your 14-day Tokyo & Kyoto Explorer plan has been generated.</span>
-                      <span className="text-[10px] text-white/40 font-medium">Just now</span>
-                    </div>
-                  </div>
-
-                  {/* Notification 2 */}
-                  <div className="flex gap-3 items-start p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Globe className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">Welcome to Voyage Genie</span>
-                      <span className="text-xs text-white/60 leading-relaxed">Start planning your next trip with the power of AI.</span>
-                      <span className="text-[10px] text-white/40 font-medium">2 hours ago</span>
-                    </div>
-                  </div>
+                  )) : (
+                    <div className="text-center p-4 text-white/50 text-sm">No notifications yet.</div>
+                  )}
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-white/10 text-center">
-                  <button className="text-xs font-bold text-white/50 hover:text-white transition-colors uppercase tracking-wider">Mark all as read</button>
+                  <button onClick={markNotificationsAsRead} className="text-xs font-bold text-white/50 hover:text-white transition-colors uppercase tracking-wider">Mark all as read</button>
                 </div>
               </motion.div>
             )}

@@ -27,7 +27,7 @@ const getDuration = (start, end) => {
 export const TripCard = ({ trip }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
-  const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip } = useTripContext();
+  const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip, addNotification } = useTripContext();
   const { addToast } = useToast();
   const { rotateX, rotateY, mouseX, mouseY } = useMouseTilt(cardRef, { maxTilt: 6, stiffness: 250, damping: 25 });
   
@@ -35,6 +35,7 @@ export const TripCard = ({ trip }) => {
   const { image: destinationImage, loading: imageLoading } = useDestinationImage(trip.destination);
   const displayImage = trip.heroImage || destinationImage;
   const glowColor = useImageColor(displayImage);
+  const { heavyTap } = useHaptics();
   
   const [tripScore, setTripScore] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,6 +57,9 @@ export const TripCard = ({ trip }) => {
       const { generatePremiumPDF } = await import('@/utils/pdfGenerator');
       await generatePremiumPDF(trip);
       addToast('success', 'PDF downloaded successfully!');
+      
+      const destName = trip?.destination?.split('&')[0] || 'Unknown Destination';
+      addNotification('PDF Exported', `Your premium itinerary for ${destName} is ready.`, 'pdf');
     } catch (err) {
       console.error(err);
       addToast('error', 'Failed to generate PDF');

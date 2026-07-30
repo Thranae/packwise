@@ -94,6 +94,34 @@ export const TripProvider = ({ children }) => {
     localStorage.setItem('packwise_packed_items', JSON.stringify(Array.from(packedItems)));
   }, [packedItems]);
 
+  const savedNotifications = localStorage.getItem('packwise_notifications');
+  const defaultNotifications = [
+    { id: 'welcome-1', title: 'Welcome to Voyage Genie', message: 'Start planning your next trip with the power of AI.', type: 'welcome', timestamp: Date.now() - 7200000, read: false }
+  ];
+  const initialNotifications = savedNotifications ? JSON.parse(savedNotifications) : defaultNotifications;
+  
+  const [notifications, setNotifications] = useState(initialNotifications);
+
+  useEffect(() => {
+    localStorage.setItem('packwise_notifications', JSON.stringify(notifications));
+  }, [notifications]);
+
+  const addNotification = useCallback((title, message, type = 'info') => {
+    const newNotif = {
+      id: Date.now().toString(),
+      title,
+      message,
+      type,
+      timestamp: Date.now(),
+      read: false
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+  }, []);
+
+  const markNotificationsAsRead = useCallback(() => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  }, []);
+
   const togglePackedItem = useCallback((itemId) => {
     setPackedItems(prev => {
       const newSet = new Set(prev);
@@ -311,7 +339,10 @@ export const TripProvider = ({ children }) => {
       setManualTheme,
       packedItems,
       togglePackedItem,
-      fetchTrips
+      fetchTrips,
+      notifications,
+      addNotification,
+      markNotificationsAsRead
     }}>
       {children}
     </TripContext.Provider>
