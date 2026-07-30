@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Check, X, Shield, Zap } from 'lucide-react';
+import { Sparkles, Check, X, Shield, Zap, Loader2 } from 'lucide-react';
 import { usePremium } from '../../context/PremiumContext';
+import { useToast } from '../../hooks/useToast';
 
 const UpgradeModal = ({ isOpen, onClose }) => {
   const { purchasePackage, packages, isReady } = usePremium();
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const toast = useToast();
 
   const handleSubscribe = async (pkg) => {
+    setIsPurchasing(true);
     const success = await purchasePackage(pkg);
+    setIsPurchasing(false);
+    
     if (success) {
+      toast.success("Welcome to Voyage Genie Premium! ✨");
       onClose(); // Automatically close on success
     }
   };
@@ -91,15 +98,16 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                     <button
                       key={pkg.identifier}
                       onClick={() => handleSubscribe(pkg)}
-                      className="w-full relative group overflow-hidden rounded-xl bg-blue-600 hover:bg-blue-500 transition-all p-4 text-left flex items-center justify-between"
+                      disabled={isPurchasing}
+                      className="w-full relative group overflow-hidden rounded-xl bg-blue-600 hover:bg-blue-500 transition-all p-4 text-left flex items-center justify-between disabled:opacity-70"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
                       <div>
                         <div className="font-semibold text-white">{pkg.product.title}</div>
                         <div className="text-blue-200 text-sm">{pkg.product.description}</div>
                       </div>
-                      <div className="font-bold text-white text-lg">
-                        {pkg.product.priceString}
+                      <div className="font-bold text-white text-lg flex items-center gap-2">
+                        {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : pkg.product.priceString}
                       </div>
                     </button>
                   ))}
