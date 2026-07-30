@@ -307,13 +307,76 @@ export const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col gap-3 mt-2 p-2">
-                  <Link to={ROUTES.LOGIN} className="w-full">
-                    <button className="w-full px-5 py-3.5 rounded-[16px] bg-white/10 hover:bg-white/20 text-white font-bold transition-colors">Log in</button>
-                  </Link>
-                  <Link to={ROUTES.SIGNUP} className="w-full">
-                    <button className="w-full px-5 py-3.5 rounded-[16px] bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white font-bold shadow-lg shadow-blue-500/30 transition-all">Get Started</button>
-                  </Link>
+                <div className="flex flex-col items-center py-6 px-2">
+                  {/* Hero Section */}
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative mb-6"
+                  >
+                    {/* Soft ambient glow behind logo */}
+                    <div className="absolute inset-0 -m-4 rounded-full bg-gradient-to-br from-blue-500/15 via-purple-500/10 to-transparent blur-2xl" />
+                    <div className="relative w-20 h-20 rounded-[24px] bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_12px_32px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.1)]">
+                      <Logo size="md" showText={false} />
+                    </div>
+                  </motion.div>
+
+                  {/* Tagline */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                    className="text-center mb-8"
+                  >
+                    <h2 className="text-xl font-semibold tracking-tight text-white mb-1.5">
+                      Welcome to Voyage Genie<span className="text-blue-400">.</span>
+                    </h2>
+                    <p className="text-[13px] text-white/40 font-light leading-relaxed max-w-[260px]">
+                      AI-powered travel planning that feels like magic
+                    </p>
+                  </motion.div>
+
+                  {/* Action Buttons */}
+                  <div className="w-full flex flex-col gap-3 px-2">
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.25 }}
+                    >
+                      <Link to={ROUTES.SIGNUP} className="w-full block">
+                        <button className="w-full relative overflow-hidden group py-4 rounded-[18px] text-white font-bold text-[15px] tracking-wide shadow-[0_8px_24px_rgba(79,124,255,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-500 hover:shadow-[0_12px_32px_rgba(79,124,255,0.5)] hover:-translate-y-0.5 active:scale-[0.97]" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #7C3AED 50%, #6366F1 100%)' }}>
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                          <span className="relative z-10 flex items-center justify-center gap-2">
+                            <Sparkles className="w-4 h-4" />
+                            Get Started — It's Free
+                          </span>
+                        </button>
+                      </Link>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.35 }}
+                    >
+                      <Link to={ROUTES.LOGIN} className="w-full block">
+                        <button className="w-full py-4 rounded-[18px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-white/80 hover:text-white font-semibold text-[15px] transition-all duration-500 shadow-[inset_0_1px_2px_rgba(255,255,255,0.06)] hover:-translate-y-0.5 active:scale-[0.97]">
+                          Already have an account? <span className="text-blue-400 font-bold">Log in</span>
+                        </button>
+                      </Link>
+                    </motion.div>
+                  </div>
+
+                  {/* Footer */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="text-[10px] font-medium tracking-[0.2em] text-white/20 uppercase mt-8"
+                  >
+                    Powered by Thranaeswanth
+                  </motion.p>
                 </div>
               )}
             </motion.div>
