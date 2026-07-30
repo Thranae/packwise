@@ -6,7 +6,6 @@ import App from './App';
 import './styles/index.css';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { registerSW } from 'virtual:pwa-register';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
@@ -24,17 +23,11 @@ if (Capacitor.isNativePlatform()) {
   }
 }
 
-// Register the PWA service worker and automatically update it
+// Force unregister any old PWA service workers that might be caching the native app
 if ('serviceWorker' in navigator) {
-  registerSW({ immediate: true });
-  
-  // When a new service worker takes over, automatically reload the page
-  // This makes updates seamless without needing a force restart
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!refreshing) {
-      refreshing = true;
-      window.location.reload();
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister();
     }
   });
 }
