@@ -83,7 +83,7 @@ export default function LoginPage() {
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
         console.error(error);
-        toast.error('Google Sign-in failed. Please try again.');
+        toast.error(`Google Sign-in failed: ${error.message || 'Please try again.'}`);
         setIsGoogleLoading(false);
       }
     },
@@ -126,7 +126,8 @@ export default function LoginPage() {
   };
 
   const onGoogleClick = () => {
-    if (isNative) {
+    const isActuallyNative = Capacitor.isNativePlatform();
+    if (isActuallyNative) {
       handleNativeGoogleLogin();
     } else {
       handleWebGoogleLogin();
