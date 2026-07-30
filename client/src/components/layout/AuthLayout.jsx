@@ -20,6 +20,10 @@ export const AuthLayout = ({ children }) => {
         <ThemeToggle />
       </div>
       
+      {/* Ambient background glows so the glass has something beautiful to refract on mobile */}
+      <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-blue-500/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+      
       {/* 
         ONE Premium Integrated Floating Container 
         Width: ~800px total (400px image + 400px login card)
@@ -31,16 +35,8 @@ export const AuthLayout = ({ children }) => {
           opacity: { duration: 0.8, ease: "easeOut" },
           y: { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.8 }
         }}
-        className="relative z-10 w-full max-w-[800px] flex flex-col lg:flex-row overflow-hidden rounded-[24px]"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.10)',
-          backdropFilter: 'blur(28px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-          boxShadow: '0 8px 30px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.22)'
-        }}
+        className="relative z-10 w-full max-w-[800px] flex flex-col lg:flex-row overflow-hidden rounded-[24px] ios-glass-card shadow-2xl"
       >
-        {/* Glass Reflection Highlight */}
         <div className="absolute inset-0 z-0 pointer-events-none rounded-[24px] overflow-hidden">
           <div className="absolute top-0 bottom-0 w-[150px] bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] animate-[glass-shine_10s_ease-in-out_infinite]" />
         </div>
@@ -117,7 +113,7 @@ export const AuthLayout = ({ children }) => {
         </div>
 
         {/* RIGHT PANEL: Login Card */}
-        <div className="relative w-full lg:w-1/2 flex items-center justify-center p-8 z-10 bg-black/10">
+        <div className="relative w-full lg:w-1/2 flex items-center justify-center p-8 z-10 bg-transparent">
           <div className="w-full max-w-[380px]">
             {children}
           </div>

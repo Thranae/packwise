@@ -104,11 +104,11 @@ export default function LoginPage() {
       </div>
 
       {/* Heading & Subtitle */}
-      <div className="mb-5">
-        <h2 className="text-[24px] font-bold text-[var(--theme-text-primary)] tracking-tight mb-1">
+      <div className="mb-6">
+        <h2 className="text-[28px] font-extrabold text-white tracking-tight mb-2 drop-shadow-md">
           Welcome Back
         </h2>
-        <p className="text-[14px] text-[var(--theme-text-secondary)] font-light leading-relaxed">
+        <p className="text-[15px] text-white/70 font-medium leading-relaxed">
           Sign in to continue your journey.
         </p>
       </div>
@@ -119,14 +119,14 @@ export default function LoginPage() {
         {/* Email Input */}
         <div>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-4 w-4 text-[var(--theme-text-secondary)] opacity-70" />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-white/50" />
             </div>
             <input
               type="email"
               placeholder="Email address"
               {...register('email')}
-              className={`w-full h-[46px] glass-input pl-10 pr-4 text-[14px] font-medium placeholder-[var(--theme-text-secondary)] transition-all ${errors.email ? '!border-red-500' : ''}`}
+              className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-4 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.email ? '!border-red-500' : ''}`}
             />
           </div>
           {errors.email && (
@@ -137,21 +137,21 @@ export default function LoginPage() {
         {/* Password Input */}
         <div>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-4 w-4 text-[var(--theme-text-secondary)] opacity-70" />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-white/50" />
             </div>
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               {...register('password')}
-              className={`w-full h-[46px] glass-input pl-10 pr-10 text-[14px] font-medium placeholder-[var(--theme-text-secondary)] transition-all ${errors.password ? '!border-red-500' : ''}`}
+              className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-12 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.password ? '!border-red-500' : ''}`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] transition-colors"
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/50 hover:text-white transition-colors"
             >
-              {showPassword ? <EyeOff className="h-4 w-4 opacity-70" /> : <Eye className="h-4 w-4 opacity-70" />}
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
           {errors.password && (
@@ -189,7 +189,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting || isGoogleLoading}
-          className="w-full h-[46px] rounded-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white text-[14px] font-semibold flex items-center justify-center shadow-lg shadow-[var(--color-accent)]/20 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none mt-1"
+          className="w-full h-[52px] rounded-[16px] ios-liquid-button text-white text-[15px] font-bold flex items-center justify-center hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none mt-2"
         >
           {isSubmitting ? (
             <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogleLogin}
           disabled={isGoogleLoading || isSubmitting}
-          className="w-full h-[46px] rounded-[14px] glass-card text-[var(--theme-text-primary)] text-[14px] font-medium flex items-center justify-center gap-2 hover:bg-[var(--theme-bg-surface)] transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
+          className="w-full h-[52px] rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[15px] font-bold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
         >
           {isGoogleLoading ? (
             <div className="flex items-center gap-2">
