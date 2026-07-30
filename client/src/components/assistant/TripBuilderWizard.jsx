@@ -42,11 +42,12 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
   return (
     <div className="relative w-full h-[68px]">
       <button
-        onClick={() => setIsOpen(true)}
-        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300"
+        type="button"
+        onClick={(e) => { e.preventDefault(); setIsOpen(true); }}
+        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300 cursor-pointer"
       >
-        <span>{formattedValue}</span>
-        <Calendar className="w-5 h-5 text-white/50" />
+        <span className="pointer-events-none">{formattedValue}</span>
+        <Calendar className="w-5 h-5 text-white/50 pointer-events-none" />
       </button>
 
       <AnimatePresence>
@@ -140,7 +141,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
         let unique = [];
 
         if (MAPTILER_KEY) {
-          const res = await fetch(`https://api.maptiler.com/geocoding/${encodeURIComponent(value)}.json?key=${MAPTILER_KEY}&limit=6`);
+          const res = await fetch(`https://api.maptiler.com/geocoding/${encodeURIComponent(value)}.json?key=${MAPTILER_KEY}&limit=6&types=country,region,municipality,locality,place,poi,tourist_attraction`);
           if (!res.ok) throw new Error('MapTiler API Error');
           const json = await res.json();
           
