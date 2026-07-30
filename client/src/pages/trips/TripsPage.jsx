@@ -53,8 +53,8 @@ export default function TripsPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide bg-[#030712] relative z-0">
-        <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-[calc(24px+env(safe-area-inset-top))] md:pt-8">
+      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide relative z-0">
+        <div className="min-h-screen px-3 md:px-8 lg:px-10 pb-24 pt-[calc(24px+env(safe-area-inset-top))] md:pt-8">
         
         {/* Header Section */}
         <div className="flex flex-row items-start justify-between gap-4 mb-8 md:mb-10 mt-2">
@@ -160,7 +160,7 @@ export default function TripsPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8"
             >
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <Skeleton key={i} className="h-[400px] w-full rounded-[32px]" />
@@ -172,7 +172,7 @@ export default function TripsPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { staggerChildren: 0.1 } }}
               exit={{ opacity: 0 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8"
             >
               {filteredTrips.map(trip => (
                 <TripCard key={trip._id} trip={trip} />
