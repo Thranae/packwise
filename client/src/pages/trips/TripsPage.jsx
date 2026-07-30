@@ -126,18 +126,18 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-6 pt-4 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex flex-wrap items-center justify-start gap-2 md:gap-3 pb-6 pt-4 px-1">
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => { setActiveFilter(filter); lightTap(); }}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-1 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[11px] font-bold tracking-wide
-                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] snap-start
-                  w-[calc((100vw-48px)/3)] md:w-auto md:whitespace-nowrap outline-none
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-4 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[12px] font-bold tracking-wide
+                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  outline-none
                   ${activeFilter === filter 
-                    ? 'text-white scale-105 z-10' 
-                    : 'text-white/60 hover:text-white/90 hover:scale-105'
+                    ? 'text-white scale-[1.03] z-10' 
+                    : 'text-white/60 hover:text-white/90 hover:scale-[1.03]'
                   }
                 `}
                 style={{ WebkitTapHighlightColor: 'transparent' }}

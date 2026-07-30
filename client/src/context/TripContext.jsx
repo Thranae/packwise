@@ -276,22 +276,23 @@ export const TripProvider = ({ children }) => {
         setCurrentTrip(newTripData);
         
         setManualTheme(null);
-        setIsGenerating(false);
-        setLoadingStep(null);
 
-        // Background Sync
-        api.post('/trips', newTripData).then(async (apiRes) => {
+        // Await Sync before removing loading state, to guarantee the trip is real for sharing
+        try {
+          const apiRes = await api.post('/trips', newTripData);
           if ((apiRes.status === 200 || apiRes.status === 201) && apiRes.data.data) {
             const realTrip = apiRes.data.data;
             await db.trips.delete(localId); // Remove temp
             await db.trips.put(realTrip); // Add real
             setCurrentTrip(realTrip);
           }
-        }).catch(e => {
-          console.error("Background sync failed for new trip:", e);
+        } catch (e) {
+          console.error("Sync failed for new trip:", e);
           // Trip remains in local DB with local ID
-        });
+        }
 
+        setIsGenerating(false);
+        setLoadingStep(null);
       }, 500);
     } catch (error) {
       console.error("Failed to generate trip:", error);
