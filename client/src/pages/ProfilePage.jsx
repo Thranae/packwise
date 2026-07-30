@@ -200,13 +200,13 @@ export default function ProfilePage() {
                     getInitials(userName)
                   )}
                   {isUploading && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm rounded-full">
                       <Loader2 className="w-8 h-8 text-white animate-spin" />
                     </div>
                   )}
                   
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
                     <Camera className="w-8 h-8 text-white drop-shadow-md" />
                   </div>
                 </div>
