@@ -267,7 +267,7 @@ export const SplashScreen = ({ onComplete }) => {
           className="absolute bottom-10 flex flex-col items-center gap-1"
         >
           <span className="text-[10px] font-medium tracking-[0.3em] uppercase" style={{ color: 'rgba(255,255,255,0.15)' }}>
-            Powered by AI
+            POWERED BY THRANAESWANTH
           </span>
         </motion.div>
       </motion.div>
