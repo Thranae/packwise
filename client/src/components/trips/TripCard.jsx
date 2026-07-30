@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/useToast';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useState, useEffect } from 'react';
 import api from '@/services/api';
+import { Share } from '@capacitor/share';
 
 // Simple formatter
 const formatDate = (dateString) => {
@@ -174,34 +175,20 @@ export const TripCard = ({ trip }) => {
                 <button onClick={async (e) => { 
                   e.stopPropagation(); 
                   setIsMenuOpen(false); 
-                  if (navigator.share) {
-                    try {
-                      addToast('info', 'Preparing share...');
-                      const shareData = {
-                        title: `${trip.destination} Trip`,
-                        text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                        url: window.location.origin
-                      };
-                      
-                      // Try to fetch and attach the actual trip image for Instagram/WhatsApp
-                      try {
-                        const res = await fetch(displayImage);
-                        const blob = await res.blob();
-                        const file = new File([blob], `${trip.destination.replace(/\\s/g, '_')}_VoyageGenie.jpg`, { type: blob.type || 'image/jpeg' });
-                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                          shareData.files = [file];
-                        }
-                      } catch (imageErr) {
-                        console.warn("Could not attach image to share:", imageErr);
-                      }
-                      
-                      await navigator.share(shareData);
-                    } catch (err) {
-                      console.warn(err);
+                  try {
+                    addToast('info', 'Opening share options...');
+                    await Share.share({
+                      title: `${trip.destination} Trip`,
+                      text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
+                      url: window.location.origin,
+                      dialogTitle: 'Share Trip with Buddies',
+                    });
+                  } catch (err) {
+                    console.warn('Native share failed or dismissed', err);
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(window.location.origin);
+                      addToast('success', 'Link copied to clipboard!');
                     }
-                  } else {
-                    navigator.clipboard.writeText(window.location.origin);
-                    addToast('success', 'Link copied to clipboard!');
                   }
                 }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>

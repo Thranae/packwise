@@ -122,6 +122,66 @@ export const TripProvider = ({ children }) => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   }, []);
 
+  // Smart Contextual Notifications based on Trips
+  useEffect(() => {
+    if (!trips || trips.length === 0) return;
+    
+    setNotifications(prev => {
+      let updated = [...prev];
+      let changed = false;
+      
+      trips.forEach(trip => {
+        if (!trip.startDate || !trip.destination) return;
+        
+        const tripStart = new Date(trip.startDate).getTime();
+        const tripEnd = new Date(trip.endDate || trip.startDate).getTime();
+        const now = Date.now();
+        const daysUntil = (tripStart - now) / (1000 * 60 * 60 * 24);
+        const daysSince = (now - tripEnd) / (1000 * 60 * 60 * 24);
+        
+        // Upcoming Trip Reminder (1-7 days away)
+        if (daysUntil > 0 && daysUntil <= 7) {
+          const notifId = `reminder-${trip._id}`;
+          if (!updated.some(n => n.id === notifId)) {
+            updated.unshift({
+              id: notifId,
+              title: 'Upcoming Trip!',
+              message: `Your trip to ${trip.destination} is in ${Math.ceil(daysUntil)} days. Make sure you've packed everything!`,
+              type: 'info',
+              timestamp: Date.now(),
+              read: false
+            });
+            changed = true;
+          }
+        }
+        
+        // Trip Completed Feedback
+        if (daysSince > 0 && daysSince <= 3) {
+          const notifId = `feedback-${trip._id}`;
+          if (!updated.some(n => n.id === notifId)) {
+            updated.unshift({
+              id: notifId,
+              title: 'Welcome Back!',
+              message: `Hope you enjoyed your trip to ${trip.destination}. Time to start planning the next one!`,
+              type: 'welcome',
+              timestamp: Date.now(),
+              read: false
+            });
+            changed = true;
+          }
+        }
+      });
+      
+      // Keep only top 20 notifications
+      if (updated.length > 20) {
+        updated = updated.slice(0, 20);
+        changed = true;
+      }
+      
+      return changed ? updated : prev;
+    });
+  }, [trips]);
+
   const togglePackedItem = useCallback((itemId) => {
     setPackedItems(prev => {
       const newSet = new Set(prev);
