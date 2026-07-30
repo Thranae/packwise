@@ -226,9 +226,18 @@ export const TripProvider = ({ children }) => {
   };
 
   const deleteTrip = async (tripId) => {
+    setIsGenerating(true);
+    setLoadingStep("Deleting trip...");
+    
+    // Premium fake delay for animation
+    await new Promise(r => setTimeout(r, 800));
+    
     // Optimistic Local Delete
     await db.trips.delete(tripId);
     if (currentTrip?._id === tripId) setCurrentTrip(null);
+    
+    setIsGenerating(false);
+    setLoadingStep(null);
 
     // Background Sync
     if (!String(tripId).startsWith("local-")) {
@@ -241,6 +250,12 @@ export const TripProvider = ({ children }) => {
   };
 
   const duplicateTrip = async (tripId) => {
+    setIsGenerating(true);
+    setLoadingStep("Duplicating trip...");
+    
+    // Premium fake delay for animation
+    await new Promise(r => setTimeout(r, 800));
+    
     try {
       const res = await api.post(`/trips/${tripId}/duplicate`);
       const data = res.data;
@@ -249,6 +264,9 @@ export const TripProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Failed to duplicate trip:", error);
+    } finally {
+      setIsGenerating(false);
+      setLoadingStep(null);
     }
   };
 
