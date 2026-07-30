@@ -88,7 +88,21 @@ export default function HomePage() {
                 <span className="text-xs font-semibold tracking-wider text-[var(--theme-text-primary)] opacity-90 uppercase">Next Generation Planning</span>
               </motion.div>
               
-              <motion.h1 variants={fadeInUp} className="text-4xl sm:text-6xl lg:text-[88px] font-semibold tracking-tighter leading-[1.05] text-[var(--theme-text-primary)]">
+              <motion.h1 
+                variants={fadeInUp} 
+                animate={isScrolled ? "show" : "show"} // Keeps standard variants working
+                whileTap={{ scale: 0.95 }}
+                onDoubleClick={(e) => {
+                  e.currentTarget.animate([
+                    { transform: 'scale(1)', filter: 'hue-rotate(0deg)' },
+                    { transform: 'scale(1.1) rotate(2deg)', filter: 'hue-rotate(90deg)' },
+                    { transform: 'scale(0.9) rotate(-2deg)', filter: 'hue-rotate(180deg)' },
+                    { transform: 'scale(1.05) rotate(1deg)', filter: 'hue-rotate(270deg)' },
+                    { transform: 'scale(1)', filter: 'hue-rotate(360deg)' }
+                  ], { duration: 600, easing: 'ease-in-out' });
+                }}
+                className="text-4xl sm:text-6xl lg:text-[88px] font-semibold tracking-tighter leading-[1.05] text-[var(--theme-text-primary)] cursor-pointer select-none"
+              >
                 Travel Smarter <br className="hidden lg:block" />
                 with AI.
               </motion.h1>
