@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+const fs = require('fs');
+const path = require('path');
+
+const content = `import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
@@ -233,7 +236,7 @@ export const TripProvider = ({ children }) => {
     // Background Sync
     if (!String(tripId).startsWith("local-")) {
       try {
-        await api.delete(`/trips/${tripId}`);
+        await api.delete(\`/trips/\${tripId}\`);
       } catch (error) {
         console.error("Background sync failed for deleting trip:", error);
       }
@@ -242,7 +245,7 @@ export const TripProvider = ({ children }) => {
 
   const duplicateTrip = async (tripId) => {
     try {
-      const res = await api.post(`/trips/${tripId}/duplicate`);
+      const res = await api.post(\`/trips/\${tripId}/duplicate\`);
       const data = res.data;
       if (data.data) {
         await db.trips.put(data.data);
@@ -263,7 +266,7 @@ export const TripProvider = ({ children }) => {
     // Background Sync
     if (!String(tripId).startsWith("local-")) {
       try {
-        const res = await api.patch(`/trips/${tripId}/favorite`);
+        const res = await api.patch(\`/trips/\${tripId}/favorite\`);
         if (res.data?.data) {
            await db.trips.put(res.data.data); // Resync actual server state just in case
         }
@@ -305,3 +308,7 @@ export const useTripContext = () => {
   if (!context) throw new Error("useTripContext must be used within a TripProvider");
   return context;
 };
+`;
+
+fs.writeFileSync(path.join(__dirname, 'src', 'context', 'TripContext.jsx'), content);
+console.log('TripContext.jsx refactored successfully.');

@@ -149,6 +149,7 @@ export const HeroSection = () => {
           <AnimatePresence mode="wait">
             {!showMap ? (
               <motion.div 
+                layoutId={`trip-image-${currentTrip._id}`}
                 key="image"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
                 className="absolute inset-0"

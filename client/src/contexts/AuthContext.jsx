@@ -10,6 +10,7 @@ import { STORAGE_KEYS } from '../constants/app';
 import { ROUTES } from '../constants/routes';
 import * as authService from '../services/auth.service';
 import { ThemeContext } from './ThemeContext';
+import { db } from '../db/db';
 
 export const AuthContext = createContext(null);
 
@@ -121,6 +122,13 @@ export function AuthProvider({ children }) {
       await authService.logout();
     } catch {
       // Even if the server call fails we still want to clear local state
+    }
+
+    try {
+      // Clear all local-first Dexie data
+      await Promise.all(db.tables.map(table => table.clear()));
+    } catch (e) {
+      console.error("Failed to clear local database", e);
     }
 
     localStorage.removeItem(STORAGE_KEYS.TOKEN);

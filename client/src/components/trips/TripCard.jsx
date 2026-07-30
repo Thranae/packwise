@@ -37,6 +37,7 @@ export const TripCard = ({ trip }) => {
   const glowColor = useImageColor(displayImage);
   
   const [tripScore, setTripScore] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useEffect(() => {
     if (!trip._id || trip._id.startsWith('mock')) return;
@@ -129,7 +130,7 @@ export const TripCard = ({ trip }) => {
         {/* Top Half: Image */}
         <div className="relative h-[220px] w-full shrink-0">
           {/* Image & Gradient Wrapper with Overflow Hidden */}
-          <div className="absolute inset-0 overflow-hidden bg-[#060b14] z-0">
+          <motion.div layoutId={`trip-image-${trip._id}`} className="absolute inset-0 overflow-hidden bg-[#060b14] z-0">
             {imageLoading ? (
               <div className="absolute inset-0 bg-white/5 animate-pulse" />
             ) : (
@@ -140,7 +141,7 @@ export const TripCard = ({ trip }) => {
             )}
             {/* Gradient to blend with content */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#060B14] via-black/30 to-transparent pointer-events-none" />
-          </div>
+          </motion.div>
           
           {/* Top Badges (Now outside overflow-hidden) */}
           <div className="absolute top-5 inset-x-5 flex items-start justify-between ios-3d-element z-50">
@@ -158,32 +159,34 @@ export const TripCard = ({ trip }) => {
             )}
             
             
-            {/* Quick Actions Dropdown (Hover revealed) */}
-            <div className="relative group/menu" onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center justify-center text-white transition-all duration-700">
+            {/* Quick Actions Dropdown */}
+            <div className="relative group/menu" onMouseLeave={() => setIsMenuOpen(false)} onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); setIsMenuOpen(!isMenuOpen); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center justify-center text-white transition-all duration-500">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
-              <div className="absolute top-full right-0 mt-2 w-40 p-2 rounded-[20px] bg-black/60 backdrop-blur-xl border border-white/10 shadow-[0_16px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.2)] opacity-0 invisible translate-y-2 group-hover/menu:opacity-100 group-hover/menu:visible group-hover/menu:translate-y-0 transition-all duration-700 z-50 flex flex-col gap-1">
-                <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); navigate(ROUTES.TRIPS_NEW); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+              
+              <div className={`absolute top-full right-0 mt-2 w-40 p-2 rounded-[20px] bg-black/70 backdrop-blur-2xl border border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_1px_2px_rgba(255,255,255,0.3)] transition-all duration-400 z-50 flex flex-col gap-1 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-2'}`}>
+                
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); selectTrip(trip._id); navigate(ROUTES.TRIPS_NEW); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); duplicateTrip(trip._id); addToast('success', 'Trip duplicated'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); duplicateTrip(trip._id); addToast('success', 'Trip duplicated'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Copy className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Duplicate</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(window.location.origin + ROUTES.OVERVIEW); addToast('success', 'Link copied to clipboard!'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); navigator.clipboard.writeText(window.location.origin + ROUTES.OVERVIEW); addToast('success', 'Link copied to clipboard!'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
                 </button>
-                <button onClick={handleDownloadPDF} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { setIsMenuOpen(false); handleDownloadPDF(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <FileDown className="w-4 h-4 shrink-0 text-blue-400" /> <span className="text-xs font-semibold text-blue-400">Export PDF</span>
                 </button>
-                <button onClick={handleTrackFlights} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { setIsMenuOpen(false); handleTrackFlights(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Plane className="w-4 h-4 shrink-0 text-amber-400" /> <span className="text-xs font-semibold text-amber-400">Track Flights</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); toggleFavoriteTrip(trip._id); addToast('success', trip.isFavorite ? 'Removed from favorites' : 'Added to favorites'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); toggleFavoriteTrip(trip._id); addToast('success', trip.isFavorite ? 'Removed from favorites' : 'Added to favorites'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Heart className={`w-4 h-4 shrink-0 ${trip.isFavorite ? 'fill-red-500 text-red-500' : ''}`} /> <span className="text-xs font-semibold">{trip.isFavorite ? 'Unfavorite' : 'Favourite'}</span>
                 </button>
                 <div className="h-[1px] w-full bg-white/10 my-1" />
-                <button onClick={(e) => { e.stopPropagation(); deleteTrip(trip._id); addToast('success', 'Trip deleted'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-red-500/20 hover:text-red-400 text-red-400/80 transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); deleteTrip(trip._id); addToast('success', 'Trip deleted'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-red-500/20 hover:text-red-400 text-red-400/80 transition-colors text-left">
                   <Trash2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Delete</span>
                 </button>
               </div>

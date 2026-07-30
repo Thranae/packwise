@@ -71,6 +71,8 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
+  overscroll-behavior-y: none; /* Prevents native pull-to-refresh bounce */
+  -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on iOS/Android */
 }
 
 #root {
@@ -91,6 +93,9 @@ body {
 
 a, button {
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation; /* Prevents double-tap to zoom */
 }
 
 h1, h2 {
