@@ -70,9 +70,14 @@ export const Navbar = () => {
           {/* Subtle noise texture for frosted liquid look */}
           <div className="absolute inset-0 opacity-[0.15] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
           {/* Left: Logo */}
-          <Link to={isAuthenticated ? ROUTES.OVERVIEW : ROUTES.HOME} className="flex-shrink-0 z-10 relative pl-2 hover:scale-105 transition-transform duration-700">
-            <Logo size="sm" />
-          </Link>
+          <div className="flex-shrink-0 z-10 relative pl-2 hover:scale-105 transition-transform duration-700">
+            <Logo 
+              size="sm" 
+              onClick={() => {
+                navigate(isAuthenticated ? ROUTES.OVERVIEW : ROUTES.HOME);
+              }} 
+            />
+          </div>
 
           {/* Center: Desktop Navigation */}
           {isAuthenticated && (

@@ -76,9 +76,9 @@ export default function SignupPage() {
     >
       {/* Real Top Logo */}
       <div className="mb-6 flex justify-start">
-        <Link to={ROUTES.HOME} className="hover:opacity-80 transition-opacity">
-          <Logo size="md" />
-        </Link>
+        <div className="hover:opacity-80 transition-opacity">
+          <Logo size="md" onClick={() => navigate(ROUTES.HOME)} />
+        </div>
       </div>
 
       {/* Heading & Subtitle */}

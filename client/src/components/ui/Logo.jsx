@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/utils/cn';
+import { motion, useAnimation } from 'framer-motion';
 
 /**
  * Official Voyage Genie Logo (Suitcase + Location Pin)
@@ -24,7 +25,7 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg" 
-      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_8px_rgba(79,124,255,0.6)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
+      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
     >
       <defs>
         <linearGradient id={metallicId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -63,7 +64,48 @@ export const LogoIcon = ({ className, size = 'md' }) => {
   );
 };
 
-export const Logo = ({ size = 'md', className, showText = true }) => {
+export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
+  const controls = useAnimation();
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  const lastTapRef = React.useRef(0);
+  const clickTimeoutRef = React.useRef(null);
+
+  const handlePointerDown = (e) => {
+    // Only handle primary touches/clicks
+    if (e.button !== undefined && e.button !== 0) return;
+    
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 300;
+
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      // Double Tap detected
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+      lastTapRef.current = 0; // reset
+      if (isAnimating) return;
+      setIsAnimating(true);
+      
+      // Premium 3D flip + glow animation sequence
+      controls.start({
+        rotateY: [0, 360],
+        scale: [1, 1.3, 1],
+        filter: [
+          'drop-shadow(0px 0px 0px rgba(79,124,255,0))',
+          'drop-shadow(0px 0px 40px rgba(79,124,255,1))',
+          'drop-shadow(0px 0px 0px rgba(79,124,255,0))'
+        ],
+        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
+      }).then(() => setIsAnimating(false));
+    } else {
+      // Single Tap candidate
+      lastTapRef.current = now;
+      if (onClick) {
+        clickTimeoutRef.current = setTimeout(() => {
+          onClick(e);
+        }, DOUBLE_TAP_DELAY);
+      }
+    }
+  };
+
   const textSizes = {
     sm: 'text-lg',
     md: 'text-xl',
@@ -72,14 +114,19 @@ export const Logo = ({ size = 'md', className, showText = true }) => {
   };
 
   return (
-    <div className={cn('group flex items-center gap-3 cursor-pointer', className)}>
+    <motion.div 
+      className={cn('group flex items-center gap-3 cursor-pointer', className)}
+      onPointerDown={handlePointerDown}
+      animate={controls}
+      style={{ transformStyle: 'preserve-3d' }}
+    >
       <LogoIcon size={size} className="text-text-primary" />
       {showText && (
         <span className={cn('font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', textSizes[size])}>
           Voyage Genie<span className="text-[var(--color-accent)] inline-block transition-transform duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125">.</span>
         </span>
       )}
-    </div>
+    </motion.div>
   );
 };
 
