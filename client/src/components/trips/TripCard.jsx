@@ -98,8 +98,6 @@ export const TripCard = ({ trip }) => {
     }
   };
   
-  const { heavyTap } = useHaptics();
-
   return (
     <div className="relative w-full h-[460px] rounded-[32px] overflow-hidden group">
       <motion.div 
