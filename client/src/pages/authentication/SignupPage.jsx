@@ -80,6 +80,7 @@ export default function SignupPage() {
     try {
       const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
       
+      await GoogleAuth.initialize();
       const result = await GoogleAuth.signIn();
       const accessToken = result.authentication?.accessToken || result.accessToken;
       

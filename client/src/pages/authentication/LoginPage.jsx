@@ -99,6 +99,7 @@ export default function LoginPage() {
       // Dynamic import to avoid SSR or Web breakages if plugin not present
       const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
       
+      await GoogleAuth.initialize();
       const result = await GoogleAuth.signIn();
       const accessToken = result.authentication?.accessToken || result.accessToken;
       
