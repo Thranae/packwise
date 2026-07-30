@@ -52,11 +52,12 @@ export const TripCard = ({ trip }) => {
   const handleDownloadPDF = async (e) => {
     e.stopPropagation();
     try {
-      addToast('info', 'Generating PDF...');
-      const url = `/api/export/trips/${trip._id}/pdf`;
-      window.open(url, '_blank');
+      addToast('info', 'Generating Premium PDF...');
+      const { generatePremiumPDF } = await import('@/utils/pdfGenerator');
+      await generatePremiumPDF(trip);
       addToast('success', 'PDF downloaded successfully!');
     } catch (err) {
+      console.error(err);
       addToast('error', 'Failed to generate PDF');
     }
   };
