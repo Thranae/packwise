@@ -20,12 +20,15 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
     xl: 'w-14 h-14',
   };
 
+  const suitcaseGlowId = `suitcase-glow-${id}`;
+  const pinGlowId = `pin-glow-${id}`;
+
   return (
     <svg 
-      viewBox="0 0 48 48" 
+      viewBox="-8 -8 64 64" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg" 
-      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', isHoverSimulated && 'rotate-[8deg] scale-110 drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)]', sizes[size], className)}
+      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-[8deg] group-hover:scale-110 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', isHoverSimulated && 'rotate-[8deg] scale-110', sizes[size], className)}
     >
       <defs>
         <linearGradient id={metallicId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -37,17 +40,41 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
           <stop offset="0%" stopColor="#93c5fd" />
           <stop offset="100%" stopColor="#3b82f6" />
         </linearGradient>
+
+        {/* Soft feathered white glow for suitcase */}
+        <filter id={suitcaseGlowId} x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+          <feFlood floodColor="#c4b5fd" floodOpacity="0.7" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* Soft feathered blue glow for map pin */}
+        <filter id={pinGlowId} x="-80%" y="-80%" width="260%" height="260%" filterUnits="objectBoundingBox">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+          <feFlood floodColor="#3b82f6" floodOpacity="0.85" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
-      {/* Suitcase Group with White Glow on Animation */}
-      <g className={cn("transition-all duration-700", "group-hover:drop-shadow-[0_0_16px_rgba(255,255,255,0.5)]", isHoverSimulated && "drop-shadow-[0_0_16px_rgba(255,255,255,0.5)]")}>
+      {/* Suitcase Group — SVG filter glow on animation */}
+      <g filter={isHoverSimulated ? `url(#${suitcaseGlowId})` : undefined}>
         {/* Telescopic Handle Poles (Animate up on hover) */}
         <path d="M18 12V6 M30 12V6" stroke={`url(#${metallicId})`} strokeWidth="2.5" strokeLinecap="round" className={cn("transition-transform duration-700 group-hover:-translate-y-1", isHoverSimulated && "-translate-y-1")} />
         
         {/* Handle Grip (Animate up on hover) */}
         <path d="M15 6H33" stroke={`url(#${metallicId})`} strokeWidth="3.5" strokeLinecap="round" className={cn("transition-transform duration-700 group-hover:-translate-y-1", isHoverSimulated && "-translate-y-1")} />
         
-        {/* Suitcase Body (Taller than wide, hard-shell) */}
+        {/* Suitcase Body */}
         <rect x="10" y="12" width="28" height="30" rx="4" stroke={`url(#${metallicId})`} strokeWidth="3" strokeLinejoin="round" />
         
         {/* Vertical Ribs (Rimowa style) */}
@@ -58,8 +85,11 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
         <circle cx="33" cy="44" r="2" fill={`url(#${metallicId})`} />
       </g>
 
-      {/* Integrated Location Pin (Blue Accent) - Bounces up and glows on hover */}
-      <g className={cn("transition-all duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] group-hover:-translate-y-3 group-hover:drop-shadow-[0_8px_20px_rgba(59,130,246,0.9)]", isHoverSimulated && "-translate-y-3 drop-shadow-[0_8px_20px_rgba(59,130,246,0.9)]")}>
+      {/* Location Pin — SVG filter blue glow on animation */}
+      <g 
+        className={cn("transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] origin-bottom group-hover:-translate-y-3", isHoverSimulated && "-translate-y-3")}
+        filter={isHoverSimulated ? `url(#${pinGlowId})` : undefined}
+      >
         <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill={`url(#${pinGradId})`} className="transition-all duration-700" />
         <circle cx="24" cy="22" r="2.5" fill="white" />
       </g>
