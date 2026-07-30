@@ -74,7 +74,8 @@ export const TripCard = ({ trip }) => {
         tripId: trip._id,
         destination: trip.destination
       });
-      }
+      addNotification('Tracking Active', `Flight alerts enabled for ${trip.destination}`, 'flight');
+      addToast('success', 'Flight tracking enabled!');
     } catch (err) {
       addToast('error', 'Failed to enable flight tracking');
     }
