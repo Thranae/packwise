@@ -275,7 +275,7 @@ export const TripProvider = ({ children }) => {
 
         // Background Sync
         api.post('/trips', newTripData).then(async (apiRes) => {
-          if (apiRes.status === 200 && apiRes.data.data) {
+          if ((apiRes.status === 200 || apiRes.status === 201) && apiRes.data.data) {
             const realTrip = apiRes.data.data;
             await db.trips.delete(localId); // Remove temp
             await db.trips.put(realTrip); // Add real

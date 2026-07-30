@@ -57,7 +57,7 @@ export default function TripsPage() {
   return (
     <PageTransition className="col-span-12">
       <PullToRefresh onRefresh={fetchTrips}>
-        <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-4 md:pt-6">
+        <div className="min-h-screen px-4 md:px-10 lg:px-12 pb-24 pt-[calc(24px+env(safe-area-inset-top))] md:pt-8">
         
         {/* Header Section */}
         <div className="flex flex-row items-start justify-between gap-4 mb-8 md:mb-10 mt-2">
@@ -126,7 +126,7 @@ export default function TripsPage() {
           </div>
 
           {/* Filter Chips */}
-          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-4 pt-1 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-6 pt-4 px-4 md:px-10 lg:px-12 -mx-4 md:-mx-10 lg:-mx-12 scrollbar-none snap-x snap-mandatory after:content-[''] after:min-w-[1px] md:after:min-w-[24px] after:h-px" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {FILTERS.map(filter => (
               <button
                 key={filter}
