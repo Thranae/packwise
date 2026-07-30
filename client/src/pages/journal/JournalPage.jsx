@@ -228,7 +228,7 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="col-span-12 w-full min-h-full flex flex-col max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12 perspective-[2000px] gap-8">
+    <div className="col-span-12 w-full min-h-full flex flex-col max-w-[1400px] mx-auto px-4 md:px-8 pb-8 md:pb-12 pt-[calc(32px+env(safe-area-inset-top))] md:pt-12 perspective-[2000px] gap-8">
       
       {/* Page Header */}
       <div className="flex flex-col gap-2 drop-shadow-xl w-full">

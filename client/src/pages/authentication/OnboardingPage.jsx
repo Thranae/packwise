@@ -92,7 +92,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[var(--theme-bg-base)] text-text-primary relative overflow-hidden flex flex-col pt-8 pb-20">
+    <div className="min-h-screen w-full bg-[var(--theme-bg-base)] text-text-primary relative overflow-hidden flex flex-col pt-[calc(24px+env(safe-area-inset-top))] md:pt-8 pb-20">
       
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none">

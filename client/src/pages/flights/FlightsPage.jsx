@@ -5,7 +5,7 @@ import FlightTrackerPanel from '@/components/flights/FlightTrackerPanel';
 
 export default function FlightsPage() {
   return (
-    <div className="col-span-12 w-full min-h-screen flex flex-col pt-8 pb-20">
+    <div className="col-span-12 w-full min-h-screen flex flex-col pt-[calc(32px+env(safe-area-inset-top))] md:pt-8 pb-20">
       {/* Header - same pattern as CalendarPage/ExplorePage */}
       <div className="flex flex-col gap-2 mb-10 px-4 md:px-8">
         <motion.div 

@@ -977,7 +977,7 @@ export default function PackingPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="w-full pt-8 pb-24">
+      <div className="w-full pt-[calc(32px+env(safe-area-inset-top))] md:pt-8 pb-24">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 z-20 relative">
           <div className="flex flex-col items-start">

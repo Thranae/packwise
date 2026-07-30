@@ -59,7 +59,7 @@ export default function CostIntelligencePage() {
   }, []);
 
   return (
-    <div className="col-span-12 w-full max-w-5xl mx-auto flex flex-col gap-6 pb-20 px-4 pt-6">
+    <div className="col-span-12 w-full max-w-5xl mx-auto flex flex-col gap-6 pb-20 px-4 pt-[calc(24px+env(safe-area-inset-top))] md:pt-6">
 
       {/* ── Page Header ── */}
       <div className="flex items-end justify-between gap-4">

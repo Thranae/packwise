@@ -47,7 +47,7 @@ export const SharedTripPage = () => {
 
   if (error || !trip) {
     return (
-      <div className="min-h-screen bg-[#030712] flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[#030712] flex flex-col items-center justify-center px-6 pb-6 pt-[calc(24px+env(safe-area-inset-top))] md:pt-6 text-center">
         <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
         <h1 className="text-2xl font-bold text-white mb-2">Oops!</h1>
         <p className="text-white/60 max-w-sm mb-8">{error}</p>

@@ -199,7 +199,7 @@ export default function ExplorePage() {
   }, [currentTrip?._id]);
 
   return (
-    <div className="col-span-12 w-full min-h-screen flex flex-col pt-8 pb-20 relative">
+    <div className="col-span-12 w-full min-h-screen flex flex-col pt-[calc(32px+env(safe-area-inset-top))] md:pt-8 pb-20 relative">
       <AnimatePresence>
         {toast && (
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="fixed top-8 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-cyan-500/90 backdrop-blur-md rounded-full shadow-lg border border-cyan-400">

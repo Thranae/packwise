@@ -531,7 +531,7 @@ export default function CalendarPage() {
   }, [currentTrip?._id]);
 
   return (
-    <div className="col-span-12 w-full min-h-screen flex flex-col pt-8 pb-28" ref={containerRef}>
+    <div className="col-span-12 w-full min-h-screen flex flex-col pt-[calc(32px+env(safe-area-inset-top))] md:pt-8 pb-28" ref={containerRef}>
       
       {/* Toast Notification */}
       <AnimatePresence>
