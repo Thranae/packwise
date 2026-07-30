@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane } from 'lucide-react';
-import { LogoIcon } from '@/components/ui/Logo';
+import { LogoIcon, useLogoDoubleTap } from '@/components/ui/Logo';
 import { motion } from 'framer-motion';
 export const GLASS = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] rounded-[24px]";
 export const GLASS_HOVER = "transition-all duration-700 hover:-translate-y-1 hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.2),0_24px_48px_rgba(0,0,0,0.5)] hover:bg-[rgba(255,255,255,0.04)]";
@@ -25,6 +25,7 @@ export function Sidebar() {
   const location = useLocation();
   const sidebarRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(sidebarRef, { maxTilt: 3, stiffness: 200, damping: 20 });
+  const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap();
 
   return (
     <motion.aside
@@ -35,13 +36,13 @@ export function Sidebar() {
     >
       {/* Logo */}
       <div className="px-4 pt-5 pb-4">
-        <Link to="/" className="flex items-center gap-2.5 group cursor-pointer">
+        <Link to="/" className="flex items-center gap-2.5 group cursor-pointer" onPointerDown={handlePointerDown}>
           <motion.div
             className={`bg-white/10 rounded-xl p-1.5 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:bg-gradient-to-br group-hover:from-white/20 group-hover:to-white/5 group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_16px_rgba(0,0,0,0.2)]`}
             whileHover={{ rotate: 15, scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300, damping: 15 }}
           >
-            <LogoIcon size="md" />
+            <LogoIcon size="md" isHoverSimulated={isHoverSimulated} />
           </motion.div>
           <div className="flex flex-col relative z-10 transition-transform duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:translate-x-1.5">
             <span className="text-white font-bold text-sm tracking-wide leading-tight transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:drop-shadow-[0_2px_10px_rgba(255,255,255,0.6)] group-hover:scale-[1.03] origin-left">

@@ -64,7 +64,7 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
   );
 };
 
-export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
+export function useLogoDoubleTap(onClick) {
   const [isHoverSimulated, setIsHoverSimulated] = React.useState(false);
   const { mediumTap } = useHaptics();
   const lastTapRef = React.useRef(0);
@@ -99,6 +99,12 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
       }
     }
   };
+
+  return { isHoverSimulated, handlePointerDown };
+}
+
+export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
+  const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap(onClick);
 
   const textSizes = {
     sm: 'text-lg',
