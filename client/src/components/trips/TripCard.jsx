@@ -70,16 +70,10 @@ export const TripCard = ({ trip }) => {
     e.stopPropagation();
     try {
       addToast('info', 'Enabling flight tracking...');
-      const res = await api.post('/flights/track', {
+      await api.post('/flights/track', {
         tripId: trip._id,
-        origin: "JFK", // Usually provided by user profile
-        destination: trip.destination,
-        date: trip.startDate
+        destination: trip.destination
       });
-      if (res.status >= 200 && res.status < 300) {
-        addToast('success', 'Flight tracking enabled!');
-      } else {
-        throw new Error("Failed");
       }
     } catch (err) {
       addToast('error', 'Failed to enable flight tracking');
@@ -176,7 +170,24 @@ export const TripCard = ({ trip }) => {
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); duplicateTrip(trip._id); addToast('success', 'Trip duplicated'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Copy className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Duplicate</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); navigator.clipboard.writeText(window.location.origin + ROUTES.OVERVIEW); addToast('success', 'Link copied to clipboard!'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={async (e) => { 
+                  e.stopPropagation(); 
+                  setIsMenuOpen(false); 
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: `${trip.destination} Trip`,
+                        text: `Check out my itinerary for ${trip.destination} on Voyage Genie!`,
+                        url: window.location.origin
+                      });
+                    } catch (err) {
+                      console.warn(err);
+                    }
+                  } else {
+                    navigator.clipboard.writeText(window.location.origin);
+                    addToast('success', 'Link copied to clipboard!');
+                  }
+                }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
                 </button>
                 <button onClick={(e) => { setIsMenuOpen(false); handleDownloadPDF(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">

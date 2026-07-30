@@ -254,18 +254,9 @@ export const TripProvider = ({ children }) => {
   };
 
   const deleteTrip = async (tripId) => {
-    setIsGenerating(true);
-    setLoadingStep("Deleting trip...");
-    
-    // Premium fake delay for animation
-    await new Promise(r => setTimeout(r, 800));
-    
-    // Optimistic Local Delete
+    // Optimistic Local Delete (Instant UX)
     await db.trips.delete(tripId);
     if (currentTrip?._id === tripId) setCurrentTrip(null);
-    
-    setIsGenerating(false);
-    setLoadingStep(null);
 
     // Background Sync
     if (!String(tripId).startsWith("local-")) {
