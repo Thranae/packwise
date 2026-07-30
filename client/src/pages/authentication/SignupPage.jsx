@@ -227,11 +227,31 @@ export default function SignupPage() {
         <p className="text-[13px] text-[var(--theme-text-secondary)]">
           Already have an account?{' '}
           <Link to={ROUTES.LOGIN} className="font-semibold text-[var(--theme-text-primary)] hover:text-[var(--color-accent)] transition-colors">
-            Log In &rarr;
+            Sign In &rarr;
           </Link>
         </p>
+      </div>
+
+      {/* Social Proof Widget */}
+      <div className="mt-8 pt-6 border-t border-white/5 flex flex-col items-center justify-center gap-3">
+        <div className="flex -space-x-2 overflow-hidden drop-shadow-md">
+          <img className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B1120] object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" alt="User 1" />
+          <img className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B1120] object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop" alt="User 2" />
+          <img className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B1120] object-cover" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=100&auto=format&fit=crop" alt="User 3" />
+          <img className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0B1120] object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" alt="User 4" />
+          <div className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-[#0B1120] bg-white/10 backdrop-blur-md">
+            <span className="text-[10px] font-bold text-white">+</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="flex gap-0.5">
+            {[1,2,3,4,5].map(i => (
+              <svg key={i} className="w-3.5 h-3.5 text-yellow-500 fill-current drop-shadow-sm" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            ))}
+          </div>
+          <span className="text-xs font-semibold text-white/70">Trusted by 10,000+ travelers</span>
+        </div>
       </div>
     </motion.div>
   );
 };
-
