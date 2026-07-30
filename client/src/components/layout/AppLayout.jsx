@@ -19,8 +19,8 @@ export function AppLayout({ children }) {
       <GenieCommandPalette />
       
       {/* Native-feeling static frosted glass edges */}
-      <div className="fixed top-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-top))] z-[60] backdrop-blur-md bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
-      <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-bottom))] z-[60] backdrop-blur-md bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
+      <div className="fixed top-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
+      <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
 
       <Sidebar />
       <BottomNav />
