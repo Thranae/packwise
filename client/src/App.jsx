@@ -38,6 +38,7 @@ const ExplorePage = lazy(() => import('./pages/explore/ExplorePage'));
 const CalendarPage = lazy(() => import('./pages/calendar/CalendarPage'));
 const JournalPage = lazy(() => import('./pages/journal/JournalPage'));
 const FlightsPage = lazy(() => import('./pages/flights/FlightsPage'));
+const SharedTripPage = lazy(() => import('./pages/public/SharedTripPage').then(m => ({ default: m.SharedTripPage })));
 
 // ---------------------------------------------------------------------------
 // Full-page loading spinner (Liquid Shimmer)
