@@ -11,7 +11,7 @@ import { useAuth } from './hooks/useAuth';
 import { useToast } from './hooks/useToast';
 import { ROUTES } from './constants/routes';
 import { cn } from './utils/cn';
-import { Loader2, Compass } from 'lucide-react';
+import { Loader2, Compass, PlaneTakeoff } from 'lucide-react';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { OnboardingTutorial } from './components/common/OnboardingTutorial';
 
@@ -49,29 +49,38 @@ function Spinner() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[1000] flex min-h-[100dvh] w-full items-center justify-center bg-[#060B14]"
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-[1000] flex min-h-[100dvh] w-full items-center justify-center bg-[#030712]"
     >
-      <div className="flex flex-col items-center gap-6">
+      <div className="flex flex-col items-center gap-8">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="relative w-24 h-24 rounded-[32px] overflow-hidden ios-glass-card flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_2px_5px_rgba(255,255,255,0.2)]"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-20 h-20 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.1)]"
         >
-          {/* Liquid Shimmer Sweep */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-shimmer" />
-          
-          <Compass className="w-10 h-10 text-white drop-shadow-lg z-10" />
+          <motion.div 
+             animate={{ y: [-2, 2, -2] }} 
+             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+             <PlaneTakeoff className="w-8 h-8 text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] ml-1" />
+          </motion.div>
+          {/* Subtle radar ring */}
+          <motion.div 
+            animate={{ scale: [1, 1.5], opacity: [0.3, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+            className="absolute inset-0 rounded-full border border-blue-400/40"
+          />
         </motion.div>
         
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="flex items-center gap-2"
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="flex flex-col items-center gap-2"
         >
-          <span className="text-[13px] font-semibold tracking-[0.15em] uppercase text-white/50 animate-pulse">Loading Workspace</span>
+          <span className="text-[11px] font-black tracking-[0.25em] uppercase text-white/40">Planning</span>
+          <span className="text-[14px] font-medium tracking-wide text-white/90 animate-pulse">Your next great escape...</span>
         </motion.div>
       </div>
     </motion.div>
