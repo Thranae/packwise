@@ -4,4 +4,5 @@
     <string name="title_activity_main">VoyageGenie</string>
     <string name="package_name">com.voyagegenie.app</string>
     <string name="custom_url_scheme">com.voyagegenie.app</string>
+    <string name="server_client_id">251191916495-p6clibvcoaaoqbu8l5l1n6lndqf5ql2e.apps.googleusercontent.com</string>
 </resources>

@@ -7,6 +7,17 @@ import './styles/index.css';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { registerSW } from 'virtual:pwa-register';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
+
+// Configure native status bar on Capacitor platforms
+if (Capacitor.isNativePlatform()) {
+  StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+  StatusBar.setBackgroundColor({ color: '#060B14' }).catch(() => {});
+  StatusBar.setOverlaysWebView({ overlay: true }).catch(() => {});
+  // Set a CSS class so we can apply native-specific padding
+  document.documentElement.classList.add('native-app');
+}
 
 // Register the PWA service worker and automatically update it
 if ('serviceWorker' in navigator) {

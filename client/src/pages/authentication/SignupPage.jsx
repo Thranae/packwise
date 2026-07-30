@@ -42,21 +42,24 @@ export default function SignupPage() {
     }
   };
 
-  const handleGoogleLogin = useGoogleLogin({
+  // Google login handler — only works on web/PWA
+  const handleWebGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setIsGoogleLoading(true);
+      let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
       try {
         const res = await api.post('/auth/google', { tokenId: tokenResponse.access_token });
         const data = res.data;
         if (data.status === 'success') {
           localStorage.setItem('token', data.data.token);
           setAuthData(data.data.user, data.data.token);
-          // Standard signup goes to ONBOARDING, but google auth might be an existing user.
-          // Let's redirect to overview, or onboarding if we knew they were new. 
-          // For simplicity, Overview is safe.
+          clearTimeout(wakeTimer);
+          setIsWakingUp(false);
           navigate(ROUTES.OVERVIEW, { replace: true });
         }
       } catch (error) {
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
         console.error(error);
         toast.error('Google Sign-up failed. Please try again.');
         setIsGoogleLoading(false);
@@ -66,6 +69,45 @@ export default function SignupPage() {
       toast.error('Google Sign-up was cancelled or failed.');
     }
   });
+
+  const handleNativeGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
+    try {
+      const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
+      
+      const result = await GoogleAuth.signIn();
+      const accessToken = result.authentication?.accessToken || result.accessToken;
+      
+      if (!accessToken) {
+        throw new Error('Failed to get access token from Google.');
+      }
+      
+      const res = await api.post('/auth/google', { tokenId: accessToken });
+      const data = res.data;
+      if (data.status === 'success') {
+        localStorage.setItem('token', data.data.token);
+        setAuthData(data.data.user, data.data.token);
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
+        navigate(ROUTES.OVERVIEW, { replace: true });
+      }
+    } catch (error) {
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
+      console.error(error);
+      toast.error('Native Google Sign-up failed. Please ensure you configured the Android Client ID.');
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const onGoogleClick = () => {
+    if (isNative) {
+      handleNativeGoogleLogin();
+    } else {
+      handleWebGoogleLogin();
+    }
+  };
 
   return (
     <motion.div 

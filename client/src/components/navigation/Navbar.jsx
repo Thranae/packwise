@@ -54,7 +54,7 @@ export const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-[16px] sm:top-[24px] left-3 right-3 sm:left-6 sm:right-6 md:left-8 md:right-8 z-[100] pointer-events-none flex justify-center"
+        className="fixed top-[calc(16px+var(--safe-top))] sm:top-[calc(24px+var(--safe-top))] left-3 right-3 sm:left-6 sm:right-6 md:left-8 md:right-8 z-[100] pointer-events-none flex justify-center"
       >
         <header
           className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700 overflow-hidden"
@@ -277,7 +277,7 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute top-[96px] left-4 right-4 bg-[#0A101C]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_40px_100px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 bg-[#0A101C]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_40px_100px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
             >
               {isAuthenticated ? (
                 <>

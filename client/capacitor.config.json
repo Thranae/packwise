@@ -1,5 +1,27 @@
 {
   "appId": "com.voyagegenie.app",
-  "appName": "VoyageGenie",
-  "webDir": "dist"
+  "appName": "Voyage Genie",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 0,
+      "backgroundColor": "#060B14",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#060B14",
+      "overlaysWebView": true
+    },
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "251191916495-p6clibvcoaaoqbu8l5l1n6lndqf5ql2e.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    }
+  }
 }

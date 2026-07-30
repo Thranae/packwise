@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
+import { Capacitor } from '@capacitor/core';
 import { LogoIcon, Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
 import { loginSchema } from '@/constants/validation';
 import api from '@/services/api';
+
+const isNative = Capacitor.isNativePlatform();
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -61,7 +64,8 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = useGoogleLogin({
+  // Google login handler — only works on web/PWA
+  const handleWebGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setIsGoogleLoading(true);
       let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
@@ -69,7 +73,6 @@ export default function LoginPage() {
         const res = await api.post('/auth/google', { tokenId: tokenResponse.access_token });
         const data = res.data;
         if (data.status === 'success') {
-          // Manually set auth state to match standard login
           localStorage.setItem('token', data.data.token);
           setAuthData(data.data.user, data.data.token);
           clearTimeout(wakeTimer);
@@ -88,6 +91,46 @@ export default function LoginPage() {
       toast.error('Google Sign-in was cancelled or failed.');
     }
   });
+
+  const handleNativeGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
+    try {
+      // Dynamic import to avoid SSR or Web breakages if plugin not present
+      const { GoogleAuth } = await import('@codetrix-studio/capacitor-google-auth');
+      
+      const result = await GoogleAuth.signIn();
+      const accessToken = result.authentication?.accessToken || result.accessToken;
+      
+      if (!accessToken) {
+        throw new Error('Failed to get access token from Google.');
+      }
+      
+      const res = await api.post('/auth/google', { tokenId: accessToken });
+      const data = res.data;
+      if (data.status === 'success') {
+        localStorage.setItem('token', data.data.token);
+        setAuthData(data.data.user, data.data.token);
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
+        navigate(ROUTES.OVERVIEW, { replace: true });
+      }
+    } catch (error) {
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
+      console.error(error);
+      toast.error('Native Google Sign-in failed. Please ensure you configured the Android Client ID.');
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const onGoogleClick = () => {
+    if (isNative) {
+      handleNativeGoogleLogin();
+    } else {
+      handleWebGoogleLogin();
+    }
+  };
 
   return (
     <motion.div 
@@ -212,9 +255,9 @@ export default function LoginPage() {
         {/* Google Button */}
         <button
           type="button"
-          onClick={handleGoogleLogin}
+          onClick={onGoogleClick}
           disabled={isGoogleLoading || isSubmitting}
-          className="w-full h-[52px] rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[15px] font-bold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
+          className={`w-full h-[52px] rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[15px] font-bold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none ${isNative ? 'opacity-40' : ''}`}
         >
           {isGoogleLoading ? (
             <div className="flex items-center gap-2">
@@ -229,10 +272,11 @@ export default function LoginPage() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
               </svg>
-              Google
+              Google {isNative && <span className="text-[11px] font-normal opacity-60">(Web only)</span>}
             </>
           )}
         </button>
+
       </form>
 
       {/* Footer */}
@@ -247,4 +291,3 @@ export default function LoginPage() {
     </motion.div>
   );
 };
-

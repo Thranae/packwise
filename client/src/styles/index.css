@@ -28,7 +28,11 @@
 }
 
 @layer base {
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
   :root {
+    --safe-top: env(safe-area-inset-top, 0px);
     /* LIGHT MODE */
     --theme-bg-base: #F2F5F9; /* Cooler background to contrast glass */
     --theme-bg-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
@@ -42,6 +46,11 @@
     --theme-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
     --theme-text-primary: #1A1D24;
     --theme-text-secondary: rgba(26, 29, 36, 0.6);
+  }
+
+  /* Force safe area padding on Android native where env() is often unreliable */
+  html.native-app {
+    --safe-top: 40px;
   }
 
   .dark {
