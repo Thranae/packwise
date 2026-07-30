@@ -136,10 +136,10 @@ export const HeroSection = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full rounded-[24px] md:rounded-[32px] flex flex-col group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden ios-glass-card"
+      className="relative w-full rounded-[32px] md:rounded-[40px] flex flex-col group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer overflow-hidden ios-glass-card"
     >
       {/* Liquid Glass Border Stroke Overlay */}
-      <div className="absolute inset-0 rounded-[24px] md:rounded-[32px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
+      <div className="absolute inset-0 rounded-[32px] md:rounded-[40px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
 
       {/* TOP SECTION: Image/Map & Title */}
       <div className="relative w-full h-[220px] md:h-[260px] flex flex-col justify-end p-5 md:p-8">
@@ -161,8 +161,8 @@ export const HeroSection = () => {
                     style={{ backgroundImage: `url(${displayImage})` }}
                   />
                 )}
-                {/* Soft Dark Overlay for Text Readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+                {/* Soft Dark Overlay for Text Readability - Lightened so it is not dull */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <motion.div 
@@ -255,13 +255,13 @@ export const HeroSection = () => {
         {/* Left: Metrics */}
         <div className="flex gap-2 sm:gap-3 ios-3d-element w-full sm:w-auto">
           {/* Weather */}
-          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-colors">
             {renderWeatherIcon(weather?.current?.icon, "w-4 h-4 md:w-5 md:h-5 drop-shadow-md")}
             <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{weather?.current?.temp ?? '--'}°C</span>
           </div>
           
           {/* Budget */}
-          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+          <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-colors">
             <Wallet className="w-4 h-4 md:w-5 md:h-5 text-emerald-400 drop-shadow-md" />
             <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
           </div>
@@ -272,16 +272,16 @@ export const HeroSection = () => {
           {/* View Map Button */}
           <button 
             onClick={(e) => { e.stopPropagation(); setShowMap(!showMap); }}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-[12px] bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition-all duration-300"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-all duration-300"
           >
-            <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            <span className="text-xs md:text-sm font-bold uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
+            <Navigation className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" />
+            <span className="text-xs md:text-sm font-bold text-white uppercase tracking-wider">{showMap ? 'Hide Map' : 'Map'}</span>
           </button>
           
           {/* Continue Button */}
           <button 
             onClick={(e) => { e.stopPropagation(); navigate(ROUTES.CALENDAR); }} 
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-[12px] ios-liquid-button group/btn relative overflow-hidden"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full ios-liquid-button group/btn relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600"
           >
             <span className="text-xs md:text-sm font-bold text-white">Continue</span>
             <ArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 text-white transition-transform duration-500 group-hover/btn:translate-x-1" />
