@@ -176,11 +176,26 @@ export const TripCard = ({ trip }) => {
                   setIsMenuOpen(false); 
                   if (navigator.share) {
                     try {
-                      await navigator.share({
+                      addToast('info', 'Preparing share...');
+                      const shareData = {
                         title: `${trip.destination} Trip`,
-                        text: `Check out my itinerary for ${trip.destination} on Voyage Genie!`,
+                        text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
                         url: window.location.origin
-                      });
+                      };
+                      
+                      // Try to fetch and attach the actual trip image for Instagram/WhatsApp
+                      try {
+                        const res = await fetch(displayImage);
+                        const blob = await res.blob();
+                        const file = new File([blob], `${trip.destination.replace(/\\s/g, '_')}_VoyageGenie.jpg`, { type: blob.type || 'image/jpeg' });
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                          shareData.files = [file];
+                        }
+                      } catch (imageErr) {
+                        console.warn("Could not attach image to share:", imageErr);
+                      }
+                      
+                      await navigator.share(shareData);
                     } catch (err) {
                       console.warn(err);
                     }
