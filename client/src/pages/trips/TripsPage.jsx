@@ -179,8 +179,8 @@ export default function TripsPage() {
                 Your travel library is empty. Let's change that by planning your next unforgettable adventure.
               </p>
               
-              <Link to={ROUTES.TRIPS_NEW}>
-                <button className="flex items-center gap-2 h-12 px-8 rounded-full ios-liquid-button text-white group">
+              <Link to={`${ROUTES.ASSISTANT}?mode=builder`}>
+                <button className="flex items-center gap-2 h-12 px-8 rounded-full ios-liquid-button text-white group bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_8px_16px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform duration-300">
                   <span className="text-[14px] font-bold tracking-wide">Create your first journey</span>
                 </button>
               </Link>

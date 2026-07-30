@@ -11,6 +11,7 @@ import { ROUTES } from './constants/routes';
 import { cn } from './utils/cn';
 import { Loader2, Compass } from 'lucide-react';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { OnboardingTutorial } from './components/common/OnboardingTutorial';
 
 
 import { WifiOff } from 'lucide-react';
@@ -404,6 +405,7 @@ export default function App() {
           <ToastProvider>
             <ErrorBoundary>
               <AppContent />
+              <OnboardingTutorial />
             </ErrorBoundary>
           </ToastProvider>
         </TripProvider>

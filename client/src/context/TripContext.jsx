@@ -184,12 +184,15 @@ export const TripProvider = ({ children }) => {
       const res = await api.get('/trips');
       if (res.status === 200) {
         const data = res.data;
-        // If web sync returns real trips, use them! Otherwise fallback to mock data
         if (data && data.length > 0) {
           setTrips(data);
           setCurrentTrip(data[0]);
+        } else if (isAuthenticated) {
+          // If authenticated and no trips, show true empty state
+          setTrips([]);
+          setCurrentTrip(null);
         } else {
-          // If backend is empty, fallback to our saved local trips or mock trips
+          // If NOT authenticated (guest), fallback to our saved local trips or mock trips
           setTrips(initialTrips);
         }
       } else {

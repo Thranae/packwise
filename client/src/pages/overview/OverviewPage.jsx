@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Navigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
+import { OverviewEmptyState } from '@/components/overview-v2/OverviewEmptyState';
 
 import { WeatherWidget } from '@/components/overview-v2/WeatherWidget';
 import { CurrencyWidget } from '@/components/overview-v2/CurrencyWidget';
@@ -33,18 +34,21 @@ const staggerContainer = {
 };
 
 export default function OverviewPage() {
-  // Use currentTrip if it exists, otherwise provide a fallback mock trip so the UI doesn't break
-  const { currentTrip: realCurrentTrip } = useTripContext();
-  
-  const currentTrip = realCurrentTrip || {
-    _id: "mock-1",
-    destination: "Tokyo & Kyoto Explorer",
-    country: "Japan",
-    startDate: "2026-10-12T00:00:00Z",
-    endDate: "2026-10-26T00:00:00Z",
-    budget: 4500,
-    currency: "INR",
-  };
+  const { currentTrip } = useTripContext();
+
+  if (!currentTrip) {
+    return (
+      <motion.div 
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+        exit="exit"
+        className="col-span-12 grid grid-cols-12 gap-6"
+      >
+        <OverviewEmptyState />
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 
