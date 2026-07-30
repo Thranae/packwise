@@ -127,7 +127,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
       return;
     }
 
-    if (value.trim().length < 3) {
+    if (value.trim().length < 2) {
       setSuggestions([]);
       setShowDropdown(false);
       onSearching?.(false);
@@ -140,45 +140,52 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
     const timeoutId = setTimeout(async () => {
       try {
         const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
-        let unique = [];
+        let results = [];
 
         if (MAPTILER_KEY) {
-          const res = await fetch(`https://api.maptiler.com/geocoding/${encodeURIComponent(value)}.json?key=${MAPTILER_KEY}&limit=6&types=country,region,municipality,locality,place,poi,tourist_attraction`);
+          const res = await fetch(`https://api.maptiler.com/geocoding/${encodeURIComponent(value)}.json?key=${MAPTILER_KEY}&limit=6&types=country,region,municipality,locality,place`);
           if (!res.ok) throw new Error('MapTiler API Error');
           const json = await res.json();
           
-          unique = (json.features || []).map(f => {
+          results = (json.features || []).map(f => {
             const mainName = f.text || f.place_name?.split(',')[0] || "Unknown Place";
             const context = f.context || [];
-            const countryObj = context.find(c => c.id.startsWith('country'));
-            const country = countryObj ? countryObj.text : (f.place_name !== mainName ? f.place_name : '');
             
+            // Extract region/state and country from context properly
+            const regionObj = context.find(c => c.id?.startsWith('region'));
+            const countryObj = context.find(c => c.id?.startsWith('country'));
+            const region = regionObj?.text || '';
+            const country = countryObj?.text || '';
+            
+            // Build a clean subtitle: "Region, Country" or just "Country"
+            const subtitle = [region, country].filter(Boolean).join(', ');
+            
+            // Determine icon based on place_type
             let Icon = MapPin;
-            let iconBg = "bg-blue-500/20";
+            let iconBg = "bg-blue-500/10";
             let iconColor = "text-blue-400";
             
             const type = f.place_type ? f.place_type[0] : '';
-            const props = f.properties || {};
             
-            if (type === 'poi' || type === 'park' || props.kind === 'park') {
-              Icon = TreePine;
-              iconBg = "bg-emerald-500/20";
-              iconColor = "text-emerald-400";
-            } else if (type === 'city' || type === 'municipality') {
-              Icon = Building2;
-              iconBg = "bg-purple-500/20";
-              iconColor = "text-purple-400";
-            } else if (type === 'country') {
+            if (type === 'country') {
               Icon = Globe2;
-              iconBg = "bg-indigo-500/20";
+              iconBg = "bg-indigo-500/10";
               iconColor = "text-indigo-400";
-            } else if (type === 'airport') {
-              Icon = Plane;
-              iconBg = "bg-sky-500/20";
-              iconColor = "text-sky-400";
+            } else if (type === 'region') {
+              Icon = Globe2;
+              iconBg = "bg-purple-500/10";
+              iconColor = "text-purple-400";
+            } else if (type === 'municipality' || type === 'locality' || type === 'place') {
+              Icon = Building2;
+              iconBg = "bg-emerald-500/10";
+              iconColor = "text-emerald-400";
             }
 
-            return { city: mainName, country, Icon, iconBg, iconColor };
+            return { 
+              city: mainName, 
+              country: subtitle || (f.place_name !== mainName ? f.place_name?.split(',').slice(1).join(',').trim() : ''),
+              Icon, iconBg, iconColor 
+            };
           });
         } else {
           // Fallback to nominatim
@@ -189,13 +196,15 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
           const parsed = data.map(item => {
             const addr = item.address || {};
             const mainName = addr.city || addr.town || addr.village || addr.state || item.name;
+            const region = addr.state || '';
             const country = addr.country || '';
-            return { city: mainName, country, Icon: MapPin, iconBg: "bg-blue-500/20", iconColor: "text-blue-400" };
+            const subtitle = [region, country].filter(Boolean).join(', ');
+            return { city: mainName, country: subtitle, Icon: MapPin, iconBg: "bg-blue-500/10", iconColor: "text-blue-400" };
           });
-          unique = parsed.filter((v, i, a) => a.findIndex(t => (t.city === v.city && t.country === v.country)) === i);
+          results = parsed.filter((v, i, a) => a.findIndex(t => (t.city === v.city && t.country === v.country)) === i);
         }
 
-        setSuggestions(unique);
+        setSuggestions(results);
         setShowDropdown(true);
       } catch (err) {
         console.error("Location search failed", err);
@@ -203,13 +212,13 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
         onSearching?.(false);
         setIsLocalSearching(false);
       }
-    }, 400);
+    }, 350);
 
     return () => clearTimeout(timeoutId);
   }, [value]);
 
   const handleSelect = (loc) => {
-    const locString = `${loc.city}, ${loc.country}`;
+    const locString = loc.country ? `${loc.city}, ${loc.country.split(',').pop().trim()}` : loc.city;
     userTypedValue.current = locString;
     onChange(locString);
     setShowDropdown(false);
@@ -243,34 +252,45 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
         <AnimatePresence>
           {showDropdown && suggestions.length > 0 && (
             <>
-              {/* Invisible overlay to catch outside clicks and close the dropdown */}
+              {/* Invisible overlay to catch outside clicks */}
               <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 className="fixed inset-0 z-40" 
                 onClick={(e) => { e.stopPropagation(); setShowDropdown(false); }} 
               />
               <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="absolute left-0 right-0 top-full mt-2 bg-[#0f172a]/95 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 rounded-[24px] p-2 z-[100] shadow-[0_30px_60px_rgba(0,0,0,0.7),inset_0_2px_10px_rgba(255,255,255,0.1)] overflow-hidden"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute left-0 right-0 top-full mt-2 bg-[#0c1425]/98 backdrop-blur-3xl border border-white/10 rounded-[20px] z-[100] shadow-[0_24px_48px_rgba(0,0,0,0.6)] overflow-hidden"
               >
-                {suggestions.map((loc, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSelect(loc)}
-                    className="w-full text-left px-4 py-3 rounded-[16px] hover:bg-white/10 transition-colors flex items-center gap-4 group/item"
-                  >
-                    <div className={`w-10 h-10 rounded-xl ${loc.iconBg} flex items-center justify-center shrink-0 group-hover/item:scale-110 transition-transform duration-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)]`}>
-                      <loc.Icon className={`w-5 h-5 ${loc.iconColor}`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-white font-bold text-[15px] truncate">{loc.city}</div>
-                      {loc.country && <div className="text-white/50 text-[12px] font-medium truncate">{loc.country}</div>}
-                    </div>
-                  </button>
-                ))}
+                {/* Header */}
+                <div className="px-4 pt-3 pb-2 border-b border-white/5">
+                  <span className="text-[10px] font-bold tracking-[0.2em] text-white/30 uppercase">Suggestions</span>
+                </div>
+
+                {/* Results */}
+                <div className="p-1.5 max-h-[280px] overflow-y-auto">
+                  {suggestions.map((loc, idx) => (
+                    <motion.button
+                      key={`${loc.city}-${idx}`}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2, delay: idx * 0.04 }}
+                      onClick={() => handleSelect(loc)}
+                      className="w-full text-left px-3 py-2.5 rounded-[14px] hover:bg-white/[0.06] active:bg-white/[0.1] transition-colors flex items-center gap-3 group/item"
+                    >
+                      <div className={`w-9 h-9 rounded-xl ${loc.iconBg} border border-white/5 flex items-center justify-center shrink-0 group-hover/item:scale-105 transition-transform duration-300`}>
+                        <loc.Icon className={`w-4 h-4 ${loc.iconColor}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-semibold text-[14px] truncate leading-tight">{loc.city}</div>
+                        {loc.country && <div className="text-white/40 text-[11px] font-medium truncate leading-tight mt-0.5">{loc.country}</div>}
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
               </motion.div>
             </>
           )}
