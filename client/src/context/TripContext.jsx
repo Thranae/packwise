@@ -234,7 +234,7 @@ export const TripProvider = ({ children }) => {
     }
   };
 
-  const generateTrip = async (prompt) => {
+  const generateTrip = async (prompt, meta = {}) => {
     setIsGenerating(true);
     setLoadingStep("Analyzing destination...");
     
@@ -248,13 +248,19 @@ export const TripProvider = ({ children }) => {
       setLoadingStep("Done.");
       setTimeout(async () => {
         const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
+        
+        // Use user's explicit values or fallback to AI data
+        const tripStartDate = meta.startDate ? new Date(meta.startDate) : (aiData.startDate ? new Date(aiData.startDate) : new Date());
+        const tripDuration = parseInt(meta.duration || aiData.duration || 7);
+        const tripEndDate = new Date(tripStartDate.getTime() + tripDuration * 24 * 60 * 60 * 1000);
+
         const newTripData = {
           ...aiData,
           destination: aiData.destination || fallbackDest,
           country: aiData.country || "Unknown",
-          startDate: aiData.startDate ? new Date(aiData.startDate).toISOString() : new Date().toISOString(),
-          endDate: new Date((aiData.startDate ? new Date(aiData.startDate).getTime() : Date.now()) + parseInt(aiData.duration || 7) * 24 * 60 * 60 * 1000).toISOString(),
-          duration: aiData.duration || "7 Days",
+          startDate: tripStartDate.toISOString(),
+          endDate: tripEndDate.toISOString(),
+          duration: `${tripDuration} Days`,
           budget: aiData.budget || 3000,
           currency: aiData.currency || "USD",
           timezone: aiData.timezone || "UTC",
