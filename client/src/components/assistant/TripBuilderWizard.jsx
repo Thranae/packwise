@@ -43,7 +43,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
     <div className="relative w-full h-[68px]">
       <button
         type="button"
-        onClick={(e) => { e.preventDefault(); setIsOpen(true); }}
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(true); }}
         className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-3xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300 cursor-pointer"
       >
         <span className="pointer-events-none">{formattedValue}</span>
@@ -564,29 +564,38 @@ export const TripBuilderWizard = () => {
             ) : (
               <motion.div
                 key="generating"
-                initial={{ opacity: 0, filter: 'blur(10px)', scale: 0.95 }}
-                animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center justify-center py-16 sm:py-20 text-center"
+                className="flex flex-col items-center justify-center py-20 text-center relative h-full min-h-[350px]"
               >
-                <div className="relative mb-10 group">
-                  <div className="absolute inset-0 bg-blue-500 rounded-full blur-[40px] opacity-40 animate-pulse" />
-                  <div className="absolute inset-0 bg-purple-500 rounded-full blur-[50px] opacity-30 animate-pulse mix-blend-screen" style={{ animationDelay: '1s' }} />
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-[32px] bg-gradient-to-tr from-blue-500/20 to-purple-500/20 border border-white/20 backdrop-blur-xl flex items-center justify-center relative z-10 shadow-[inset_0_2px_10px_rgba(255,255,255,0.3)]">
-                    <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-spin" />
-                  </div>
+                {/* Stunning Minimalist Animation */}
+                <div className="relative flex items-center justify-center w-32 h-32 mb-12">
+                   {/* Expanding pulse rings */}
+                   <motion.div 
+                     animate={{ scale: [1, 2.5], opacity: [0.3, 0] }}
+                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+                     className="absolute inset-0 rounded-full border-[1.5px] border-blue-400/50"
+                   />
+                   <motion.div 
+                     animate={{ scale: [1, 2], opacity: [0.3, 0] }}
+                     transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut", delay: 1.25 }}
+                     className="absolute inset-0 rounded-full border-[1.5px] border-indigo-400/50"
+                   />
+                   {/* Center glowing orb */}
+                   <motion.div 
+                     animate={{ scale: [0.95, 1.05, 0.95] }}
+                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                     className="relative z-10 w-20 h-20 bg-white/[0.05] border border-white/10 rounded-full backdrop-blur-2xl flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.3),inset_0_2px_10px_rgba(255,255,255,0.2)]"
+                   >
+                     <Sparkles className="w-8 h-8 text-blue-400 drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                   </motion.div>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-4 drop-shadow-lg">
-                  {loadingStep || 'Crafting your perfect trip...'}
+                
+                <h3 className="text-[14px] sm:text-[15px] font-bold tracking-[0.3em] uppercase text-white/90 drop-shadow-lg animate-pulse">
+                  {loadingStep || 'Crafting Journey...'}
                 </h3>
-                <p className="text-base sm:text-lg text-white/60 font-medium max-w-sm mx-auto leading-relaxed">
-                  Our AI is analyzing thousands of data points to find the best flights, accommodations, and activities.
-                </p>
-                <div className="mt-8 sm:mt-10 flex gap-3">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)] animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.8)] animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.8)] animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -236,11 +236,11 @@ export const TripProvider = ({ children }) => {
 
   const generateTrip = async (prompt, meta = {}) => {
     setIsGenerating(true);
-    setLoadingStep("Analyzing destination...");
+    setLoadingStep("INITIALIZING...");
     
     try {
-      setTimeout(() => setLoadingStep("Finding attractions..."), 1500);
-      setTimeout(() => setLoadingStep("Creating itinerary..."), 3000);
+      setTimeout(() => setLoadingStep("DISCOVERING..."), 1500);
+      setTimeout(() => setLoadingStep("FINALIZING..."), 3000);
       
       const res = await api.post('/ai/trip', { prompt });
       const aiData = res.data;
@@ -304,7 +304,7 @@ export const TripProvider = ({ children }) => {
   const modifyTrip = async (message) => {
     if (!currentTrip) return;
     setIsGenerating(true);
-    setLoadingStep("Modifying trip...");
+    setLoadingStep("CURATING EXPERIENCE...");
     try {
       const res = await api.post('/trips/chat', { currentTrip, message });
       const data = res.data;
