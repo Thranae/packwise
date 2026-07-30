@@ -32,77 +32,61 @@ export const AIChatInterface = () => {
     setIsLoading(true);
 
     try {
-      // Intentional fake delay to simulate 'thinking' per user request
-      await new Promise(resolve => setTimeout(resolve, 4000));
-
-      const res = await fetch('/api/ai/chat/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: userMessage, 
-          context: { 
-            previousMessages: messages.map(m => m.content).join('\n'),
-            currentTrip: currentTrip ? { destination: currentTrip.destination, status: currentTrip.status } : null
-          }
-        })
-      });
-      
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let botReply = '';
+      // Fake delay to simulate 'thinking' per user request
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
-      setIsLoading(false); // Stop the loading animation immediately, we are streaming now
+      setIsLoading(false);
 
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
+      // Local-first Mock AI Logic
+      let botReply = "I'm your Voyage Genie! I can help you plan your entire trip, discover hidden gems, and optimize your budget. Where would you like to go next?";
+      const lowerInput = userMessage.toLowerCase();
+      
+      const destMatch = userMessage.match(/(in|to|for) ([a-zA-Z\s]+)/i);
+      let destination = destMatch ? destMatch[2].trim() : null;
+      
+      // Fallback manual checks
+      if (!destination) {
+        if (lowerInput.includes('rome')) destination = 'Rome, Italy';
+        else if (lowerInput.includes('tokyo')) destination = 'Tokyo, Japan';
+        else if (lowerInput.includes('paris')) destination = 'Paris, France';
+        else if (lowerInput.includes('london')) destination = 'London, UK';
+      }
+
+      if (destination) {
+        botReply = `Absolutely! Let me put together an incredible itinerary for ${destination}, featuring both popular sights and some of my favorite hidden gems.\n\n[ACTION: GENERATE_TRIP | destination: ${destination}]`;
+      }
+
+      let currentText = '';
+      const chars = botReply.split('');
+      
+      for (let i = 0; i < chars.length; i++) {
+        await new Promise(r => setTimeout(r, 15 + Math.random() * 20)); // Realistic typing speed
+        currentText += chars[i];
         
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-            try {
-              const data = JSON.parse(line.slice(6));
-              const text = data.choices[0]?.delta?.content || '';
-              botReply += text;
-              
-              // Check for action tag incrementally
-              const actionMatch = botReply.match(/\[ACTION:\s*GENERATE_TRIP\s*\|\s*destination:\s*([^\]]+)\]/i);
-              
-              if (actionMatch && !isExecutingAction) {
-                const destination = actionMatch[1].trim();
-                setIsExecutingAction(true);
-                // Remove the tag from the visible reply
-                botReply = botReply.replace(actionMatch[0], '').trim();
-                
-                // Trigger the generation
-                setTimeout(async () => {
-                   setMessages(prev => [...prev, { role: 'assistant', content: `Generating your trip to ${destination}...` }]);
-                   await generateTrip(`Destination: ${destination}`);
-                   navigate('/trips');
-                }, 500);
-              }
-
-              setMessages(prev => {
-                const newMsgs = [...prev];
-                // Don't show the raw tag to the user while streaming
-                newMsgs[newMsgs.length - 1].content = botReply.replace(/\[ACTION:.*$/i, '').trim();
-                return newMsgs;
-              });
-            } catch (e) {
-              console.error("Stream parse error", e);
-            }
-          }
+        // Check for action tag incrementally
+        const actionMatch = currentText.match(/\[ACTION:\s*GENERATE_TRIP\s*\|\s*destination:\s*([^\]]+)\]/i);
+        
+        if (actionMatch && !isExecutingAction) {
+          const dest = actionMatch[1].trim();
+          setIsExecutingAction(true);
+          
+          // Trigger the generation
+          setTimeout(async () => {
+             setMessages(prev => [...prev, { role: 'assistant', content: `Generating your trip to ${dest}...` }]);
+             await generateTrip(`Destination: ${dest}`);
+             navigate('/trips');
+          }, 800);
         }
+
+        setMessages(prev => {
+          const newMsgs = [...prev];
+          newMsgs[newMsgs.length - 1].content = currentText.replace(/\[ACTION:.*$/i, '').trim();
+          return newMsgs;
+        });
       }
     } catch (error) {
       console.error("Chat error:", error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: "Oops, something went wrong on my end. Please make sure my AI integration is active!",
-      }]);
-    } finally {
       setIsLoading(false);
     }
   };
