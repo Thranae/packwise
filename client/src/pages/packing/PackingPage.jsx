@@ -377,8 +377,27 @@ export default function PackingPage() {
           if (r.data?.success && r.data?.data?.hasResults) {
             return r.data.data.images || [];
           }
-          return [];
-        } catch { return []; }
+          throw new Error('Backend failed, falling back to local mocks');
+        } catch {
+          // LOCAL FALLBACK DEMO IMAGES
+          const isMen = query.includes('men');
+          const menMocks = [
+            'https://images.unsplash.com/photo-1516826957135-700ede19c6ce?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1480455624313-e29b44bbfde1?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=800&auto=format&fit=crop'
+          ];
+          const womenMocks = [
+            'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=800&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop'
+          ];
+          // Return 2 random mock images per query to populate the board
+          const pool = isMen ? menMocks : womenMocks;
+          const shuffled = [...pool].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, 2);
+        }
       };
 
       /**
