@@ -16,7 +16,6 @@ import { OnboardingTutorial } from './components/common/OnboardingTutorial';
 
 
 import { WifiOff } from 'lucide-react';
-import { useState, useEffect } from 'react';
 // ---------------------------------------------------------------------------
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/authentication/LoginPage'));
