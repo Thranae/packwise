@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, Map, Sparkles } from 'lucide-react';
+import { Bot, Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { TripBuilderWizard } from '@/components/assistant/TripBuilderWizard';
@@ -12,7 +12,7 @@ export default function AssistantPage() {
 
   return (
     <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0">
-      <div className="h-full min-h-0 overflow-hidden px-4 sm:px-6 md:px-10 lg:px-12 pb-[90px] sm:pb-12 pt-[calc(24px+env(safe-area-inset-top))] md:pt-6 flex flex-col items-start w-full relative z-10">
+      <div className="h-full min-h-0 px-4 sm:px-6 md:px-10 lg:px-12 pb-[90px] sm:pb-12 pt-[calc(24px+env(safe-area-inset-top))] md:pt-6 flex flex-col items-start w-full relative z-10">
         
         {/* Unified Header & Segmented Control */}
         <div className="w-full max-w-4xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-10 z-20 relative shrink-0">
@@ -24,7 +24,7 @@ export default function AssistantPage() {
               style={{ fontFamily: "'Outfit', sans-serif" }}
               className="text-3xl sm:text-4xl font-bold tracking-tight text-white drop-shadow-md mb-2 flex items-center gap-3"
             >
-              <Sparkles className="w-8 h-8 text-blue-400" /> Planning Hub
+              <Map className="w-8 h-8 text-blue-400" /> Planning Hub
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: -10 }}
