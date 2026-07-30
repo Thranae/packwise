@@ -10,6 +10,7 @@ import { ROUTES } from '@/constants/routes';
 import { getInitials } from '@/utils/formatters';
 import { GenieSlideOut } from '../ai/GenieSlideOut';
 import { LogoIcon, useLogoDoubleTap } from '@/components/ui/Logo';
+import { cn } from '@/utils/cn';
 import api from '@/services/api';
 
 export const TopHeader = () => {
@@ -109,13 +110,9 @@ export const TopHeader = () => {
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center border border-white/20 shadow-inner group">
           <LogoIcon size="sm" isHoverSimulated={isHoverSimulated} />
         </div>
-        <motion.span 
-          animate={isHoverSimulated ? { scale: [1, 1.1, 1], color: ['#ffffff', '#60a5fa', '#ffffff'] } : {}}
-          transition={{ duration: 0.5 }}
-          className={`text-white font-bold text-sm tracking-wide transition-all duration-300 ${isHoverSimulated ? 'drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' : ''}`}
-        >
-          Voyage Genie
-        </motion.span>
+        <span className={cn('font-extrabold tracking-tight text-white transition-all duration-700', isHoverSimulated && 'text-transparent bg-clip-text bg-gradient-to-r from-white to-[#4F7CFF]')}>
+          Voyage Genie<span className={cn("inline-block transition-transform duration-700 text-[var(--color-accent)]", isHoverSimulated && "translate-x-1 -translate-y-1 scale-125")}>.</span>
+        </span>
       </div>
 
       {/* Search Bar (occupies ~60% of available space) */}
