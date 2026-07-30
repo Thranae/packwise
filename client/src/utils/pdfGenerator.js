@@ -87,22 +87,22 @@ export const generatePremiumPDF = async (trip) => {
                       <div class="w-14 h-14 rounded-2xl bg-blue-500 text-white flex items-center justify-center font-black text-2xl shadow-md shrink-0">
                         ${i + 1}
                       </div>
-                      <h3 class="text-3xl font-bold text-slate-800 tracking-tight">${day.title || \`Day \${i + 1}\`}</h3>
+                      <h3 class="text-3xl font-bold text-slate-800 tracking-tight">${day.title || `Day ${i + 1}`}</h3>
                    </div>
                    <div class="flex flex-col gap-6 pl-6 border-l-4 border-slate-100 ml-7">
                       ${(Array.isArray(day) ? day : (day.activities || [])).map(act => {
                          const time = act.time || act.startTime || '';
                          const actTitle = act.title || act.name || act.activity || act;
                          const desc = act.description || act.details || '';
-                         return \`
+                         return `
                          <div class="flex flex-col gap-1.5 relative">
                            <div class="absolute -left-[31px] top-2 w-3 h-3 rounded-full bg-blue-300 border-[3px] border-white shadow-sm"></div>
                            <span class="font-extrabold text-slate-800 text-xl tracking-tight leading-snug">
-                             \${time ? \`<span class="text-blue-500 mr-2">\${time}</span>\` : ''}\${typeof actTitle === 'string' ? actTitle : 'Activity'}
+                             ${time ? `<span class="text-blue-500 mr-2">${time}</span>` : ''}${typeof actTitle === 'string' ? actTitle : 'Activity'}
                            </span>
-                           \${desc ? \`<span class="text-slate-500 text-[1.1rem] leading-relaxed font-medium max-w-3xl">\${desc}</span>\` : ''}
+                           ${desc ? `<span class="text-slate-500 text-[1.1rem] leading-relaxed font-medium max-w-3xl">${desc}</span>` : ''}
                          </div>
-                         \`
+                         `;
                       }).join('')}
                    </div>
                 </div>
