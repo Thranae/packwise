@@ -361,20 +361,19 @@ export default function PackingPage() {
     try {
       // Use the FULL destination string for geographic context
       const fullDest = currentTrip?.destination?.split('&')[0].trim() || 'Tokyo';
-      const cityPart   = fullDest.split(',')[0].trim();
-      const regionPart = fullDest.includes(',') ? fullDest.split(',').slice(1).join(',').trim() : fullDest;
+      const parts = fullDest.split(',').map(s => s.trim());
+      const cityPart = parts[0];
+      const countryPart = parts.length > 1 ? parts[parts.length - 1] : cityPart;
 
       const API_URL = '/api';
       const MAX_PAIRS = 10; // up to 10 women + 10 men = 20 images
 
       /**
        * Fetch images for ONE query from the backend.
-       * Returns [] if query returned no relevant images.
        */
       const fetchFor = async (query) => {
         try {
           const r = await axios.get(`${API_URL}/images/moodboard`, { params: { query, page: pageToFetch } });
-          // Accept any results — hasResults=true means the API found something relevant
           if (r.data?.success && r.data?.data?.hasResults) {
             return r.data.data.images || [];
           }
@@ -383,22 +382,20 @@ export default function PackingPage() {
       };
 
       /**
-       * Run ALL queries for a gender IN PARALLEL and accumulate every
-       * image found. Deduplicates across all results.
-       * Shows whatever was found — even if it's just 2-4 images.
-       * Only returns empty if truly 0 images found across all queries.
+       * Run queries from specific to general in parallel.
+       * allSettled preserves order, so most specific results come first.
        */
       const fetchGenderImages = async (gender) => {
         const g = gender === 'men' ? 'men' : 'women';
 
-        // All queries run simultaneously — geographically anchored at every level
+        // Cascading relevance: City -> Country -> Generic Travel
         const queries = [
-          `${g} traditional clothing ${cityPart}`,
-          `${g} traditional clothing ${fullDest}`,
-          `${g} traditional clothing ${regionPart}`,
-          `${g} local fashion ${regionPart}`,
-          `${g} casual street style ${regionPart}`,
-          `${g} outdoor lifestyle ${regionPart}`,
+          `${g} street style ${cityPart}`,
+          `${g} local fashion ${cityPart}`,
+          `${g} traditional clothing ${countryPart}`,
+          `${g} travel outfit ${countryPart}`,
+          `${g} vacation style`,
+          `${g} casual fashion`
         ];
 
         // Fire ALL queries in parallel for speed
@@ -749,8 +746,8 @@ export default function PackingPage() {
                   {/* Minimalist Grid Background */}
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
-                  {/* The Animated Checklist Container - Compact */}
-                  <div className="relative w-[220px] h-[150px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-100">
+                  {/* The Animated Checklist Container - Slightly larger */}
+                  <div className="relative w-[260px] h-[190px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-4 scale-100">
                     
                     {/* Header */}
                     <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30">
@@ -853,7 +850,7 @@ export default function PackingPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                className="col-start-1 row-start-1 flex flex-col bg-black/20 p-4 min-h-[450px]"
+                className="col-start-1 row-start-1 flex flex-col bg-black/20 p-4 min-h-[280px] h-full"
               >
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
                 <div className="flex items-center gap-2">
@@ -895,7 +892,7 @@ export default function PackingPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              className={`col-start-1 row-start-1 p-3 sm:p-4 overflow-y-auto max-h-[300px] md:max-h-[400px] custom-scrollbar ${cat.id === 1 || cat.id === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1' : 'flex flex-col gap-1'}`}
+              className={`col-start-1 row-start-1 p-3 sm:p-4 overflow-y-auto max-h-[250px] md:max-h-[280px] custom-scrollbar ${cat.id === 1 || cat.id === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1' : 'flex flex-col gap-1'}`}
             >
               {cat.items.map(item => {
                 const isPacked = packedItems.has(item.id);
