@@ -20,9 +20,9 @@ export const AuthLayout = ({ children }) => {
         <ThemeToggle />
       </div>
       
-      {/* Ambient background glows so the glass has something beautiful to refract on mobile */}
-      <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-blue-500/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+      {/* Ambient background glows - Simplified to prevent lag */}
+      <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-blue-500/20 rounded-full blur-[60px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-purple-500/20 rounded-full blur-[60px] pointer-events-none" />
       
       {/* 
         ONE Premium Integrated Floating Container 
@@ -30,16 +30,10 @@ export const AuthLayout = ({ children }) => {
       */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: [0, -6, 0] }}
-        transition={{ 
-          opacity: { duration: 0.8, ease: "easeOut" },
-          y: { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.8 }
-        }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 w-full max-w-[800px] flex flex-col lg:flex-row overflow-hidden rounded-[24px] ios-glass-card shadow-2xl"
       >
-        <div className="absolute inset-0 z-0 pointer-events-none rounded-[24px] overflow-hidden">
-          <div className="absolute top-0 bottom-0 w-[150px] bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] animate-[glass-shine_10s_ease-in-out_infinite]" />
-        </div>
 
         {/* LEFT PANEL: Travel Image & Widgets */}
         <div className="relative hidden lg:flex lg:w-1/2 shrink-0 flex-col overflow-hidden bg-black/20 z-10">
