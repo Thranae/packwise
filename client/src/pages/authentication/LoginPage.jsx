@@ -120,7 +120,7 @@ export default function LoginPage() {
       clearTimeout(wakeTimer);
       setIsWakingUp(false);
       console.error(error);
-      toast.error('Native Google Sign-in failed. Please ensure you configured the Android Client ID.');
+      toast.error(`Native Google Sign-in failed: ${error.message || JSON.stringify(error)}`);
       setIsGoogleLoading(false);
     }
   };
