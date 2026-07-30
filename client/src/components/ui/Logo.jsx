@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
  * Official Voyage Genie Logo (Suitcase + Location Pin)
  * Minimal, premium, simple outline.
  */
-export const LogoIcon = ({ className, size = 'md' }) => {
+export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) => {
   const rawId = React.useId();
   // useId contains colons which can break CSS url() in some browsers, strip them
   const id = rawId.replace(/:/g, '');
@@ -24,7 +24,7 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg" 
-      className={cn('logo-svg shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', sizes[size], className)}
+      className={cn('shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:rotate-[8deg] group-hover:scale-110 group-hover:drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]', isHoverSimulated && 'rotate-[8deg] scale-110 drop-shadow-[0_4px_16px_rgba(79,124,255,0.8)]', sizes[size], className)}
     >
       <defs>
         <linearGradient id={metallicId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -39,10 +39,10 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       </defs>
 
       {/* Telescopic Handle Poles (Animate up on hover) */}
-      <path d="M18 12V6 M30 12V6" stroke={`url(#${metallicId})`} strokeWidth="2.5" strokeLinecap="round" className="logo-handle transition-transform duration-700 group-hover:-translate-y-1" />
+      <path d="M18 12V6 M30 12V6" stroke={`url(#${metallicId})`} strokeWidth="2.5" strokeLinecap="round" className={cn("transition-transform duration-700 group-hover:-translate-y-1", isHoverSimulated && "-translate-y-1")} />
       
       {/* Handle Grip (Animate up on hover) */}
-      <path d="M15 6H33" stroke={`url(#${metallicId})`} strokeWidth="3.5" strokeLinecap="round" className="logo-handle transition-transform duration-700 group-hover:-translate-y-1" />
+      <path d="M15 6H33" stroke={`url(#${metallicId})`} strokeWidth="3.5" strokeLinecap="round" className={cn("transition-transform duration-700 group-hover:-translate-y-1", isHoverSimulated && "-translate-y-1")} />
       
       {/* Suitcase Body (Taller than wide, hard-shell) */}
       <rect x="10" y="12" width="28" height="30" rx="4" stroke={`url(#${metallicId})`} strokeWidth="3" strokeLinejoin="round" />
@@ -55,7 +55,7 @@ export const LogoIcon = ({ className, size = 'md' }) => {
       <circle cx="33" cy="44" r="2" fill={`url(#${metallicId})`} />
 
       {/* Integrated Location Pin (Blue Accent) - Bounces up on hover */}
-      <g className="logo-pin transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-3 origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+      <g className={cn("transition-transform duration-700 delay-75 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:-translate-y-3 origin-bottom drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]", isHoverSimulated && "-translate-y-3")}>
         <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill={`url(#${pinGradId})`} className="transition-all duration-700" />
         <circle cx="24" cy="22" r="2.5" fill="white" />
       </g>
@@ -106,13 +106,13 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
 
   return (
     <div 
-      className={cn('group flex items-center gap-3 cursor-pointer', isHoverSimulated && 'logo-hover-active', className)}
+      className={cn('group flex items-center gap-3 cursor-pointer', className)}
       onPointerDown={handlePointerDown}
     >
-      <LogoIcon size={size} className="text-text-primary" />
+      <LogoIcon size={size} className="text-text-primary" isHoverSimulated={isHoverSimulated} />
       {showText && (
-        <span className={cn('logo-text font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', textSizes[size])}>
-          Voyage Genie<span className="logo-dot text-[var(--color-accent)] inline-block transition-transform duration-700 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125">.</span>
+        <span className={cn('font-extrabold tracking-tight text-text-primary transition-all duration-700 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#4F7CFF]', isHoverSimulated && 'text-transparent bg-clip-text bg-gradient-to-r from-white to-[#4F7CFF]', textSizes[size])}>
+          Voyage Genie<span className={cn("inline-block transition-transform duration-700 text-[var(--color-accent)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-125", isHoverSimulated && "translate-x-1 -translate-y-1 scale-125")}>.</span>
         </span>
       )}
     </div>

@@ -411,10 +411,3 @@ input:-webkit-autofill:active{
     width: 100% !important;
   }
 }
-
-/* Logo Simulated Hover State for Mobile Double-Tap */
-.group.logo-hover-active .logo-svg { transform: rotate(8deg) scale(1.1); filter: drop-shadow(0 4px 16px rgba(79,124,255,0.8)); }
-.group.logo-hover-active .logo-handle { transform: translateY(-0.25rem); }
-.group.logo-hover-active .logo-pin { transform: translateY(-0.75rem); }
-.group.logo-hover-active .logo-text { color: transparent; background-clip: text; -webkit-background-clip: text; background-image: linear-gradient(to right, #ffffff, #4F7CFF); }
-.group.logo-hover-active .logo-dot { transform: translateX(0.25rem) translateY(-0.25rem) scale(1.25); }
