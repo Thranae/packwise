@@ -27,9 +27,9 @@ export const uploadProfileImage = catchAsync(async (req, res) => {
     return ApiResponse.send(res, 400, 'No image file provided');
   }
 
-  // Construct URL for the uploaded file
-  // E.g., http://localhost:5000/uploads/profiles/filename.jpg
-  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/profiles/${req.file.filename}`;
+  // Convert buffer to base64 string for MongoDB storage
+  const base64Image = req.file.buffer.toString('base64');
+  const imageUrl = `data:${req.file.mimetype};base64,${base64Image}`;
   
   const updatedUser = await userService.updateProfileImage(req.user._id, imageUrl);
   ApiResponse.send(res, 200, 'Profile image updated successfully', updatedUser);

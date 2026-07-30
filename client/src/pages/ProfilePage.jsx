@@ -188,10 +188,7 @@ export default function ProfilePage() {
                   className="hidden"
                 />
                 
-                {/* Rotating glow ring when uploading */}
-                {isUploading && (
-                  <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 animate-[spin_2s_linear_infinite] blur-md opacity-70" />
-                )}
+                {/* Rotating glow ring removed for a cleaner look */}
 
                 <div 
                   className="w-32 h-32 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-4xl font-bold text-white shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.3)] overflow-hidden cursor-pointer relative group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] border-2 border-white/20"
