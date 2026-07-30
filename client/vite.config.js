@@ -98,6 +98,8 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            if (id.includes('react/') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor-react';
+            if (id.includes('framer-motion') || id.includes('lucide-react')) return 'vendor-ui';
             if (id.includes('maplibre-gl') || id.includes('react-map-gl') || id.includes('leaflet')) return 'vendor-map';
             if (id.includes('three') || id.includes('globe.gl')) return 'vendor-3d';
             if (id.includes('jspdf') || id.includes('html2canvas')) return 'vendor-pdf';

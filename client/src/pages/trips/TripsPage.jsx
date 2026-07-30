@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { Plus, Search, Map, Compass, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
 import { useHaptics } from '@/hooks/useHaptics';
+import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { PullToRefresh } from '@/components/common/PullToRefresh';
 
@@ -16,18 +17,21 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 export default function TripsPage() {
   const { trips, loadingTrips, fetchTrips } = useTripContext();
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { lightTap, successTap } = useHaptics();
+  
+  useRoutePreload(2000); // Preload heavy route chunks after 2s of idle
 
   const filteredTrips = useMemo(() => {
     return trips.filter(trip => {
       // Guard against corrupted null entries
       if (!trip || !trip._id) return false;
 
-      if (!searchQuery && activeFilter === 'All') return true;
+      if (!deferredSearchQuery && activeFilter === 'All') return true;
       
-      const search = searchQuery.toLowerCase().trim();
+      const search = deferredSearchQuery.toLowerCase().trim();
       const dest = trip.destination?.toLowerCase() || '';
       const country = trip.country?.toLowerCase() || '';
       const status = trip.status?.toLowerCase() || '';
@@ -48,7 +52,7 @@ export default function TripsPage() {
 
       return matchesSearch && matchesFilter;
     });
-  }, [searchQuery, activeFilter, trips]);
+  }, [deferredSearchQuery, activeFilter, trips]);
 
   return (
     <PageTransition className="col-span-12">
