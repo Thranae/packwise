@@ -173,7 +173,13 @@ export const TripCard = ({ trip }) => {
                   <Copy className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Duplicate</span>
                 </button>
                 <button onClick={async (e) => { 
-                  e.stopPropagation(); 
+                  e.stopPropagation();
+                  
+                  if (trip._id.startsWith('local-')) {
+                    addToast('warning', 'Please wait for this trip to sync before sharing!');
+                    return;
+                  }
+
                   setIsMenuOpen(false); 
                   
                   try {
@@ -216,7 +222,7 @@ export const TripCard = ({ trip }) => {
                     const shareOptions = {
                       title: `${trip.destination} Trip`,
                       text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                      url: `https://voyagegenie.app/shared/${trip._id}`,
+                      url: `https://packwise-neon.vercel.app/shared/${trip._id}`,
                       dialogTitle: 'Share Trip with Buddies',
                     };
 
@@ -228,7 +234,7 @@ export const TripCard = ({ trip }) => {
                   } catch (err) {
                     console.warn('Native share failed or dismissed', err);
                     if (navigator.clipboard) {
-                      navigator.clipboard.writeText(`https://voyagegenie.app/shared/${trip._id}`);
+                      navigator.clipboard.writeText(`https://packwise-neon.vercel.app/shared/${trip._id}`);
                       addToast('success', 'Link copied to clipboard!');
                     }
                   }
