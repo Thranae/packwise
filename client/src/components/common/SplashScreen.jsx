@@ -133,7 +133,9 @@ export const SplashScreen = ({ onComplete }) => {
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
               className="relative z-10 transform-gpu"
             >
-              <LogoIcon size="lg" />
+              <div className="scale-[1.8] mt-1 ml-1">
+                <LogoIcon size="lg" />
+              </div>
             </motion.div>
           </div>
 
