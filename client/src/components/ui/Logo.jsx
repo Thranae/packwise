@@ -84,18 +84,17 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
       if (isAnimating) return;
       setIsAnimating(true);
       
-      // Premium pulse + wiggle animation
+      // Animate to match the desktop hover state, then return
       controls.start({
-        scale: [1, 1.25, 0.95, 1.1, 1],
-        rotate: [0, -8, 8, -4, 0],
+        scale: [1, 1.1, 1.1, 1],
+        rotate: [0, 8, 8, 0],
         filter: [
-          'drop-shadow(0px 0px 0px rgba(79,124,255,0))',
-          'drop-shadow(0px 0px 24px rgba(79,124,255,0.8))',
-          'drop-shadow(0px 0px 16px rgba(79,124,255,0.4))',
-          'drop-shadow(0px 0px 8px rgba(79,124,255,0.2))',
-          'drop-shadow(0px 0px 0px rgba(79,124,255,0))'
+          'drop-shadow(0px 2px 4px rgba(0,0,0,0.4))',
+          'drop-shadow(0px 4px 16px rgba(79,124,255,0.8))',
+          'drop-shadow(0px 4px 16px rgba(79,124,255,0.8))',
+          'drop-shadow(0px 2px 4px rgba(0,0,0,0.4))'
         ],
-        transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+        transition: { duration: 0.9, times: [0, 0.3, 0.7, 1], ease: [0.16, 1, 0.3, 1] }
       }).then(() => setIsAnimating(false));
     } else {
       // Single Tap candidate
