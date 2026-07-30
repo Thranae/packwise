@@ -175,20 +175,62 @@ export const TripCard = ({ trip }) => {
                 <button onClick={async (e) => { 
                   e.stopPropagation(); 
                   setIsMenuOpen(false); 
-                    try {
-                      addToast('info', 'Opening share options...');
-                      await Share.share({
-                        title: `${trip.destination} Trip`,
-                        text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                        url: 'https://voyagegenie.app',
-                        dialogTitle: 'Share Trip with Buddies',
-                      });
-                    } catch (err) {
-                      console.warn('Native share failed or dismissed', err);
-                      if (navigator.clipboard) {
-                        navigator.clipboard.writeText('https://voyagegenie.app');
-                        addToast('success', 'Link copied to clipboard!');
+                  
+                  try {
+                    addToast('info', 'Preparing trip to share...');
+                    let localFileUri = null;
+                    
+                    // On Native, download the image to share it directly!
+                    const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
+                    
+                    if (isNative && displayImage) {
+                      try {
+                        const { Filesystem, Directory } = await import('@capacitor/filesystem');
+                        
+                        // Fetch the image
+                        const response = await fetch(displayImage);
+                        const blob = await response.blob();
+                        
+                        // Convert to base64
+                        const base64Data = await new Promise((resolve, reject) => {
+                          const reader = new FileReader();
+                          reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                          reader.onerror = reject;
+                          reader.readAsDataURL(blob);
+                        });
+                        
+                        const fileName = `voyage-genie-${trip._id}-${Date.now()}.jpg`;
+                        
+                        const result = await Filesystem.writeFile({
+                          path: fileName,
+                          data: base64Data,
+                          directory: Directory.Cache
+                        });
+                        
+                        localFileUri = result.uri;
+                      } catch (imgErr) {
+                        console.warn('Could not attach image to share', imgErr);
                       }
+                    }
+
+                    const shareOptions = {
+                      title: `${trip.destination} Trip`,
+                      text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
+                      url: 'https://voyagegenie.app',
+                      dialogTitle: 'Share Trip with Buddies',
+                    };
+
+                    if (localFileUri) {
+                      shareOptions.files = [localFileUri];
+                    }
+
+                    await Share.share(shareOptions);
+                  } catch (err) {
+                    console.warn('Native share failed or dismissed', err);
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText('https://voyagegenie.app');
+                      addToast('success', 'Link copied to clipboard!');
+                    }
                   }
                 }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
