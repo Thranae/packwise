@@ -148,8 +148,8 @@ const PlaceModal = ({ place, onClose }) => {
   const pillColor = useTransform(y, [0, 100], ["rgba(255,255,255,0.7)", "rgba(255,255,255,1)"]);
 
   const handleDragEnd = (event, info) => {
-    // Easier close threshold:
-    if (info.offset.y > 40 || info.velocity.y > 150) {
+    // Very easy close threshold:
+    if (info.offset.y > 20 || info.velocity.y > 50) {
       onClose();
     }
   };
@@ -180,10 +180,10 @@ const PlaceModal = ({ place, onClose }) => {
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
         className="relative w-full md:w-[80vw] max-w-2xl h-[85vh] md:h-auto md:max-h-[85vh] overflow-hidden rounded-t-[40px] md:rounded-[40px] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] md:shadow-[0_32px_64px_rgba(0,0,0,0.5)] bg-[#0B1120] border-t border-white/20 md:border isolate flex flex-col will-change-transform"
       >
-        {/* Drag Pill (Mobile Only) */}
+        {/* Drag Pill (Mobile Only) - Made much larger and easier to grab */}
         <motion.div 
           style={{ width: pillWidth, opacity: pillOpacity, backgroundColor: pillColor }}
-          className="md:hidden absolute top-4 left-1/2 -translate-x-1/2 h-2.5 rounded-full z-[100] shadow-[0_2px_4px_rgba(0,0,0,0.5)] border border-white/30" 
+          className="md:hidden absolute top-3 left-1/2 -translate-x-1/2 w-16 h-2 rounded-full z-[100] shadow-[0_2px_4px_rgba(0,0,0,0.5)] border border-white/30" 
         />
         
         {/* Close Button (Desktop Only) */}
