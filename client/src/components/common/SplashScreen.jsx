@@ -58,41 +58,33 @@ export const SplashScreen = ({ onComplete }) => {
         style={{ backgroundColor: '#030712' }}
       >
         <div className="flex-1 flex flex-col items-center justify-center relative w-full h-full">
-          {/* Stunning Minimalist Animation */}
-          <div className="relative flex items-center justify-center w-32 h-32 mb-10">
-              {/* Expanding pulse rings */}
-              <motion.div 
-                animate={{ scale: [1, 2.5], opacity: [0.3, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
-                className="absolute inset-0 rounded-full border-[1.5px] border-blue-400/50"
-              />
-              <motion.div 
-                animate={{ scale: [1, 2], opacity: [0.3, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut", delay: 1.25 }}
-                className="absolute inset-0 rounded-full border-[1.5px] border-indigo-400/50"
-              />
-              {/* Center glowing app logo */}
-              <motion.div 
-                initial={{ scale: 0 }}
-                animate={{ scale: [0.95, 1.05, 0.95] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="relative z-10 w-24 h-24 bg-white/[0.03] border border-white/10 rounded-full backdrop-blur-2xl flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.3),inset_0_2px_15px_rgba(255,255,255,0.2)] group"
-              >
-                <LogoIcon size="lg" isHoverSimulated={true} className="w-12 h-12 text-white z-10 pointer-events-none drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
-              </motion.div>
-          </div>
+          {/* Ultra-Premium Minimalist Logo Reveal */}
+          <motion.div 
+            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 backdrop-blur-3xl shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
+          >
+            {/* Very subtle static glow behind the icon */}
+            <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
+            
+            {/* The icon stays perfectly straight and stable */}
+            <div className="relative z-10 scale-[1.2]">
+              <LogoIcon size="xl" className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]" />
+            </div>
+          </motion.div>
           
-          {/* App Name minimal text */}
+          {/* App Name minimal text with elegant reveal */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={phase >= 1 ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center gap-1"
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center gap-2"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.15em] text-white/90 uppercase drop-shadow-md">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-[0.2em] text-white/90 uppercase">
               Voyage Genie
             </h1>
-            <p className="text-[11px] sm:text-[12px] font-medium tracking-[0.2em] text-white/40 uppercase mt-2">
+            <p className="text-[11px] sm:text-[12px] font-medium tracking-[0.3em] text-white/40 uppercase mt-1">
               Your AI Travel Companion
             </p>
           </motion.div>
