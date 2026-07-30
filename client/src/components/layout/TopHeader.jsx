@@ -348,18 +348,7 @@ export const TopHeader = () => {
           </div>
         </div>
 
-        {/* Logo (Mobile Only) */}
-        <div className="lg:hidden flex items-center justify-center flex-1">
-          <Link to="/" className="group" onPointerDown={handlePointerDown}>
-            <motion.div
-              className={`bg-white/10 rounded-xl p-2 transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:bg-gradient-to-br group-hover:from-white/20 group-hover:to-white/5 group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_16px_rgba(0,0,0,0.2)]`}
-              whileHover={{ rotate: 15, scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-            >
-              <LogoIcon size="sm" isHoverSimulated={isHoverSimulated} />
-            </motion.div>
-          </Link>
-        </div>
+
 
         {/* Notifications */}
         <div className="relative" ref={notificationsRef}>
