@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutGrid, Map, Sparkles, Compass, User } from 'lucide-react';
+import { LayoutGrid, Map, Wand2, Compass, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
@@ -8,7 +8,7 @@ import { useSoundEffect } from '@/hooks/useSoundEffect';
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
   { label: 'Trips', path: '/trips', icon: Map, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
-  { label: 'Genie', path: '/assistant', icon: Sparkles, activeColor: 'text-white', isCenter: true },
+  { label: 'Genie', path: '/assistant', icon: Wand2, activeColor: 'text-white', isCenter: true },
   { label: 'Explore', path: '/explore', icon: Compass, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
   { label: 'Profile', path: '/profile', icon: User, activeColor: 'text-rose-400', shadowColor: 'shadow-rose-500/50' },
 ];
@@ -63,7 +63,7 @@ export function BottomNav() {
                   <div className="w-[58px] h-[58px] rounded-full bg-gradient-to-b from-[#1E293B] to-[#0F172A] p-[2px] shadow-[0_12px_24px_rgba(0,0,0,0.7)]">
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center shadow-[inset_0_6px_10px_rgba(255,255,255,0.5),inset_0_-4px_10px_rgba(0,0,0,0.6)] border-[1.5px] border-white/40 relative overflow-hidden group-active:scale-95 transition-transform duration-200">
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-                      <Icon size={26} className="text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.7)] group-hover:rotate-12 transition-transform duration-500" />
+                      <Icon size={26} className="text-white group-hover:rotate-12 transition-transform duration-500" />
                       
                       {/* Pulse Indicator */}
                       <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-emerald-400 rounded-full border-2 border-indigo-700 shadow-[0_0_12px_rgba(52,211,153,1),inset_0_2px_4px_rgba(255,255,255,0.8)] animate-pulse" />
