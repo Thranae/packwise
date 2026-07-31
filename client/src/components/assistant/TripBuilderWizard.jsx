@@ -8,6 +8,7 @@ import { useTripContext } from '@/context/TripContext';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useHaptics } from '@/hooks/useHaptics';
+import { LogoIcon } from '@/components/ui/Logo';
 
 // Premium Custom Date Picker
 const PremiumDatePicker = ({ value, onChange, minDate }) => {
