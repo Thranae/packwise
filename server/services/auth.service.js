@@ -44,36 +44,38 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
   existingUser.otpExpires = otpExpires;
   await existingUser.save();
 
-  // Send the OTP via email
-  
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('Server configuration error: RESEND_API_KEY missing');
+  // Send email via nodemailer
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('Server configuration error: SMTP_USER or SMTP_PASS missing');
+    throw new Error('Server configuration error: Email credentials missing');
   }
-  
-  const resendResponse = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
-    body: JSON.stringify({
-      from: 'Voyage Genie <onboarding@resend.dev>',
-      to: typeof normalizedEmail !== 'undefined' ? normalizedEmail : user.email,
-      subject: 'Your Voyage Genie OTP',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
-          <h2 style="color: #4F7CFF;">Voyage Genie</h2>
-          <p>Your verification code is:</p>
-          <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
-          <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
-        </div>
-      `
-    })
   });
 
-  if (!resendResponse.ok) {
-    const errData = await resendResponse.json();
-    console.error('Resend API Error:', errData);
+  const mailOptions = {
+    from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
+    to: normalizedEmail,
+    subject: 'Your Voyage Genie Signup OTP',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+        <h2 style="color: #4F7CFF;">Voyage Genie</h2>
+        <p>Your verification code to create an account is:</p>
+        <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
+        <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.error('Email send error:', err);
     throw new Error('Failed to send verification email');
   }
 
@@ -186,41 +188,40 @@ export const generateOtpAndSendEmail = async (email) => {
   user.otpExpires = otpExpires;
   await user.save();
 
-  // Send email via Resend API
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('Server configuration error: RESEND_API_KEY missing');
+  // Send email via nodemailer
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('Server configuration error: SMTP_USER or SMTP_PASS missing');
+    throw new ApiError(500, 'Server configuration error: Email credentials missing');
   }
 
-  try {
-    const resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
-      },
-      body: JSON.stringify({
-        from: 'Voyage Genie <onboarding@resend.dev>',
-        to: user.email,
-        subject: 'Your Password Reset OTP',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
-            <h2 style="color: #4F7CFF;">Voyage Genie</h2>
-            <p>Your one-time password to sign in is:</p>
-            <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
-            <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
-          </div>
-        `
-      })
-    });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
-    if (!resendResponse.ok) {
-      throw new Error('Failed to send verification email');
-    }
+  const mailOptions = {
+    from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
+    to: user.email,
+    subject: 'Your Password Reset OTP',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+        <h2 style="color: #4F7CFF;">Voyage Genie</h2>
+        <p>Your one-time password to sign in is:</p>
+        <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
+        <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
   } catch (err) {
     console.error('Email send error:', err);
     throw new ApiError(500, 'Failed to send OTP email');
   }
-
 
   return { message: 'OTP sent successfully' };
 };
