@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
 import { signupSchema } from '@/constants/validation';
 import api from '@/services/api';
+import axios from 'axios';
 
 const isNative = Capacitor.isNativePlatform();
 
@@ -59,7 +60,8 @@ export default function SignupPage() {
   const onSubmit = async (data) => {
     try {
       let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
-      const res = await api.post('/auth/signup', data);
+      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
+      const res = await axios.post(`${vercelApiUrl}/api/signup`, data);
       
       if (res.data.success || res.status === 201) {
         setSignupEmail(data.email);
@@ -85,7 +87,8 @@ export default function SignupPage() {
     try {
       // Re-trigger the signup API to resend the OTP.
       const data = getValues();
-      const res = await api.post('/auth/signup', data);
+      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
+      const res = await axios.post(`${vercelApiUrl}/api/signup`, data);
       
       if (res.data.success || res.status === 201) {
         setResendTimer(40);
