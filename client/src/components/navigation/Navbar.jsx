@@ -309,8 +309,12 @@ export const Navbar = () => {
                       initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 }}
                       className="flex items-center gap-4 p-4 mb-3 rounded-[20px] bg-white/[0.03] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
                     >
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_12px_rgba(99,102,241,0.4)] border-[1.5px] border-white/20 shrink-0">
-                        <span className="text-lg font-bold text-white drop-shadow-md">{getInitials(user?.name || 'User')}</span>
+                      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_12px_rgba(99,102,241,0.4)] border-[1.5px] border-white/20 shrink-0 overflow-hidden">
+                        {user?.profileImage ? (
+                          <img src={user.profileImage} alt={user?.name || 'User'} className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-lg font-bold text-white drop-shadow-md">{getInitials(user?.name || 'User')}</span>
+                        )}
                       </div>
                       <div className="flex flex-col min-w-0">
                         <span className="font-bold text-white text-[16px] truncate tracking-tight">{user?.name || 'User'}</span>
