@@ -45,7 +45,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
       <button
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(true); }}
-        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300 cursor-pointer"
+        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300 cursor-pointer"
       >
         <span className="pointer-events-none">{formattedValue}</span>
         <Calendar className="w-5 h-5 text-white/50 pointer-events-none" />
@@ -57,13 +57,13 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
             <div className="fixed inset-0 z-[100] flex items-center justify-center">
               <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/40 "
                 onClick={() => setIsOpen(false)}
               />
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95 backdrop-blur-md border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
+                className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95  border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
               >
                 <div className="flex items-center justify-between mb-6">
                   <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
@@ -243,7 +243,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
           placeholder={placeholder}
           autoFocus={autoFocus}
           disabled={disabled}
-          className="w-full h-14 pl-6 pr-14 text-base rounded-[18px] bg-white/[0.05] backdrop-blur-md border-[1.5px] border-white/10 border-t-white/40 border-l-white/30 text-white placeholder-white/40 focus:bg-white/[0.12] focus:border-white/40 focus:border-t-white/60 focus:ring-4 focus:ring-indigo-400/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:bg-white/[0.08] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.25)] hover:-translate-y-[2px] outline-none relative z-20" 
+          className="w-full h-14 pl-6 pr-14 text-base rounded-[18px] bg-white/[0.05]  border-[1.5px] border-white/10 border-t-white/40 border-l-white/30 text-white placeholder-white/40 focus:bg-white/[0.12] focus:border-white/40 focus:border-t-white/60 focus:ring-4 focus:ring-indigo-400/20 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:bg-white/[0.08] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.25)] hover:-translate-y-[2px] outline-none relative z-20" 
         />
         {isLocalSearching && (
           <div className="absolute right-5 top-1/2 -translate-y-1/2 z-30 pointer-events-none">
@@ -264,7 +264,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute left-0 right-0 top-full mt-2 bg-[#0c1425]/98 backdrop-blur-md border border-white/10 rounded-[20px] z-[100] shadow-[0_24px_48px_rgba(0,0,0,0.6)] overflow-hidden"
+                className="absolute left-0 right-0 top-full mt-2 bg-[#0c1425]/98  border border-white/10 rounded-[20px] z-[100] shadow-[0_24px_48px_rgba(0,0,0,0.6)] overflow-hidden"
               >
                 {/* Header */}
                 <div className="px-4 pt-3 pb-2 border-b border-white/5">
@@ -390,7 +390,7 @@ export const TripBuilderWizard = () => {
                 <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-[20px] flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative group ${
                   isActive || isPast 
                     ? `bg-gradient-to-br ${s.color} text-white shadow-[0_12px_24px_${s.shadow},inset_0_4px_12px_rgba(255,255,255,0.4)] scale-110 z-20` 
-                    : 'bg-white/5 border border-white/10 text-white/40 backdrop-blur-md shadow-[inset_0_2px_4px_rgba(255,255,255,0.05)]'
+                    : 'bg-white/5 border border-white/10 text-white/40  shadow-[inset_0_2px_4px_rgba(255,255,255,0.05)]'
                 }`}>
                   {isActive && <div className={`absolute -inset-4 bg-gradient-to-r ${s.color} rounded-full opacity-30 blur-2xl animate-pulse -z-10`} />}
                   {isActive && <div className="absolute inset-0 bg-white/20 rounded-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mix-blend-overlay" />}
@@ -443,7 +443,7 @@ export const TripBuilderWizard = () => {
                       <div className="flex-1">
                         <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">How long is your trip?</label>
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2 bg-white/[0.03] backdrop-blur-md border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)]">
+                          <div className="flex items-center gap-2 bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)]">
                             <button 
                               onClick={() => setDuration(Math.max(1, (parseInt(duration) || 7) - 1))}
                               className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
@@ -490,8 +490,8 @@ export const TripBuilderWizard = () => {
                               onClick={() => setBudget(b)}
                               className={`group/budget relative overflow-hidden rounded-[16px] sm:rounded-[24px] p-2 sm:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                                 isActive 
-                                  ? 'bg-white/[0.12] backdrop-blur-md border-[1.5px] border-white/30 border-t-white/60 border-l-white/50 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_4px_12px_rgba(255,255,255,0.3)] scale-[1.02] ring-2 sm:ring-4 ring-indigo-400/20' 
-                                  : 'bg-white/[0.03] backdrop-blur-md border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_24px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.2)]'
+                                  ? 'bg-white/[0.12]  border-[1.5px] border-white/30 border-t-white/60 border-l-white/50 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_4px_12px_rgba(255,255,255,0.3)] scale-[1.02] ring-2 sm:ring-4 ring-indigo-400/20' 
+                                  : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_24px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.2)]'
                               }`}
                             >
                               {isActive && <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />}
@@ -518,8 +518,8 @@ export const TripBuilderWizard = () => {
                               onClick={() => toggleStyle(style)}
                               className={`rounded-[20px] px-4 py-4 sm:px-6 sm:py-5 text-center cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                                 isActive 
-                                  ? 'bg-gradient-to-br from-indigo-500/80 to-purple-600/80 backdrop-blur-md border-[1.5px] border-white/40 border-t-white/70 border-l-white/50 shadow-[0_16px_32px_rgba(99,102,241,0.5),inset_0_4px_16px_rgba(255,255,255,0.4)] text-white scale-[1.02] ring-2 ring-white/20' 
-                                  : 'bg-white/[0.03] backdrop-blur-sm border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white/60 hover:text-white hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_16px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.25)]'
+                                  ? 'bg-gradient-to-br from-indigo-500/80 to-purple-600/80  border-[1.5px] border-white/40 border-t-white/70 border-l-white/50 shadow-[0_16px_32px_rgba(99,102,241,0.5),inset_0_4px_16px_rgba(255,255,255,0.4)] text-white scale-[1.02] ring-2 ring-white/20' 
+                                  : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white/60 hover:text-white hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_16px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.25)]'
                               }`}
                             >
                               <span className={`text-[13px] sm:text-[15px] font-bold tracking-wide transition-colors duration-300 ${isActive ? 'drop-shadow-md' : ''}`}>{style}</span>
@@ -530,12 +530,12 @@ export const TripBuilderWizard = () => {
                     </div>
                     <div className="group">
                       <label className="block text-[15px] font-bold text-white/90 mb-3 tracking-wide">Specific Interests <span className="text-white/40 font-medium">(Optional)</span></label>
-                      <input type="text" placeholder="e.g. Art museums, fine dining, hiking..." className="w-full h-16 px-6 text-lg rounded-[20px] bg-white/[0.03] backdrop-blur-sm border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white placeholder-white/30 focus:bg-white/[0.08] focus:border-white/20 focus:ring-4 focus:ring-indigo-400/10 transition-all duration-500 shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)] outline-none group-hover:bg-white/[0.06]" />
+                      <input type="text" placeholder="e.g. Art museums, fine dining, hiking..." className="w-full h-16 px-6 text-lg rounded-[20px] bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white placeholder-white/30 focus:bg-white/[0.08] focus:border-white/20 focus:ring-4 focus:ring-indigo-400/10 transition-all duration-500 shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)] outline-none group-hover:bg-white/[0.06]" />
                     </div>
                     <div>
                       <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Who is traveling? <span className="text-white/40 font-medium">(For Packing List)</span></label>
                       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                        <div className="flex-1 flex items-center justify-between bg-white/[0.03] backdrop-blur-md border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03]  border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
                           <span className="font-bold text-white/80 tracking-wide">Male Travelers</span>
                           <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
                             <button onClick={() => setMales(Math.max(0, males - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
@@ -543,7 +543,7 @@ export const TripBuilderWizard = () => {
                             <button onClick={() => setMales(males + 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Plus className="w-4 h-4 text-white" /></button>
                           </div>
                         </div>
-                        <div className="flex-1 flex items-center justify-between bg-white/[0.03] backdrop-blur-md border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03]  border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
                           <span className="font-bold text-white/80 tracking-wide">Female Travelers</span>
                           <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
                             <button onClick={() => setFemales(Math.max(0, females - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
@@ -559,7 +559,7 @@ export const TripBuilderWizard = () => {
                 <div className="flex items-center justify-between mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/10 relative z-10 shrink-0">
                   <button 
                     onClick={() => { lightTap(); playSound('tap'); setStep(step - 1); }}
-                    className={`h-12 sm:h-14 px-6 sm:px-8 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.03] backdrop-blur-sm border-[1.5px] border-white/10 border-t-white/30 text-white/70 hover:bg-white/[0.08] hover:text-white hover:-translate-y-[2px] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_8px_rgba(255,255,255,0.1)]'}`}
+                    className={`h-12 sm:h-14 px-6 sm:px-8 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 text-white/70 hover:bg-white/[0.08] hover:text-white hover:-translate-y-[2px] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_8px_rgba(255,255,255,0.1)]'}`}
                   >
                     Back
                   </button>
@@ -567,7 +567,7 @@ export const TripBuilderWizard = () => {
                   {step < 3 ? (
                     <button 
                       onClick={() => { lightTap(); playSound('tap'); setStep(step + 1); }}
-                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-white/10 backdrop-blur-md border-[1.5px] border-white/20 border-t-white/50 border-l-white/40 text-white font-bold tracking-wide shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/20 hover:scale-[1.02] hover:-translate-y-[2px] transition-all duration-500 group hover:shadow-[0_16px_32px_rgba(0,0,0,0.4),inset_0_6px_16px_rgba(255,255,255,0.3)]"
+                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-white/10  border-[1.5px] border-white/20 border-t-white/50 border-l-white/40 text-white font-bold tracking-wide shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/20 hover:scale-[1.02] hover:-translate-y-[2px] transition-all duration-500 group hover:shadow-[0_16px_32px_rgba(0,0,0,0.4),inset_0_6px_16px_rgba(255,255,255,0.3)]"
                     >
                       <span className="text-[14px] sm:text-[15px] font-bold text-white tracking-wide drop-shadow-md">Next Step</span>
                       <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-1 transition-transform drop-shadow-md" />
@@ -576,7 +576,7 @@ export const TripBuilderWizard = () => {
                     <button 
                       onClick={handleGenerate}
                       disabled={!prompt.trim()}
-                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-gradient-to-r from-emerald-400/90 to-teal-500/90 backdrop-blur-md border-[1.5px] border-white/40 border-t-white/70 border-l-white/60 disabled:opacity-50 transition-all duration-500 shadow-[0_12px_24px_rgba(52,211,153,0.5),inset_0_4px_12px_rgba(255,255,255,0.4)] group hover:scale-[1.02] hover:-translate-y-[2px] hover:shadow-[0_16px_32px_rgba(52,211,153,0.6),inset_0_6px_16px_rgba(255,255,255,0.5)]"
+                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-gradient-to-r from-emerald-400/90 to-teal-500/90  border-[1.5px] border-white/40 border-t-white/70 border-l-white/60 disabled:opacity-50 transition-all duration-500 shadow-[0_12px_24px_rgba(52,211,153,0.5),inset_0_4px_12px_rgba(255,255,255,0.4)] group hover:scale-[1.02] hover:-translate-y-[2px] hover:shadow-[0_16px_32px_rgba(52,211,153,0.6),inset_0_6px_16px_rgba(255,255,255,0.5)]"
                     >
                       <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white drop-shadow-md" />
                       <span className="text-[14px] sm:text-[15px] font-bold text-white tracking-wide drop-shadow-md">Generate Itinerary</span>
@@ -598,7 +598,7 @@ export const TripBuilderWizard = () => {
                   initial={{ scale: 0.85, opacity: 0, y: 20 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 backdrop-blur-md shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
+                  className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5  shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
                 >
                   {/* Very subtle static glow behind the icon */}
                   <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
@@ -629,7 +629,7 @@ export const TripBuilderWizard = () => {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="hidden lg:block w-full lg:w-[400px] shrink-0 sticky top-8"
           >
-            <div className="w-full p-6 rounded-[32px] bg-black/40 backdrop-blur-md border border-white/10 border-t-white/30 border-l-white/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.2)]">
+            <div className="w-full p-6 rounded-[32px] bg-black/40  border border-white/10 border-t-white/30 border-l-white/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.2)]">
               <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
                 <Sparkles className="w-5 h-5 text-indigo-400" />
                 <h3 className="text-lg font-bold text-white tracking-wide">
@@ -665,7 +665,7 @@ export const TripBuilderWizard = () => {
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-white/[0.08] to-transparent -translate-x-[100%] group-hover/item:translate-x-0 transition-transform duration-500 ease-out pointer-events-none" />
                       
-                      <div className="relative z-10 shrink-0 w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-2xl shadow-[0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover/item:scale-110 group-hover/item:bg-white/20 group-hover/item:border-white/50 group-hover/item:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                      <div className="relative z-10 shrink-0 w-12 h-12 rounded-full bg-white/5  border border-white/10 flex items-center justify-center text-2xl shadow-[0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover/item:scale-110 group-hover/item:bg-white/20 group-hover/item:border-white/50 group-hover/item:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
                         {loc.icon}
                       </div>
                       
