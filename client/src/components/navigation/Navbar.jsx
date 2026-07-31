@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Sparkles, Globe, Book } from 'lucide-react';
+import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Plane, Globe, Book, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { ROUTES } from '@/constants/routes';
@@ -303,132 +303,79 @@ export const Navbar = () => {
               <div className="relative z-10 bg-[#0C1322] rounded-[28px] p-5 flex flex-col"
               >
               {isAuthenticated ? (
-                  <div className="flex flex-col gap-1 w-full pb-2">
-                    {/* Premium User Profile Card */}
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 }}
-                      className="flex items-center gap-4 p-4 mb-3 rounded-[20px] bg-white/[0.03] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
-                    >
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_12px_rgba(99,102,241,0.4)] border-[1.5px] border-white/20 shrink-0 overflow-hidden">
+                  <div className="flex flex-col w-full">
+                    {/* User Profile Row */}
+                    <div className="flex items-center gap-3.5 px-2 py-3 mb-2">
+                      <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 border border-white/20 shrink-0 overflow-hidden">
                         {user?.profileImage ? (
                           <img src={user.profileImage} alt={user?.name || 'User'} className="w-full h-full object-cover" />
                         ) : (
-                          <span className="text-lg font-bold text-white drop-shadow-md">{getInitials(user?.name || 'User')}</span>
+                          <span className="text-sm font-bold text-white">{getInitials(user?.name || 'User')}</span>
                         )}
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="font-bold text-white text-[16px] truncate tracking-tight">{user?.name || 'User'}</span>
-                        <span className="text-[13px] text-white/50 truncate font-medium mt-0.5">{user?.email}</span>
+                        <span className="font-semibold text-white text-[15px] truncate">{user?.name || 'User'}</span>
+                        <span className="text-[12px] text-white/40 truncate">{user?.email}</span>
                       </div>
-                    </motion.div>
-
-                    {/* Navigation Items */}
-                    <div className="flex flex-col gap-1">
-                      {navItems.map((item, idx) => (
-                        <motion.div key={item.name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.1 + (idx * 0.05) }}>
-                          <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="group flex items-center gap-4 px-4 py-3.5 rounded-[16px] text-white/70 hover:bg-white/[0.06] hover:text-white transition-all duration-300">
-                            <div className="w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:bg-white/[0.1] group-hover:border-white/10 group-hover:scale-110 transition-all duration-300">
-                              <item.icon className="h-4 w-4 group-hover:text-blue-400 transition-colors" />
-                            </div>
-                            <span className="font-semibold text-[15px] tracking-wide">{item.name}</span>
-                          </Link>
-                        </motion.div>
-                      ))}
                     </div>
 
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-3" />
+                    <div className="h-px w-full bg-white/[0.06] mb-1" />
+
+                    {/* Navigation Items — no motion wrappers for instant render */}
+                    {navItems.map((item) => (
+                      <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-white/65 hover:bg-white/[0.05] hover:text-white transition-colors duration-200">
+                        <item.icon className="h-[18px] w-[18px]" />
+                        <span className="font-medium text-[15px]">{item.name}</span>
+                      </Link>
+                    ))}
+
+                    <div className="h-px w-full bg-white/[0.06] my-1" />
                     
-                    <div className="flex flex-col gap-1">
-                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.45 }}>
-                        <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="group flex items-center gap-4 px-4 py-3.5 rounded-[16px] text-white/70 hover:bg-white/[0.06] hover:text-white transition-all duration-300">
-                          <div className="w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:bg-white/[0.1] group-hover:border-white/10 group-hover:scale-110 transition-all duration-300">
-                            <Settings className="h-4 w-4 group-hover:text-white transition-colors" />
-                          </div>
-                          <span className="font-semibold text-[15px] tracking-wide">Settings</span>
-                        </Link>
-                      </motion.div>
+                    <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-white/65 hover:bg-white/[0.05] hover:text-white transition-colors duration-200">
+                      <Settings className="h-[18px] w-[18px]" />
+                      <span className="font-medium text-[15px]">Settings</span>
+                    </Link>
 
-                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.5 }}>
-                        <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="group flex items-center w-full gap-4 px-4 py-3.5 rounded-[16px] text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300">
-                          <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center group-hover:bg-red-500/20 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
-                            <LogOut className="h-4 w-4" />
-                          </div>
-                          <span className="font-semibold text-[15px] tracking-wide">Log out</span>
-                        </button>
-                      </motion.div>
-                    </div>
+                    <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="flex items-center w-full gap-3.5 px-4 py-3 rounded-[14px] text-red-400/70 hover:bg-red-500/10 hover:text-red-400 transition-colors duration-200">
+                      <LogOut className="h-[18px] w-[18px]" />
+                      <span className="font-medium text-[15px]">Log out</span>
+                    </button>
                   </div>
               ) : (
-                <div className="flex flex-col items-center py-6 px-2">
-                  {/* Hero Section */}
-                  <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative mb-6"
-                  >
-                    {/* Soft ambient glow behind logo */}
-                    <div className="absolute inset-0 -m-4 rounded-full bg-gradient-to-br from-blue-500/15 via-purple-500/10 to-transparent blur-2xl" />
-                    <div className="relative w-20 h-20 rounded-[24px] bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_12px_32px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.1)]">
-                      <Logo size="md" showText={false} />
+                <div className="flex flex-col w-full py-3 px-1">
+                  {/* Compact travel-themed header */}
+                  <div className="flex items-center gap-3 px-3 mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/10 border border-white/[0.08] flex items-center justify-center">
+                      <Plane className="w-5 h-5 text-blue-400" />
                     </div>
-                  </motion.div>
+                    <div>
+                      <h2 className="text-[16px] font-semibold text-white tracking-tight">Voyage Genie<span className="text-blue-400">.</span></h2>
+                      <p className="text-[11px] text-white/35">Plan your next adventure</p>
+                    </div>
+                  </div>
 
-                  {/* Tagline */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.15 }}
-                    className="text-center mb-8"
-                  >
-                    <h2 className="text-xl font-semibold tracking-tight text-white mb-1.5">
-                      Welcome to Voyage Genie<span className="text-blue-400">.</span>
-                    </h2>
-                    <p className="text-[13px] text-white/40 font-light leading-relaxed max-w-[260px]">
-                      AI-powered travel planning that feels like magic
-                    </p>
-                  </motion.div>
+                  {/* CTA Buttons */}
+                  <div className="flex flex-col gap-2.5 px-1">
+                    <Link to={ROUTES.SIGNUP} onClick={() => setMobileMenuOpen(false)} className="w-full block">
+                      <button className="w-full relative overflow-hidden group py-3.5 rounded-2xl text-white font-semibold text-[14px] tracking-wide transition-all duration-300 active:scale-[0.97]" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #6366F1 100%)' }}>
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          Get Started
+                          <ArrowRight className="w-4 h-4" />
+                        </span>
+                      </button>
+                    </Link>
 
-                  {/* Action Buttons */}
-                  <div className="w-full flex flex-col gap-3 px-2">
-                    <motion.div
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.25 }}
-                    >
-                      <Link to={ROUTES.SIGNUP} className="w-full block">
-                        <button className="w-full relative overflow-hidden group py-4 rounded-[18px] text-white font-bold text-[15px] tracking-wide shadow-[0_8px_24px_rgba(79,124,255,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-500 hover:shadow-[0_12px_32px_rgba(79,124,255,0.5)] hover:-translate-y-0.5 active:scale-[0.97]" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #7C3AED 50%, #6366F1 100%)' }}>
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                          <span className="relative z-10 flex items-center justify-center gap-2">
-                            <Sparkles className="w-4 h-4" />
-                            Get Started — It's Free
-                          </span>
-                        </button>
-                      </Link>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.35 }}
-                    >
-                      <Link to={ROUTES.LOGIN} className="w-full block">
-                        <button className="w-full py-4 rounded-[18px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-white/80 hover:text-white font-semibold text-[15px] transition-all duration-500 shadow-[inset_0_1px_2px_rgba(255,255,255,0.06)] hover:-translate-y-0.5 active:scale-[0.97]">
-                          Already have an account? <span className="text-blue-400 font-bold">Log in</span>
-                        </button>
-                      </Link>
-                    </motion.div>
+                    <Link to={ROUTES.LOGIN} onClick={() => setMobileMenuOpen(false)} className="w-full block">
+                      <button className="w-full py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-white/70 hover:text-white font-medium text-[14px] transition-colors duration-200 active:scale-[0.97]">
+                        Log in
+                      </button>
+                    </Link>
                   </div>
 
                   {/* Footer */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="text-[10px] font-medium tracking-[0.2em] text-white/20 uppercase mt-8"
-                  >
+                  <p className="text-[9px] font-medium tracking-[0.15em] text-white/15 uppercase mt-5 text-center">
                     Powered by Thranaeswanth
-                  </motion.p>
+                  </p>
                 </div>
               )}
               </div>
