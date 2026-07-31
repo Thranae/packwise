@@ -131,9 +131,9 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
 
       {/* 3. Category Breakdown */}
       <Card title="Category Breakdown" icon={Landmark} iconColor="text-purple-400" delay={0.15}>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6 min-w-0">
           {/* Donut */}
-          <div className="w-[120px] h-[120px] relative shrink-0">
+          <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] relative shrink-0">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)]">
               <defs>
                 <filter id="liquidTube" x="-20%" y="-20%" width="140%" height="140%">
@@ -170,22 +170,22 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
               ))}
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider">Total</span>
-              <span className="text-xs font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{destSymbol}{fmtDest(total / rateMultiplier)}</span>
+              <span className="text-[8px] sm:text-[9px] font-bold text-white/40 uppercase tracking-wider">Total</span>
+              <span className="text-[10px] sm:text-xs font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{destSymbol}{fmtDest(total / rateMultiplier)}</span>
             </div>
           </div>
 
           {/* Legend */}
-          <div className="flex flex-col gap-2 flex-1">
+          <div className="flex flex-col gap-2 flex-1 min-w-0">
             {pieData.map((slice, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <div className="w-3 h-3 rounded-full shrink-0 shadow-[0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.6)]" style={{ backgroundColor: slice.color }} />
-                  <span className="text-sm text-white/70 truncate">{slice.name}</span>
+              <div key={i} className="flex items-center justify-between min-w-0 gap-1">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
+                  <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full shrink-0 shadow-[0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.6)]" style={{ backgroundColor: slice.color }} />
+                  <span className="text-[11px] sm:text-sm text-white/70 truncate">{slice.name}</span>
                 </div>
-                <div className="flex items-center gap-2 shrink-0 pl-2">
-                  <span className="text-sm font-bold text-white truncate max-w-[100px] text-right">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</span>
-                  <span className="text-xs text-white/35 w-7 shrink-0 text-right">{Math.round(slice.pct)}%</span>
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0 pl-1 text-right">
+                  <span className="text-[11px] sm:text-sm font-bold text-white truncate min-w-0">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</span>
+                  <span className="text-[10px] sm:text-xs text-white/35 w-6 sm:w-7 shrink-0 text-right">{Math.round(slice.pct)}%</span>
                 </div>
               </div>
             ))}
