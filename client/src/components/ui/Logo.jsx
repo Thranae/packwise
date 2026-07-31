@@ -138,10 +138,10 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
   const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap(onClick);
 
   const textSizes = {
-    sm: 'text-xl',
-    md: 'text-2xl',
-    lg: 'text-4xl',
-    xl: 'text-5xl',
+    sm: 'text-lg',
+    md: 'text-xl',
+    lg: 'text-3xl',
+    xl: 'text-4xl',
   };
 
   return (
