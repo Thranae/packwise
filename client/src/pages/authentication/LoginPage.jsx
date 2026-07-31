@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
 import { loginSchema } from '@/constants/validation';
 import api from '@/services/api';
+import axios from 'axios';
 
 const isNative = Capacitor.isNativePlatform();
 
@@ -175,7 +176,8 @@ export default function LoginPage() {
     }
     setIsOtpLoading(true);
     try {
-      const res = await api.post('/auth/forgot-password', { email: forgotEmail });
+      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
+      const res = await axios.post(`${vercelApiUrl}/api/forgot-password`, { email: forgotEmail });
       if (res.data.success || res.data.status === 'success' || res.status === 200) {
         setIsOtpSent(true);
         setResendTimer(40);
@@ -194,7 +196,8 @@ export default function LoginPage() {
     if (resendTimer > 0 || isResending) return;
     setIsResending(true);
     try {
-      const res = await api.post('/auth/forgot-password', { email: forgotEmail });
+      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
+      const res = await axios.post(`${vercelApiUrl}/api/forgot-password`, { email: forgotEmail });
       if (res.data.success || res.data.status === 'success' || res.status === 200) {
         setResendTimer(40);
         toast.success('A new OTP has been sent to your email.');
