@@ -59,9 +59,9 @@ export default function SignupPage() {
     try {
       let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
       const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
-      const res = await axios.post(`${vercelApiUrl}/api/signup`, data);
+      const res = await axios.post(`${vercelApiUrl}/api/signup`, { email: data.email, password: data.password });
       
-      if (res.data.success || res.status === 201) {
+      if (res.data?.success === true) {
         setSignupEmail(data.email);
         setIsOtpMode(true);
         setResendTimer(40); // Start timer when entering OTP mode
@@ -86,9 +86,9 @@ export default function SignupPage() {
       // Re-trigger the signup API to resend the OTP.
       const data = getValues();
       const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
-      const res = await axios.post(`${vercelApiUrl}/api/signup`, data);
+      const res = await axios.post(`${vercelApiUrl}/api/signup`, { email: signupEmail, password: 'dummy-password' }); // Note: API ignores password on resend
       
-      if (res.data.success || res.status === 201) {
+      if (res.data?.success === true) {
         setResendTimer(40);
         toast.success('A new OTP has been sent to your email.');
       } else {
