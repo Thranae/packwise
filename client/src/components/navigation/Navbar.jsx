@@ -268,18 +268,25 @@ export const Navbar = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={() => { playSound('tap'); setMobileMenuOpen(false); }}
-              className="absolute inset-0 bg-[#060B14]/60 backdrop-blur-md"
+              className="absolute inset-0 bg-[#060B14]/80"
             />
             
             {/* Menu Card */}
             <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: -16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               style={{ willChange: 'transform, opacity' }}
-              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 bg-[#0A101C]/85 backdrop-blur-xl border border-white/[0.08] rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_24px_64px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] overflow-hidden"
+              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 rounded-[28px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.7)]"
             >
+              {/* Gradient border glow */}
+              <div className="absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/[0.12] via-white/[0.04] to-transparent pointer-events-none" style={{ padding: '1px' }}>
+                <div className="w-full h-full rounded-[27px] bg-[#0C1322]" />
+              </div>
+              {/* Content layer */}
+              <div className="relative z-10 bg-[#0C1322] rounded-[28px] p-5 flex flex-col"
+              >
               {isAuthenticated ? (
                   <div className="flex flex-col gap-1 w-full pb-2">
                     {/* Premium User Profile Card */}
@@ -405,6 +412,7 @@ export const Navbar = () => {
                   </motion.p>
                 </div>
               )}
+              </div>
             </motion.div>
           </div>
         )}
