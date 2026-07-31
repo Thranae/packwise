@@ -275,37 +275,63 @@ export const Navbar = () => {
             <motion.div
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 bg-[#0A101C]/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_40px_100px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              style={{ willChange: 'transform, opacity' }}
+              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 bg-[#0A101C]/85 backdrop-blur-xl border border-white/[0.08] rounded-[32px] p-4 flex flex-col gap-2 shadow-[0_24px_64px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] overflow-hidden"
             >
               {isAuthenticated ? (
-                <>
-                  <div className="flex items-center gap-3 px-4 py-4 mb-2 border-b border-white/10">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 text-sm font-bold text-white shadow-inner border border-white/20">
-                      {getInitials(user?.name || 'Thranae')}
+                  <div className="flex flex-col gap-1 w-full pb-2">
+                    {/* Premium User Profile Card */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 }}
+                      className="flex items-center gap-4 p-4 mb-3 rounded-[20px] bg-white/[0.03] border border-white/[0.08] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                    >
+                      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_4px_12px_rgba(99,102,241,0.4)] border-[1.5px] border-white/20 shrink-0">
+                        <span className="text-lg font-bold text-white drop-shadow-md">{getInitials(user?.name || 'User')}</span>
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-bold text-white text-[16px] truncate tracking-tight">{user?.name || 'User'}</span>
+                        <span className="text-[13px] text-white/50 truncate font-medium mt-0.5">{user?.email}</span>
+                      </div>
+                    </motion.div>
+
+                    {/* Navigation Items */}
+                    <div className="flex flex-col gap-1">
+                      {navItems.map((item, idx) => (
+                        <motion.div key={item.name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.1 + (idx * 0.05) }}>
+                          <Link to={item.path} onClick={() => setMobileMenuOpen(false)} className="group flex items-center gap-4 px-4 py-3.5 rounded-[16px] text-white/70 hover:bg-white/[0.06] hover:text-white transition-all duration-300">
+                            <div className="w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:bg-white/[0.1] group-hover:border-white/10 group-hover:scale-110 transition-all duration-300">
+                              <item.icon className="h-4 w-4 group-hover:text-blue-400 transition-colors" />
+                            </div>
+                            <span className="font-semibold text-[15px] tracking-wide">{item.name}</span>
+                          </Link>
+                        </motion.div>
+                      ))}
                     </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-white">{user?.name || 'Thranae'}</span>
-                      <span className="text-xs text-white/60">{user?.email}</span>
+
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-3" />
+                    
+                    <div className="flex flex-col gap-1">
+                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.45 }}>
+                        <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="group flex items-center gap-4 px-4 py-3.5 rounded-[16px] text-white/70 hover:bg-white/[0.06] hover:text-white transition-all duration-300">
+                          <div className="w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-center group-hover:bg-white/[0.1] group-hover:border-white/10 group-hover:scale-110 transition-all duration-300">
+                            <Settings className="h-4 w-4 group-hover:text-white transition-colors" />
+                          </div>
+                          <span className="font-semibold text-[15px] tracking-wide">Settings</span>
+                        </Link>
+                      </motion.div>
+
+                      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.2, delay: 0.5 }}>
+                        <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="group flex items-center w-full gap-4 px-4 py-3.5 rounded-[16px] text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-300">
+                          <div className="w-8 h-8 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center group-hover:bg-red-500/20 group-hover:border-red-500/30 group-hover:scale-110 transition-all duration-300">
+                            <LogOut className="h-4 w-4" />
+                          </div>
+                          <span className="font-semibold text-[15px] tracking-wide">Log out</span>
+                        </button>
+                      </motion.div>
                     </div>
                   </div>
-                  {navItems.map((item) => (
-                    <Link key={item.name} to={item.path} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-white/70 hover:bg-white/10 hover:text-white transition-colors font-medium">
-                      <item.icon className="h-5 w-5" />
-                      {item.name}
-                    </Link>
-                  ))}
-                  <div className="h-px w-full bg-white/10 my-1" />
-                  <Link to={ROUTES.SETTINGS} className="flex items-center gap-3 px-4 py-3 rounded-[16px] text-white/70 hover:bg-white/10 hover:text-white transition-colors font-medium">
-                    <Settings className="h-5 w-5" />
-                    Settings
-                  </Link>
-                  <button onClick={logout} className="flex items-center w-full gap-3 px-4 py-3 rounded-[16px] text-red-400 hover:bg-red-500/20 transition-colors font-medium">
-                    <LogOut className="h-5 w-5" />
-                    Log out
-                  </button>
-                </>
               ) : (
                 <div className="flex flex-col items-center py-6 px-2">
                   {/* Hero Section */}
