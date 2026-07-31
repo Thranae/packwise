@@ -1,4 +1,3 @@
-import nodemailer from 'nodemailer';
 import { MongoClient } from 'mongodb';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
@@ -78,21 +77,19 @@ export default async function handler(req, res) {
     }
     await client.close();
 
-    // Send email
-    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
-
-      const mailOptions = {
-        from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
+    // Send email using Resend API to bypass Google spam filters
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    
+    const resendResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Voyage Genie <onboarding@resend.dev>',
         to: normalizedEmail,
         subject: 'Your Voyage Genie Signup OTP',
-        text: `Your signup verification code is: ${otp}. It is valid for 10 minutes.`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
             <h2 style="color: #4F7CFF;">Voyage Genie</h2>
@@ -101,12 +98,13 @@ export default async function handler(req, res) {
             <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
           </div>
         `
-      };
+      })
+    });
 
-      await transporter.sendMail(mailOptions);
-    } else {
-      console.log('SMTP credentials missing, signup OTP not sent:', otp);
-      return res.status(500).json({ success: false, message: 'Server configuration error: SMTP credentials missing in Vercel' });
+    if (!resendResponse.ok) {
+      const errorData = await resendResponse.json();
+      console.error('Resend API error:', errorData);
+      return res.status(500).json({ success: false, message: 'Email provider failed to send OTP' });
     }
 
     return res.status(201).json({ success: true, message: 'OTP sent! Please check your email to verify.' });
