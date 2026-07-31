@@ -54,12 +54,14 @@ export default function SignupPage() {
       try {
         const res = await api.post('/auth/google', { tokenId: tokenResponse.access_token });
         const data = res.data;
-        if (data.status === 'success') {
+        if (data.success) {
           localStorage.setItem('token', data.data.token);
           setAuthData(data.data.user, data.data.token);
           clearTimeout(wakeTimer);
           setIsWakingUp(false);
           navigate(ROUTES.OVERVIEW, { replace: true });
+        } else {
+          throw new Error(data.message || 'Signup failed on backend');
         }
       } catch (error) {
         clearTimeout(wakeTimer);
@@ -90,12 +92,14 @@ export default function SignupPage() {
       
       const res = await api.post('/auth/google', { tokenId: accessToken });
       const data = res.data;
-      if (data.status === 'success') {
+      if (data.success) {
         localStorage.setItem('token', data.data.token);
         setAuthData(data.data.user, data.data.token);
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
         navigate(ROUTES.OVERVIEW, { replace: true });
+      } else {
+        throw new Error(data.message || 'Signup failed on backend');
       }
     } catch (error) {
       clearTimeout(wakeTimer);
