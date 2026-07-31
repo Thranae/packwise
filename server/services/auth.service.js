@@ -44,42 +44,36 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
   existingUser.otpExpires = otpExpires;
   await existingUser.save();
 
-  // Send email via Brevo API
-  if (!process.env.BREVO_API_KEY) {
-    console.warn('Server configuration error: BREVO_API_KEY missing');
+  // Send email via Nodemailer using Gmail App Password
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn('Server configuration error: SMTP credentials missing');
     throw new Error('Server configuration error: Email credentials missing');
   }
 
-  const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'api-key': process.env.BREVO_API_KEY,
-      'content-type': 'application/json'
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
-    body: JSON.stringify({
-      sender: {
-        name: 'Voyage Genie',
-        email: 'support.packwise@gmail.com'
-      },
-      to: [
-        { email: normalizedEmail }
-      ],
+  });
+
+  try {
+    await transporter.sendMail({
+      from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
+      to: normalizedEmail,
       subject: 'Your Voyage Genie Signup OTP',
-      htmlContent: `
+      html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
           <h2 style="color: #4F7CFF;">Voyage Genie</h2>
           <p>Your verification code to create an account is:</p>
           <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
           <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
         </div>
-      `
-    })
-  });
-
-  if (!brevoResponse.ok) {
-    const errData = await brevoResponse.json();
-    console.error('Brevo API Error:', errData);
+      `,
+    });
+  } catch (error) {
+    console.error('Nodemailer Error:', error);
     throw new Error('Failed to send verification email');
   }
 
