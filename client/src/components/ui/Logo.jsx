@@ -14,10 +14,10 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
   const pinGradId = `pin-grad-${id}`;
 
   const sizes = {
-    sm: 'w-5 h-5',
-    md: 'w-7 h-7',
-    lg: 'w-10 h-10',
-    xl: 'w-14 h-14',
+    sm: 'w-6 h-6',
+    md: 'w-9 h-9',
+    lg: 'w-12 h-12',
+    xl: 'w-16 h-16',
   };
 
   const suitcaseGlowId = `suitcase-glow-${id}`;
@@ -138,10 +138,10 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
   const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap(onClick);
 
   const textSizes = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-3xl',
-    xl: 'text-4xl',
+    sm: 'text-xl',
+    md: 'text-2xl',
+    lg: 'text-4xl',
+    xl: 'text-5xl',
   };
 
   return (
