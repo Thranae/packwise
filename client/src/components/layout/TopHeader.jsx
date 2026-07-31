@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Sparkles, Bell, Globe, User, Settings, LogOut, Mic, Map, Book, ArrowRight } from 'lucide-react';
+import { Search, Sparkles, Bell, Globe, User, Settings, LogOut, Mic, Map, Book, ArrowRight, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useAuth } from '@/hooks/useAuth';
 import { useTripContext } from '@/context/TripContext';
 import { useAI } from '@/hooks/useAI';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { ROUTES } from '@/constants/routes';
 import { getInitials } from '@/utils/formatters';
 import { GenieSlideOut } from '../ai/GenieSlideOut';
@@ -15,6 +16,7 @@ import api from '@/services/api';
 
 export const TopHeader = () => {
   const { user, logout } = useAuth();
+  const { isInstallable, promptInstall } = usePWAInstall();
   const { currentTrip, packedItems, generateTrip, notifications, markNotificationsAsRead } = useTripContext();
   const unreadCount = notifications ? notifications.filter(n => !n.read).length : 0;
   
@@ -459,6 +461,15 @@ export const TopHeader = () => {
                 </div>
 
                 <div className="flex flex-col gap-1">
+                  {isInstallable && (
+                    <button onClick={async () => {
+                      setProfileMenuOpen(false);
+                      await promptInstall();
+                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-blue-500/10 text-blue-400 hover:text-blue-300 transition-all text-sm font-bold group/item">
+                      <Download className="w-4 h-4 group-hover/item:scale-110 transition-transform" />
+                      Install App
+                    </button>
+                  )}
                   <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-all text-sm font-bold group/item">
                     <User className="w-4 h-4 group-hover/item:text-blue-400 group-hover/item:scale-110 transition-transform" />
                     My Profile
