@@ -106,6 +106,7 @@ export default async function handler(req, res) {
       await transporter.sendMail(mailOptions);
     } else {
       console.log('SMTP credentials missing, signup OTP not sent:', otp);
+      return res.status(500).json({ success: false, message: 'Server configuration error: SMTP credentials missing in Vercel' });
     }
 
     return res.status(201).json({ success: true, message: 'OTP sent! Please check your email to verify.' });
