@@ -58,7 +58,11 @@ export default function SignupPage() {
   const onSubmit = async (data) => {
     try {
       let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
-      const res = await api.post(`/auth/signup`, { email: data.email, password: data.password });
+      const res = await api.post(`/auth/signup`, { 
+        name: data.name,
+        email: data.email, 
+        password: data.password 
+      });
       
       if (res.data?.success === true || res.data?.message) {
         setSignupEmail(data.email);
@@ -84,7 +88,11 @@ export default function SignupPage() {
     try {
       // Re-trigger the signup API to resend the OTP.
       const data = getValues();
-      const res = await api.post(`/auth/signup`, { email: signupEmail, password: 'dummy-password' }); // Note: API ignores password on resend
+      const res = await api.post(`/auth/signup`, { 
+        name: data.name || 'User',
+        email: signupEmail, 
+        password: 'dummy-password' 
+      }); // Note: API ignores password on resend
       
       if (res.data?.success === true || res.data?.message) {
         setResendTimer(40);
