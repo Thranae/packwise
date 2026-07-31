@@ -97,8 +97,9 @@ const generateItinerary = (trip) => {
     weather: weatherTypes[0],
     budget: { estimate: Math.round(perDay * 0.6), label: 'Light day' },
     activities: [
-      { time: '14:00', icon: PlaneLanding,  title: 'Airport Transfer', desc: `Arrive at ${cleanDest(dest).split(' ')[0]} Airport` },
-      { time: '16:30', icon: MapPin,        title: 'Hotel Check-in',   desc: 'Settle in and freshen up' },
+      { time: '14:00', icon: MapPin,  title: 'Arrival & Transfer', desc: `Arrive at ${cleanDest(dest).split(' ')[0]} and transfer to accommodation` },
+      { time: '15:30', icon: Coffee,  title: 'Check-in & Rest',  desc: 'Settle in and freshen up' },
+      { time: '17:00', icon: Map,     title: 'Orientation Walk', desc: 'Familiarise yourself with the area' },
       { time: '19:30', icon: Utensils,      title: 'Welcome Dinner',   desc: 'First taste of local cuisine' },
     ],
     img: null,
@@ -138,7 +139,7 @@ const generateItinerary = (trip) => {
       activities: [
         { time: '09:00', icon: Coffee,       title: 'Final Breakfast',   desc: 'One last local meal' },
         { time: '11:00', icon: ShoppingBag,  title: 'Souvenir Shopping', desc: 'Last-minute gifts' },
-        { time: '14:30', icon: PlaneTakeoff, title: 'Airport Departure', desc: `Fly home from ${cleanDest(dest).split(' ')[0]}` },
+        { time: '14:30', icon: MapPin, title: 'Departure Journey', desc: `Begin journey home from ${cleanDest(dest).split(' ')[0]}` },
       ],
       img: null,
     });
@@ -548,8 +549,8 @@ export default function CalendarPage() {
           <Calendar className="w-5 h-5" />
           <span className="text-sm font-bold uppercase tracking-[0.2em]">Itinerary</span>
         </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-5xl font-semibold tracking-tighter text-white">
-          {destLabel} <span className="text-white/30">Timeline</span>
+        <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-5xl font-semibold tracking-tighter text-white truncate max-w-full">
+          {destLabel} <span className="text-white/30 hidden sm:inline-block">Timeline</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="text-white/50 text-lg max-w-xl">
           Your cinematic, day-by-day journey — real photos, weather, and budget for every stop.

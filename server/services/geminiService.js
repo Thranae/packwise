@@ -95,7 +95,9 @@ REQUIRED JSON STRUCTURE:
 }
 
 IMPORTANT RULES:
-- Ensure the sum of budget category amounts equals the budget total.
+- Verify if the destination actually has a major commercial airport before suggesting flights or airport check-ins. If it does not (e.g., Udhagamandalam/Ooty, which is accessed via Coimbatore airport or by road), suggest the appropriate nearest transit hub or road/rail travel instead.
+- Ensure the budget is calculated accurately and realistically based on the destination and travel style, and that all category percentages mathematically sum exactly to 100%.
+- Ensure the sum of budget category amounts exactly equals the budget total.
 - Ensure the dashOffsets for the budget chart correctly stack up to 100 (dashOffset starts at 0, then subtracts previous percent).
 - Generate a realistic and highly detailed itinerary.
 `;
