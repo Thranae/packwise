@@ -69,7 +69,8 @@ export const deleteTrip = catchAsync(async (req, res) => {
 
 export const duplicateTrip = catchAsync(async (req, res) => {
   const userId = req.user ? req.user.id : "65a000000000000000000000";
-  const tripToDuplicate = await Trip.findOne({ _id: req.params.id, user: userId }).lean();
+  // Find the trip by ID regardless of who owns it, so public links can be duplicated
+  const tripToDuplicate = await Trip.findById(req.params.id).lean();
   
   if (!tripToDuplicate) return ApiResponse.send(res, 404, 'Trip not found');
   
@@ -79,6 +80,7 @@ export const duplicateTrip = catchAsync(async (req, res) => {
   delete tripToDuplicate.__v;
   
   tripToDuplicate.destination = `${tripToDuplicate.destination} (Copy)`;
+  tripToDuplicate.user = userId; // Assign new ownership
   
   const newTrip = new Trip(tripToDuplicate);
   await newTrip.save();

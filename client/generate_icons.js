@@ -1,89 +1,36 @@
-import sharp from 'sharp';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const sharp = require('sharp');
+const fs = require('fs');
+const path = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const svgIcon = `
-<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Dark Blue Background (Rounded Square) -->
-  <rect width="512" height="512" rx="100" fill="#0A101C" />
-  
-  <defs>
-    <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#ffffff" />
-      <stop offset="40%" stopColor="#e2e8f0" />
-      <stop offset="100%" stopColor="#64748b" />
-    </linearGradient>
-    <linearGradient id="pin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#93c5fd" />
-      <stop offset="100%" stopColor="#3b82f6" />
-    </linearGradient>
-  </defs>
-
-  <!-- Scale and center the 48x48 icon into the 512x512 canvas -->
-  <!-- 512 / 48 = 10.666 scale. But we want some padding. Let's scale by 7 and center it -->
-  <!-- 48 * 7 = 336. 512 - 336 = 176 / 2 = 88 padding -->
-  <g transform="translate(88, 88) scale(7)">
-    <!-- Telescopic Handle Poles -->
-    <path d="M18 12V6 M30 12V6" stroke="url(#metallic)" stroke-width="2.5" stroke-linecap="round" />
-    
-    <!-- Handle Grip -->
-    <path d="M15 6H33" stroke="url(#metallic)" stroke-width="3.5" stroke-linecap="round" />
-    
-    <!-- Suitcase Body -->
-    <rect x="10" y="12" width="28" height="30" rx="4" stroke="url(#metallic)" stroke-width="3" stroke-linejoin="round" />
-    
-    <!-- Vertical Ribs -->
-    <path d="M16 18V36 M32 18V36" stroke="url(#metallic)" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.6" />
-
-    <!-- Wheels -->
-    <circle cx="15" cy="44" r="2" fill="url(#metallic)" />
-    <circle cx="33" cy="44" r="2" fill="url(#metallic)" />
-
-    <!-- Integrated Location Pin -->
-    <g>
-      <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="url(#pin-grad)" />
-      <circle cx="24" cy="22" r="2.5" fill="white" />
-    </g>
-  </g>
-</svg>
-`;
-
-async function generate() {
+async function generateIcons() {
   const publicDir = path.join(__dirname, 'public');
+  const svgPath = path.join(publicDir, 'logo.svg');
   
-  // Write the base SVG (for modern browsers)
-  await fs.writeFile(path.join(publicDir, 'logo.svg'), svgIcon);
+  // Read SVG, remove rx="100" to make it a perfect solid square
+  let svgData = fs.readFileSync(svgPath, 'utf8');
+  svgData = svgData.replace('rx="100"', '');
   
-  // Generate PWA Icons
-  const buffer = Buffer.from(svgIcon);
+  const buffer = Buffer.from(svgData);
   
-  await sharp(buffer)
-    .resize(192, 192)
-    .png()
-    .toFile(path.join(publicDir, 'pwa-192x192.png'));
-    
+  console.log("Generating pwa-512x512.png...");
   await sharp(buffer)
     .resize(512, 512)
     .png()
     .toFile(path.join(publicDir, 'pwa-512x512.png'));
     
+  console.log("Generating pwa-192x192.png...");
   await sharp(buffer)
-    .resize(180, 180)
+    .resize(192, 192)
     .png()
-    .toFile(path.join(publicDir, 'apple-touch-icon.png'));
-
-  // Maskable icon (needs more padding)
-  const maskableSvg = svgIcon.replace('translate(88, 88) scale(7)', 'translate(136, 136) scale(5)'); // 48 * 5 = 240, 512-240 = 272/2 = 136
-  await sharp(Buffer.from(maskableSvg))
+    .toFile(path.join(publicDir, 'pwa-192x192.png'));
+    
+  console.log("Generating maskable-icon-512x512.png...");
+  await sharp(buffer)
     .resize(512, 512)
     .png()
     .toFile(path.join(publicDir, 'maskable-icon-512x512.png'));
 
-  console.log("Icons generated successfully!");
+  console.log("Done!");
 }
 
-generate().catch(console.error);
+generateIcons().catch(console.error);
