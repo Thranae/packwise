@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     let interval = null;
-    if (isForgotPasswordMode && resendTimer > 0) {
+    if (isOtpSent && resendTimer > 0) {
       interval = setInterval(() => {
         setResendTimer((prev) => prev - 1);
       }, 1000);
