@@ -73,7 +73,7 @@ export function BottomNav() {
               ) : (
                 <>
                   <div className={`relative z-10 flex flex-col items-center justify-center transition-all duration-400 ${isActive ? `-translate-y-2.5 scale-105 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] ${item.activeColor}` : 'text-white/50 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] group-hover:text-white/90 group-hover:scale-110'}`}>
-                    <Icon size={22} className={isActive ? 'stroke-[2.5px]' : 'stroke-2'} />
+                    <Icon size={26} className={isActive ? 'stroke-[2.5px]' : 'stroke-2'} />
                   </div>
                   <span className={`absolute bottom-1.5 text-[8.5px] font-extrabold tracking-widest uppercase transition-all duration-300 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] z-10 ${isActive ? `${item.activeColor} opacity-100 translate-y-0` : 'text-white/40 opacity-0 translate-y-2'}`}>
                     {item.label}
