@@ -72,7 +72,7 @@ export const Navbar = () => {
           {/* Left: Logo */}
           <div className="flex-shrink-0 z-10 relative pl-2 hover:scale-105 transition-transform duration-700">
             <Logo 
-              size="sm" 
+              size="md" 
               onClick={() => {
                 navigate(isAuthenticated ? ROUTES.OVERVIEW : ROUTES.HOME);
               }} 

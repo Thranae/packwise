@@ -14,10 +14,10 @@ export const LogoIcon = ({ className, size = 'md', isHoverSimulated = false }) =
   const pinGradId = `pin-grad-${id}`;
 
   const sizes = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16',
-    xl: 'w-24 h-24',
+    sm: 'w-6 h-6',
+    md: 'w-9 h-9',
+    lg: 'w-12 h-12',
+    xl: 'w-16 h-16',
   };
 
   const suitcaseGlowId = `suitcase-glow-${id}`;
@@ -139,9 +139,9 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
 
   const textSizes = {
     sm: 'text-xl',
-    md: 'text-3xl',
-    lg: 'text-5xl',
-    xl: 'text-7xl',
+    md: 'text-2xl',
+    lg: 'text-4xl',
+    xl: 'text-5xl',
   };
 
   return (
