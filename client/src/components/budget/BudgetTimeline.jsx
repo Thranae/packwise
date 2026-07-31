@@ -60,11 +60,11 @@ export const BudgetTimeline = React.memo(({ summary, breakdown, inputs, rates })
               label={`Day ${day}`}
               sublabel="Explore"
             >
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-[10px] text-white/40 flex items-center gap-1">
+              <div className="flex items-center justify-between mt-1 gap-1">
+                <span className="text-[10px] text-white/40 flex items-center gap-1 shrink-0">
                   <Clock className="w-3 h-3" /> spend
                 </span>
-                <span className="text-xs font-bold text-white">{originSymbol} {fmtOrigin(dailyTotal)}</span>
+                <span className="text-xs font-bold text-white whitespace-nowrap truncate">{originSymbol}{fmtOrigin(dailyTotal)}</span>
               </div>
             </TimelineNode>
           ))}
@@ -110,7 +110,7 @@ const TimelineNode = ({ icon, iconBg, label, sublabel, children, isFirst, isLast
     </div>
 
     {/* Card */}
-    <div className="mt-2 w-[120px] bg-white/5 border border-white/10 rounded-xl p-3 hover:bg-white/8 transition-colors">
+    <div className="mt-2 w-[135px] bg-white/5 border border-white/10 rounded-xl p-3 hover:bg-white/8 transition-colors">
       {children}
     </div>
   </div>
