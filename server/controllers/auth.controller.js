@@ -7,6 +7,15 @@ export const signup = catchAsync(async (req, res) => {
   ApiResponse.send(res, 201, 'User registered successfully', result);
 });
 
+export const verifySignupOtp = catchAsync(async (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return ApiResponse.send(res, 400, 'Email and OTP are required');
+  }
+  const result = await authService.verifySignupOtp(email, otp);
+  ApiResponse.send(res, 200, 'Email verified and registered successfully', result);
+});
+
 export const login = catchAsync(async (req, res) => {
   const result = await authService.loginUser(req.body);
   ApiResponse.send(res, 200, 'Login successful', result);

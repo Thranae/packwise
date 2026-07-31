@@ -7,14 +7,98 @@ import crypto from 'crypto';
 
 export const signupUser = async ({ name, email, password, gender, travelPreference }) => {
   const normalizedEmail = email.toLowerCase();
-  const existingUser = await User.findOne({ email: normalizedEmail });
+  
+  // If user exists and is verified, reject.
+  // If user exists but is NOT verified, we can overwrite or just resend the OTP.
+  // We'll resend OTP and update password if needed.
+  let existingUser = await User.findOne({ email: normalizedEmail });
   if (existingUser) {
-    throw new ApiError(409, 'Email already in use');
+    if (existingUser.isVerified) {
+      throw new ApiError(409, 'Email already in use');
+    }
   }
 
-  const user = await User.create({ name, email: normalizedEmail, password, gender, travelPreference });
-  const token = generateToken(user._id);
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
+  const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
 
+  if (!existingUser) {
+    existingUser = await User.create({ 
+      name, 
+      email: normalizedEmail, 
+      password, 
+      gender, 
+      travelPreference,
+      isVerified: false 
+    });
+  } else {
+    // Update existing unverified user with new details in case they changed them
+    existingUser.name = name;
+    existingUser.password = password; // mongoose hooks will re-hash
+    existingUser.gender = gender;
+    existingUser.travelPreference = travelPreference;
+  }
+
+  existingUser.otp = hashedOtp;
+  existingUser.otpExpires = otpExpires;
+  await existingUser.save();
+
+  // Send the OTP via email
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
+    to: normalizedEmail,
+    subject: 'Your Voyage Genie Signup OTP',
+    text: `Your signup verification code is: ${otp}. It is valid for 10 minutes.`,
+    html: `
+      <div style="font-family: Arial, sans-serif; text-align: center; padding: 40px; background-color: #f9f9f9;">
+        <h2 style="color: #333;">Welcome to Voyage Genie!</h2>
+        <p style="font-size: 16px; color: #555;">Use the following code to verify your email address:</p>
+        <div style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #4285F4; margin: 20px 0;">
+          ${otp}
+        </div>
+        <p style="font-size: 14px; color: #999;">This code is valid for 10 minutes.</p>
+      </div>
+    `,
+  };
+
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn(`MOCK OTP: ${otp} (Setup SMTP_USER and SMTP_PASS to send real emails)`);
+  } else {
+    await transporter.sendMail(mailOptions);
+  }
+
+  return { success: true, message: 'OTP sent to email for verification' };
+};
+
+export const verifySignupOtp = async (email, otpCode) => {
+  const normalizedEmail = email.toLowerCase();
+  const hashedOtp = crypto.createHash('sha256').update(otpCode).digest('hex');
+
+  const user = await User.findOne({ 
+    email: normalizedEmail, 
+    otp: hashedOtp, 
+    otpExpires: { $gt: Date.now() } 
+  }).select('+otp +otpExpires');
+
+  if (!user) {
+    throw new ApiError(400, 'Invalid or expired OTP');
+  }
+
+  user.isVerified = true;
+  user.otp = undefined;
+  user.otpExpires = undefined;
+  await user.save();
+
+  const token = generateToken(user._id);
   const userObj = user.toObject();
   delete userObj.password;
 
@@ -27,8 +111,12 @@ export const loginUser = async ({ email, password }) => {
   if (!user) {
     throw new ApiError(404, 'Account does not exist. Please create an account.');
   }
-  if (!user.password || !(await user.comparePassword(password))) {
+  if (!user || !user.password || !(await user.comparePassword(password))) {
     throw new ApiError(401, 'Invalid email or password');
+  }
+  
+  if (!user.isVerified) {
+    throw new ApiError(403, 'Email not verified. Please sign up again to receive a new OTP.');
   }
 
   const token = generateToken(user._id);
@@ -53,6 +141,10 @@ export const googleAuthUser = async (accessToken) => {
       if (!user.googleId) {
         user.googleId = googleId;
         user.profileImage = user.profileImage || picture;
+        user.isVerified = true;
+        await user.save();
+      } else if (!user.isVerified) {
+        user.isVerified = true;
         await user.save();
       }
     } else {
@@ -61,6 +153,7 @@ export const googleAuthUser = async (accessToken) => {
         email,
         googleId,
         profileImage: picture,
+        isVerified: true
       });
     }
 

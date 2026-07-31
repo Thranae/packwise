@@ -64,6 +64,10 @@ const userSchema = new mongoose.Schema(
       },
       default: 'solo',
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     theme: {
       type: String,
       enum: {
