@@ -181,63 +181,27 @@ export const TripCard = ({ trip }) => {
                   }
 
                   setIsMenuOpen(false); 
-                  
                   try {
                     addToast('info', 'Preparing trip to share...');
-                    let localFileUri = null;
                     
-                    // On Native, download the image to share it directly!
                     const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
-                    
-                    if (isNative && displayImage) {
-                      try {
-                        const { Filesystem, Directory } = await import('@capacitor/filesystem');
-                        
-                        let imgUrl = displayImage;
-                        if (imgUrl.startsWith('/')) {
-                          imgUrl = window.location.origin + imgUrl;
-                        }
-
-                        const fileName = `voyage-genie-${trip._id}-${Date.now()}.jpg`;
-                        
-                        // Use native download to bypass web CORS restrictions
-                        const result = await Filesystem.downloadFile({
-                          url: imgUrl,
-                          path: fileName,
-                          directory: Directory.Cache
-                        });
-                        
-                        // Ensure we have a valid URI for sharing
-                        if (result.path) {
-                          const uriResult = await Filesystem.getUri({
-                            path: result.path,
-                            directory: Directory.Cache
-                          });
-                          localFileUri = uriResult.uri;
-                        } else if (result.uri) {
-                          localFileUri = result.uri;
-                        }
-                      } catch (imgErr) {
-                        console.warn('Could not attach image to share', imgErr);
-                      }
-                    }
+                    const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
+                    const shareUrl = `${baseUrl}/shared/${trip._id}`;
 
                     const shareOptions = {
                       title: `${trip.destination} Trip`,
                       text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                      url: `${window.location.origin}/shared/${trip._id}`,
+                      url: shareUrl,
                       dialogTitle: 'Share Trip with Buddies',
                     };
-
-                    if (localFileUri) {
-                      shareOptions.files = [localFileUri];
-                    }
 
                     await Share.share(shareOptions);
                   } catch (err) {
                     console.warn('Native share failed or dismissed', err);
                     if (navigator.clipboard) {
-                      navigator.clipboard.writeText(`${window.location.origin}/shared/${trip._id}`);
+                      const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
+                      const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
+                      navigator.clipboard.writeText(`${baseUrl}/shared/${trip._id}`);
                       addToast('success', 'Link copied to clipboard!');
                     }
                   }

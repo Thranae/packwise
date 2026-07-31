@@ -139,15 +139,10 @@ export const googleAuthUser = async (accessToken) => {
     let user = await User.findOne({ email });
 
     if (user) {
-      if (!user.googleId) {
-        user.googleId = googleId;
-        user.profileImage = user.profileImage || picture;
-        user.isVerified = true;
-        await user.save();
-      } else if (!user.isVerified) {
-        user.isVerified = true;
-        await user.save();
-      }
+      user.googleId = googleId;
+      user.profileImage = picture; // Always update to keep in sync with Google Avatar
+      user.isVerified = true;
+      await user.save();
     } else {
       user = await User.create({
         name,
