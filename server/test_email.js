@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -7,6 +8,11 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-transporter.verify()
-  .then(() => console.log('SMTP Connection Success'))
-  .catch(e => console.error('SMTP Connection Error', e));
+transporter.sendMail({
+  from: '"Voyage Genie" <support.packwise@gmail.com>',
+  to: 'support.packwise@gmail.com',
+  subject: 'Test Email from Local',
+  text: 'This is a test email.'
+})
+.then(() => console.log('Email sent successfully'))
+.catch(err => console.error('Error sending email:', err));

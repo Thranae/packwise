@@ -174,9 +174,8 @@ export default function LoginPage() {
     }
     setIsOtpLoading(true);
     try {
-      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
-      const res = await axios.post(`${vercelApiUrl}/api/forgot-password`, { email: forgotEmail });
-      if (res.data?.success === true) {
+      const res = await api.post(`/auth/forgot-password`, { email: forgotEmail });
+      if (res.data?.success === true || res.data?.message) {
         setIsOtpSent(true);
         setResendTimer(40);
         toast.success('OTP sent! Please check your email.');
@@ -194,9 +193,8 @@ export default function LoginPage() {
     if (resendTimer > 0 || isResending) return;
     setIsResending(true);
     try {
-      const vercelApiUrl = import.meta.env.VITE_VERCEL_URL || (window.location.origin.includes('localhost') ? '' : window.location.origin);
-      const res = await axios.post(`${vercelApiUrl}/api/forgot-password`, { email: forgotEmail });
-      if (res.data?.success === true) {
+      const res = await api.post(`/auth/forgot-password`, { email: forgotEmail });
+      if (res.data?.success === true || res.data?.message) {
         setResendTimer(40);
         toast.success('A new OTP has been sent to your email.');
       } else {
