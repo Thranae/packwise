@@ -42,11 +42,9 @@ export default function LoginPage() {
       interval = setInterval(() => {
         setResendTimer((prev) => prev - 1);
       }, 1000);
-    } else if (resendTimer === 0) {
-      clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isForgotPasswordMode, resendTimer]);
+  }, [isOtpSent, resendTimer]);
 
   const [otpCode, setOtpCode] = useState('');
   const [isOtpLoading, setIsOtpLoading] = useState(false);

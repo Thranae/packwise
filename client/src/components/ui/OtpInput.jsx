@@ -69,7 +69,7 @@ const OtpInput = ({ length = 6, value = '', onChange }) => {
   };
 
   return (
-    <div className="flex justify-between items-center gap-2 my-2 w-full">
+    <div className="flex justify-between items-center gap-1 sm:gap-2 my-6 w-full">
       {otp.map((data, index) => (
         <input
           key={index}
@@ -81,7 +81,12 @@ const OtpInput = ({ length = 6, value = '', onChange }) => {
           onChange={(e) => handleChange(index, e)}
           onKeyDown={(e) => handleKeyDown(index, e)}
           onPaste={handlePaste}
-          className="w-12 h-[56px] text-center text-[24px] font-bold text-white bg-white/5 border border-white/10 rounded-[14px] focus:outline-none focus:bg-white/10 focus:border-[var(--color-accent)] transition-all duration-300 placeholder-white/20"
+          className="flex-1 max-w-[52px] min-w-[36px] aspect-[4/5] sm:aspect-square text-center text-[22px] sm:text-[26px] font-bold text-white 
+          bg-white/10 backdrop-blur-xl border border-white/20 rounded-[14px] 
+          shadow-[0_8px_32px_rgba(0,0,0,0.25),inset_0_2px_6px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.2)] 
+          focus:outline-none focus:bg-white/20 focus:border-[var(--color-accent)] 
+          focus:shadow-[0_0_20px_rgba(79,124,255,0.4),inset_0_2px_6px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.2)] 
+          transition-all duration-300 placeholder-white/20"
         />
       ))}
     </div>

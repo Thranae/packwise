@@ -41,8 +41,6 @@ export default function SignupPage() {
       interval = setInterval(() => {
         setResendTimer((prev) => prev - 1);
       }, 1000);
-    } else if (resendTimer === 0) {
-      clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [isOtpMode, resendTimer]);
