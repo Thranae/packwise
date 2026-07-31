@@ -47,8 +47,14 @@ export const fetchExchangeRates = async (baseCurrency = 'USD') => {
 };
 
 export const calculateTripCost = (destCountry, days, travelers, style) => {
-  const destData = COUNTRY_DATA[destCountry];
-  if (!destData) return null; // Used to trigger "Live data unavailable"
+  const destData = COUNTRY_DATA[destCountry] || {
+    currency: 'USD', symbol: '$', code: 'US', flag: 'YΧY',
+    rates: { 
+      budget: { hotel: 80, food: 40, transport: 15, attractions: 20, insurance: 5 }, 
+      standard: { hotel: 180, food: 80, transport: 30, attractions: 50, insurance: 10 }, 
+      luxury: { hotel: 400, food: 200, transport: 100, attractions: 150, insurance: 25 } 
+    }
+  };
 
   const rates = destData.rates[style.toLowerCase()];
   
