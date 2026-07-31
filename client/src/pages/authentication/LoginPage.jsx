@@ -390,22 +390,24 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <div className="flex justify-center mt-1 mb-2">
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  disabled={resendTimer > 0 || isResending}
-                  className="text-[13px] font-medium text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  {isResending ? (
-                    'Resending...'
-                  ) : resendTimer > 0 ? (
-                    `Resend code in ${resendTimer}s`
-                  ) : (
-                    'Didn\'t receive the code? Resend'
-                  )}
-                </button>
-              </div>
+              {isOtpSent && (
+                <div className="flex justify-center mt-1 mb-2">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={resendTimer > 0 || isResending}
+                    className="text-[13px] font-medium text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    {isResending ? (
+                      'Resending...'
+                    ) : resendTimer > 0 ? (
+                      `Resend code in ${resendTimer}s`
+                    ) : (
+                      'Didn\'t receive the code? Resend'
+                    )}
+                  </button>
+                </div>
+              )}
 
               <div className="flex gap-2 mt-2">
                 <button
