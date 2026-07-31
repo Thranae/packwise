@@ -66,7 +66,29 @@ const getActivities = (dest = '', dayNum) => {
   return set[(dayNum - 1) % set.length];
 };
 
-// ─── Fake weather per day ──────────────────────────────────────────────────────
+// 🏔️ Real AI Data Parsers 🏔️
+const parseWeatherCondition = (condition) => {
+  if (!condition) return { icon: Cloud, color: 'text-slate-300', bg: 'bg-slate-400/10' };
+  const lower = condition.toLowerCase();
+  if (lower.includes('sun') || lower.includes('clear')) return { icon: Sun, color: 'text-yellow-400', bg: 'bg-yellow-400/10' };
+  if (lower.includes('rain') || lower.includes('shower') || lower.includes('storm')) return { icon: CloudRain, color: 'text-blue-400', bg: 'bg-blue-400/10' };
+  if (lower.includes('snow')) return { icon: CloudRain, color: 'text-sky-300', bg: 'bg-sky-300/10' };
+  return { icon: Cloud, color: 'text-slate-300', bg: 'bg-slate-400/10' };
+};
+
+const getActivityIcon = (title = '', desc = '', time = '') => {
+  const str = (title + ' ' + desc + ' ' + time).toLowerCase();
+  if (str.includes('breakfast') || str.includes('coffee') || str.includes('cafe') || str.includes('tea')) return Coffee;
+  if (str.includes('lunch') || str.includes('dinner') || str.includes('meal') || str.includes('restaurant') || str.includes('eat') || str.includes('food')) return Utensils;
+  if (str.includes('flight') || str.includes('airport') || str.includes('fly')) return PlaneTakeoff;
+  if (str.includes('shop') || str.includes('market') || str.includes('mall') || str.includes('store') || str.includes('buy')) return ShoppingBag;
+  if (str.includes('music') || str.includes('bar') || str.includes('club') || str.includes('night') || str.includes('party')) return Music;
+  if (str.includes('museum') || str.includes('art') || str.includes('gallery') || str.includes('landmark') || str.includes('temple') || str.includes('church') || str.includes('monument')) return Landmark;
+  if (str.includes('photo') || str.includes('view') || str.includes('scenic') || str.includes('lookout')) return Camera;
+  return MapPin;
+};
+
+// 🏔️ Fake weather per day 🏔️
 const weatherTypes = [
   { icon: Sun,       label: '28°C Sunny',  color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
   { icon: Cloud,     label: '22°C Cloudy', color: 'text-slate-300',  bg: 'bg-slate-400/10'  },
@@ -74,12 +96,12 @@ const weatherTypes = [
   { icon: Sun,       label: '31°C Clear',  color: 'text-orange-400', bg: 'bg-orange-400/10' },
 ];
 
-// ─── Destination name cleaner ─────────────────────────────────────────────────
+// 🏔️ Destination name cleaner 🏔️
 const cleanDest = (raw = '') =>
   raw.replace(/\b(Explorer|Roadtrip|Road Trip|Retreat|Escape|Getaway|Highlights|Lights|Luxury|Surf|Carnival|Backpacking|Journey|Adventure|Holiday|Vacation|Tour|Opera|Gateway|Weekend|Delight|&.*)\b/gi, '')
      .replace(/\s+/g, ' ').trim();
 
-// ─── Itinerary generator ───────────────────────────────────────────────────────
+// 🏔️ Itinerary generator 🏔️
 const generateItinerary = (trip) => {
   if (!trip) return [];
   const diff   = new Date(trip.endDate) - new Date(trip.startDate);
@@ -87,6 +109,51 @@ const generateItinerary = (trip) => {
   const dest   = trip.destination || '';
   const perDay = Math.round((trip.budget || 3000) / days);
 
+  // If the AI successfully generated the real itinerary, use it natively!
+  if (trip.itinerary && Array.isArray(trip.itinerary) && trip.itinerary.length > 0) {
+    return trip.itinerary.map((aiDay, idx) => {
+      const dateObj = new Date(trip.startDate);
+      dateObj.setDate(dateObj.getDate() + idx);
+      const isEven = idx % 2 === 0;
+      
+      // Pull real AI weather for this exact day if available
+      let wData = weatherTypes[idx % weatherTypes.length];
+      if (trip.weather?.forecast && trip.weather.forecast[idx]) {
+        const fc = trip.weather.forecast[idx];
+        const { icon, color, bg } = parseWeatherCondition(fc.condition);
+        wData = { icon, label: `${fc.temp}°C ${fc.condition}`, color, bg };
+      }
+      
+      // Attempt to calculate a slice of the real total budget if available
+      let estBudget = perDay;
+      if (trip.budgetDetails?.total) {
+        estBudget = Math.round(trip.budgetDetails.total / trip.itinerary.length);
+      }
+
+      return {
+        day: aiDay.day || (idx + 1),
+        title: aiDay.title || `Day ${idx + 1}`,
+        date: dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+        fullDate: dateObj,
+        icon: isEven ? Map : Coffee,
+        color: isEven ? 'text-emerald-400' : 'text-violet-400',
+        bg: isEven ? 'bg-emerald-500/20' : 'bg-violet-500/20',
+        border: isEven ? 'border-emerald-500/30' : 'border-violet-500/30',
+        glow: isEven ? 'shadow-emerald-500/20' : 'shadow-violet-500/20',
+        weather: wData,
+        budget: { estimate: estBudget, label: 'Planned' },
+        activities: Array.isArray(aiDay.activities) ? aiDay.activities.map(act => ({
+          time: act.time,
+          icon: getActivityIcon(act.place, act.description, act.time),
+          title: act.place,
+          desc: act.description
+        })) : [],
+        img: null,
+      };
+    });
+  }
+
+  // Fallback to fake generation if no AI itinerary exists (e.g. for mock trips)
   const items = [];
 
   items.push({

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchExchangeRates, calculateTripCost } from '@/utils/costEngine';
 import { Loader2, AlertCircle, Sparkles, RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
@@ -6,14 +6,17 @@ import { ConfigurationPanel } from '@/components/budget/ConfigurationPanel';
 import { BudgetHero } from '@/components/budget/BudgetHero';
 import { BudgetGrid } from '@/components/budget/BudgetGrid';
 import { BudgetTimeline } from '@/components/budget/BudgetTimeline';
+import { useTripContext } from '@/context/TripContext';
 
 export default function CostIntelligencePage() {
+  const { currentTrip } = useTripContext();
+
   const [inputs, setInputs] = useState({
     originCountry: 'India',
-    destCountry: 'United States',
-    days: 5,
-    travelers: 2,
-    travelStyle: 'standard',
+    destCountry: currentTrip?.country || 'United States',
+    days: currentTrip ? Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) : 5,
+    travelers: currentTrip?.travelers || 2,
+    travelStyle: currentTrip?.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip?.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard',
     budgetType: 'balanced',
     transportation: 'public',
     accommodation: 'hotel',
@@ -35,12 +38,51 @@ export default function CostIntelligencePage() {
       setRates(response.rates);
       setLastUpdated(Date.now());
 
-      const costs = calculateTripCost(
-        inputs.destCountry,
-        inputs.days,
-        inputs.travelers,
-        inputs.travelStyle
-      );
+      let costs;
+
+      // If the AI generated perfect budget data, use it!
+      if (currentTrip && currentTrip.budgetDetails && Array.isArray(currentTrip.budgetDetails.categories)) {
+        const bd = currentTrip.budgetDetails;
+        const getCat = (name) => bd.categories.find(c => c.name.toLowerCase().includes(name))?.amount || 0;
+        
+        const aiHotel = getCat('hotel') || getCat('stay');
+        const aiFood = getCat('food') || getCat('dining');
+        const aiTransport = getCat('transport') || getCat('flight') || getCat('travel');
+        const aiShopping = getCat('shop');
+        const aiMisc = getCat('misc') || getCat('other');
+        
+        costs = {
+          dailyBreakdown: {
+            hotel: Math.round(aiHotel / inputs.days),
+            food: Math.round(aiFood / inputs.days),
+            transport: Math.round(aiTransport / inputs.days),
+            attractions: Math.round((bd.total - (aiHotel + aiFood + aiTransport + aiShopping + aiMisc)) / inputs.days) || 0,
+            shopping: Math.round(aiShopping / inputs.days),
+            insurance: 0,
+            total: Math.round(bd.total / inputs.days)
+          },
+          summary: {
+            totalBudget: bd.total,
+            averageDailySpend: Math.round(bd.total / inputs.days),
+            emergencyReserve: Math.round(aiMisc * 0.5),
+            internetSim: Math.round(aiMisc * 0.25),
+            visaFees: 0,
+            miscellaneous: Math.round(aiMisc * 0.25)
+          },
+          destCurrency: currentTrip.currency || 'USD',
+          destSymbol: currentTrip.currency === 'INR' ? '₹' : (currentTrip.currency === 'EUR' ? '€' : '$'),
+          destCode: currentTrip.country || inputs.destCountry,
+          destFlag: '🌍'
+        };
+      } else {
+        // Fallback to local offline calculation engine if AI data is missing
+        costs = calculateTripCost(
+          inputs.destCountry,
+          inputs.days,
+          inputs.travelers,
+          inputs.travelStyle
+        );
+      }
       
       // Ensure smooth loading animation transition
       await new Promise(r => setTimeout(r, 400));
@@ -51,7 +93,7 @@ export default function CostIntelligencePage() {
     } finally {
       setLoading(false);
     }
-  }, [inputs]);
+  }, [inputs, currentTrip]);
 
   useEffect(() => {
     handleCalculate();
