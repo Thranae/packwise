@@ -181,29 +181,57 @@ export const TripCard = ({ trip }) => {
                   }
 
                   setIsMenuOpen(false); 
-                  try {
-                    addToast('info', 'Preparing trip to share...');
-                    
-                    const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
-                    const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
-                    // Point to the Vercel Serverless Function to inject dynamic Open Graph tags for beautiful link previews
-                    const shareUrl = `${baseUrl}/api/share?id=${trip._id}`;
+                  const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
+                  const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
+                  // Point to the Vercel Serverless Function to inject dynamic Open Graph tags for beautiful link previews
+                  const shareUrl = `${baseUrl}/api/share?id=${trip._id}`;
 
-                    const shareOptions = {
-                      title: `${trip.destination} Trip`,
-                      text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
-                      url: shareUrl,
-                      dialogTitle: 'Share Trip with Buddies',
-                    };
-
-                    await Share.share(shareOptions);
-                  } catch (err) {
-                    console.warn('Native share failed or dismissed', err);
-                    if (navigator.clipboard) {
-                      const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
-                      const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
-                      navigator.clipboard.writeText(`${baseUrl}/api/share?id=${trip._id}`);
-                      addToast('success', 'Link copied to clipboard!');
+                  if (isNative) {
+                    try {
+                      await Share.share({
+                        title: `${trip.destination} Trip`,
+                        text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
+                        url: shareUrl,
+                        dialogTitle: 'Share Trip with Buddies',
+                      });
+                    } catch (err) {
+                      console.warn('Native share dismissed', err);
+                    }
+                  } else {
+                    // PWA / Web Browser Flow
+                    let sharedViaApi = false;
+                    try {
+                      if (navigator.share) {
+                        await navigator.share({
+                          title: `${trip.destination} Trip`,
+                          text: `Check out my upcoming trip to ${trip.destination} curated by Voyage Genie! \n\n`,
+                          url: shareUrl,
+                        });
+                        sharedViaApi = true;
+                      } else {
+                        throw new Error('Web Share API not supported');
+                      }
+                    } catch (err) {
+                      // Fallback to clipboard if share fails, is dismissed, or isn't supported
+                      if (!sharedViaApi) {
+                        try {
+                          if (navigator.clipboard && window.isSecureContext) {
+                            await navigator.clipboard.writeText(shareUrl);
+                            addToast('success', 'Link copied to clipboard!');
+                          } else {
+                            // Legacy fallback
+                            const textArea = document.createElement("textarea");
+                            textArea.value = shareUrl;
+                            document.body.appendChild(textArea);
+                            textArea.select();
+                            document.execCommand("copy");
+                            textArea.remove();
+                            addToast('success', 'Link copied to clipboard!');
+                          }
+                        } catch (clipErr) {
+                          addToast('error', 'Could not copy link to clipboard.');
+                        }
+                      }
                     }
                   }
                 }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
