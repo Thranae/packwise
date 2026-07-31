@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { Capacitor } from '@capacitor/core';
 import { LogoIcon, Logo } from '@/components/ui/Logo';
+import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
@@ -31,12 +32,28 @@ export default function LoginPage() {
   const [isForgotPasswordMode, setIsForgotPasswordMode] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
+  const [resendTimer, setResendTimer] = useState(40);
+  const [isResending, setIsResending] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isForgotPasswordMode && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isForgotPasswordMode, resendTimer]);
+
   const [otpCode, setOtpCode] = useState('');
   const [isOtpLoading, setIsOtpLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -161,6 +178,7 @@ export default function LoginPage() {
       const res = await api.post('/auth/forgot-password', { email: forgotEmail });
       if (res.data.success || res.data.status === 'success' || res.status === 200) {
         setIsOtpSent(true);
+        setResendTimer(40);
         toast.success('OTP sent! Please check your email.');
       } else {
         toast.error(res.data.message || 'Failed to send OTP.');
@@ -169,6 +187,24 @@ export default function LoginPage() {
       toast.error(err.response?.data?.message || 'Failed to send OTP. Please ensure your account exists.');
     } finally {
       setIsOtpLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendTimer > 0 || isResending) return;
+    setIsResending(true);
+    try {
+      const res = await api.post('/auth/forgot-password', { email: forgotEmail });
+      if (res.data.success || res.data.status === 'success' || res.status === 200) {
+        setResendTimer(40);
+        toast.success('A new OTP has been sent to your email.');
+      } else {
+        toast.error(res.data.message || 'Failed to resend OTP.');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to resend OTP.');
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -350,21 +386,26 @@ export default function LoginPage() {
                 </div>
               ) : (
                 <div>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-white/50" />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="6-digit OTP"
-                      value={otpCode}
-                      onChange={(e) => setOtpCode(e.target.value)}
-                      maxLength={6}
-                      className="w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-4 text-[20px] tracking-widest font-bold placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300"
-                    />
-                  </div>
+                  <OtpInput length={6} value={otpCode} onChange={(val) => setOtpCode(val)} />
                 </div>
               )}
+
+              <div className="flex justify-center mt-1 mb-2">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resendTimer > 0 || isResending}
+                  className="text-[13px] font-medium text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  {isResending ? (
+                    'Resending...'
+                  ) : resendTimer > 0 ? (
+                    `Resend code in ${resendTimer}s`
+                  ) : (
+                    'Didn\'t receive the code? Resend'
+                  )}
+                </button>
+              </div>
 
               <div className="flex gap-2 mt-2">
                 <button

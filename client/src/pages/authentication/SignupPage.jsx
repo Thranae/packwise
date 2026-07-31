@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { Capacitor } from '@capacitor/core';
 import { LogoIcon, Logo } from '@/components/ui/Logo';
+import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
@@ -30,10 +31,25 @@ export default function SignupPage() {
   const [otpCode, setOtpCode] = useState('');
   const [isOtpLoading, setIsOtpLoading] = useState(false);
   const [signupEmail, setSignupEmail] = useState('');
+  const [resendTimer, setResendTimer] = useState(40);
+  const [isResending, setIsResending] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isOtpMode && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isOtpMode, resendTimer]);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(signupSchema),
@@ -42,13 +58,45 @@ export default function SignupPage() {
 
   const onSubmit = async (data) => {
     try {
-      await signup(data);
-      // Redirect to onboarding after successful signup
-      navigate(ROUTES.ONBOARDING, { replace: true });
+      let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
+      const res = await api.post('/auth/signup', data);
+      
+      if (res.data.success || res.status === 201) {
+        setSignupEmail(data.email);
+        setIsOtpMode(true);
+        setResendTimer(40); // Start timer when entering OTP mode
+        toast.success(res.data.message || 'OTP sent! Please check your email to verify.');
+      } else {
+        toast.error(res.data.message || 'Failed to send OTP.');
+      }
+      
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
     } catch (error) {
       toast.error(
         error.response?.data?.message || error.message || 'An error occurred during signup.'
       );
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendTimer > 0 || isResending) return;
+    setIsResending(true);
+    try {
+      // Re-trigger the signup API to resend the OTP.
+      const data = getValues();
+      const res = await api.post('/auth/signup', data);
+      
+      if (res.data.success || res.status === 201) {
+        setResendTimer(40);
+        toast.success('A new OTP has been sent to your email.');
+      } else {
+        toast.error(res.data.message || 'Failed to resend OTP.');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to resend OTP.');
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -279,19 +327,24 @@ export default function SignupPage() {
               </div>
 
               <div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-white/50" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="6-digit OTP"
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
-                    maxLength={6}
-                    className="w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-4 text-[20px] tracking-widest font-bold placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300"
-                  />
-                </div>
+                <OtpInput length={6} value={otpCode} onChange={(val) => setOtpCode(val)} />
+              </div>
+
+              <div className="flex justify-center mt-1 mb-2">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={resendTimer > 0 || isResending}
+                  className="text-[13px] font-medium text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  {isResending ? (
+                    'Resending...'
+                  ) : resendTimer > 0 ? (
+                    `Resend code in ${resendTimer}s`
+                  ) : (
+                    'Didn\'t receive the code? Resend'
+                  )}
+                </button>
               </div>
 
               <div className="flex gap-2 mt-2">
