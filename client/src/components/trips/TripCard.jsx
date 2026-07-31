@@ -202,7 +202,7 @@ export const TripCard = ({ trip }) => {
                     if (navigator.clipboard) {
                       const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
                       const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
-                      navigator.clipboard.writeText(`${baseUrl}/shared/${trip._id}`);
+                      navigator.clipboard.writeText(`${baseUrl}/api/share?id=${trip._id}`);
                       addToast('success', 'Link copied to clipboard!');
                     }
                   }
