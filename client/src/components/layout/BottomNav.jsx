@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutGrid, Map, Wand2, Compass, User } from 'lucide-react';
+import { LayoutGrid, Map, Bot, Compass, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
@@ -8,7 +8,7 @@ import { useSoundEffect } from '@/hooks/useSoundEffect';
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
   { label: 'Trips', path: '/trips', icon: Map, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
-  { label: 'Genie', path: '/assistant', icon: Wand2, activeColor: 'text-white', isCenter: true },
+  { label: 'Genie', path: '/assistant', icon: Bot, activeColor: 'text-white', isCenter: true },
   { label: 'Explore', path: '/explore', icon: Compass, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
   { label: 'Profile', path: '/profile', icon: User, activeColor: 'text-rose-400', shadowColor: 'shadow-rose-500/50' },
 ];
