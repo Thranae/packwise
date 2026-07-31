@@ -77,8 +77,6 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
     throw new Error('Failed to send verification email');
   }
 
-  }
-
   return { success: true, message: 'OTP sent to email for verification' };
 };
 
@@ -222,14 +220,7 @@ export const generateOtpAndSendEmail = async (email) => {
     console.error('Email send error:', err);
     throw new ApiError(500, 'Failed to send OTP email');
   }
-  } else {
-    // Mock email for development if credentials aren't set
-    console.log(`\n======================================`);
-    console.log(`MOCK EMAIL SENT TO: ${user.email}`);
-    console.log(`SUBJECT: Your Password Reset OTP`);
-    console.log(`OTP: ${otp}`);
-    console.log(`======================================\n`);
-  }
+
 
   return { message: 'OTP sent successfully' };
 };
