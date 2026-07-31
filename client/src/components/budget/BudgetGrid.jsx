@@ -74,16 +74,16 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
       <Card title="Daily Breakdown" icon={BedDouble} iconColor="text-blue-400" delay={0.05}>
         <div className="flex flex-col gap-1">
           {dailyItems.map((item, i) => (
-            <div key={i} className="flex items-center justify-between py-2 px-2 rounded-xl hover:bg-white/5 transition-colors">
-              <div className="flex items-center gap-3">
+            <div key={i} className="flex items-center justify-between py-2 px-2 rounded-xl hover:bg-white/5 transition-colors gap-2">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center shrink-0 border border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] backdrop-blur-md`}>
                   <item.icon className={`w-4 h-4 ${item.color} drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)]`} />
                 </div>
-                <span className="text-sm font-medium text-white/80">{item.name}</span>
+                <span className="text-sm font-medium text-white/80 truncate">{item.name}</span>
               </div>
-              <div className="flex flex-col items-end">
-                <span className="text-sm font-bold text-white">{originSymbol} {fmtOrigin(item.val)}</span>
-                <span className="text-[10px] text-white/35">≈ {destSymbol}{fmtDest(item.val)}</span>
+              <div className="flex flex-col items-end shrink-0 pl-1 text-right">
+                <span className="text-sm font-bold text-white truncate max-w-[100px]">{originSymbol} {fmtOrigin(item.val)}</span>
+                <span className="text-[10px] text-white/35 truncate max-w-[100px]">≈ {destSymbol}{fmtDest(item.val)}</span>
               </div>
             </div>
           ))}
@@ -99,12 +99,12 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
               <span>You pay ({originCurrency})</span>
               <span>They get ({destCurrency})</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-xl font-bold text-white">{originSymbol} 10,000</span>
-              <div className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="flex items-center justify-between gap-1 min-w-0">
+              <span className="text-xl font-bold text-white truncate min-w-0">{originSymbol} 10,000</span>
+              <div className="w-7 h-7 shrink-0 rounded-full bg-emerald-500/20 flex items-center justify-center mx-1">
+                <ArrowRight className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               </div>
-              <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 truncate text-right min-w-0">
                 {destSymbol} {fmtDest(10000 / rateMultiplier)}
               </span>
             </div>
@@ -119,9 +119,9 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
             <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Quick Amounts</span>
             <div className="flex gap-2">
               {[1000, 5000, 10000].map(amt => (
-                <div key={amt} className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-colors cursor-pointer">
-                  <p className="text-xs font-bold text-white">{originSymbol}{amt.toLocaleString()}</p>
-                  <p className="text-[10px] text-white/40">{destSymbol}{fmtDest(amt / rateMultiplier)}</p>
+                <div key={amt} className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl p-2 sm:p-3 text-center hover:bg-white/10 transition-colors cursor-pointer">
+                  <p className="text-[11px] sm:text-xs font-bold text-white truncate">{originSymbol}{amt.toLocaleString()}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/40 truncate">{destSymbol}{fmtDest(amt / rateMultiplier)}</p>
                 </div>
               ))}
             </div>
@@ -179,13 +179,13 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
           <div className="flex flex-col gap-2 flex-1">
             {pieData.map((slice, i) => (
               <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
                   <div className="w-3 h-3 rounded-full shrink-0 shadow-[0_2px_5px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.6)]" style={{ backgroundColor: slice.color }} />
-                  <span className="text-sm text-white/70">{slice.name}</span>
+                  <span className="text-sm text-white/70 truncate">{slice.name}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</span>
-                  <span className="text-xs text-white/35 w-7 text-right">{Math.round(slice.pct)}%</span>
+                <div className="flex items-center gap-2 shrink-0 pl-2">
+                  <span className="text-sm font-bold text-white truncate max-w-[100px] text-right">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</span>
+                  <span className="text-xs text-white/35 w-7 shrink-0 text-right">{Math.round(slice.pct)}%</span>
                 </div>
               </div>
             ))}
@@ -205,9 +205,9 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
               <div className={`w-8 h-8 rounded-lg ${r.bg} flex items-center justify-center border border-white/20 shadow-[0_4px_8px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] backdrop-blur-md`}>
                 <r.icon className={`w-4 h-4 ${r.color} drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)]`} />
               </div>
-              <div>
-                <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{r.label}</p>
-                <p className="text-sm font-semibold text-white mt-0.5">{r.value}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider truncate">{r.label}</p>
+                <p className="text-[13px] sm:text-sm font-semibold text-white mt-0.5 truncate">{r.value}</p>
               </div>
             </motion.div>
           ))}
