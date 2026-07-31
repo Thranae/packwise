@@ -31,24 +31,24 @@ export const AmbientBackground = () => {
 
   const gradients = {
     default: {
-      orb1: "bg-blue-600/20",
-      orb2: "bg-indigo-600/20",
-      orb3: "bg-purple-600/20"
+      orb1: "radial-gradient(circle, rgba(37,99,235,0.15) 0%, rgba(37,99,235,0) 70%)", // blue-600
+      orb2: "radial-gradient(circle, rgba(79,70,229,0.15) 0%, rgba(79,70,229,0) 70%)", // indigo-600
+      orb3: "radial-gradient(circle, rgba(147,51,234,0.15) 0%, rgba(147,51,234,0) 70%)" // purple-600
     },
     cold: {
-      orb1: "bg-cyan-500/30",
-      orb2: "bg-blue-400/20",
-      orb3: "bg-white/10"
+      orb1: "radial-gradient(circle, rgba(6,182,212,0.2) 0%, rgba(6,182,212,0) 70%)", // cyan-500
+      orb2: "radial-gradient(circle, rgba(96,165,250,0.15) 0%, rgba(96,165,250,0) 70%)", // blue-400
+      orb3: "radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%)" // white
     },
     tropical: {
-      orb1: "bg-orange-500/20",
-      orb2: "bg-rose-500/20",
-      orb3: "bg-amber-400/20"
+      orb1: "radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(249,115,22,0) 70%)", // orange-500
+      orb2: "radial-gradient(circle, rgba(244,63,94,0.15) 0%, rgba(244,63,94,0) 70%)", // rose-500
+      orb3: "radial-gradient(circle, rgba(251,191,36,0.15) 0%, rgba(251,191,36,0) 70%)" // amber-400
     },
     nature: {
-      orb1: "bg-emerald-600/20",
-      orb2: "bg-teal-500/20",
-      orb3: "bg-lime-600/20"
+      orb1: "radial-gradient(circle, rgba(5,150,105,0.15) 0%, rgba(5,150,105,0) 70%)", // emerald-600
+      orb2: "radial-gradient(circle, rgba(20,184,166,0.15) 0%, rgba(20,184,166,0) 70%)", // teal-500
+      orb3: "radial-gradient(circle, rgba(101,163,13,0.15) 0%, rgba(101,163,13,0) 70%)" // lime-600
     }
   };
 
@@ -64,7 +64,8 @@ export const AmbientBackground = () => {
           scale: [1, 1.1, 0.9, 1]
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] rounded-full blur-[100px] sm:blur-[140px] mix-blend-screen transition-colors duration-1000 ${currentGradients.orb1}`}
+        className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] rounded-full mix-blend-screen transition-colors duration-1000"
+        style={{ background: currentGradients.orb1 }}
       />
       
       {/* Orb 2: Bottom Right - Floating Slow */}
@@ -75,7 +76,8 @@ export const AmbientBackground = () => {
           scale: [1, 1.2, 0.8, 1]
         }}
         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className={`absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] max-w-[900px] max-h-[900px] rounded-full blur-[100px] sm:blur-[140px] mix-blend-screen transition-colors duration-1000 ${currentGradients.orb2}`}
+        className="absolute bottom-[-20%] right-[-10%] w-[90vw] h-[90vw] max-w-[900px] max-h-[900px] rounded-full mix-blend-screen transition-colors duration-1000"
+        style={{ background: currentGradients.orb2 }}
       />
       
       {/* Orb 3: Center Ambient - Breathing */}
@@ -85,7 +87,8 @@ export const AmbientBackground = () => {
           scale: [1, 1.05, 1]
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-[30%] left-[20%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] rounded-full blur-[120px] mix-blend-screen transition-colors duration-1000 ${currentGradients.orb3}`}
+        className="absolute top-[30%] left-[20%] w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] rounded-full mix-blend-screen transition-colors duration-1000"
+        style={{ background: currentGradients.orb3 }}
       />
 
       {/* Deep Space Grid Overlay for Texture */}

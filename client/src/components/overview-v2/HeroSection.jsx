@@ -234,7 +234,7 @@ export const HeroSection = ({ isSharedView = false }) => {
             <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
             <span className="text-xs md:text-lg font-bold tracking-wide">{currentTrip.country}</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white drop-shadow-lg leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white drop-shadow-lg leading-tight break-words overflow-hidden">
             {currentTrip.destination}
           </h1>
           <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-6 mt-1">
