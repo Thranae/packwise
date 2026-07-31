@@ -164,7 +164,7 @@ export const TripCard = ({ trip }) => {
                 <MoreHorizontal className="w-5 h-5" />
               </button>
               
-              <div className={`absolute top-full right-0 mt-2 w-40 p-2 rounded-[20px] bg-black/70 backdrop-blur-2xl border border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_1px_2px_rgba(255,255,255,0.3)] transition-all duration-400 z-50 flex flex-col gap-1 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-2'}`}>
+              <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[24px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-3xl border border-white/30 shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_10px_rgba(255,255,255,0.1)] transition-all duration-400 z-[100] flex flex-col gap-1.5 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-2'}`}>
                 
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); selectTrip(trip._id); navigate(ROUTES.TRIPS_NEW); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>

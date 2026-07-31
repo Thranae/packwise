@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     // Determine the backend API URL. Vercel automatically exposes NEXT_PUBLIC or VITE_ prefixed vars to the edge/serverless if configured,
     // but in case it isn't, we can try to rely on a hardcoded fallback or the VITE_API_URL environment variable.
     // If the user didn't set VITE_API_URL for the serverless environment, this might fail, so we provide a safe fallback.
-    const apiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://packwise-backend.onrender.com/api'; // Guessing standard render URL if missing
+    const apiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://packwise-c35v.onrender.com/api'; // Guessing standard render URL if missing
     
     // Fetch the trip data from the public endpoint
     const response = await fetch(`${apiUrl}/trips/public/${id}`);
