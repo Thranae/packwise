@@ -107,6 +107,47 @@ export default function SignupPage() {
     }
   };
 
+  const handleVerifySignupOtp = async (e) => {
+    if (e) e.preventDefault();
+    if (!otpCode || otpCode.length !== 6) {
+      toast.error('Please enter a valid 6-digit OTP.');
+      return;
+    }
+    
+    setIsOtpLoading(true);
+    let wakeTimer = setTimeout(() => setIsWakingUp(true), 3000);
+    
+    try {
+      const res = await api.post(`/auth/verify-signup`, {
+        email: signupEmail,
+        otp: otpCode,
+      });
+
+      const data = res.data;
+      if (data.success) {
+        // Set token and user data
+        localStorage.setItem('token', data.data.token);
+        setAuthData(data.data.user, data.data.token);
+        
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
+        
+        toast.success(data.message || 'Email verified successfully! Welcome.');
+        navigate(ROUTES.OVERVIEW, { replace: true });
+      } else {
+        toast.error(data.message || 'Verification failed. Please try again.');
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || error.message || 'An error occurred during verification.'
+      );
+    } finally {
+      clearTimeout(wakeTimer);
+      setIsWakingUp(false);
+      setIsOtpLoading(false);
+    }
+  };
+
   // Google login handler — only works on web/PWA
   const handleWebGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
