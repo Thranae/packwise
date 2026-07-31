@@ -146,7 +146,7 @@ export const Logo = ({ size = 'md', className, showText = true, onClick }) => {
 
   return (
     <div 
-      className={cn('group flex items-center gap-3 cursor-pointer', className)}
+      className={cn('group flex items-center gap-1.5 cursor-pointer', className)}
       onPointerDown={handlePointerDown}
     >
       <LogoIcon size={size} className="text-text-primary" isHoverSimulated={isHoverSimulated} />
