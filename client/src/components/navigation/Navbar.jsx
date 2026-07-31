@@ -71,6 +71,27 @@ export const Navbar = () => {
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="fixed top-[calc(16px+var(--safe-top))] sm:top-[calc(24px+var(--safe-top))] left-3 right-3 sm:left-6 sm:right-6 md:left-8 md:right-8 z-[100] pointer-events-none flex justify-center"
       >
+        {/* SVG definitions for 3D icon textures */}
+        <svg width="0" height="0" className="absolute">
+          <defs>
+            <linearGradient id="icon-3d-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="40%" stopColor="#60a5fa" />
+              <stop offset="100%" stopColor="#2563eb" />
+            </linearGradient>
+            <linearGradient id="icon-3d-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="40%" stopColor="#c084fc" />
+              <stop offset="100%" stopColor="#7c3aed" />
+            </linearGradient>
+            <linearGradient id="icon-3d-slate" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="50%" stopColor="#94a3b8" />
+              <stop offset="100%" stopColor="#475569" />
+            </linearGradient>
+          </defs>
+        </svg>
+
         <header
           className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700 overflow-hidden"
           style={{
@@ -286,22 +307,19 @@ export const Navbar = () => {
               className="absolute inset-0 bg-[#060B14]/80"
             />
             
-            {/* Menu Card */}
+            {/* Menu Card - iOS 18 Liquid Glass */}
             <motion.div
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               style={{ willChange: 'transform, opacity' }}
-              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 rounded-[28px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.7)]"
+              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 rounded-[32px] bg-[#111827]/75 backdrop-blur-md border border-white/[0.12] shadow-[0_32px_64px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.25),inset_0_0_32px_rgba(255,255,255,0.03)] p-5 flex flex-col overflow-hidden"
             >
-              {/* Gradient border glow */}
-              <div className="absolute inset-0 rounded-[28px] bg-gradient-to-b from-white/[0.12] via-white/[0.04] to-transparent pointer-events-none" style={{ padding: '1px' }}>
-                <div className="w-full h-full rounded-[27px] bg-[#0C1322]" />
-              </div>
-              {/* Content layer */}
-              <div className="relative z-10 bg-[#0C1322] rounded-[28px] p-5 flex flex-col"
-              >
+              {/* Subtle noise for glass texture */}
+              <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+              
+              <div className="relative z-10 flex flex-col w-full">
               {isAuthenticated ? (
                   <div className="flex flex-col w-full">
                     {/* User Profile Row */}
@@ -321,32 +339,43 @@ export const Navbar = () => {
 
                     <div className="h-px w-full bg-white/[0.06] mb-1" />
 
-                    {/* Navigation Items — no motion wrappers for instant render */}
-                    {navItems.map((item) => (
-                      <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-white/65 hover:bg-white/[0.05] hover:text-white transition-colors duration-200">
-                        <item.icon className="h-[18px] w-[18px]" />
-                        <span className="font-medium text-[15px]">{item.name}</span>
-                      </Link>
-                    ))}
+                    {/* Navigation Items */}
+                    <div className="flex flex-col gap-1 mt-1">
+                      {navItems.map((item) => (
+                        <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-3 rounded-[16px] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all duration-200">
+                          <div className="w-8 h-8 rounded-[12px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                            <item.icon className="h-[18px] w-[18px]" style={{ stroke: 'url(#icon-3d-slate)', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
+                          </div>
+                          <span className="font-semibold text-[15px] tracking-wide">{item.name}</span>
+                        </Link>
+                      ))}
+                    </div>
 
-                    <div className="h-px w-full bg-white/[0.06] my-1" />
+                    <div className="h-px w-full bg-white/[0.08] my-2" />
                     
-                    <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-white/65 hover:bg-white/[0.05] hover:text-white transition-colors duration-200">
-                      <Settings className="h-[18px] w-[18px]" />
-                      <span className="font-medium text-[15px]">Settings</span>
-                    </Link>
+                    <div className="flex flex-col gap-1">
+                      <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-3 rounded-[16px] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all duration-200">
+                        <div className="w-8 h-8 rounded-[12px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                          <Settings className="h-[18px] w-[18px]" style={{ stroke: 'url(#icon-3d-slate)', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
+                        </div>
+                        <span className="font-semibold text-[15px] tracking-wide">Settings</span>
+                      </Link>
 
-                    <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="flex items-center w-full gap-3.5 px-4 py-3 rounded-[14px] text-red-400/70 hover:bg-red-500/10 hover:text-red-400 transition-colors duration-200">
-                      <LogOut className="h-[18px] w-[18px]" />
-                      <span className="font-medium text-[15px]">Log out</span>
-                    </button>
+                      <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="flex items-center w-full gap-4 px-3 py-3 rounded-[16px] text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200">
+                        <div className="w-8 h-8 rounded-[12px] bg-red-500/10 border border-red-500/20 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                          <LogOut className="h-[18px] w-[18px] text-red-400" style={{ filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
+                        </div>
+                        <span className="font-semibold text-[15px] tracking-wide">Log out</span>
+                      </button>
+                    </div>
                   </div>
               ) : (
                 <div className="flex flex-col w-full py-3 px-1">
                   {/* Compact travel-themed header */}
-                  <div className="flex items-center gap-3 px-3 mb-4">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/10 border border-white/[0.08] flex items-center justify-center">
-                      <Plane className="w-5 h-5 text-blue-400" />
+                  <div className="flex items-center gap-4 px-2 mb-5">
+                    <div className="w-12 h-12 rounded-[16px] bg-white/[0.05] border border-white/[0.12] flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.15),0_8px_16px_rgba(0,0,0,0.4)] relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20" />
+                      <Plane className="w-6 h-6 relative z-10" style={{ stroke: 'url(#icon-3d-blue)', filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.6))' }} />
                     </div>
                     <div>
                       <h2 className="text-[16px] font-semibold text-white tracking-tight">Voyage Genie<span className="text-blue-400">.</span></h2>
