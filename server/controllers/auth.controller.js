@@ -21,6 +21,24 @@ export const googleAuth = catchAsync(async (req, res) => {
   ApiResponse.send(res, 200, 'Google Login successful', result);
 });
 
+export const forgotPassword = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return ApiResponse.send(res, 400, 'Email is required');
+  }
+  const result = await authService.generateOtpAndSendEmail(email);
+  ApiResponse.send(res, 200, 'OTP sent', result);
+});
+
+export const verifyOtp = catchAsync(async (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return ApiResponse.send(res, 400, 'Email and OTP are required');
+  }
+  const result = await authService.verifyOtpAndLogin({ email, otp });
+  ApiResponse.send(res, 200, 'OTP verified and login successful', result);
+});
+
 export const logout = catchAsync(async (req, res) => {
   ApiResponse.send(res, 200, 'Logged out successfully');
 });

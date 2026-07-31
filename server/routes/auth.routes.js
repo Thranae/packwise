@@ -9,6 +9,8 @@ const router = express.Router();
 router.post('/signup', validate(signupSchema), authController.signup);
 router.post('/login', validate(loginSchema), authController.login);
 router.post('/google', authController.googleAuth);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/verify-otp', authController.verifyOtp);
 router.post('/logout', authController.logout);
 router.get('/me', authMiddleware, authController.getMe);
 
