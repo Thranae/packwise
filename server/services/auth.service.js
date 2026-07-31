@@ -52,7 +52,9 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
+    port: 587,
+    secure: false,
+    requireTLS: true,
     secure: true,
     connectionTimeout: 10000,
     greetingTimeout: 10000,
@@ -201,7 +203,9 @@ export const generateOtpAndSendEmail = async (email) => {
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
+    port: 587,
+    secure: false,
+    requireTLS: true,
     secure: true,
     connectionTimeout: 10000,
     greetingTimeout: 10000,
