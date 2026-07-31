@@ -48,6 +48,21 @@ export const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <>
       <motion.div
@@ -260,7 +275,7 @@ export const Navbar = () => {
       {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <div key="mobile-menu" className="fixed inset-0 z-[90] sm:hidden">
+          <div key="mobile-menu" className="fixed inset-0 z-[90] sm:hidden" style={{ touchAction: 'none', overscrollBehavior: 'contain' }}>
             {/* Blurred Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
