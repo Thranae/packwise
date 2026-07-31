@@ -44,45 +44,42 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
   existingUser.otpExpires = otpExpires;
   await existingUser.save();
 
-  // Send email via nodemailer
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('Server configuration error: SMTP_USER or SMTP_PASS missing');
+  // Send email via Brevo API
+  if (!process.env.BREVO_API_KEY) {
+    console.warn('Server configuration error: BREVO_API_KEY missing');
     throw new Error('Server configuration error: Email credentials missing');
   }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    secure: true,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+  const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': process.env.BREVO_API_KEY,
+      'content-type': 'application/json'
     },
+    body: JSON.stringify({
+      sender: {
+        name: 'Voyage Genie',
+        email: 'support.packwise@gmail.com'
+      },
+      to: [
+        { email: normalizedEmail }
+      ],
+      subject: 'Your Voyage Genie Signup OTP',
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+          <h2 style="color: #4F7CFF;">Voyage Genie</h2>
+          <p>Your verification code to create an account is:</p>
+          <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
+          <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
+        </div>
+      `
+    })
   });
 
-  const mailOptions = {
-    from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
-    to: normalizedEmail,
-    subject: 'Your Voyage Genie Signup OTP',
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
-        <h2 style="color: #4F7CFF;">Voyage Genie</h2>
-        <p>Your verification code to create an account is:</p>
-        <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
-        <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
-      </div>
-    `
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.error('Email send error:', err);
+  if (!brevoResponse.ok) {
+    const errData = await brevoResponse.json();
+    console.error('Brevo API Error:', errData);
     throw new Error('Failed to send verification email');
   }
 
@@ -195,45 +192,42 @@ export const generateOtpAndSendEmail = async (email) => {
   user.otpExpires = otpExpires;
   await user.save();
 
-  // Send email via nodemailer
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('Server configuration error: SMTP_USER or SMTP_PASS missing');
+  // Send email via Brevo API
+  if (!process.env.BREVO_API_KEY) {
+    console.warn('Server configuration error: BREVO_API_KEY missing');
     throw new ApiError(500, 'Server configuration error: Email credentials missing');
   }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    secure: true,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+  const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': process.env.BREVO_API_KEY,
+      'content-type': 'application/json'
     },
+    body: JSON.stringify({
+      sender: {
+        name: 'Voyage Genie',
+        email: 'support.packwise@gmail.com'
+      },
+      to: [
+        { email: user.email }
+      ],
+      subject: 'Your Password Reset OTP',
+      htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+          <h2 style="color: #4F7CFF;">Voyage Genie</h2>
+          <p>Your one-time password to sign in is:</p>
+          <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
+          <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
+        </div>
+      `
+    })
   });
 
-  const mailOptions = {
-    from: `"Voyage Genie" <${process.env.SMTP_USER}>`,
-    to: user.email,
-    subject: 'Your Password Reset OTP',
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
-        <h2 style="color: #4F7CFF;">Voyage Genie</h2>
-        <p>Your one-time password to sign in is:</p>
-        <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
-        <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
-      </div>
-    `
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.error('Email send error:', err);
+  if (!brevoResponse.ok) {
+    const errData = await brevoResponse.json();
+    console.error('Brevo API Error:', errData);
     throw new ApiError(500, 'Failed to send OTP email');
   }
 
