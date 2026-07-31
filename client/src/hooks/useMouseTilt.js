@@ -22,8 +22,10 @@ export const useMouseTilt = (ref, config = { maxTilt: 15, stiffness: 300, dampin
 
   useEffect(() => {
     // Disable spatial 3D effects on touch devices to prevent Chromium flickering bugs on PWA
+    // and completely disable on native Capacitor apps to prevent UI thread lag
+    const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
     const isHoverable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!isHoverable) return;
+    if (isNative || !isHoverable) return;
 
     const handleMouseMove = (e) => {
       if (!ref.current) return;
