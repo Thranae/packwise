@@ -186,7 +186,8 @@ export const TripCard = ({ trip }) => {
                     
                     const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
                     const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
-                    const shareUrl = `${baseUrl}/shared/${trip._id}`;
+                    // Point to the Vercel Serverless Function to inject dynamic Open Graph tags for beautiful link previews
+                    const shareUrl = `${baseUrl}/api/share?id=${trip._id}`;
 
                     const shareOptions = {
                       title: `${trip.destination} Trip`,
