@@ -147,9 +147,9 @@ export default function ProfilePage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="w-full max-w-6xl mx-auto px-6 pb-8 md:pb-12 pt-[calc(32px+env(safe-area-inset-top))] md:pt-12">
+      <div className="w-full max-w-6xl mx-auto px-4 md:px-6 pb-8 md:pb-12 pt-2 md:pt-6">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <motion.h1 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

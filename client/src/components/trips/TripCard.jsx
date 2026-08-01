@@ -9,6 +9,7 @@ import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useToast } from '@/hooks/useToast';
 import { useHaptics } from '@/hooks/useHaptics';
+import { useTransitionNavigate } from '@/contexts/TransitionContext';
 import { useState, useEffect } from 'react';
 import api from '@/services/api';
 import { Share } from '@capacitor/share';
@@ -28,6 +29,7 @@ const getDuration = (start, end) => {
 export const TripCard = ({ trip }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
+  const triggerTransition = useTransitionNavigate();
   const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip, addNotification } = useTripContext();
   const { addToast } = useToast();
   const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
@@ -320,7 +322,7 @@ export const TripCard = ({ trip }) => {
 
           {/* Bottom CTA */}
           <div className="mt-5 relative z-20 ios-3d-element">
-            <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); navigate(ROUTES.OVERVIEW); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] cursor-pointer group/btn">
+            <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] cursor-pointer group/btn">
               Open Trip Overview
             </button>
           </div>

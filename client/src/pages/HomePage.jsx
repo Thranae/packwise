@@ -8,10 +8,13 @@ import {
   Smartphone, Compass, CreditCard, MapPin
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useTripContext } from '@/context/TripContext';
+import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { ROUTES } from '@/constants/routes';
 import { Logo } from '@/components/ui/Logo';
 import { Image } from '@/components/ui/Image';
 import { Navbar } from '@/components/navigation/Navbar';
+import { BottomNav } from '@/components/layout/BottomNav';
 import { AnimatedBackground } from '@/components/common/AnimatedBackground';
 
 // ---------------------------------------------------------------------------
@@ -44,7 +47,21 @@ const scaleIn = {
 // ---------------------------------------------------------------------------
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const { trips, isGenerating } = useTripContext();
+  const nextTrip = trips && trips.length > 0 ? trips[0] : null;
+  const { imageUrl: nextTripImage } = useDestinationImage(nextTrip?.destination);
+  
+  const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
+  const tripImage = nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop';
+  const tripCountry = nextTrip?.country || 'Japan';
+  
+  const daysUntil = nextTrip?.startDate 
+      ? Math.max(0, Math.ceil((new Date(nextTrip.startDate) - new Date()) / (1000 * 60 * 60 * 24)))
+      : 12;
+  const startsText = nextTrip?.startDate ? `Starts in ${daysUntil} days` : 'Starts in 12 days';
+  const tripDestCode = nextTrip?.destination ? (nextTrip.destination.length > 3 ? nextTrip.destination.substring(0,3).toUpperCase() : nextTrip.destination.toUpperCase()) : "HND";
+
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -67,14 +84,130 @@ export default function HomePage() {
       
       <AnimatedBackground />
 
-      <Navbar />
+              {/* Native-feeling static frosted glass edges */}
+        <div className="fixed top-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
+        <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
+
+        <Navbar />
+        {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-32 sm:pt-36 lg:pt-48">
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-20 sm:pt-24 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
         
         {/* HERO SECTION */}
-        <section className="relative min-h-[70vh] lg:min-h-[90vh] flex flex-col justify-center pb-10 lg:pb-20">
-          <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+        <section className={`relative flex flex-col justify-center pb-10 lg:pb-20 ${isAuthenticated ? "min-h-[calc(100vh-140px)] mt-4 lg:mt-8" : "min-h-[70vh] lg:min-h-[90vh]"}`}>
+          {isAuthenticated ? (
+              <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
+              {/* Authenticated Dashboard: Left Side */}
+              <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
+                <motion.h1 variants={fadeInUp} className="text-3xl sm:text-4xl lg:text-[50px] font-semibold tracking-tighter leading-tight truncate w-full max-w-full text-[var(--theme-text-primary)]">
+                  Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{user?.displayName?.split(' ')[0] || user?.name?.split(' ')[0] || 'Traveler'}</span>.
+                </motion.h1>
+                <motion.p variants={fadeInUp} className="mt-4 sm:mt-6 text-base sm:text-xl text-[var(--theme-text-secondary)] font-light max-w-lg">
+                  Where is your next adventure taking you? Let our AI craft your perfect itinerary in seconds.
+                </motion.p>
+            
+                {/* Beautiful AI Prompt Bar */}
+                <motion.div variants={fadeInUp} className="mt-6 w-full max-w-md relative group">
+                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-xl opacity-50 group-hover:opacity-100 transition-opacity rounded-full"></div>
+                   <Link to={ROUTES.ASSISTANT}>
+                     <div className="relative flex items-center bg-white/5 backdrop-blur-md border border-white/20 rounded-full p-2 pl-6 shadow-2xl hover:bg-white/10 transition-colors">
+                        <Sparkles className="w-5 h-5 text-purple-400 mr-3 animate-pulse" />
+                        <span className="flex-1 min-w-0 text-white/50 text-left text-sm sm:text-base whitespace-nowrap overflow-hidden text-ellipsis pr-4">E.g., 5 days in Tokyo for cherry blossoms...</span>
+                        <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-3 rounded-full shadow-lg group-hover:scale-105 transition-transform">
+                           <ArrowRight className="w-5 h-5" />
+                        </button>
+                     </div>
+                   </Link>
+                </motion.div>
+              </motion.div>
+
+              {/* Authenticated Dashboard: Right Side Ticket Widget */}
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="lg:col-span-6 w-full relative order-2 mt-4 sm:mt-6 lg:mt-0 flex items-center justify-center perspective-[1200px] px-2 sm:px-0">
+                <motion.div 
+                   animate={{ y: [-3, 3, -3] }} 
+                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                   className="w-full max-w-sm relative z-20"
+                >
+                   {/* Outer Liquid Glass Container */}
+                   <div className="relative p-[1px] rounded-[32px] overflow-hidden bg-gradient-to-br from-white/40 via-white/10 to-transparent shadow-[0_32px_64px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] backdrop-blur-[24px]">
+                      {/* Inner frosted content */}
+                      {isGenerating ? (
+                      <div className="bg-[#030712]/40 backdrop-blur-3xl rounded-[32px] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-white/5 min-h-[320px]">
+                         <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse" />
+                         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse" />
+                         
+                         {/* Modern AI Generating Animation */}
+                         <div className="relative w-24 h-24 mb-6">
+                             <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-500 animate-spin" style={{ animationDuration: '2s' }} />
+                             <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400 animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }} />
+                             <div className="absolute inset-0 flex items-center justify-center">
+                                 <Sparkles className="w-8 h-8 text-white animate-pulse" />
+                             </div>
+                         </div>
+                         
+                         <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2 text-center">Crafting Journey...</h3>
+                         <p className="text-xs sm:text-sm text-white/50 text-center max-w-[200px]">Our AI is analyzing millions of data points to build your perfect itinerary.</p>
+                      </div>
+                    ) : (
+                      <div className="bg-[#030712]/40 backdrop-blur-3xl rounded-[32px] p-2 flex flex-col gap-2 relative overflow-hidden border border-white/5">
+                         {/* Beautiful subtle animated background glow */}
+                         <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse" />
+                         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse" />
+                         
+                         {/* Hero Image Section */}
+                         <div className="w-full h-[140px] sm:h-[160px] rounded-[28px] overflow-hidden relative border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] shrink-0 group">
+                            <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
+                            <div className="absolute bottom-4 left-5">
+                               <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-none mb-1 drop-shadow-md truncate max-w-[200px]">{tripDestination}</h3>
+                               <p className="text-[10px] sm:text-xs text-emerald-400 font-bold tracking-widest uppercase drop-shadow-md">{startsText}</p>
+                            </div>
+                            <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
+                               <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                               </span>
+                               <span className="text-[9px] uppercase font-bold text-white/90 tracking-wider">Upcoming</span>
+                            </div>
+                         </div>
+                         
+                         {/* Bottom Info Section */}
+                         <div className="px-5 py-3 relative z-10">
+                            <div className="flex justify-between items-center relative z-10">
+                               <div className="text-left">
+                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">SFO</span>
+                                 <p className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest mt-0.5 font-bold">Outbound</p>
+                               </div>
+                               
+                               <div className="flex-1 flex items-center justify-center relative px-4">
+                                 <div className="absolute w-full border-t-[1.5px] border-dashed border-white/20 top-1/2 -translate-y-1/2" />
+                                 <Plane className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 relative z-10 bg-[#030712] px-1 rounded-full transform rotate-45" />
+                               </div>
+                               
+                               <div className="text-right">
+                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">{tripDestCode}</span>
+                                 <p className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest mt-0.5 font-bold">Arrival</p>
+                               </div>
+                            </div>
+                            
+                            <Link to={ROUTES.TRIPS} className="relative z-10 mt-4 block">
+                              <button className="w-full py-3.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-white/10 rounded-2xl text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)] group hover:scale-[1.02] active:scale-[0.98]">
+                                View Itinerary <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                              </button>
+                            </Link>
+                         </div>
+                      </div>
+                    )}
+                   </div>
+                </motion.div>
+                
+                {/* Decorative blur blobs behind ticket */}
+</motion.div>
+
+              </div>
+            ) : (
+              <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
             
             {/* Hero Left Content */}
             <motion.div 
@@ -170,7 +303,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 1. Passport (Hidden on mobile to reduce clutter) */}
-              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[5%] left-[-5%] z-30 hidden lg:block">
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[-2%] left-[-2%] lg:top-[5%] lg:left-[-5%] z-30 scale-[0.6] sm:scale-75 lg:scale-100 origin-top-left">
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[15deg] rotate-z-[-5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/40 to-indigo-500/10 border border-indigo-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -184,7 +317,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 2. Weather */}
-              <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[10%] right-[0%] z-30">
+              <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[20%] right-[-5%] lg:top-[10%] lg:right-[0%] z-30 scale-[0.6] sm:scale-75 lg:scale-100 origin-top-right">
                 <div className={`${glassStyle} p-5 flex flex-col gap-2 rotate-y-[-20deg] rotate-z-[5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="flex items-center justify-between">
                     <CloudSun className="w-8 h-8 text-yellow-500" />
@@ -195,7 +328,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 3. Flights */}
-              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="absolute bottom-[2%] lg:bottom-[25%] left-[-2%] lg:left-[-10%] z-40">
+              <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} className="absolute bottom-[-2%] left-[-2%] lg:bottom-[25%] lg:left-[-10%] z-40 scale-[0.65] sm:scale-75 lg:scale-100 origin-bottom-left">
                 <div className={`${glassStyle} p-5 rotate-y-[10deg] rotate-z-[2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default min-w-[200px] shadow-xl`}>
                   <div className="flex justify-between items-center mb-3">
                     <Plane className="w-5 h-5 text-blue-500" />
@@ -226,7 +359,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 5. Budget */}
-              <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }} className="absolute bottom-[10%] right-[5%] z-40">
+              <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }} className="absolute bottom-[25%] right-[-5%] lg:bottom-[10%] lg:right-[5%] z-40 scale-[0.65] sm:scale-75 lg:scale-100 origin-bottom-right">
                 <div className={`${glassStyle} p-5 flex flex-col gap-1 rotate-y-[-15deg] rotate-z-[4deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="group cursor-pointer relative overflow-hidden w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/40 to-emerald-500/10 border border-emerald-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_4px_8px_rgba(0,0,0,0.5)] flex items-center justify-center">
@@ -289,7 +422,9 @@ export default function HomePage() {
               )}
             </motion.div>
           </div>
-        </section>
+        
+            )}
+          </section>
 
         {/* FEATURES */}
         <section id="features" className="py-16 lg:py-32 relative z-20">
@@ -604,4 +739,6 @@ export default function HomePage() {
     </div>
   );
 }
+
+
 

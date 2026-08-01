@@ -74,8 +74,12 @@ export const TripProvider = ({ children }) => {
     
   const [currentTripState, setCurrentTripState] = useState(initialCurrentTrip);
   
-  // Keep currentTrip in sync with Dexie changes
-  const currentTrip = trips.find(t => t._id === currentTripState?._id) || currentTripState || trips[0];
+  // Keep currentTrip in sync with Dexie changes. 
+  // Fallback to localStorage if currentTripState failed to find it initially due to async loading.
+  const currentTrip = 
+    trips.find(t => t._id === currentTripState?._id) || 
+    trips.find(t => t._id === localStorage.getItem('packwise_current_trip_id')) || 
+    trips[0];
 
   const setCurrentTrip = useCallback((trip) => {
     setCurrentTripState(trip);

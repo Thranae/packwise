@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionTemplate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
+import { useTransitionNavigate } from '@/contexts/TransitionContext';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useHaptics } from '@/hooks/useHaptics';
@@ -303,6 +304,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
 
 export const TripBuilderWizard = () => {
   const navigate = useNavigate();
+  const triggerTransition = useTransitionNavigate();
   const [step, setStep] = useState(1);
   const { generateTrip, isGenerating, loadingStep, currentTrip } = useTripContext();
   const { playSound } = useSoundEffect();
@@ -340,7 +342,7 @@ export const TripBuilderWizard = () => {
     
     successTap();
     playSound('success');
-    navigate(ROUTES.TRIPS);
+    navigate(ROUTES.TRIPS, { state: { generatingTrip: true, destination: prompt } });
   };
 
   const handleSelectLocation = (loc) => {
@@ -717,3 +719,4 @@ function DollarSignIcon({ count, isActive, level }) {
 }
 
 export default TripBuilderWizard;
+

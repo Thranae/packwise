@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { TransitionProvider } from './contexts/TransitionContext';
 import { TripProvider } from '@/context/TripContext';
 import { PremiumProvider } from './context/PremiumContext';
 import { useAuth } from './hooks/useAuth';
@@ -421,10 +422,12 @@ export default function App() {
         <PremiumProvider>
           <TripProvider>
             <ToastProvider>
-              <ErrorBoundary>
-                <AppContent />
-                <OnboardingTutorial />
-              </ErrorBoundary>
+              <TransitionProvider>
+                <ErrorBoundary>
+                  <AppContent />
+                  <OnboardingTutorial />
+                </ErrorBoundary>
+              </TransitionProvider>
             </ToastProvider>
           </TripProvider>
         </PremiumProvider>

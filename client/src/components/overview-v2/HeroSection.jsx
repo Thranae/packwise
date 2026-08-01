@@ -107,6 +107,8 @@ export const HeroSection = ({ isSharedView = false }) => {
 
   if (!currentTrip) return null;
 
+  const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
+
   const displayImage = currentTrip.heroImage || destinationImage;
 
   const gData = coords ? [{ lat: coords.lat, lng: coords.lng, size: 20, color: '#60a5fa' }] : [];
@@ -132,7 +134,11 @@ export const HeroSection = ({ isSharedView = false }) => {
   return (
     <motion.div 
       ref={cardRef}
-      style={{ rotateX, rotateY, transformPerspective: 1200, transformStyle: 'preserve-3d' }}
+      style={{ 
+        rotateX, 
+        rotateY, 
+        ...(isNative ? {} : { transformPerspective: 1200, transformStyle: 'preserve-3d' }) 
+      }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}

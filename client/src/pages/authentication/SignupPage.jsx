@@ -64,13 +64,18 @@ export default function SignupPage() {
         password: data.password 
       });
       
-      if (res.data?.success === true || res.data?.message) {
-        setSignupEmail(data.email);
-        setIsOtpMode(true);
-        setResendTimer(40); // Start timer when entering OTP mode
-        toast.success(res.data.message || 'OTP sent! Please check your email to verify.');
+      const responseData = res.data;
+      if (responseData.success) {
+        localStorage.setItem('token', responseData.data.token);
+        setAuthData(responseData.data.user, responseData.data.token);
+        
+        clearTimeout(wakeTimer);
+        setIsWakingUp(false);
+        
+        toast.success('Account created successfully! Welcome.');
+        navigate(ROUTES.OVERVIEW, { replace: true });
       } else {
-        toast.error(res.data.message || 'Failed to send OTP.');
+        toast.error(responseData.message || 'Failed to create account.');
       }
       
       clearTimeout(wakeTimer);
@@ -79,6 +84,8 @@ export default function SignupPage() {
       toast.error(
         error.response?.data?.message || error.message || 'An error occurred during signup.'
       );
+    } finally {
+      setIsWakingUp(false);
     }
   };
 

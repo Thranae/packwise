@@ -9,17 +9,52 @@ import { useTripContext } from '@/context/TripContext';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
+const GeneratingTripCard = ({ destination }) => (
+  <motion.div 
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    className="relative group rounded-[32px] overflow-hidden bg-[#0B101E]/80 border border-white/10 shadow-lg min-h-[300px] flex flex-col justify-center items-center p-8 backdrop-blur-2xl"
+  >
+    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-purple-500/10 animate-pulse" />
+    <Loader2 className="w-12 h-12 text-purple-400 animate-spin mb-6 relative z-10" />
+    <h3 className="text-xl font-bold text-white relative z-10 tracking-tight text-center">Crafting itinerary...</h3>
+    <p className="text-sm text-white/50 relative z-10 text-center mt-2 font-medium max-w-[80%]">Curating the best of {destination}</p>
+    
+    <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 animate-[loading-bar_5s_ease-in-out_forwards]" style={{ width: '100%' }} />
+    <style>{`
+      @keyframes loading-bar {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(0%); }
+      }
+    `}</style>
+  </motion.div>
+);
+
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
 
-export default function TripsPage() {
-  const { trips, loadingTrips, fetchTrips } = useTripContext();
-  const [searchQuery, setSearchQuery] = useState('');
-  const deferredSearchQuery = useDeferredValue(searchQuery);
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const { lightTap, successTap } = useHaptics();
-  
-  useRoutePreload(2000); // Preload heavy route chunks after 2s of idle
+  export default function TripsPage() {
+    const { trips, loadingTrips, fetchTrips } = useTripContext();
+    const location = useLocation();
+    const [searchQuery, setSearchQuery] = useState('');
+    const deferredSearchQuery = useDeferredValue(searchQuery);
+    const [activeFilter, setActiveFilter] = useState('All');
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const { lightTap, successTap } = useHaptics();
+    
+    const [showGenerating, setShowGenerating] = useState(location.state?.generatingTrip || false);
+    const destName = location.state?.destination || 'New Destination';
+
+    useEffect(() => {
+      if (showGenerating) {
+        const timer = setTimeout(() => {
+          setShowGenerating(false);
+        }, 5000);
+        return () => clearTimeout(timer);
+      }
+    }, [showGenerating]);
+
+    useRoutePreload(2000); // Preload heavy route chunks after 2s of idle
 
   const filteredTrips = useMemo(() => {
     return trips.filter(trip => {
@@ -209,3 +244,4 @@ export default function TripsPage() {
     </PageTransition>
   );
 }
+

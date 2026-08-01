@@ -444,7 +444,7 @@ export const TopHeader = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="absolute right-0 top-full mt-4 w-64 rounded-2xl bg-[#0F172A]/90 backdrop-blur-[40px] shadow-[0_24px_48px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] p-2 z-[200] border border-white/10"
+                className="absolute right-0 top-full mt-4 w-64 rounded-2xl bg-slate-900/95 backdrop-blur-[60px] shadow-[0_24px_48px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.25)] p-2 z-[200] border border-white/20"
               >
                 <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20 flex items-center justify-center shadow-inner">
@@ -456,7 +456,7 @@ export const TopHeader = () => {
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-sm font-bold text-white truncate tracking-tight">{user?.name || 'User'}</span>
-                    <span className="text-[11px] font-medium text-white/60 truncate">{user?.email}</span>
+                    <span className="text-[11px] font-medium text-white/80 truncate">{user?.email}</span>
                   </div>
                 </div>
 
@@ -466,21 +466,21 @@ export const TopHeader = () => {
                       setProfileMenuOpen(false);
                       await promptInstall();
                     }} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-blue-500/10 text-blue-400 hover:text-blue-300 transition-all text-sm font-bold group/item">
-                      <Download className="w-4 h-4 group-hover/item:scale-110 transition-transform" />
+                      <Download className="w-4 h-4 group-hover/item:scale-110 transition-transform drop-shadow-md" />
                       Install App
                     </button>
                   )}
-                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-all text-sm font-bold group/item">
-                    <User className="w-4 h-4 group-hover/item:text-blue-400 group-hover/item:scale-110 transition-transform" />
+                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white transition-all text-sm font-bold group/item">
+                    <User className="w-4 h-4 text-blue-400 group-hover/item:scale-110 transition-transform drop-shadow-md" />
                     My Profile
                   </Link>
-                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-all text-sm font-bold group/item">
-                    <Settings className="w-4 h-4 group-hover/item:text-purple-400 group-hover/item:scale-110 transition-transform" />
+                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white transition-all text-sm font-bold group/item">
+                    <Settings className="w-4 h-4 text-purple-400 group-hover/item:scale-110 transition-transform drop-shadow-md" />
                     Settings
                   </Link>
                   <div className="h-px w-full bg-white/10 my-1" />
                   <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all text-sm font-bold w-full text-left group/item">
-                    <LogOut className="w-4 h-4 group-hover/item:scale-110 transition-transform" />
+                    <LogOut className="w-4 h-4 text-red-500 group-hover/item:scale-110 transition-transform drop-shadow-md" />
                     Log Out
                   </button>
                 </div>
