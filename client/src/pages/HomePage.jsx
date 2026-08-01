@@ -307,7 +307,7 @@ export default function HomePage() {
                 <div className={`${glassStyle} p-4 flex items-center gap-4 rotate-y-[15deg] rotate-z-[-5deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/40 to-indigo-500/10 border border-indigo-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                    <BookOpen className="w-6 h-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 group-hover:text-indigo-400 group-hover:drop-shadow-[0_0_12px_rgba(129,140,248,0.8)] group-hover:scale-110" />
+                    <BookOpen className="w-6 h-6 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 text-indigo-400 group-hover:drop-shadow-[0_0_12px_rgba(129,140,248,0.8)] group-hover:scale-110" />
                   </div>
                   <div>
                     <div className="text-xs text-[var(--theme-text-secondary)]">Docs</div>
@@ -349,7 +349,7 @@ export default function HomePage() {
                 <div className={`${glassStyle} p-4 flex items-center gap-3 rotate-y-[5deg] rotate-z-[-2deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="group cursor-pointer relative overflow-hidden w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/40 to-orange-500/10 border border-orange-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(0,0,0,0.5)] flex items-center justify-center">
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                    <Luggage className="w-5 h-5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 group-hover:text-orange-400 group-hover:drop-shadow-[0_0_12px_rgba(251,146,60,0.8)] group-hover:scale-110" />
+                    <Luggage className="w-5 h-5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 text-orange-400 group-hover:drop-shadow-[0_0_12px_rgba(251,146,60,0.8)] group-hover:scale-110" />
                   </div>
                   <div>
                     <div className="text-xs text-[var(--theme-text-secondary)]">Packing</div>
@@ -363,7 +363,7 @@ export default function HomePage() {
                 <div className={`${glassStyle} p-5 flex flex-col gap-1 rotate-y-[-15deg] rotate-z-[4deg] hover:rotate-0 hover:scale-110 hover:z-50 transition-all duration-700 cursor-default shadow-xl`}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="group cursor-pointer relative overflow-hidden w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/40 to-emerald-500/10 border border-emerald-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_4px_8px_rgba(0,0,0,0.5)] flex items-center justify-center">
-                      <CreditCard className="w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] group-hover:scale-110" />
+                      <CreditCard className="w-4 h-4 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 text-emerald-400 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.8)] group-hover:scale-110" />
                     </div>
                     <span className="text-sm font-semibold text-[var(--theme-text-primary)]">Budget</span>
                   </div>
@@ -452,12 +452,12 @@ export default function HomePage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {[
-              { icon: Compass, title: 'Smart Itineraries', desc: 'AI-generated timelines that adapt to your pace, preferences, and real-time conditions.', colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_12px_rgba(96,165,250,0.8)]' },
-              { icon: Luggage, title: 'Contextual Packing', desc: 'Generates packing lists based on destination weather, activities, and duration.', colorClass: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_12px_rgba(251,146,60,0.8)]' },
-              { icon: BarChart3, title: 'Expense Tracking', desc: 'Monitor your budget in real-time with beautiful charts and multi-currency support.', colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]' },
-              { icon: Shield, title: 'Document Vault', desc: 'Securely store passports, visas, and tickets locally with military-grade encryption.', colorClass: 'group-hover:text-red-400 group-hover:drop-shadow-[0_0_12px_rgba(248,113,113,0.8)]' },
-              { icon: Globe, title: 'Offline Mode', desc: 'Access your entire trip timeline and maps without an active internet connection.', colorClass: 'group-hover:text-indigo-400 group-hover:drop-shadow-[0_0_12px_rgba(129,140,248,0.8)]' },
-              { icon: Zap, title: 'Instant Sync', desc: 'Changes made on any device instantly reflect everywhere. Collaboration made easy.', colorClass: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]' },
+              { icon: Compass, title: 'Smart Itineraries', desc: 'AI-generated timelines that adapt to your pace, preferences, and real-time conditions.', colorClass: 'text-blue-400 group-hover:drop-shadow-[0_0_12px_rgba(96,165,250,0.8)]' },
+              { icon: Luggage, title: 'Contextual Packing', desc: 'Generates packing lists based on destination weather, activities, and duration.', colorClass: 'text-orange-400 group-hover:drop-shadow-[0_0_12px_rgba(251,146,60,0.8)]' },
+              { icon: BarChart3, title: 'Expense Tracking', desc: 'Monitor your budget in real-time with beautiful charts and multi-currency support.', colorClass: 'text-emerald-400 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]' },
+              { icon: Shield, title: 'Document Vault', desc: 'Securely store passports, visas, and tickets locally with military-grade encryption.', colorClass: 'text-red-400 group-hover:drop-shadow-[0_0_12px_rgba(248,113,113,0.8)]' },
+              { icon: Globe, title: 'Offline Mode', desc: 'Access your entire trip timeline and maps without an active internet connection.', colorClass: 'text-indigo-400 group-hover:drop-shadow-[0_0_12px_rgba(129,140,248,0.8)]' },
+              { icon: Zap, title: 'Instant Sync', desc: 'Changes made on any device instantly reflect everywhere. Collaboration made easy.', colorClass: 'text-yellow-400 group-hover:drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]' },
             ].map((feature, i) => (
               <motion.div
                 key={i}
@@ -468,7 +468,7 @@ export default function HomePage() {
                   className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white/20 to-white/5 border border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-2px_4px_rgba(0,0,0,0.4),0_10px_20px_rgba(0,0,0,0.5)] group-hover:scale-110 group-hover:-translate-y-2 group-hover:shadow-[inset_0_2px_6px_rgba(255,255,255,0.5),inset_0_-2px_6px_rgba(0,0,0,0.5),0_16px_32px_rgba(0,0,0,0.6)] transition-all duration-700 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                  <feature.icon className={`h-8 w-8 text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 group-hover:scale-110 ${feature.colorClass}`} />
+                  <feature.icon className={`h-8 w-8 drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] relative z-10 transition-all duration-700 group-hover:scale-110 ${feature.colorClass}`} />
                 </div>
                 <h3 className="mb-3 text-xl font-bold">{feature.title}</h3>
                 <p className="text-base text-[var(--theme-text-secondary)] font-light leading-relaxed">{feature.desc}</p>
@@ -739,6 +739,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 
