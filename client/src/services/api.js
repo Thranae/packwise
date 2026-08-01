@@ -2,7 +2,7 @@ import axios from 'axios';
 import { STORAGE_KEYS } from '../constants/app';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://packwise-c35v.onrender.com/api',
   timeout: 120000, // Increased to 120s to allow for Render free-tier cold starts
   headers: {
     'Content-Type': 'application/json',
