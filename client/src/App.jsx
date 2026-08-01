@@ -56,17 +56,17 @@ function Spinner() {
       <div className="flex-1 flex flex-col items-center justify-center relative w-full h-full">
         {/* Ultra-Premium Minimalist Logo Reveal */}
         <motion.div 
-          initial={{ scale: 0.85, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 backdrop-blur-3xl shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 transform-gpu"
         >
           {/* Very subtle static glow behind the icon */}
           <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
           
           {/* The icon stays perfectly straight and stable */}
           <div className="relative z-10 scale-[1.2]">
-            <LogoIcon size="xl" className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]" />
+            <LogoIcon size="xl" className="text-white" />
           </div>
         </motion.div>
       </div>
