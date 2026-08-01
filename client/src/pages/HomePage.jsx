@@ -92,7 +92,7 @@ export default function HomePage() {
         {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-10 sm:pt-20 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-24 sm:pt-28 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
         
         {/* HERO SECTION */}
         <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh]"}`}>
