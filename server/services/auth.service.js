@@ -4,6 +4,7 @@ import { generateToken } from './token.service.js';
 import axios from 'axios';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
+import { sendWelcomeEmail } from './email.service.js';
 
 export const signupUser = async ({ name, email, password, gender, travelPreference }) => {
   const normalizedEmail = email.toLowerCase();
@@ -97,7 +98,11 @@ export const verifySignupOtp = async (email, otpCode) => {
   user.isVerified = true;
   user.otp = undefined;
   user.otpExpires = undefined;
+  user.hasReceivedWelcomeEmail = true;
   await user.save();
+
+  // Send Welcome Email in background
+  sendWelcomeEmail(user.email, user.name).catch(console.error);
 
   const token = generateToken(user._id);
   const userObj = user.toObject();
@@ -151,6 +156,13 @@ export const googleAuthUser = async (accessToken) => {
         profileImage: picture,
         isVerified: true
       });
+    }
+
+    if (!user.hasReceivedWelcomeEmail) {
+      user.hasReceivedWelcomeEmail = true;
+      await user.save();
+      // Send Welcome Email in background
+      sendWelcomeEmail(user.email, user.name).catch(console.error);
     }
 
     const token = generateToken(user._id);
