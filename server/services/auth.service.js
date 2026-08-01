@@ -48,8 +48,42 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
   // For testing when SMTP fails:
   console.log(`\n\n=== OTP FOR ${normalizedEmail}: ${otp} ===\n\n`);
 
-  // Try to send email, but don't hang if SMTP is misconfigured
-  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  // Try to send email using Brevo (preferred) or Nodemailer
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const brevoResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'api-key': process.env.BREVO_API_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          sender: {
+            name: 'Voyage Genie',
+            email: 'support.packwise@gmail.com'
+          },
+          to: [{ email: normalizedEmail }],
+          subject: 'Your Voyage Genie Signup OTP',
+          htmlContent: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center;">
+              <h2 style="color: #4F7CFF;">Voyage Genie</h2>
+              <p>Your verification code to create an account is:</p>
+              <h1 style="font-size: 32px; letter-spacing: 4px; color: #111827; background: #f3f4f6; padding: 10px; border-radius: 8px;">${otp}</h1>
+              <p style="color: #6b7280; font-size: 12px;">This code expires in 10 minutes. Do not share this code with anyone.</p>
+            </div>
+          `
+        })
+      });
+
+      if (!brevoResponse.ok) {
+        throw new Error('Brevo API failed');
+      }
+    } catch (error) {
+      console.error('Brevo Error (Skipping email):', error.message);
+      return { success: true, message: `Email failed. Your OTP is: ${otp}` };
+    }
+  } else if (process.env.SMTP_USER && process.env.SMTP_PASS) {
     try {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -57,7 +91,7 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
         },
-        connectionTimeout: 5000, // Fail fast in 5 seconds
+        connectionTimeout: 5000,
         greetingTimeout: 5000,
         socketTimeout: 5000,
       });
@@ -77,18 +111,13 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
       });
     } catch (error) {
       console.error('Nodemailer Error (Skipping email):', error.message);
-      // We don't throw, we let them proceed but they won't get the email unless they fix SMTP.
-      // For development, we return the OTP in the message so they can still test the app!
       return { success: true, message: `Email failed. Your OTP is: ${otp}` };
     }
   } else {
-    console.warn('Server configuration error: SMTP credentials missing, skipping email');
-    // If no email configured, we bypass email sending for now so the user isn't permanently locked out of testing.
+    console.warn('Server configuration error: Email credentials missing, skipping email');
   }
 
-  // If we reach here, email was sent or skipped successfully
-  // For development testing when SMTP is broken, we return a hint
-  return { success: true, message: process.env.SMTP_USER ? 'OTP sent to email for verification' : `Email not configured. Your OTP is: ${otp}` };
+  return { success: true, message: process.env.BREVO_API_KEY || process.env.SMTP_USER ? 'OTP sent to email for verification' : `Email not configured. Your OTP is: ${otp}` };
 };
 
 export const verifySignupOtp = async (email, otpCode) => {
