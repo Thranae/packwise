@@ -80,7 +80,8 @@ html, body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  overscroll-behavior-y: none; /* Prevents native pull-to-refresh bounce */
+  overscroll-behavior-y: none;
+  overflow-x: hidden; /* Prevents native pull-to-refresh bounce */
   -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on iOS/Android */
 }
 
@@ -470,3 +471,4 @@ input:-webkit-autofill:active{
     width: 100% !important;
   }
 }
+

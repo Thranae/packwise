@@ -108,7 +108,7 @@ export default function HomePage() {
                 </motion.p>
             
                 {/* Beautiful AI Prompt Bar */}
-                <motion.div variants={fadeInUp} className="mt-6 w-full max-w-md relative group">
+                <motion.div variants={fadeInUp} className="mt-6 w-full max-w-[85vw] sm:max-w-md relative group">
                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-xl opacity-50 group-hover:opacity-100 transition-opacity rounded-full"></div>
                    <Link to={ROUTES.ASSISTANT}>
                      <div className="relative flex items-center bg-white/5 backdrop-blur-md border border-white/20 rounded-full p-2 pl-6 shadow-2xl hover:bg-white/10 transition-colors">
@@ -127,7 +127,7 @@ export default function HomePage() {
                 <motion.div 
                    animate={{ y: [-3, 3, -3] }} 
                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                   className="w-full max-w-sm relative z-20"
+                   className="w-full max-w-[85vw] sm:max-w-sm relative z-20"
                 >
                    {/* Outer Liquid Glass Container */}
                    <div className="relative p-[1px] rounded-[32px] overflow-hidden bg-gradient-to-br from-white/40 via-white/10 to-transparent shadow-[0_32px_64px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] backdrop-blur-[24px]">
