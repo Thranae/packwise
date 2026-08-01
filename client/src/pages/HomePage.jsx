@@ -92,10 +92,10 @@ export default function HomePage() {
         {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-20 sm:pt-24 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-10 sm:pt-20 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
         
         {/* HERO SECTION */}
-        <section className={`relative flex flex-col justify-center pb-10 lg:pb-20 ${isAuthenticated ? "min-h-[calc(100vh-140px)] mt-4 lg:mt-8" : "min-h-[70vh] lg:min-h-[90vh]"}`}>
+        <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh]"}`}>
           {isAuthenticated ? (
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
               {/* Authenticated Dashboard: Left Side */}
