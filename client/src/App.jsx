@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { InstallPromptWidget } from '@/components/pwa/InstallPromptWidget';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { App as CapacitorApp } from '@capacitor/app';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -173,6 +174,26 @@ function ToastContainer() {
 // ---------------------------------------------------------------------------
 function AppRoutes() {
   const location = useLocation();
+    const navigate = useNavigate();
+    
+    // Handle Capacitor Hardware Back Button
+    useEffect(() => {
+        let listener = null;
+        const setupListener = async () => {
+            listener = await CapacitorApp.addListener('backButton', () => {
+                if (location.pathname === ROUTES.HOME) {
+                    CapacitorApp.exitApp();
+                } else {
+                    navigate(-1);
+                }
+            });
+        };
+        setupListener();
+        return () => {
+            if (listener) listener.remove();
+        };
+    }, [location.pathname, navigate]);
+
 
   // Scroll to top on route change
   useEffect(() => {

@@ -8,6 +8,7 @@ import {
   Smartphone, Compass, CreditCard, MapPin
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 import { useTripContext } from '@/context/TripContext';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { ROUTES } from '@/constants/routes';
@@ -48,6 +49,7 @@ const scaleIn = {
 
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
+  const { addToast } = useToast();
   const { trips, isGenerating } = useTripContext();
   const nextTrip = trips && trips.length > 0 ? trips[0] : null;
   const { imageUrl: nextTripImage } = useDestinationImage(nextTrip?.destination);
@@ -110,8 +112,8 @@ export default function HomePage() {
                 {/* Dynamic Voice Waveform */}
                   <motion.div variants={fadeInUp} className="mt-8 relative group cursor-pointer">
                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-blue-500/20 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
-                     <Link to={ROUTES.ASSISTANT}>
-                        <div className="relative flex items-center bg-[#030712]/40 backdrop-blur-xl border border-white/10 rounded-full p-2 pl-4 pr-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:bg-[#030712]/60 group-hover:border-white/20">
+                     <div onClick={(e) => { e.preventDefault(); addToast("AI Voice Assistant is coming in the next update!", "info"); }}>
+                       <div className="relative flex items-center bg-[#030712]/40 backdrop-blur-xl border border-white/10 rounded-full p-2 pl-4 pr-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:bg-[#030712]/60 group-hover:border-white/20">
                            {/* Mic Icon */}
                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] relative overflow-hidden shrink-0 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-shadow">
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
@@ -134,7 +136,7 @@ export default function HomePage() {
                            {/* Text Prompt */}
                            <span className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 whitespace-nowrap overflow-hidden text-ellipsis min-w-0">Tap to speak your adventure...</span>
                         </div>
-                     </Link>
+                     </div>
                   </motion.div>
               </motion.div>
 
