@@ -130,7 +130,16 @@ export default function HomePage() {
                    className="w-full max-w-[85vw] sm:max-w-sm relative z-20"
                 >
                    {/* Outer Liquid Glass Container */}
-                   <div className="relative p-[1px] rounded-[32px] overflow-hidden bg-gradient-to-br from-white/40 via-white/10 to-transparent shadow-[0_32px_64px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2)] backdrop-blur-[24px]">
+                   <div className="relative p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden">
+                        {/* iOS Noise Texture Overlay */}
+                        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
+                        
+                        {/* 3D Liquid Glare Sheen */}
+                        <div className="absolute top-0 left-0 right-0 h-[40%] bg-gradient-to-b from-white/30 to-transparent opacity-60 rounded-t-[32px] z-0 pointer-events-none" />
+                        
+                        {/* Vibrant Ambient Orbs */}
+                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-fuchsia-500/30 blur-[40px] rounded-full animate-pulse z-0" />
+                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/30 blur-[40px] rounded-full animate-pulse z-0" style={{ animationDelay: "1s" }} />
                       {/* Inner frosted content */}
                       {isGenerating ? (
                       <div className="bg-[#030712]/40 backdrop-blur-3xl rounded-[32px] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-white/5 min-h-[320px]">
@@ -150,13 +159,13 @@ export default function HomePage() {
                          <p className="text-xs sm:text-sm text-white/50 text-center max-w-[200px]">Our AI is analyzing millions of data points to build your perfect itinerary.</p>
                       </div>
                     ) : (
-                      <div className="bg-[#030712]/40 backdrop-blur-3xl rounded-[32px] p-2 flex flex-col gap-2 relative overflow-hidden border border-white/5">
+                      <div className="bg-[#030712]/30 rounded-[31px] p-2.5 flex flex-col gap-3 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
                          {/* Beautiful subtle animated background glow */}
                          <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse" />
                          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse" />
                          
                          {/* Hero Image Section */}
-                         <div className="w-full h-[140px] sm:h-[160px] rounded-[28px] overflow-hidden relative border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] shrink-0 group">
+                         <div className="w-full h-[150px] sm:h-[170px] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 group transform-gpu z-10 border border-white/10">
                             <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
                             <div className="absolute bottom-4 left-5">

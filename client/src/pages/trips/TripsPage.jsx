@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useDeferredValue } from 'react';
 import { Plus, Search, Map, Compass, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/common/PageTransition';
 import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
