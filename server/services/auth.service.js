@@ -79,7 +79,7 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
       console.error('Nodemailer Error (Skipping email):', error.message);
       // We don't throw, we let them proceed but they won't get the email unless they fix SMTP.
       // For development, we return the OTP in the message so they can still test the app!
-      return { success: true, message: `Check server logs for OTP, email failed.` };
+      return { success: true, message: `Email failed. Your OTP is: ${otp}` };
     }
   } else {
     console.warn('Server configuration error: SMTP credentials missing, skipping email');
@@ -88,7 +88,7 @@ export const signupUser = async ({ name, email, password, gender, travelPreferen
 
   // If we reach here, email was sent or skipped successfully
   // For development testing when SMTP is broken, we return a hint
-  return { success: true, message: 'OTP sent to email for verification' };
+  return { success: true, message: process.env.SMTP_USER ? 'OTP sent to email for verification' : `Email not configured. Your OTP is: ${otp}` };
 };
 
 export const verifySignupOtp = async (email, otpCode) => {
