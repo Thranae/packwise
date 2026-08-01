@@ -92,7 +92,7 @@ export default function HomePage() {
         {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-24 sm:pt-28 lg:pt-32" : "pt-32 sm:pt-36 lg:pt-48"}`}>
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-32 sm:pt-36 lg:pt-40" : "pt-32 sm:pt-36 lg:pt-48"}`}>
         
         {/* HERO SECTION */}
         <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh]"}`}>
@@ -107,19 +107,35 @@ export default function HomePage() {
                   Where is your next adventure taking you? Let our AI craft your perfect itinerary in seconds.
                 </motion.p>
             
-                {/* Beautiful AI Prompt Bar */}
-                <motion.div variants={fadeInUp} className="mt-6 w-full max-w-[85vw] sm:max-w-md relative group">
-                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-xl opacity-50 group-hover:opacity-100 transition-opacity rounded-full"></div>
-                   <Link to={ROUTES.ASSISTANT}>
-                     <div className="relative flex items-center bg-white/5 backdrop-blur-md border border-white/20 rounded-full p-2 pl-6 shadow-2xl hover:bg-white/10 transition-colors">
-                        <Sparkles className="w-5 h-5 text-purple-400 mr-3 animate-pulse" />
-                        <span className="flex-1 min-w-0 text-white/50 text-left text-sm sm:text-base whitespace-nowrap overflow-hidden text-ellipsis pr-4">E.g., 5 days in Tokyo for cherry blossoms...</span>
-                        <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-3 rounded-full shadow-lg group-hover:scale-105 transition-transform">
-                           <ArrowRight className="w-5 h-5" />
-                        </button>
-                     </div>
-                   </Link>
-                </motion.div>
+                {/* Dynamic Voice Waveform */}
+                  <motion.div variants={fadeInUp} className="mt-8 relative group cursor-pointer">
+                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-blue-500/20 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+                     <Link to={ROUTES.ASSISTANT}>
+                        <div className="relative flex items-center bg-[#030712]/40 backdrop-blur-xl border border-white/10 rounded-full p-2 pl-4 pr-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:bg-[#030712]/60 group-hover:border-white/20">
+                           {/* Mic Icon */}
+                           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] relative overflow-hidden shrink-0 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-shadow">
+                              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white relative z-10"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
+                           </div>
+                           
+                           {/* Animated Waveform */}
+                           <div className="flex items-center gap-1 mx-4 h-6">
+                              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                                 <motion.div 
+                                    key={i}
+                                    animate={{ scaleY: [0.3, 1, 0.3] }}
+                                    transition={{ duration: 1 + (i % 3) * 0.2, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
+                                    className={`w-1 rounded-full ${i % 2 === 0 ? 'bg-fuchsia-400' : 'bg-blue-400'} origin-center`}
+                                    style={{ height: '100%' }}
+                                 />
+                              ))}
+                           </div>
+                           
+                           {/* Text Prompt */}
+                           <span className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 whitespace-nowrap overflow-hidden text-ellipsis min-w-0">Tap to speak your adventure...</span>
+                        </div>
+                     </Link>
+                  </motion.div>
               </motion.div>
 
               {/* Authenticated Dashboard: Right Side Ticket Widget */}
