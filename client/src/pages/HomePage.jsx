@@ -50,8 +50,8 @@ const scaleIn = {
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
   const { addToast } = useToast();
-  const { trips, isGenerating } = useTripContext();
-  const nextTrip = trips && trips.length > 0 ? trips[0] : null;
+  const { trips, currentTrip, isGenerating } = useTripContext();
+  const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
   const { imageUrl: nextTripImage } = useDestinationImage(nextTrip?.destination);
   
   const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
@@ -218,7 +218,7 @@ export default function HomePage() {
                                </div>
                             </div>
                             
-                            <Link to={ROUTES.TRIPS} className="relative z-10 mt-4 block">
+                            <Link to={ROUTES.OVERVIEW} className="relative z-10 mt-4 block">
                               <button className="w-full py-3.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-white/10 rounded-2xl text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)] group hover:scale-[1.02] active:scale-[0.98]">
                                 View Itinerary <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                               </button>
@@ -312,15 +312,15 @@ export default function HomePage() {
               <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[5%] lg:top-[10%] left-[5%] w-[90%] h-[90%] lg:h-[75%] z-20">
                 <div className={`${glassStyle} w-full h-full p-2 flex items-center justify-center relative overflow-hidden group`}>
                   <Image 
-                    src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Kyoto, Japan" 
+                    src={tripImage} 
+                    alt={tripDestination} 
                     className="absolute inset-0 w-full h-full object-cover rounded-[16px] transition-transform duration-1000 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-[16px]" />
                   <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10 text-white">
                     <div>
                       <div className="text-sm font-medium text-white/80 mb-1">Current Itinerary</div>
-                      <div className="text-2xl font-bold">Kyoto, Japan</div>
+                      <div className="text-2xl font-bold truncate max-w-[200px]">{tripDestination}</div>
                     </div>
                     <div className="px-4 py-2 text-xs font-bold text-white bg-white/20 backdrop-blur-md rounded-full border border-white/20">
                       Active
