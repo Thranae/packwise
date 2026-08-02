@@ -219,7 +219,7 @@ export default function HomePage() {
                                </div>
                             </div>
                             
-                            <div onClick={() => { setCurrentTrip(nextTrip); navigate(ROUTES.OVERVIEW); }} className="relative z-10 mt-4 block cursor-pointer">
+                            <div onClick={() => { setCurrentTrip(nextTrip); navigate(ROUTES.CALENDAR); }} className="relative z-10 mt-4 block cursor-pointer">
                               <button className="w-full py-3.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-white/10 rounded-2xl text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)] group hover:scale-[1.02] active:scale-[0.98]">
                                 View Itinerary <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                               </button>
