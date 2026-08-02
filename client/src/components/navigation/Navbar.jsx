@@ -238,7 +238,7 @@ export const Navbar = () => {
                           <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
                             <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20 flex items-center justify-center shadow-inner">
                               {user?.profileImage ? (
-                                <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
+                                <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                               ) : (
                                 <span className="text-white text-sm font-bold drop-shadow-sm">{getInitials(user?.name || 'User')}</span>
                               )}

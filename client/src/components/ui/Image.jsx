@@ -36,6 +36,7 @@ export const Image = ({
         src={imageSrc}
         alt={alt || 'Image'}
         loading="lazy"
+        referrerPolicy="no-referrer"
         onLoad={() => setIsLoading(false)}
         onError={() => {
           if (!hasError) {

@@ -177,7 +177,7 @@ export default function HomePage() {
                          <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2 text-center">Crafting Journey...</h3>
                          <p className="text-xs sm:text-sm text-white/50 text-center max-w-[200px]">Our AI is analyzing millions of data points to build your perfect itinerary.</p>
                       </div>
-                    ) : (
+                    ) : nextTrip ? (
                       <div className="bg-[#030712]/30 rounded-[31px] p-2.5 flex flex-col gap-3 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
                          {/* Beautiful subtle animated background glow */}
                          <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse" />
@@ -225,6 +225,22 @@ export default function HomePage() {
                               </button>
                             </div>
                          </div>
+                      </div>
+                    ) : (
+                      <div className="bg-[#030712]/30 rounded-[31px] p-8 flex flex-col items-center justify-center relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] min-h-[320px] text-center border border-white/5">
+                         <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 blur-[50px] rounded-full animate-pulse" />
+                         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-emerald-500/10 blur-[50px] rounded-full animate-pulse" />
+                         
+                         <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                            <Map className="w-8 h-8 text-white/60" />
+                         </div>
+                         
+                         <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-3">Ready to explore?</h3>
+                         <p className="text-xs sm:text-sm text-white/50 mb-8 max-w-[220px]">You don't have any upcoming trips. Let our AI build one for you in seconds.</p>
+                         
+                         <button onClick={() => navigate('/assistant')} className="w-full py-3.5 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 rounded-2xl text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(59,130,246,0.4)] hover:scale-[1.02] active:scale-[0.98] border border-white/20">
+                           Start Planning <ArrowRight className="w-4 h-4" />
+                         </button>
                       </div>
                     )}
                    </div>
