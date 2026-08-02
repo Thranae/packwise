@@ -360,8 +360,8 @@ export const TripBuilderWizard = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center max-w-[800px] mx-auto p-4 sm:p-6 lg:p-8">
       
-      {/* Sleek, Compact Form Card without 3D tilt */}
-      <div className="relative w-full bg-[#050B14]/60 backdrop-blur-[30px] border border-white/10 border-t-white/20 rounded-[40px] p-6 sm:p-10 shadow-[0_30px_80px_rgba(0,0,0,0.8),inset_0_2px_20px_rgba(255,255,255,0.1)] flex flex-col overflow-hidden">
+      {/* Sleek, Compact Form Card - iOS Liquid Glass Style */}
+      <div className="relative w-full bg-black/20 backdrop-blur-[40px] border border-white/20 border-t-white/30 rounded-[40px] p-6 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.15)] flex flex-col overflow-visible">
         
         {/* Header Steps */}
         <div className="flex items-center justify-between mb-8 sm:mb-10 relative z-10">
@@ -397,7 +397,7 @@ export const TripBuilderWizard = () => {
         </div>
 
         {/* Form Content */}
-        <div className="relative z-10 w-full min-h-[300px] sm:min-h-[340px] flex flex-col">
+        <div className="relative z-10 w-full flex flex-col">
           <AnimatePresence mode="wait">
             {!isGenerating ? (
               <motion.div
@@ -409,7 +409,7 @@ export const TripBuilderWizard = () => {
                 className="space-y-6 flex-1 flex flex-col justify-center"
               >
                 {step === 1 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 relative z-50">
                     <LocationInput 
                       label="Where do you want to go?"
                       value={prompt}
@@ -428,14 +428,14 @@ export const TripBuilderWizard = () => {
                       placeholder="Where are you flying from?"
                     />
                     
-                    {/* Inline Suggestions */}
+                    {/* Floating Dropdown Suggestions */}
                     <AnimatePresence>
                       {(suggestions.length > 0 || isSearching) && (
                         <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="w-full bg-white/[0.03] border border-white/5 rounded-2xl p-4 shadow-inner"
+                          initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                          className="absolute z-[100] left-0 right-0 top-[170px] bg-black/60 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]"
                         >
                           {isSearching ? (
                             <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
@@ -583,7 +583,7 @@ export const TripBuilderWizard = () => {
 
         {/* Navigation Buttons */}
         {!isGenerating && (
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/10 relative z-10">
+          <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/10 relative z-10">
             <button 
               onClick={() => { lightTap(); setStep(step - 1); }}
               className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10'}`}
