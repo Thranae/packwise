@@ -267,15 +267,25 @@ export const TripProvider = ({ children }) => {
   const generateTrip = async (prompt, meta = {}) => {
     setIsGenerating(true);
     setLoadingStep("INITIALIZING...");
+    const startTime = Date.now();
     
     try {
       setTimeout(() => setLoadingStep("DISCOVERING..."), 1500);
       setTimeout(() => setLoadingStep("FINALIZING..."), 3000);
+      setTimeout(() => setLoadingStep("POLISHING UI..."), 5000);
       
       const res = await api.post('/ai/trip', { prompt });
       const aiData = res.data;
       
+      const elapsed = Date.now() - startTime;
+      const minDelay = 7000;
+      if (elapsed < minDelay) {
+        await new Promise(r => setTimeout(r, minDelay - elapsed));
+      }
+      
       setLoadingStep("Done.");
+      
+      // Delay before redirecting to let the user see 'Done.'
       setTimeout(async () => {
         const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
         

@@ -31,7 +31,9 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
   const handlePrevMonth = (e) => { e.stopPropagation(); setCurrentMonth(new Date(year, month - 1, 1)); };
   const handleNextMonth = (e) => { e.stopPropagation(); setCurrentMonth(new Date(year, month + 1, 1)); };
 
-  const handleSelectDate = (d) => {
+  const handleSelectDate = (e, d) => {
+    e.preventDefault();
+    e.stopPropagation();
     const selected = new Date(year, month, d);
     selected.setMinutes(selected.getMinutes() - selected.getTimezoneOffset());
     onChange(selected.toISOString().split('T')[0]);
@@ -88,7 +90,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                       <button
                         key={`${year}-${month}-${d}`}
                         disabled={isPast}
-                        onClick={() => handleSelectDate(d)}
+                        onClick={(e) => handleSelectDate(e, d)}
                         className={`
                           relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-all duration-300
                           ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
