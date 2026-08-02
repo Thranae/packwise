@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   Map, Plane, CloudSun, Luggage, DollarSign, BookOpen,
@@ -50,7 +50,8 @@ const scaleIn = {
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
   const { addToast } = useToast();
-  const { trips, currentTrip, isGenerating } = useTripContext();
+  const { trips, currentTrip, isGenerating, setCurrentTrip } = useTripContext();
+  const navigate = useNavigate();
   const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
   const { image: nextTripImage } = useDestinationImage(nextTrip?.destination);
   
@@ -218,11 +219,11 @@ export default function HomePage() {
                                </div>
                             </div>
                             
-                            <Link to={ROUTES.OVERVIEW} className="relative z-10 mt-4 block">
+                            <div onClick={() => { setCurrentTrip(nextTrip); navigate(ROUTES.OVERVIEW); }} className="relative z-10 mt-4 block cursor-pointer">
                               <button className="w-full py-3.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border border-white/10 rounded-2xl text-white text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)] group hover:scale-[1.02] active:scale-[0.98]">
                                 View Itinerary <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                               </button>
-                            </Link>
+                            </div>
                          </div>
                       </div>
                     )}
