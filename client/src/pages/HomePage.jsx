@@ -52,10 +52,10 @@ export default function HomePage() {
   const { addToast } = useToast();
   const { trips, currentTrip, isGenerating } = useTripContext();
   const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
-  const { imageUrl: nextTripImage } = useDestinationImage(nextTrip?.destination);
+  const { image: nextTripImage } = useDestinationImage(nextTrip?.destination);
   
   const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
-  const tripImage = nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop';
+  const tripImage = nextTrip?.heroImage || nextTrip?.image || nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop';
   const tripCountry = nextTrip?.country || 'Japan';
   
   const daysUntil = nextTrip?.startDate 
