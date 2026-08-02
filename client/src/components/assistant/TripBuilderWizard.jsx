@@ -67,7 +67,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                 className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95  border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
+                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 80 text-white" /></button>
                   <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
                   <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 text-white" /></button>
                 </div>
@@ -361,7 +361,7 @@ export const TripBuilderWizard = () => {
     <div className="w-full h-full flex flex-col items-center justify-center max-w-[800px] mx-auto p-4 sm:p-6 lg:p-8">
       
       {/* Sleek, Compact Form Card - iOS Liquid Glass Style */}
-      <div className="relative w-full bg-black/20 backdrop-blur-[40px] border border-white/20 border-t-white/30 rounded-[40px] p-6 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.15)] flex flex-col overflow-visible">
+      <div className="relative w-full bg-white/[0.04] backdrop-blur-[50px] border border-white/10 border-t-white/20 rounded-[40px] p-6 sm:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.5),inset_0_1px_4px_rgba(255,255,255,0.1)] flex flex-col overflow-visible">
         
         {/* Header Steps */}
         <div className="flex items-center justify-between mb-8 sm:mb-10 relative z-10">
@@ -380,7 +380,7 @@ export const TripBuilderWizard = () => {
                 )}
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 relative z-10 ${
                   isActive || isPast 
-                    ? `bg-gradient-to-br ${s.color} text-white ${s.shadow} scale-110 rotate-3` 
+                    ? `bg-gradient-to-br ${s.color} text-white ${s.shadow} scale-110` 
                     : 'bg-black/40 text-white/40 border border-white/5'
                 }`}
                 style={{
@@ -435,7 +435,7 @@ export const TripBuilderWizard = () => {
                           initial={{ opacity: 0, y: -10, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                          className="absolute z-[100] left-0 right-0 top-[170px] bg-black/60 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]"
+                          className={`absolute z-[100] left-0 right-0 ${activeField === "startCity" ? "top-[175px]" : "top-[85px]"} bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
                         >
                           {isSearching ? (
                             <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
