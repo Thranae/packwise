@@ -393,7 +393,7 @@ export const TripBuilderWizard = () => {
                 <span className={`text-[10px] font-black tracking-widest uppercase transition-all duration-300 ${isActive ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] scale-110' : isPast ? 'text-white/80' : 'text-white/30'}`}>{s.title}</span>
               </div>
             );
-          })}}
+          })}
         </div>
 
         {/* Form Content */}
