@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine, Clock, Users } from 'lucide-react';
+import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
 import { motion, AnimatePresence, useMotionTemplate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
 import { useTransitionNavigate } from '@/contexts/TransitionContext';
-import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useHaptics } from '@/hooks/useHaptics';
 import { LogoIcon } from '@/components/ui/Logo';
@@ -67,7 +66,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                 className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95  border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 80 text-white" /></button>
+                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
                   <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
                   <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 text-white" /></button>
                 </div>
@@ -221,9 +220,9 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
 
   const handleSelect = (loc) => {
     const locString = loc.country ? `${loc.city}, ${loc.country.split(',').pop().trim()}` : loc.city;
-    userTypedValue.current = locString;
-    onChange(locString);
+    setSuggestions([]);
     setShowDropdown(false);
+    onChange(locString);
   };
 
   return (
@@ -302,12 +301,11 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
   );
 };
 
-
 export const TripBuilderWizard = () => {
   const navigate = useNavigate();
   const triggerTransition = useTransitionNavigate();
   const [step, setStep] = useState(1);
-  const { generateTrip, isGenerating, loadingStep } = useTripContext();
+  const { generateTrip, isGenerating, loadingStep, currentTrip } = useTripContext();
   const { playSound } = useSoundEffect();
   const { lightTap, successTap } = useHaptics();
   const [prompt, setPrompt] = useState("");
@@ -319,12 +317,12 @@ export const TripBuilderWizard = () => {
   const [males, setMales] = useState(1);
   const [females, setFemales] = useState(0);
   
+  // Side Panel State
   const [suggestions, setSuggestions] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [activeField, setActiveField] = useState(null);
+  const [activeField, setActiveField] = useState(null); // 'destination' or 'startCity'
 
   const toggleStyle = (style) => {
-    lightTap();
     setStyles(prev => prev.includes(style) ? prev.filter(s => s !== style) : [...prev, style]);
   };
 
@@ -335,6 +333,7 @@ export const TripBuilderWizard = () => {
     const genderContext = (males > 0 || females > 0) ? ` Travelers: ${males + females} total (${males} male, ${females} female).` : "";
     const fullPrompt = `Destination: ${prompt}.${flightContext} Start Date: ${startDate}. Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     
+    // Explicitly pass dates to bypass AI hallucination
     await generateTrip(fullPrompt, { startDate, duration }); 
     
     successTap();
@@ -352,55 +351,50 @@ export const TripBuilderWizard = () => {
   };
 
   const steps = [
-    { id: 1, title: 'Destination', icon: MapPin, color: 'from-emerald-400 via-teal-400 to-emerald-600', shadow: 'shadow-[0_0_20px_rgba(52,211,153,0.5)]' },
-    { id: 2, title: 'Origin', icon: Plane, color: 'from-cyan-400 via-blue-400 to-blue-600', shadow: 'shadow-[0_0_20px_rgba(56,189,248,0.5)]' },
-    { id: 3, title: 'Details', icon: Wallet, color: 'from-indigo-400 via-purple-400 to-purple-600', shadow: 'shadow-[0_0_20px_rgba(99,102,241,0.5)]' },
-    { id: 4, title: 'Style', icon: Compass, color: 'from-fuchsia-400 via-pink-400 to-rose-600', shadow: 'shadow-[0_0_20px_rgba(217,70,239,0.5)]' },
+    { id: 1, title: 'Destination', icon: MapPin, color: 'from-emerald-400 to-teal-500', shadow: 'rgba(52,211,153,0.5)' },
+    { id: 2, title: 'Duration & Budget', icon: Wallet, color: 'from-blue-400 to-indigo-500', shadow: 'rgba(59,130,246,0.5)' },
+    { id: 3, title: 'Interests & Style', icon: Compass, color: 'from-purple-400 to-pink-500', shadow: 'rgba(192,132,252,0.5)' },
   ];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center max-w-[960px] mx-auto p-4 sm:p-6 lg:p-8">
-      
-      {/* Premium Frosted Glass Card */}
-      <div className="relative w-full bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] backdrop-blur-[60px] border border-white/[0.12] rounded-[36px] p-7 sm:p-10 lg:p-12 shadow-[0_40px_80px_-12px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.3)] flex flex-col overflow-visible min-h-[420px] sm:min-h-[480px]">
-        {/* Top edge highlight */}
-        <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        
-        {/* Header Steps */}
-        <div className="flex items-center justify-between mb-8 sm:mb-10 relative z-10">
-          <div className="absolute top-[20px] left-8 right-8 h-[2px] bg-white/5 rounded-full -z-10" />
+    <div className="w-full h-full flex flex-col lg:flex-row items-start justify-start gap-8 max-w-[1400px]">
+      <div className="flex flex-col items-start w-full h-full lg:flex-1 lg:max-w-4xl relative z-10">
+        {/* Background Ambient Glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full pointer-events-none z-0" />
+
+        <motion.div 
+          className="relative w-full h-full ios-glass-card rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 group/card shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col min-h-0"
+        >
+
+        <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10 px-2 sm:px-6 shrink-0">
+          <div className="absolute top-1/2 left-6 right-6 h-[3px] bg-white/5 rounded-full -z-10" />
           <div 
-            className="absolute top-[20px] left-8 h-[2px] bg-gradient-to-r from-blue-500 to-purple-500 rounded-full -z-10 transition-all duration-500 ease-out" 
-            style={{ width: `calc(${((step - 1) / (steps.length - 1)) * 100}% - 64px)` }} 
+            className="absolute top-1/2 left-6 h-[3px] bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full -z-10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_0_15px_rgba(59,130,246,0.6)]" 
+            style={{ width: `calc(${((step - 1) / (steps.length - 1)) * 100}% - 48px)` }} 
           />
           {steps.map((s) => {
             const isActive = step === s.id;
             const isPast = step > s.id;
             return (
-              <div key={s.id} className="flex flex-col items-center gap-3 w-16 relative" style={{ perspective: "1000px" }}>
-                {isActive && (
-                  <div className="absolute top-0 w-12 h-12 bg-white/20 rounded-full blur-xl animate-pulse" />
-                )}
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 relative z-10 ${
+              <div key={s.id} className="flex flex-col items-center gap-3 relative">
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-[20px] flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] relative group ${
                   isActive || isPast 
-                    ? `bg-gradient-to-br ${s.color} text-white ${s.shadow} scale-110` 
-                    : 'bg-black/40 text-white/40 border border-white/5'
-                }`}
-                style={{
-                  boxShadow: isActive || isPast ? 'inset 0px 2px 4px rgba(255,255,255,0.6), inset 0px -4px 8px rgba(0,0,0,0.4), 0px 10px 20px rgba(0,0,0,0.5)' : 'inset 0px 1px 2px rgba(255,255,255,0.05)',
-                  transformStyle: 'preserve-3d'
-                }}>
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/30 to-transparent opacity-50" />
-                  <s.icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] scale-110' : ''}`} style={{ transform: 'translateZ(10px)' }} />
+                    ? `bg-gradient-to-br ${s.color} text-white shadow-[0_12px_24px_${s.shadow},inset_0_4px_12px_rgba(255,255,255,0.4)] scale-110 z-20` 
+                    : 'bg-white/5 border border-white/10 text-white/40  shadow-[inset_0_2px_4px_rgba(255,255,255,0.05)]'
+                }`}>
+                  {isActive && <div className={`absolute -inset-4 bg-gradient-to-r ${s.color} rounded-full opacity-30 blur-2xl animate-pulse -z-10`} />}
+                  {isActive && <div className="absolute inset-0 bg-white/20 rounded-[20px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mix-blend-overlay" />}
+                  <s.icon className={`w-5 h-5 sm:w-6 sm:h-6 transition-all duration-500 ${isActive ? 'drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] scale-110' : isPast ? 'drop-shadow-sm' : ''}`} />
                 </div>
-                <span className={`text-[10px] font-black tracking-widest uppercase transition-all duration-300 ${isActive ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] scale-110' : isPast ? 'text-white/80' : 'text-white/30'}`}>{s.title}</span>
+                <span className={`text-[12px] sm:text-[13px] font-bold tracking-wide uppercase transition-colors duration-700 ${isActive || isPast ? 'text-white' : 'text-white/30'} absolute -bottom-8 w-max text-center hidden sm:block`}>
+                  {s.title}
+                </span>
               </div>
             );
           })}
         </div>
 
-        {/* Form Content */}
-        <div className="relative z-10 w-full flex flex-col">
+        <div className="relative z-10 mt-2 sm:mt-6 flex-1 min-h-0 overflow-y-auto pb-4 scrollbar-hide px-1 sm:px-2" style={{ scrollbarWidth: 'none' }}>
           <AnimatePresence mode="wait">
             {!isGenerating ? (
               <motion.div
@@ -408,182 +402,309 @@ export const TripBuilderWizard = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="space-y-6 flex-1 flex flex-col justify-center"
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               >
                 {step === 1 && (
-                  <div className="space-y-4">
+                  <div className="space-y-4 sm:space-y-5">
                     <LocationInput 
                       label="Where do you want to go?"
                       value={prompt}
                       onChange={setPrompt}
                       onSearching={setIsSearching}
                       onFocus={() => setActiveField('destination')}
-                      placeholder="e.g. Tokyo, Japan"
+                      placeholder="e.g. Tokyo, Japan or 'Somewhere tropical'"
                       autoFocus={true}
                     />
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <div className="space-y-4">
+                    
                     <LocationInput 
-                      label={<span>Starting City <span className="text-white/30 font-medium text-xs ml-2">(Optional)</span></span>}
+                      label={<span>Starting City <span className="text-white/40 font-medium">(Optional)</span></span>}
                       value={startCity}
                       onChange={setStartCity}
                       onSearching={setIsSearching}
                       onFocus={() => setActiveField('startCity')}
                       placeholder="Where are you flying from?"
-                      autoFocus={true}
                     />
                   </div>
                 )}
 
-                {step === 3 && (
-                  <div className="space-y-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
-                        <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
-                          <Clock className="w-4 h-4 text-blue-400" /> Duration (Days)
-                        </label>
-                        <div className="flex items-center justify-between bg-black/40 rounded-xl p-2 border border-white/10">
-                          <button onClick={() => { lightTap(); setDuration(Math.max(1, (parseInt(duration) || 7) - 1)); }} className="w-12 h-12 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Minus className="w-5 h-5" /></button>
-                          <input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} placeholder="7" className="w-16 text-center text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/70 outline-none bg-transparent" />
-                          <button onClick={() => { lightTap(); setDuration((parseInt(duration) || 7) + 1); }} className="w-12 h-12 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Plus className="w-5 h-5" /></button>
+                {step === 2 && (
+                  <div className="space-y-5 sm:space-y-6">
+                    <div className="flex flex-col md:flex-row gap-5 sm:gap-6">
+                      <div className="flex-1">
+                        <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">How long is your trip?</label>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2 bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-2 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)]">
+                            <button 
+                              onClick={() => setDuration(Math.max(1, (parseInt(duration) || 7) - 1))}
+                              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
+                            >
+                              <Minus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
+                            </button>
+                            
+                            <input 
+                              type="number" 
+                              value={duration}
+                              onChange={(e) => setDuration(e.target.value)}
+                              placeholder="7" 
+                              className="w-16 h-12 text-center text-3xl font-black bg-transparent text-white placeholder-white/20 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none drop-shadow-md transition-all duration-300" 
+                            />
+                            
+                            <button 
+                              onClick={() => setDuration((parseInt(duration) || 7) + 1)}
+                              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 hover:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.2)] active:scale-90 transition-all duration-300 text-white/60 hover:text-white group border border-transparent hover:border-white/10"
+                            >
+                              <Plus className="w-5 h-5 group-hover:scale-110 transition-transform drop-shadow-sm" />
+                            </button>
+                          </div>
+                          <span className="text-xl font-bold text-white/50 tracking-wide drop-shadow-sm ml-2">Days</span>
                         </div>
                       </div>
                       
-                      <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
-                        <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
-                          <Calendar className="w-4 h-4 text-purple-400" /> Start Date
-                        </label>
-                        <PremiumDatePicker value={startDate} onChange={setStartDate} minDate={new Date().toISOString().split('T')[0]} />
+                      <div className="flex-1">
+                        <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Starting Date</label>
+                        <PremiumDatePicker 
+                          value={startDate}
+                          onChange={setStartDate}
+                          minDate={new Date().toISOString().split('T')[0]}
+                        />
                       </div>
                     </div>
-                    
-                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
-                      <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
-                        <Wallet className="w-4 h-4 text-emerald-400" /> Estimated Budget
-                      </label>
-                      <div className="flex bg-black/40 p-1.5 rounded-xl border border-white/10">
-                        {['Budget', 'Moderate', 'Luxury'].map((b) => (
-                          <button 
-                            key={b} 
-                            onClick={() => { lightTap(); setBudget(b); }}
-                            className={`flex-1 py-3.5 rounded-lg text-sm font-bold transition-all duration-300 ${
-                              budget === b 
-                                ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg' 
-                                : 'text-white/50 hover:text-white/80 hover:bg-white/5'
-                            }`}
-                          >
-                            {b}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {step === 4 && (
-                  <div className="space-y-8">
-                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
-                      <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
-                        <Compass className="w-4 h-4 text-orange-400" /> Travel Style
-                      </label>
-                      <div className="flex flex-wrap gap-2.5">
-                        {['Fast-paced', 'Relaxed', 'Culture', 'Nature', 'Foodie', 'Luxury', 'Adventure', 'Nightlife'].map((style) => (
-                          <button 
-                            key={style} 
-                            onClick={() => toggleStyle(style)}
-                            className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
-                              styles.includes(style)
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg scale-105 border border-transparent' 
-                                : 'bg-black/40 text-white/60 hover:text-white hover:bg-white/10 border border-white/10'
-                            }`}
-                          >
-                            {style}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
-                      <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
-                        <Users className="w-4 h-4 text-pink-400" /> Travelers
-                      </label>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="flex-1 flex items-center justify-between bg-black/40 border border-white/10 p-3 rounded-xl">
-                          <span className="text-sm font-bold text-white/80 ml-2">Male</span>
-                          <div className="flex items-center gap-3">
-                            <button onClick={() => { lightTap(); setMales(Math.max(0, males - 1)); }} className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Minus className="w-4 h-4" /></button>
-                            <span className="w-6 text-center font-bold text-lg text-white">{males}</span>
-                            <button onClick={() => { lightTap(); setMales(males + 1); }} className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Plus className="w-4 h-4" /></button>
-                          </div>
-                        </div>
-                        <div className="flex-1 flex items-center justify-between bg-black/40 border border-white/10 p-3 rounded-xl">
-                          <span className="text-sm font-bold text-white/80 ml-2">Female</span>
-                          <div className="flex items-center gap-3">
-                            <button onClick={() => { lightTap(); setFemales(Math.max(0, females - 1)); }} className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Minus className="w-4 h-4" /></button>
-                            <span className="w-6 text-center font-bold text-lg text-white">{females}</span>
-                            <button onClick={() => { lightTap(); setFemales(females + 1); }} className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"><Plus className="w-4 h-4" /></button>
-                          </div>
-                        </div>
+                    <div>
+                      <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Estimated Budget Level</label>
+                      <div className="grid grid-cols-3 gap-2 sm:gap-5">
+                        {['Budget', 'Moderate', 'Luxury'].map((b) => {
+                          const isActive = budget === b;
+                          return (
+                            <div 
+                              key={b} 
+                              onClick={() => setBudget(b)}
+                              className={`group/budget relative overflow-hidden rounded-[16px] sm:rounded-[24px] p-2 sm:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                                isActive 
+                                  ? 'bg-white/[0.12]  border-[1.5px] border-white/30 border-t-white/60 border-l-white/50 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_4px_12px_rgba(255,255,255,0.3)] scale-[1.02] ring-2 sm:ring-4 ring-indigo-400/20' 
+                                  : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_24px_rgba(0,0,0,0.2),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_16px_32px_rgba(0,0,0,0.3),inset_0_4px_16px_rgba(255,255,255,0.2)]'
+                              }`}
+                            >
+                              {isActive && <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />}
+                              <DollarSignIcon count={b === 'Budget' ? 1 : b === 'Moderate' ? 2 : 3} isActive={isActive} level={b} />
+                              <span className={`mt-2 sm:mt-3 text-[11px] sm:text-[15px] font-bold tracking-wide transition-colors duration-500 ${isActive ? 'text-white drop-shadow-md' : 'text-white/60 group-hover/budget:text-white/90'}`}>{b}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 )}
 
+                {step === 3 && (
+                  <div className="space-y-5 sm:space-y-6">
+                    <div>
+                      <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Travel Style</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                        {['Fast-paced', 'Relaxed', 'Culture', 'Nature', 'Foodie', 'Luxury'].map((style) => {
+                          const isActive = styles.includes(style);
+                          return (
+                            <div 
+                              key={style} 
+                              onClick={() => toggleStyle(style)}
+                              className={`rounded-[20px] px-4 py-4 sm:px-6 sm:py-5 text-center cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                                isActive 
+                                  ? 'bg-gradient-to-br from-indigo-500/80 to-purple-600/80  border-[1.5px] border-white/40 border-t-white/70 border-l-white/50 shadow-[0_16px_32px_rgba(99,102,241,0.5),inset_0_4px_16px_rgba(255,255,255,0.4)] text-white scale-[1.02] ring-2 ring-white/20' 
+                                  : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white/60 hover:text-white hover:bg-white/[0.08] hover:scale-[1.02] hover:-translate-y-1 shadow-[0_8px_16px_rgba(0,0,0,0.15),inset_0_2px_8px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.25)]'
+                              }`}
+                            >
+                              <span className={`text-[13px] sm:text-[15px] font-bold tracking-wide transition-colors duration-300 ${isActive ? 'drop-shadow-md' : ''}`}>{style}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div className="group">
+                      <label className="block text-[15px] font-bold text-white/90 mb-3 tracking-wide">Specific Interests <span className="text-white/40 font-medium">(Optional)</span></label>
+                      <input type="text" placeholder="e.g. Art museums, fine dining, hiking..." className="w-full h-16 px-6 text-lg rounded-[20px] bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 text-white placeholder-white/30 focus:bg-white/[0.08] focus:border-white/20 focus:ring-4 focus:ring-indigo-400/10 transition-all duration-500 shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)] outline-none group-hover:bg-white/[0.06]" />
+                    </div>
+                    <div>
+                      <label className="block text-[15px] font-bold text-white/90 mb-4 tracking-wide">Who is traveling? <span className="text-white/40 font-medium">(For Packing List)</span></label>
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03]  border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                          <span className="font-bold text-white/80 tracking-wide">Male Travelers</span>
+                          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                            <button onClick={() => setMales(Math.max(0, males - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
+                            <span className="w-6 text-center font-black text-lg text-white">{males}</span>
+                            <button onClick={() => setMales(males + 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Plus className="w-4 h-4 text-white" /></button>
+                          </div>
+                        </div>
+                        <div className="flex-1 flex items-center justify-between bg-white/[0.03]  border-[1.5px] border-white/10 p-4 rounded-[24px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] hover:bg-white/[0.05] transition-colors duration-300">
+                          <span className="font-bold text-white/80 tracking-wide">Female Travelers</span>
+                          <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
+                            <button onClick={() => setFemales(Math.max(0, females - 1))} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Minus className="w-4 h-4 text-white" /></button>
+                            <span className="w-6 text-center font-black text-lg text-white">{females}</span>
+                            <button onClick={() => setFemales(females + 1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 transition-colors active:scale-90"><Plus className="w-4 h-4 text-white" /></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/10 relative z-10 shrink-0">
+                  <button 
+                    onClick={() => { lightTap(); playSound('tap'); setStep(step - 1); }}
+                    className={`h-12 sm:h-14 px-6 sm:px-8 rounded-full font-bold text-[14px] sm:text-[15px] tracking-wide transition-all duration-500 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.03]  border-[1.5px] border-white/10 border-t-white/30 text-white/70 hover:bg-white/[0.08] hover:text-white hover:-translate-y-[2px] shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.05)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_8px_rgba(255,255,255,0.1)]'}`}
+                  >
+                    Back
+                  </button>
+                  
+                  {step < 3 ? (
+                    <button 
+                      onClick={() => { lightTap(); playSound('tap'); setStep(step + 1); }}
+                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-white/10  border-[1.5px] border-white/20 border-t-white/50 border-l-white/40 text-white font-bold tracking-wide shadow-[0_12px_24px_rgba(0,0,0,0.3),inset_0_4px_12px_rgba(255,255,255,0.2)] hover:bg-white/20 hover:scale-[1.02] hover:-translate-y-[2px] transition-all duration-500 group hover:shadow-[0_16px_32px_rgba(0,0,0,0.4),inset_0_6px_16px_rgba(255,255,255,0.3)]"
+                    >
+                      <span className="text-[14px] sm:text-[15px] font-bold text-white tracking-wide drop-shadow-md">Next Step</span>
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:translate-x-1 transition-transform drop-shadow-md" />
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={handleGenerate}
+                      disabled={!prompt.trim()}
+                      className="flex items-center gap-2 sm:gap-3 h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-gradient-to-r from-emerald-400/90 to-teal-500/90  border-[1.5px] border-white/40 border-t-white/70 border-l-white/60 disabled:opacity-50 transition-all duration-500 shadow-[0_12px_24px_rgba(52,211,153,0.5),inset_0_4px_12px_rgba(255,255,255,0.4)] group hover:scale-[1.02] hover:-translate-y-[2px] hover:shadow-[0_16px_32px_rgba(52,211,153,0.6),inset_0_6px_16px_rgba(255,255,255,0.5)]"
+                    >
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white drop-shadow-md" />
+                      <span className="text-[14px] sm:text-[15px] font-bold text-white tracking-wide drop-shadow-md">Generate Itinerary</span>
+                    </button>
+                  )}
+                </div>
               </motion.div>
             ) : (
               <motion.div
+                key="generating"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center flex-1 text-center"
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col items-center justify-center py-20 text-center relative h-full min-h-[350px]"
               >
-                <div className="relative flex items-center justify-center w-24 h-24 mb-6 rounded-3xl bg-white/[0.02] border border-white/5">
-                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-                   <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-500 animate-spin" style={{ animationDuration: '2s' }} />
-                   <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400 animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }} />
-                   <Sparkles className="w-8 h-8 text-white animate-pulse" />
-                </div>
-                <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-white/90">
+                {/* Ultra-Premium Minimalist Logo Reveal */}
+                <motion.div 
+                  initial={{ scale: 0.85, opacity: 0, y: 20 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5  shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
+                >
+                  {/* Very subtle static glow behind the icon */}
+                  <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
+                  
+                  {/* The icon stays perfectly straight and stable */}
+                  <div className="relative z-10 scale-[1.2]">
+                    <LogoIcon size="xl" className="text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]" />
+                  </div>
+                </motion.div>
+                
+                <h3 className="text-[14px] sm:text-[15px] font-bold tracking-[0.3em] uppercase text-white/90 drop-shadow-lg animate-pulse">
                   {loadingStep || 'Crafting Journey...'}
                 </h3>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-
-        {/* Navigation Buttons */}
-        {!isGenerating && (
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/[0.08] relative z-[5]">
-            <button 
-              onClick={() => { lightTap(); setStep(step - 1); }}
-              className={`px-6 py-3.5 rounded-2xl font-bold text-sm transition-all duration-300 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.04] hover:bg-white/[0.08] text-white/60 hover:text-white border border-white/[0.08] hover:border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.2)]'}`}
-            >
-              Back
-            </button>
-            
-            {step < 4 ? (
-              <button 
-                onClick={() => { lightTap(); setStep(step + 1); }}
-                className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold text-sm transition-all duration-300 shadow-[0_8px_24px_-4px_rgba(59,130,246,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_12px_32px_-4px_rgba(59,130,246,0.5)] hover:-translate-y-[1px] active:translate-y-0"
-              >
-                Next <ArrowRight className="w-4 h-4" />
-              </button>
-            ) : (
-              <button 
-                onClick={handleGenerate}
-                disabled={!prompt.trim()}
-                className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-300 shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_12px_32px_-4px_rgba(16,185,129,0.5)] hover:-translate-y-[1px] active:translate-y-0"
-              >
-                <Sparkles className="w-4 h-4" /> Generate Trip
-              </button>
-            )}
-          </div>
-        )}
+      </motion.div>
       </div>
+
+      {/* 3D Glass Side Panel for Search Results */}
+      <AnimatePresence>
+        {step === 1 && (suggestions.length > 0 || isSearching) && (
+          <motion.div
+            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 10, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden lg:block w-full lg:w-[400px] shrink-0 sticky top-8"
+          >
+            <div className="w-full p-6 rounded-[32px] bg-black/40  border border-white/10 border-t-white/30 border-l-white/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.2)]">
+              <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                <Sparkles className="w-5 h-5 text-indigo-400" />
+                <h3 className="text-lg font-bold text-white tracking-wide">
+                  {activeField === 'startCity' ? 'Starting Locations' : 'Destinations'}
+                </h3>
+              </div>
+              
+              {isSearching ? (
+                <div className="flex flex-col items-center justify-center py-10 gap-4">
+                  <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+                  <span className="text-sm font-medium text-white/50">Searching the globe...</span>
+                </div>
+              ) : (
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
+                  }}
+                  className="flex flex-col gap-2"
+                >
+                  {suggestions.map((loc, idx) => (
+                    <motion.button
+                      key={idx}
+                      variants={{
+                        hidden: { opacity: 0, x: -15 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: 'easeOut' } }
+                      }}
+                      onClick={() => handleSelectLocation(loc)}
+                      className="w-full flex items-center gap-4 px-4 py-3 rounded-[20px] transition-all duration-400 text-left group/item relative overflow-hidden bg-transparent hover:bg-white/[0.06] border border-transparent hover:border-white/10"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/[0.08] to-transparent -translate-x-[100%] group-hover/item:translate-x-0 transition-transform duration-500 ease-out pointer-events-none" />
+                      
+                      <div className="relative z-10 shrink-0 w-12 h-12 rounded-full bg-white/5  border border-white/10 flex items-center justify-center text-2xl shadow-[0_4px_8px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover/item:scale-110 group-hover/item:bg-white/20 group-hover/item:border-white/50 group-hover/item:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                        {loc.icon}
+                      </div>
+                      
+                      <div className="relative z-10 flex flex-col transition-transform duration-300 group-hover/item:translate-x-1.5 overflow-hidden">
+                        <span className="text-[16px] font-bold text-white tracking-wide drop-shadow-md truncate">{loc.city}</span>
+                        <span className="text-[13px] font-medium text-white/40 group-hover/item:text-white/80 transition-colors duration-300 truncate">{loc.country}</span>
+                      </div>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
+
+function DollarSignIcon({ count, isActive, level }) {
+  const activeColors = {
+    'Budget': 'bg-gradient-to-b from-rose-400 to-red-700 drop-shadow-[0_4px_6px_rgba(225,29,72,0.5)] scale-110',
+    'Moderate': 'bg-gradient-to-b from-yellow-300 to-amber-600 drop-shadow-[0_4px_6px_rgba(245,158,11,0.5)] scale-110',
+    'Luxury': 'bg-gradient-to-b from-emerald-300 to-emerald-600 drop-shadow-[0_4px_6px_rgba(16,185,129,0.5)] scale-110'
+  };
+  
+  const inactiveColors = {
+    'Budget': 'bg-gradient-to-b from-rose-400/40 to-red-600/40 group-hover/budget:from-rose-400/80 group-hover/budget:to-red-600/80',
+    'Moderate': 'bg-gradient-to-b from-yellow-400/40 to-amber-600/40 group-hover/budget:from-yellow-400/80 group-hover/budget:to-amber-600/80',
+    'Luxury': 'bg-gradient-to-b from-emerald-400/40 to-emerald-600/40 group-hover/budget:from-emerald-400/80 group-hover/budget:to-emerald-600/80'
+  };
+
+  return (
+    <div className="flex items-center">
+      {[1, 2, 3].map((i) => (
+        <span 
+          key={i} 
+          className={`text-2xl sm:text-3xl font-black tracking-tighter transition-all duration-500 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${
+            i <= count 
+              ? (isActive ? activeColors[level] : inactiveColors[level]) 
+              : 'bg-gradient-to-b from-white/80 to-white/40 opacity-70 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]'
+          }`}
+        >
+          $
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default TripBuilderWizard;
+
