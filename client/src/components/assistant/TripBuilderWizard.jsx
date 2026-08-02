@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
+import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine, Clock, Users } from 'lucide-react';
 import { motion, AnimatePresence, useMotionTemplate } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -361,8 +361,10 @@ export const TripBuilderWizard = () => {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center max-w-[960px] mx-auto p-4 sm:p-6 lg:p-8">
       
-      {/* Sleek, Compact Form Card - iOS Liquid Glass Style */}
-      <div className="relative w-full bg-white/[0.04] backdrop-blur-[50px] border border-white/10 border-t-white/20 rounded-[40px] p-6 sm:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.5),inset_0_1px_4px_rgba(255,255,255,0.1)] flex flex-col overflow-visible">
+      {/* Premium Frosted Glass Card */}
+      <div className="relative w-full bg-gradient-to-br from-white/[0.07] via-white/[0.04] to-white/[0.02] backdrop-blur-[60px] border border-white/[0.12] rounded-[36px] p-7 sm:p-10 lg:p-12 shadow-[0_40px_80px_-12px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.05),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.3)] flex flex-col overflow-visible min-h-[420px] sm:min-h-[480px]">
+        {/* Top edge highlight */}
+        <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         
         {/* Header Steps */}
         <div className="flex items-center justify-between mb-8 sm:mb-10 relative z-10">
@@ -410,7 +412,7 @@ export const TripBuilderWizard = () => {
                 className="space-y-6 flex-1 flex flex-col justify-center"
               >
                 {step === 1 && (
-                  <div className="space-y-6 relative z-50">
+                  <div className="space-y-4">
                     <LocationInput 
                       label="Where do you want to go?"
                       value={prompt}
@@ -420,48 +422,11 @@ export const TripBuilderWizard = () => {
                       placeholder="e.g. Tokyo, Japan"
                       autoFocus={true}
                     />
-
-                    
-                    {/* Floating Dropdown Suggestions */}
-                    <AnimatePresence>
-                      {(suggestions.length > 0 || isSearching) && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                          className={`absolute z-[100] left-0 right-0 top-[85px] bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
-                        >
-                          {isSearching ? (
-                            <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
-                              <Loader2 className="w-4 h-4 animate-spin" /> Searching...
-                            </div>
-                          ) : (
-                            <div className="flex flex-col gap-1.5">
-                              {suggestions.map((loc, idx) => (
-                                <button
-                                  key={idx}
-                                  onClick={() => handleSelectLocation(loc)}
-                                  className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 group"
-                                >
-                                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
-                                    {loc.Icon ? <loc.Icon className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
-                                  </div>
-                                  <div className="overflow-hidden flex-1">
-                                    <div className="text-sm font-bold text-white truncate">{loc.city}</div>
-                                    <div className="text-xs text-white/50 truncate">{loc.country}</div>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
                 )}
 
                 {step === 2 && (
-                  <div className="space-y-6 relative z-50">
+                  <div className="space-y-4">
                     <LocationInput 
                       label={<span>Starting City <span className="text-white/30 font-medium text-xs ml-2">(Optional)</span></span>}
                       value={startCity}
@@ -471,42 +436,6 @@ export const TripBuilderWizard = () => {
                       placeholder="Where are you flying from?"
                       autoFocus={true}
                     />
-                    
-                    {/* Floating Dropdown Suggestions */}
-                    <AnimatePresence>
-                      {(suggestions.length > 0 || isSearching) && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                          className={`absolute z-[100] left-0 right-0 top-[85px] bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
-                        >
-                          {isSearching ? (
-                            <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
-                              <Loader2 className="w-4 h-4 animate-spin" /> Searching...
-                            </div>
-                          ) : (
-                            <div className="flex flex-col gap-1.5">
-                              {suggestions.map((loc, idx) => (
-                                <button
-                                  key={idx}
-                                  onClick={() => handleSelectLocation(loc)}
-                                  className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 group"
-                                >
-                                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
-                                    {loc.Icon ? <loc.Icon className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
-                                  </div>
-                                  <div className="overflow-hidden flex-1">
-                                    <div className="text-sm font-bold text-white truncate">{loc.city}</div>
-                                    <div className="text-xs text-white/50 truncate">{loc.country}</div>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
                 )}
 
@@ -627,10 +556,10 @@ export const TripBuilderWizard = () => {
 
         {/* Navigation Buttons */}
         {!isGenerating && (
-          <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/10 relative z-10">
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/[0.08] relative z-[5]">
             <button 
               onClick={() => { lightTap(); setStep(step - 1); }}
-              className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/5 hover:bg-white/10 text-white/70 hover:text-white border border-white/10'}`}
+              className={`px-6 py-3.5 rounded-2xl font-bold text-sm transition-all duration-300 ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white/[0.04] hover:bg-white/[0.08] text-white/60 hover:text-white border border-white/[0.08] hover:border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.2)]'}`}
             >
               Back
             </button>
@@ -638,7 +567,7 @@ export const TripBuilderWizard = () => {
             {step < 4 ? (
               <button 
                 onClick={() => { lightTap(); setStep(step + 1); }}
-                className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]"
+                className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold text-sm transition-all duration-300 shadow-[0_8px_24px_-4px_rgba(59,130,246,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_12px_32px_-4px_rgba(59,130,246,0.5)] hover:-translate-y-[1px] active:translate-y-0"
               >
                 Next <ArrowRight className="w-4 h-4" />
               </button>
@@ -646,7 +575,7 @@ export const TripBuilderWizard = () => {
               <button 
                 onClick={handleGenerate}
                 disabled={!prompt.trim()}
-                className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-50 text-white font-bold transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
+                className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-300 shadow-[0_8px_24px_-4px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_12px_32px_-4px_rgba(16,185,129,0.5)] hover:-translate-y-[1px] active:translate-y-0"
               >
                 <Sparkles className="w-4 h-4" /> Generate Trip
               </button>
