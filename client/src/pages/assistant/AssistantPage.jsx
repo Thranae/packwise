@@ -15,7 +15,7 @@ export default function AssistantPage() {
       <div className="h-full min-h-0 px-4 sm:px-6 md:px-10 lg:px-12 pb-[90px] sm:pb-12 pt-[calc(24px+env(safe-area-inset-top))] md:pt-6 flex flex-col items-start w-full relative z-10">
         
         {/* Unified Header & Segmented Control */}
-        <div className="w-full max-w-[800px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-8 z-20 relative shrink-0">
+        <div className="w-full max-w-[960px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-8 z-20 relative shrink-0">
           
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <motion.h1 

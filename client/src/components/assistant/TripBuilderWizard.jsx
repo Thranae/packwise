@@ -353,12 +353,13 @@ export const TripBuilderWizard = () => {
 
   const steps = [
     { id: 1, title: 'Destination', icon: MapPin, color: 'from-emerald-400 via-teal-400 to-emerald-600', shadow: 'shadow-[0_0_20px_rgba(52,211,153,0.5)]' },
-    { id: 2, title: 'Details', icon: Wallet, color: 'from-blue-400 via-indigo-400 to-blue-600', shadow: 'shadow-[0_0_20px_rgba(59,130,246,0.5)]' },
-    { id: 3, title: 'Style', icon: Compass, color: 'from-fuchsia-400 via-purple-400 to-fuchsia-600', shadow: 'shadow-[0_0_20px_rgba(192,132,252,0.5)]' },
+    { id: 2, title: 'Origin', icon: Plane, color: 'from-cyan-400 via-blue-400 to-blue-600', shadow: 'shadow-[0_0_20px_rgba(56,189,248,0.5)]' },
+    { id: 3, title: 'Details', icon: Wallet, color: 'from-indigo-400 via-purple-400 to-purple-600', shadow: 'shadow-[0_0_20px_rgba(99,102,241,0.5)]' },
+    { id: 4, title: 'Style', icon: Compass, color: 'from-fuchsia-400 via-pink-400 to-rose-600', shadow: 'shadow-[0_0_20px_rgba(217,70,239,0.5)]' },
   ];
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center max-w-[800px] mx-auto p-4 sm:p-6 lg:p-8">
+    <div className="w-full h-full flex flex-col items-center justify-center max-w-[960px] mx-auto p-4 sm:p-6 lg:p-8">
       
       {/* Sleek, Compact Form Card - iOS Liquid Glass Style */}
       <div className="relative w-full bg-white/[0.04] backdrop-blur-[50px] border border-white/10 border-t-white/20 rounded-[40px] p-6 sm:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.5),inset_0_1px_4px_rgba(255,255,255,0.1)] flex flex-col overflow-visible">
@@ -419,14 +420,7 @@ export const TripBuilderWizard = () => {
                       placeholder="e.g. Tokyo, Japan"
                       autoFocus={true}
                     />
-                    <LocationInput 
-                      label={<span>Starting City <span className="text-white/30 font-medium text-xs ml-2">(Optional)</span></span>}
-                      value={startCity}
-                      onChange={setStartCity}
-                      onSearching={setIsSearching}
-                      onFocus={() => setActiveField('startCity')}
-                      placeholder="Where are you flying from?"
-                    />
+
                     
                     {/* Floating Dropdown Suggestions */}
                     <AnimatePresence>
@@ -435,7 +429,7 @@ export const TripBuilderWizard = () => {
                           initial={{ opacity: 0, y: -10, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                          className={`absolute z-[100] left-0 right-0 ${activeField === "startCity" ? "top-[175px]" : "top-[85px]"} bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
+                          className={`absolute z-[100] left-0 right-0 top-[85px] bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
                         >
                           {isSearching ? (
                             <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
@@ -467,6 +461,56 @@ export const TripBuilderWizard = () => {
                 )}
 
                 {step === 2 && (
+                  <div className="space-y-6 relative z-50">
+                    <LocationInput 
+                      label={<span>Starting City <span className="text-white/30 font-medium text-xs ml-2">(Optional)</span></span>}
+                      value={startCity}
+                      onChange={setStartCity}
+                      onSearching={setIsSearching}
+                      onFocus={() => setActiveField('startCity')}
+                      placeholder="Where are you flying from?"
+                      autoFocus={true}
+                    />
+                    
+                    {/* Floating Dropdown Suggestions */}
+                    <AnimatePresence>
+                      {(suggestions.length > 0 || isSearching) && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                          className={`absolute z-[100] left-0 right-0 top-[85px] bg-black/80 backdrop-blur-3xl border border-white/20 rounded-[24px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_2px_10px_rgba(255,255,255,0.1)]`}
+                        >
+                          {isSearching ? (
+                            <div className="flex items-center justify-center gap-3 py-4 text-white/50 text-sm">
+                              <Loader2 className="w-4 h-4 animate-spin" /> Searching...
+                            </div>
+                          ) : (
+                            <div className="flex flex-col gap-1.5">
+                              {suggestions.map((loc, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => handleSelectLocation(loc)}
+                                  className="w-full text-left px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-3 group"
+                                >
+                                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
+                                    {loc.Icon ? <loc.Icon className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
+                                  </div>
+                                  <div className="overflow-hidden flex-1">
+                                    <div className="text-sm font-bold text-white truncate">{loc.city}</div>
+                                    <div className="text-xs text-white/50 truncate">{loc.country}</div>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {step === 3 && (
                   <div className="space-y-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
@@ -511,7 +555,7 @@ export const TripBuilderWizard = () => {
                   </div>
                 )}
 
-                {step === 3 && (
+                {step === 4 && (
                   <div className="space-y-8">
                     <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-5">
                       <label className="flex items-center gap-2 text-[13px] font-bold text-white/80 tracking-wider uppercase mb-4">
@@ -591,7 +635,7 @@ export const TripBuilderWizard = () => {
               Back
             </button>
             
-            {step < 3 ? (
+            {step < 4 ? (
               <button 
                 onClick={() => { lightTap(); setStep(step + 1); }}
                 className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]"
