@@ -76,7 +76,8 @@ export const TripScoreWidget = ({ className = "" }) => {
     );
   }
 
-  const { score, factors } = data || { score: 72, factors: { weather: 85, budget: 65, packing: 70, visa: 68 } };
+  const score = data?.score ?? 72;
+  const factors = data?.factors || { weather: 85, budget: 65, packing: 70, visa: 68 };
   const theme = getScoreTheme(score);
   const label = getLabel(score);
 
