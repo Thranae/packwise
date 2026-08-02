@@ -266,23 +266,32 @@ export const TripProvider = ({ children }) => {
 
   const generateTrip = async (prompt, meta = {}) => {
     setIsGenerating(true);
-    setLoadingStep("INITIALIZING...");
+    
+    const messages = [
+      "INITIALIZING AI CORE...",
+      "ANALYZING DESTINATION...",
+      "DISCOVERING HIDDEN GEMS...",
+      "CURATING LOCAL EXPERIENCES...",
+      "OPTIMIZING TRAVEL ROUTES...",
+      "CHECKING WEATHER PATTERNS...",
+      "BALANCING BUDGET...",
+      "FINALIZING ITINERARY..."
+    ];
+    let msgIndex = 0;
+    setLoadingStep(messages[0]);
+    
+    const msgInterval = setInterval(() => {
+      msgIndex = (msgIndex + 1) % messages.length;
+      setLoadingStep(messages[msgIndex]);
+    }, 900);
+
     const startTime = Date.now();
     
     try {
-      setTimeout(() => setLoadingStep("DISCOVERING..."), 1500);
-      setTimeout(() => setLoadingStep("FINALIZING..."), 3000);
-      setTimeout(() => setLoadingStep("POLISHING UI..."), 5000);
-      
       const res = await api.post('/ai/trip', { prompt });
       const aiData = res.data;
       
-      const elapsed = Date.now() - startTime;
-      const minDelay = 7000;
-      if (elapsed < minDelay) {
-        await new Promise(r => setTimeout(r, minDelay - elapsed));
-      }
-      
+      clearInterval(msgInterval);
       setLoadingStep("Done.");
       
       // Delay before redirecting to let the user see 'Done.'
@@ -336,6 +345,7 @@ export const TripProvider = ({ children }) => {
       }, 500);
     } catch (error) {
       console.error("Failed to generate trip:", error);
+      clearInterval(msgInterval);
       setIsGenerating(false);
       setLoadingStep(null);
     }

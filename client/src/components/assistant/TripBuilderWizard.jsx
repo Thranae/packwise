@@ -56,9 +56,10 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
       {createPortal(
         <AnimatePresence>
           {isOpen && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center">
-              <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center">
+              <div 
                 className="absolute inset-0 bg-black/40 "
                 onClick={() => setIsOpen(false)}
               />
@@ -105,7 +106,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                   })}
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           )}
         </AnimatePresence>,
         document.body

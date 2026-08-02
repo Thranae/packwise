@@ -169,7 +169,7 @@ export const HeroSection = ({ isSharedView = false }) => {
                   />
                 )}
                 {/* Soft Dark Overlay for Text Readability - Lightened so it is not dull */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <motion.div 

@@ -21,7 +21,7 @@ const GeneratingTripCard = ({ destination }) => (
     <h3 className="text-xl font-bold text-white relative z-10 tracking-tight text-center">Crafting itinerary...</h3>
     <p className="text-sm text-white/50 relative z-10 text-center mt-2 font-medium max-w-[80%]">Curating the best of {destination}</p>
     
-    <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 animate-[loading-bar_5s_ease-in-out_forwards]" style={{ width: '100%' }} />
+    <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 animate-[loading-bar_7s_ease-in-out_forwards]" style={{ width: '100%' }} />
     <style>{`
       @keyframes loading-bar {
         0% { transform: translateX(-100%); }
@@ -49,7 +49,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
       if (showGenerating) {
         const timer = setTimeout(() => {
           setShowGenerating(false);
-        }, 5000);
+        }, 7000);
         return () => clearTimeout(timer);
       }
     }, [showGenerating]);
