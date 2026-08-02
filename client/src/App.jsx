@@ -138,20 +138,20 @@ function ToastContainer() {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] flex flex-col items-center justify-center gap-4 pointer-events-none w-[90%] sm:w-auto min-w-[300px] max-w-md">
+    <div className="fixed top-6 right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none w-[90%] sm:w-auto max-w-sm">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <motion.div
             key={toast.id}
             className={cn(
-              'pointer-events-auto flex items-center justify-center text-center gap-3 rounded-[24px] border border-white/20 px-6 py-5 shadow-[0_20px_40px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] backdrop-blur-xl bg-[#030712]/80',
-              'text-base font-semibold transition-all w-full relative overflow-hidden',
+              'pointer-events-auto flex items-center gap-3 rounded-[16px] border border-white/10 px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-lg bg-[#030712]/90',
+              'text-sm font-medium transition-all w-full relative overflow-hidden',
               typeStyles[toast.type] || typeStyles.info,
             )}
             role="alert"
-            initial={{ opacity: 0, scale: 0.85, y: 15 }}
+            initial={{ opacity: 0, scale: 0.95, x: 20 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            exit={{ opacity: 0, scale: 0.95, x: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <span className="flex-1">{toast.message}</span>
