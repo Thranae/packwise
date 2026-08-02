@@ -383,6 +383,20 @@ export const TripProvider = ({ children }) => {
     }
   };
 
+  const updateTripLocal = async (tripId, updates) => {
+    const trip = trips.find(t => t._id === tripId);
+    if (!trip) return;
+    
+    // Optimistic Local Update
+    const updatedTrip = { ...trip, ...updates };
+    await db.trips.put(updatedTrip);
+    
+    // If it's the current trip, update the state so UI reacts instantly
+    if (currentTrip?._id === tripId) {
+      setCurrentTrip(updatedTrip);
+    }
+  };
+
   return (
     <TripContext.Provider value={{
       trips,
@@ -404,7 +418,8 @@ export const TripProvider = ({ children }) => {
       fetchTrips,
       notifications,
       addNotification,
-      markNotificationsAsRead
+      markNotificationsAsRead,
+      updateTripLocal
     }}>
       {children}
     </TripContext.Provider>

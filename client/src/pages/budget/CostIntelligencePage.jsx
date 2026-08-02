@@ -9,7 +9,7 @@ import { BudgetTimeline } from '@/components/budget/BudgetTimeline';
 import { useTripContext } from '@/context/TripContext';
 
 export default function CostIntelligencePage() {
-  const { currentTrip } = useTripContext();
+  const { currentTrip, updateTripLocal } = useTripContext();
 
   const [inputs, setInputs] = useState({
     originCountry: 'India',
@@ -29,7 +29,10 @@ export default function CostIntelligencePage() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [configOpen, setConfigOpen] = useState(false);
 
-  const handleCalculate = useCallback(async () => {
+  const handleCalculate = useCallback(async (isManualOverride = false) => {
+    // Prevent event object from being truthy
+    const isManual = typeof isManualOverride === 'boolean' ? isManualOverride : false;
+    
     setLoading(true);
     setError(null);
     setConfigOpen(false);
@@ -82,6 +85,25 @@ export default function CostIntelligencePage() {
           inputs.travelers,
           inputs.travelStyle
         );
+        
+        // Scale to exactly match the AI's high-level budget unless the user explicitly overrode the config
+        if (currentTrip && currentTrip.budget && !isManual) {
+          const ratio = currentTrip.budget / costs.summary.totalBudget;
+          if (ratio !== 1 && ratio > 0 && isFinite(ratio)) {
+            for (let key in costs.dailyBreakdown) {
+              costs.dailyBreakdown[key] = Math.round(costs.dailyBreakdown[key] * ratio);
+            }
+            for (let key in costs.summary) {
+              costs.summary[key] = Math.round(costs.summary[key] * ratio);
+            }
+            costs.summary.totalBudget = currentTrip.budget;
+          }
+        }
+      }
+      
+      // If user tweaked config manually, push the newly calculated budget back to the global trip!
+      if (isManual && updateTripLocal && currentTrip) {
+        updateTripLocal(currentTrip._id, { budget: costs.summary.totalBudget });
       }
       
       // Ensure smooth loading animation transition
@@ -93,10 +115,31 @@ export default function CostIntelligencePage() {
     } finally {
       setLoading(false);
     }
-  }, [inputs, currentTrip]);
+  }, [inputs, currentTrip, updateTripLocal]);
+
+  const prevTripId = React.useRef(currentTrip?._id);
 
   useEffect(() => {
-    handleCalculate();
+    if (currentTrip && currentTrip._id !== prevTripId.current) {
+      prevTripId.current = currentTrip._id;
+      
+      const newDays = Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000));
+      const newStyle = currentTrip.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard';
+      
+      setInputs(prev => ({
+        ...prev,
+        destCountry: currentTrip.country || 'United States',
+        days: newDays || 5,
+        travelers: currentTrip.travelers || 2,
+        travelStyle: newStyle
+      }));
+      
+      handleCalculate(false);
+    }
+  }, [currentTrip, handleCalculate]);
+
+  useEffect(() => {
+    handleCalculate(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,7 +168,7 @@ export default function CostIntelligencePage() {
             <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${configOpen ? 'rotate-180' : ''}`} />
           </button>
           <button
-            onClick={handleCalculate}
+            onClick={() => handleCalculate(true)}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 md:px-4 py-2.5 md:py-2 rounded-xl bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 text-sm font-semibold transition-all"
           >
             <RefreshCw className="w-4 h-4" /> <span>Calculate</span>
@@ -148,7 +191,7 @@ export default function CostIntelligencePage() {
               <ConfigurationPanel
                 inputs={inputs}
                 setInputs={setInputs}
-                onCalculate={handleCalculate}
+                onCalculate={() => handleCalculate(true)}
               />
             </div>
           </motion.div>
