@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateTrip, modifyTrip, getUserTrips, createTrip, deleteTrip, duplicateTrip, toggleFavorite, getPublicTrip } from '../controllers/trip.controller.js';
+import { generateTrip, modifyTrip, getUserTrips, createTrip, deleteTrip, duplicateTrip, toggleFavorite, getPublicTrip, updateTrip } from '../controllers/trip.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -30,5 +30,8 @@ router.post('/:id/duplicate', duplicateTrip);
 
 // Toggle favorite status
 router.patch('/:id/favorite', toggleFavorite);
+
+// Update trip partial data
+router.patch('/:id', updateTrip);
 
 export default router;

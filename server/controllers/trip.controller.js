@@ -108,3 +108,13 @@ export const getPublicTrip = catchAsync(async (req, res) => {
   
   ApiResponse.send(res, 200, 'Public trip fetched successfully', trip);
 });
+export const updateTrip = catchAsync(async (req, res) => {
+  const userId = req.user ? req.user.id : "65a000000000000000000000";
+  const updatedTrip = await Trip.findOneAndUpdate(
+    { _id: req.params.id, user: userId },
+    { $set: req.body },
+    { new: true, runValidators: true }
+  );
+  if (!updatedTrip) return ApiResponse.send(res, 404, 'Trip not found');
+  ApiResponse.send(res, 200, 'Trip updated successfully', updatedTrip);
+});

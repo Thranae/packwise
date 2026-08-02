@@ -201,9 +201,35 @@ export const TripProvider = ({ children }) => {
     if (!isAuthenticated) return;
     try {
       setLoadingTrips(true);
+      
+      // 1. Sync any local (offline) trips to the server before pulling
+      const localTrips = await db.trips.filter(t => String(t._id).startsWith('local-')).toArray();
+      for (const localTrip of localTrips) {
+        try {
+          // Remove local _id so backend creates a new one
+          const { _id, ...tripDataToSync } = localTrip;
+          const syncRes = await api.post('/trips', tripDataToSync);
+          if ((syncRes.status === 200 || syncRes.status === 201) && syncRes.data.data) {
+            await db.trips.delete(localTrip._id);
+            await db.trips.put(syncRes.data.data);
+            if (currentTripState?._id === localTrip._id) {
+              setCurrentTrip(syncRes.data.data);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to sync offline trip:", localTrip._id, e);
+        }
+      }
+
+      // 2. Clear out mock trips that might have been populated when not logged in
+      const mockTrips = await db.trips.filter(t => String(t._id).startsWith('mock-')).toArray();
+      if (mockTrips.length > 0) {
+        await db.trips.bulkDelete(mockTrips.map(t => t._id));
+      }
+
+      // 3. Fetch from server
       const res = await api.get('/trips');
       if (res.status === 200 && res.data) {
-        // Sync API data down to local Dexie
         await db.trips.bulkPut(res.data);
       }
     } catch (err) {
@@ -211,7 +237,7 @@ export const TripProvider = ({ children }) => {
     } finally {
       setLoadingTrips(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, currentTripState]);
 
   // Sync on mount
   useEffect(() => {
@@ -394,6 +420,15 @@ export const TripProvider = ({ children }) => {
     // If it's the current trip, update the state so UI reacts instantly
     if (currentTrip?._id === tripId) {
       setCurrentTrip(updatedTrip);
+    }
+    
+    // Push updates to backend if online and it's not a local-only trip
+    if (isAuthenticated && !String(tripId).startsWith("local-")) {
+      try {
+        await api.patch(`/trips/${tripId}`, updates);
+      } catch (e) {
+        console.error("Failed to push trip update to server:", e);
+      }
     }
   };
 
