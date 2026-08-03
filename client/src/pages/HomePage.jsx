@@ -315,32 +315,48 @@ export default function HomePage() {
               
               {/* Center Map / Main Art */}
               <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[5%] lg:top-[10%] left-[5%] w-[90%] h-[90%] lg:h-[75%] z-20">
-                <div className="relative w-full h-full rounded-[32px] md:rounded-[40px] flex flex-col group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ios-glass-card">
-                  {/* Liquid Glass Border Stroke Overlay */}
-                  <div className="absolute inset-0 rounded-[32px] md:rounded-[40px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
+                <div className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
+                  {/* iOS Noise Texture Overlay */}
+                  <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                   
-                  <Image 
-                    src={tripImage} 
-                    alt={tripDestination} 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  {/* 3D Liquid Glare Sheen */}
+                  <div className="absolute top-0 left-0 right-0 h-[40%] bg-gradient-to-b from-white/30 to-transparent opacity-60 rounded-t-[32px] z-0 pointer-events-none group-hover:h-[50%] transition-all duration-700" />
                   
-                  <div className="absolute bottom-6 left-6 right-6 flex flex-col z-10 text-white gap-2">
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <div className="text-sm font-medium text-white/80 mb-1 flex items-center gap-2">
-                          <Sparkles className="w-4 h-4 text-purple-400" /> Voyage Genie
+                  {/* Vibrant Ambient Orbs */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-fuchsia-500/30 blur-[40px] rounded-full animate-pulse z-0" />
+                  <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/30 blur-[40px] rounded-full animate-pulse z-0" style={{ animationDelay: "1s" }} />
+
+                  {/* Inner frosted content */}
+                  <div className="bg-[#030712]/30 rounded-[31px] p-2.5 flex flex-col gap-3 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] w-full h-full">
+                     {/* Beautiful subtle animated background glow */}
+                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
+                     <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
+                     
+                     {/* Hero Image Section */}
+                     <div className="w-full h-[55%] md:h-[60%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
+                        <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
+                        <div className="absolute bottom-4 left-5">
+                           <h3 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-none mb-1 drop-shadow-md truncate max-w-[200px] flex items-center gap-2">
+                             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" /> Voyage Genie
+                           </h3>
+                           <p className="text-[9px] sm:text-[10px] text-emerald-400 font-bold tracking-widest uppercase drop-shadow-md">AI Travel Companion</p>
                         </div>
-                        <div className="text-2xl font-bold truncate max-w-[200px]">{tripDestination}</div>
-                      </div>
-                      <div className="px-4 py-2 text-xs font-bold text-white bg-white/20 backdrop-blur-md rounded-full border border-white/20">
-                        Active
-                      </div>
-                    </div>
-                    <p className="text-sm text-white/70 mt-1 font-light leading-relaxed">
-                      Your AI travel companion. Voyage Genie instantly crafts hyper-personalized itineraries, manages your budget, and discovers hidden gems just for you.
-                    </p>
+                        <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
+                           <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                           </span>
+                           <span className="text-[9px] uppercase font-bold text-white/90 tracking-wider">Active</span>
+                        </div>
+                     </div>
+                     
+                     {/* Bottom Info Section */}
+                     <div className="px-3 sm:px-5 py-2 sm:py-3 relative z-10 flex-1 flex flex-col justify-center border-t border-white/5">
+                        <p className="text-xs sm:text-sm text-white/80 font-light leading-relaxed text-center drop-shadow-md">
+                          Design the perfect journey. Voyage Genie instantly crafts hyper-personalized itineraries, automates logistics, and discovers hidden gems just for you.
+                        </p>
+                     </div>
                   </div>
                 </div>
               </motion.div>
