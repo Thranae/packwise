@@ -12,36 +12,34 @@ import { Skeleton } from '@/components/ui/Skeleton';
 const GeneratingTripCard = ({ destination }) => (
   <motion.div 
     key="generating"
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    className="col-span-full flex justify-center"
+    className="relative w-full h-[380px] sm:h-[400px] xl:h-[420px] rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl flex flex-col justify-center items-center p-6"
   >
-    <div className="relative w-full max-w-md rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
-      {/* Subtle static gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-purple-500/[0.06]" />
-      
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center py-12 px-8">
-        {/* Orbital loading animation */}
-        <div className="relative w-20 h-20 mb-8">
-          <div className="absolute inset-0 rounded-full border-2 border-white/[0.06]" />
-          <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-400/80 animate-spin" style={{ animationDuration: '1.5s' }} />
-          <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400/60 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }} />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Sparkles className="w-7 h-7 text-white/90" />
-          </div>
+    {/* Subtle static gradient background */}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-purple-500/[0.06]" />
+    
+    {/* Content */}
+    <div className="relative z-10 flex flex-col items-center">
+      {/* Orbital loading animation */}
+      <div className="relative w-20 h-20 mb-8">
+        <div className="absolute inset-0 rounded-full border-2 border-white/[0.06]" />
+        <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-400/80 animate-spin" style={{ animationDuration: '1.5s' }} />
+        <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400/60 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }} />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Sparkles className="w-7 h-7 text-white/90" />
         </div>
-        
-        <h3 className="text-xl font-bold text-white tracking-tight text-center mb-2">Crafting itinerary...</h3>
-        <p className="text-sm text-white/45 text-center font-medium leading-relaxed">Curating the best of {destination}</p>
       </div>
       
-      {/* Progress bar */}
-      <div className="relative h-1 w-full bg-white/[0.04] overflow-hidden">
-        <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500 to-purple-500 animate-[gen-progress_7s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
-      </div>
+      <h3 className="text-xl font-bold text-white tracking-tight text-center mb-2">Crafting itinerary...</h3>
+      <p className="text-sm text-white/45 text-center font-medium leading-relaxed max-w-[200px]">Curating the best of {destination}</p>
+    </div>
+    
+    {/* Progress bar */}
+    <div className="absolute bottom-0 left-0 right-0 h-1.5 w-full bg-white/[0.04] overflow-hidden">
+      <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500 to-purple-500 animate-[gen-progress_7s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
     </div>
     
     <style>{`
@@ -106,7 +104,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
       const matchesFilter = activeFilter === 'All' || trip.status === activeFilter;
 
       return matchesSearch && matchesFilter;
-    });
+    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [deferredSearchQuery, activeFilter, trips]);
 
   return (
@@ -212,9 +210,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
         {/* Trips Grid or Skeletons */}
         <AnimatePresence mode="wait">
-          {showGenerating ? (
-            <GeneratingTripCard destination={destName} />
-          ) : loadingTrips ? (
+          {loadingTrips ? (
             <motion.div
               key="skeletons"
               initial={{ opacity: 0 }}
@@ -226,7 +222,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                 <Skeleton key={i} className="h-[400px] w-full rounded-[32px]" />
               ))}
             </motion.div>
-          ) : filteredTrips.length > 0 ? (
+          ) : (showGenerating || filteredTrips.length > 0) ? (
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
@@ -234,6 +230,9 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               exit={{ opacity: 0 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8"
             >
+              <AnimatePresence>
+                {showGenerating && <GeneratingTripCard destination={destName} />}
+              </AnimatePresence>
               {filteredTrips.map(trip => (
                 <TripCard key={trip._id} trip={trip} />
               ))}
