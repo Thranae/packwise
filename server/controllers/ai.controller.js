@@ -118,6 +118,20 @@ export const getRecommendations = async (req, res) => {
   }
 };
 
+export const getInspirationImageQueries = async (req, res) => {
+  try {
+    const { destination } = req.body;
+    if (!destination) {
+      return res.status(400).json({ error: 'Destination is required' });
+    }
+    const cacheKey = `inspiration_queries_${destination}`;
+    const result = await getCachedOrGenerate(cacheKey, () => aiService.generateInspirationImageQueries(destination));
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const chatAssistant = async (req, res) => {
   try {
     const { message, context } = req.body;

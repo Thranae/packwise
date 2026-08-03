@@ -17,6 +17,7 @@ import { Image } from '@/components/ui/Image';
 import { Navbar } from '@/components/navigation/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { AnimatedBackground } from '@/components/common/AnimatedBackground';
+import { GeneratingTripCard } from '@/components/trips/GeneratingTripCard';
 
 // ---------------------------------------------------------------------------
 const glassBase = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]";
@@ -50,7 +51,7 @@ const scaleIn = {
 export default function HomePage() {
   const { isAuthenticated, user } = useAuth();
   const { addToast } = useToast();
-  const { trips, currentTrip, isGenerating, setCurrentTrip } = useTripContext();
+  const { trips, currentTrip, isGeneratingTrip, generatingDestination, setCurrentTrip } = useTripContext();
   const navigate = useNavigate();
   const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
   const { image: nextTripImage } = useDestinationImage(nextTrip?.destination);
@@ -160,23 +161,10 @@ export default function HomePage() {
                         <div className="absolute -top-10 -right-10 w-32 h-32 bg-fuchsia-500/30 blur-[40px] rounded-full animate-pulse z-0" />
                         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/30 blur-[40px] rounded-full animate-pulse z-0" style={{ animationDelay: "1s" }} />
                       {/* Inner frosted content */}
-                      {isGenerating ? (
-                      <div className="bg-[#030712]/40 backdrop-blur-3xl rounded-[32px] p-8 flex flex-col items-center justify-center relative overflow-hidden border border-white/5 min-h-[320px]">
-                         <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse" />
-                         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse" />
-                         
-                         {/* Modern AI Generating Animation */}
-                         <div className="relative w-24 h-24 mb-6">
-                             <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-500 animate-spin" style={{ animationDuration: '2s' }} />
-                             <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400 animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }} />
-                             <div className="absolute inset-0 flex items-center justify-center">
-                                 <Sparkles className="w-8 h-8 text-white animate-pulse" />
-                             </div>
-                         </div>
-                         
-                         <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-2 text-center">Crafting Journey...</h3>
-                         <p className="text-xs sm:text-sm text-white/50 text-center max-w-[200px]">Our AI is analyzing millions of data points to build your perfect itinerary.</p>
-                      </div>
+                      {isGeneratingTrip ? (
+                        <div className="bg-[#030712] rounded-[32px] overflow-hidden w-full h-[320px] sm:h-[400px]">
+                          <GeneratingTripCard destination={generatingDestination} />
+                        </div>
                     ) : nextTrip ? (
                       <div className="bg-[#030712]/30 rounded-[31px] p-2.5 flex flex-col gap-3 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
                          {/* Beautiful subtle animated background glow */}

@@ -10,6 +10,7 @@ router.post('/packing/alternative', aiController.getPackingAlternative);
 router.post('/budget', aiController.getBudgetAdvice);
 router.post('/itinerary', aiController.getItinerary);
 router.post('/recommendations', aiController.getRecommendations);
+router.post('/inspiration-images', aiController.getInspirationImageQueries);
 router.post('/chat', aiController.chatAssistant);
 router.post('/chat/stream', aiController.chatAssistantStream);
 

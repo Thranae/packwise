@@ -405,6 +405,34 @@ Write a beautiful, personal travel memory journal. Return JSON strictly matching
 
     return this._generateJson(prompt, fallback, 'planning');
   }
+
+  async generateInspirationImageQueries(destination) {
+    const prompt = `You are an expert travel photographer. For a trip to ${destination}, provide highly specific and famous stock photo search queries for the following 8 categories: 
+    Landmark, Nature, Food, Culture, Art, Sightseeing, Shopping, Nightlife.
+    For each category, provide a query (2-5 words max) that will yield a breathtaking stock photo of a REAL, iconic place in ${destination} (e.g., for Landmark in Paris: "Eiffel Tower Paris", for Culture in Kyoto: "Fushimi Inari Shrine Kyoto").
+    Return strictly JSON matching this format:
+    {
+      "Landmark": "query",
+      "Nature": "query",
+      "Food": "query",
+      "Culture": "query",
+      "Art": "query",
+      "Sightseeing": "query",
+      "Shopping": "query",
+      "Nightlife": "query"
+    }`;
+    const fallback = {
+      Landmark: `${destination} landmark architecture`,
+      Nature: `${destination} nature scenic landscape`,
+      Food: `${destination} food street cuisine`,
+      Culture: `${destination} culture heritage temple`,
+      Art: `${destination} museum art gallery`,
+      Sightseeing: `${destination} city skyline view`,
+      Shopping: `${destination} market bazaar shopping`,
+      Nightlife: `${destination} night lights festival`
+    };
+    return this._generateJson(prompt, fallback, 'lightweight');
+  }
 }
 
 export default new AIService();

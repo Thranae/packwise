@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Compass, Plus } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 
-import { DestinationOfTheDayWidget } from './DestinationOfTheDayWidget';
-import { TravelerStatsWidget } from './TravelerStatsWidget';
+const DestinationOfTheDayWidget = React.lazy(() => import('./DestinationOfTheDayWidget').then(m => ({ default: m.DestinationOfTheDayWidget })));
+const TravelerStatsWidget = React.lazy(() => import('./TravelerStatsWidget').then(m => ({ default: m.TravelerStatsWidget })));
 
 export const OverviewEmptyState = () => {
   const navigate = useNavigate();
@@ -53,8 +53,12 @@ export const OverviewEmptyState = () => {
         </motion.div>
       </motion.div>
 
-      <DestinationOfTheDayWidget className="col-span-12 md:col-span-6 lg:col-span-4" />
-      <TravelerStatsWidget className="col-span-12 md:col-span-6 lg:col-span-12" />
+      <React.Suspense fallback={<div className="col-span-12 md:col-span-6 lg:col-span-4 h-[300px] rounded-[32px] ios-glass-card animate-pulse" />}>
+        <DestinationOfTheDayWidget className="col-span-12 md:col-span-6 lg:col-span-4" />
+      </React.Suspense>
+      <React.Suspense fallback={<div className="col-span-12 md:col-span-6 lg:col-span-12 h-[300px] rounded-[32px] ios-glass-card animate-pulse" />}>
+        <TravelerStatsWidget className="col-span-12 md:col-span-6 lg:col-span-12" />
+      </React.Suspense>
     </>
   );
 };

@@ -156,25 +156,33 @@ export default function ExplorePage() {
     let isMounted = true;
     if (!currentTrip?.destination) return;
 
-    const fetchCategoryImage = async (category) => {
-      // Query like "Dharamshala landmark architecture" (no comma)
-      const query = `${placeName} ${category.suffix}`;
-      try {
-        const res = await api.get(`/images/search?query=${encodeURIComponent(query)}`);
-        if (res.data?.data?.imageUrl) return res.data.data.imageUrl;
-      } catch (_) {}
-      // Secondary fallback: try just the place name
-      try {
-        const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}`);
-        if (res2.data?.data?.imageUrl) return res2.data.data.imageUrl;
-      } catch (_) {}
-      return null;
-    };
-
     const fetchAllImages = async () => {
       setLoading(true);
       try {
-        // Fetch all 8 in parallel, each with its own targeted query
+        // 1. Get optimized image queries from AI
+        let aiQueries = {};
+        try {
+          const aiRes = await api.post('/ai/inspiration-images', { destination: placeName });
+          aiQueries = aiRes.data || {};
+        } catch (err) {
+          console.warn("Failed to get AI inspiration queries, using fallbacks");
+        }
+
+        const fetchCategoryImage = async (category) => {
+          const optimalQuery = aiQueries[category.type] || `${placeName} ${category.suffix}`;
+          try {
+            const res = await api.get(`/images/search?query=${encodeURIComponent(optimalQuery)}`);
+            if (res.data?.data?.imageUrl) return res.data.data.imageUrl;
+          } catch (_) {}
+          // Secondary fallback: try just the place name
+          try {
+            const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}`);
+            if (res2.data?.data?.imageUrl) return res2.data.data.imageUrl;
+          } catch (_) {}
+          return null;
+        };
+
+        // Fetch all 8 in parallel, each with its own targeted AI query
         const results = await Promise.all(CARD_CATEGORIES.map(cat => fetchCategoryImage(cat)));
 
         const cards = CARD_CATEGORIES.map((cat, i) => ({
