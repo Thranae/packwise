@@ -17,39 +17,50 @@ const GeneratingTripCard = ({ destination }) => (
     animate={{ opacity: 1, scale: 1 }}
     exit={{ opacity: 0, scale: 0.95 }}
     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-    className="relative w-full h-[460px] rounded-[32px] overflow-hidden bg-gradient-to-br from-[#0B101E] to-[#141A28] border border-white/[0.06] shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-3xl flex flex-col justify-center items-center p-8 group"
+    className="relative w-full h-[460px] rounded-[32px] overflow-hidden bg-white/5 backdrop-blur-2xl border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_8px_32px_rgba(0,0,0,0.6)] ios-glass-card flex flex-col justify-center items-center p-8 group transform-gpu will-change-transform"
   >
-    {/* Subtle Premium Grain/Shimmer Layer */}
-    <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none" />
-    <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.02)_25%,rgba(255,255,255,0.0)_50%)] bg-[length:200%_100%] animate-[shimmer_4s_infinite_linear]" />
-    
-    {/* Central Minimal Loading Element */}
+    {/* Dynamic Background Effects */}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-emerald-500/10 mix-blend-overlay animate-[pulse_4s_ease-in-out_infinite]" />
+    <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.0)_0%,rgba(255,255,255,0.05)_25%,rgba(255,255,255,0.0)_50%)] bg-[length:200%_100%] animate-[shimmer_3s_infinite_linear]" />
+    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+
+    {/* Central 3D Globe Element */}
     <div className="relative z-10 flex flex-col items-center">
-      <div className="relative w-24 h-24 mb-10 flex items-center justify-center">
-        {/* Pulsating highly transparent outer aura */}
-        <div className="absolute inset-0 rounded-full border border-white/[0.08] animate-ping" style={{ animationDuration: '3s' }} />
-        {/* Static elegant thin inner ring */}
-        <div className="absolute inset-3 rounded-full border border-white/[0.15]" />
-        {/* Central Icon */}
-        <div className="absolute inset-0 flex items-center justify-center animate-[spin_10s_linear_infinite]">
-          <Globe className="w-10 h-10 text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" strokeWidth={1} />
+      <div className="relative w-28 h-28 mb-10 flex items-center justify-center">
+        {/* Floating animated rings */}
+        <div className="absolute inset-0 rounded-full border-2 border-dashed border-blue-400/30 animate-[spin_12s_linear_infinite]" />
+        <div className="absolute inset-2 rounded-full border border-purple-400/20 animate-[spin_8s_linear_infinite_reverse]" />
+        
+        {/* Central Glowing Icon */}
+        <div className="absolute inset-0 flex items-center justify-center animate-[bounce_3s_infinite]">
+          <div className="absolute w-12 h-12 bg-blue-500/30 rounded-full blur-xl animate-pulse" />
+          <Globe className="w-12 h-12 text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] relative z-10" strokeWidth={1.5} />
         </div>
       </div>
       
       {/* Refined Typography */}
-      <h3 className="text-sm font-semibold text-white/90 tracking-[0.3em] uppercase mb-4 text-center">Curating Journey</h3>
-      <div className="h-[1px] w-12 bg-white/20 mb-4" />
-      <p className="text-base text-white/50 text-center font-light leading-relaxed max-w-[240px]">
-        Preparing a bespoke experience for <br/><span className="font-medium text-white/80">{destination}</span>
+      <h3 className="text-sm font-bold text-white tracking-[0.25em] uppercase mb-4 text-center drop-shadow-md">Curating Journey</h3>
+      <div className="h-[2px] w-16 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent mb-5" />
+      <p className="text-base text-white/70 text-center font-medium leading-relaxed max-w-[260px] drop-shadow-sm">
+        Synthesizing the perfect itinerary for <br/><span className="font-extrabold text-white text-lg mt-1 block drop-shadow-md">{destination}</span>
       </p>
     </div>
     
+    {/* Scanning Laser Line */}
+    <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_15px_rgba(96,165,250,0.8)] z-10 opacity-70 animate-[scan_3s_ease-in-out_infinite]" />
+    
     {/* Minimalist Linear Progress */}
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] w-full bg-transparent overflow-hidden z-20">
-      <div className="absolute inset-y-0 left-0 w-full bg-white/30 animate-[gen-progress_8s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
+    <div className="absolute bottom-0 left-0 right-0 h-[3px] w-full bg-black/20 overflow-hidden z-20">
+      <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500 to-emerald-400 animate-[gen-progress_8s_cubic-bezier(0.4,0,0.2,1)_forwards] shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
     </div>
     
     <style>{`
+      @keyframes scan {
+        0% { top: 0%; opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+      }
       @keyframes shimmer {
         from { background-position: 200% 0; }
         to { background-position: -200% 0; }
@@ -231,9 +242,10 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               <AnimatePresence>
                 {isGeneratingTrip && <GeneratingTripCard destination={generatingDestination} />}
               </AnimatePresence>
-              {filteredTrips.map(trip => (
-                <TripCard key={trip._id} trip={trip} />
-              ))}
+              {filteredTrips.map(trip => {
+                if (isGeneratingTrip && trip.destination === generatingDestination) return null;
+                return <TripCard key={trip._id} trip={trip} />;
+              })}
             </motion.div>
           ) : (
             <motion.div

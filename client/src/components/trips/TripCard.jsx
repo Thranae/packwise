@@ -145,11 +145,7 @@ export const TripCard = ({ trip }) => {
           hidden: { opacity: 0, scale: 0.98, y: 20 },
           show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
         }}
-        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card cursor-pointer transform-gpu will-change-transform bg-black"
-        onClick={(e) => {
-          selectTrip(trip._id);
-          navigate(ROUTES.OVERVIEW);
-        }}
+        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card transform-gpu will-change-transform bg-transparent"
       >
         {/* GPU-Accelerated Interactive Flashlight */}
         {!isNative && (
