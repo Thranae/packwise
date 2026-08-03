@@ -66,7 +66,7 @@ export const SplashScreen = ({ onComplete }) => {
             initial={{ scale: 0.85, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 backdrop-blur-3xl shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)]"
+            className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_2px_rgba(255,255,255,0.1)] transform-gpu"
           >
             {/* Very subtle static glow behind the icon */}
             <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />

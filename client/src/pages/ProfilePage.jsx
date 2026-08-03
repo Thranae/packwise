@@ -140,18 +140,17 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="bg-[#020617] min-h-screen text-white overflow-x-hidden font-sans selection:bg-white/20 selection:text-white transition-colors duration-700">
-      <AnimatedBackground />
-      <PageTransition className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+    <div className="text-white font-sans selection:bg-white/20 selection:text-white transition-colors duration-700 w-full">
+      <PageTransition className="relative z-10 w-full max-w-4xl mx-auto px-0 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
         <main className="w-full">
           
           {/* Top Header / Sticky Bar */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-row items-center justify-between gap-2 mb-6 sm:mb-8">
             <h1 className="text-3xl font-extrabold tracking-tight text-white drop-shadow-md">My Profile</h1>
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className={`rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all flex items-center gap-2 ${
+              className={`rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all flex items-center gap-2 ios-liquid-button ${
                 isEditing 
                   ? 'bg-green-500 hover:bg-green-600 text-white shadow-[0_4px_16px_rgba(34,197,94,0.4)] border border-green-400/50' 
                   : 'bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md shadow-md'
@@ -209,44 +208,52 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider pl-1">Full Name</label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <div className="relative w-full h-11">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <User className="w-4 h-4 text-white/40" />
+                      </div>
                       <input 
                         type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={!isEditing}
-                        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60 disabled:bg-transparent shadow-inner"
+                        className="glass-input w-full h-full pl-9 pr-3 text-sm disabled:opacity-60 disabled:bg-transparent"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider pl-1">Display Name</label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <div className="relative w-full h-11">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <User className="w-4 h-4 text-white/40" />
+                      </div>
                       <input 
                         type="text" name="displayName" value={formData.displayName} onChange={handleInputChange} disabled={!isEditing}
-                        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60 disabled:bg-transparent shadow-inner"
+                        className="glass-input w-full h-full pl-9 pr-3 text-sm disabled:opacity-60 disabled:bg-transparent"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider pl-1">Email Address</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <div className="relative w-full h-11">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Mail className="w-4 h-4 text-white/40" />
+                      </div>
                       <input 
                         type="email" name="email" value={formData.email} onChange={handleInputChange} disabled={!isEditing}
-                        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60 disabled:bg-transparent shadow-inner"
+                        className="glass-input w-full h-full pl-9 pr-3 text-sm disabled:opacity-60 disabled:bg-transparent"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider pl-1">Home Airport</label>
-                    <div className="relative">
-                      <Plane className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <div className="relative w-full h-11">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Plane className="w-4 h-4 text-white/40" />
+                      </div>
                       <input 
                         type="text" name="homeAirport" value={formData.homeAirport} onChange={handleInputChange} disabled={!isEditing} placeholder="e.g. SFO"
-                        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-9 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60 disabled:bg-transparent shadow-inner uppercase"
+                        className="glass-input uppercase w-full h-full pl-9 pr-3 text-sm disabled:opacity-60 disabled:bg-transparent"
                       />
                     </div>
                   </div>
@@ -273,7 +280,7 @@ export default function ProfilePage() {
                     {isEditing && (
                       <div className="flex gap-2 mt-3">
                         {['budget', 'moderate', 'luxury'].map(b => (
-                          <button key={b} onClick={() => togglePreference('budgetPreference', b)} className={`flex-1 py-2 rounded-xl text-[11px] font-bold capitalize transition-all ${formData.budgetPreference === b ? 'bg-blue-500 text-white shadow-[0_2px_10px_rgba(59,130,246,0.4)]' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                          <button key={b} onClick={() => togglePreference('budgetPreference', b)} className={`flex-1 py-2 rounded-xl text-[11px] font-bold capitalize transition-all ${formData.budgetPreference === b ? 'ios-liquid-button bg-blue-500 text-white shadow-[0_2px_10px_rgba(59,130,246,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
                             {b}
                           </button>
                         ))}
@@ -295,7 +302,7 @@ export default function ProfilePage() {
                         {STYLE_OPTIONS.map(style => {
                           const isSelected = formData.travelStyle.includes(style);
                           return (
-                            <button key={style} onClick={() => togglePreference('travelStyle', style)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'bg-purple-500 text-white shadow-[0_2px_10px_rgba(168,85,247,0.4)]' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                            <button key={style} onClick={() => togglePreference('travelStyle', style)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'ios-liquid-button bg-purple-500 text-white shadow-[0_2px_10px_rgba(168,85,247,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
                               {style}
                             </button>
                           );
@@ -318,7 +325,7 @@ export default function ProfilePage() {
                         {DIETARY_OPTIONS.map(diet => {
                           const isSelected = formData.dietaryRestrictions.includes(diet);
                           return (
-                            <button key={diet} onClick={() => togglePreference('dietaryRestrictions', diet)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'bg-orange-500 text-white shadow-[0_2px_10px_rgba(249,115,22,0.4)]' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                            <button key={diet} onClick={() => togglePreference('dietaryRestrictions', diet)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'ios-liquid-button bg-orange-500 text-white shadow-[0_2px_10px_rgba(249,115,22,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
                               {diet}
                             </button>
                           );

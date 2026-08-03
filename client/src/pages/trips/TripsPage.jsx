@@ -173,9 +173,13 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
           ) : (isGeneratingTrip || filteredTrips.length > 0) ? (
             <motion.div
               key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { staggerChildren: 0.1 } }}
-              exit={{ opacity: 0 }}
+              variants={{
+                hidden: { opacity: 0 },
+                show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } }
+              }}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8"
             >
               <AnimatePresence>

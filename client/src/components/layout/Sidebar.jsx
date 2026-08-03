@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
-import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane } from 'lucide-react';
+import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane, BookOpen } from 'lucide-react';
 import { LogoIcon, useLogoDoubleTap } from '@/components/ui/Logo';
 import { motion } from 'framer-motion';
 export const GLASS = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] rounded-[24px]";
@@ -9,13 +9,13 @@ export const GLASS_HOVER = "transition-all duration-700 hover:-translate-y-1 hov
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
-  { label: 'Trips', path: '/trips', icon: Map, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
+  { label: 'Trips', path: '/trips', icon: Compass, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
   { label: 'AI Planner', path: '/assistant', icon: Sparkles, colorClass: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
   { label: 'Packing', path: '/packing', icon: Box, colorClass: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]' },
   { label: 'Calendar', path: '/calendar', icon: Calendar, colorClass: 'group-hover:text-pink-400 group-hover:drop-shadow-[0_0_8px_rgba(244,114,182,0.8)]' },
   { label: 'Budget', path: '/budget', icon: Wallet, colorClass: 'group-hover:text-green-400 group-hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]' },
-  { label: 'Explore', path: '/explore', icon: Compass, colorClass: 'group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' },
-  { label: 'Journal', path: '/journal', icon: FileText, colorClass: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]' },
+  { label: 'Explore', path: '/explore', icon: Map, colorClass: 'group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' },
+  { label: 'Journal', path: '/journal', icon: BookOpen, colorClass: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]' },
   { label: 'Flights', path: '/flights', icon: Plane, colorClass: 'group-hover:text-sky-400 group-hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]' },
   { label: 'Profile', path: '/profile', icon: User, colorClass: 'group-hover:text-rose-400 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.8)]' },
   { label: 'Settings', path: '/settings', icon: Settings, colorClass: 'group-hover:text-gray-300 group-hover:drop-shadow-[0_0_8px_rgba(209,213,219,0.8)]' },
@@ -63,7 +63,7 @@ export function Sidebar() {
       <div className="mx-4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       {/* Nav Links */}
-      <div className="flex-1 overflow-y-auto px-4 py-2 scrollbar-none relative z-10 flex flex-col gap-1.5">
+      <div className="flex-1 flex flex-col gap-1.5 px-3 py-2 overflow-y-auto no-scrollbar relative z-10" style={{ scrollbarWidth: 'none' }}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -72,7 +72,11 @@ export function Sidebar() {
             <NavLink
               key={item.path}
               to={item.path}
-              className={`group flex items-center gap-3.5 px-3 py-3 rounded-[16px] transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)] relative overflow-hidden ${isActive ? 'bg-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3)]' : 'hover:bg-white/[0.04]'}`}
+              className={`group flex items-center gap-3 px-3 py-2.5 rounded-[16px] transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)] relative overflow-hidden ${
+                isActive 
+                  ? 'bg-white/[0.08] border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_16px_rgba(0,0,0,0.2)]' 
+                  : 'hover:bg-white/[0.04] border border-transparent'
+              }`}
             >
               {/* Active pill background */}
               {isActive && (
@@ -87,14 +91,14 @@ export function Sidebar() {
               )}
 
               {/* Icon */}
-              <span className="relative z-10 transition-transform duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:translate-x-1">
+              <span className={`relative z-10 transition-transform duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:translate-x-1 ${item.colorClass}`}>
                 <Icon
-                  size={16}
-                  className={`transition-all duration-700 ${
+                  className={`w-[18px] h-[18px] transition-all duration-700 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] ${
                     isActive 
-                      ? item.colorClass.replace(/group-hover:/g, '') 
-                      : `text-white/50 ${item.colorClass}`
+                      ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]' 
+                      : 'text-white/60 group-hover:text-current'
                   }`}
+                  strokeWidth={isActive ? 2.5 : 1.8}
                 />
               </span>
 

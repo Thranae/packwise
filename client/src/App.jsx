@@ -104,7 +104,7 @@ function GuestRoute({ children }) {
 
   return children;
 }
-/** Redirects unauthenticated users to the login page. */
+/** Redirects unauthenticated users to the login page. */
 function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -197,8 +197,7 @@ function AppRoutes() {
 
   return (
     <Suspense fallback={<Spinner />}>
-      <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location}>
         <Route path={ROUTES.HOME} element={<HomePage />} />
 
           <Route
@@ -369,7 +368,6 @@ function AppRoutes() {
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      </AnimatePresence>
     </Suspense>
   );
 }

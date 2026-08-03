@@ -136,15 +136,22 @@ export const TripCard = ({ trip }) => {
   };
   
   return (
-    <div className="relative w-full h-[460px] rounded-[32px] overflow-hidden group">
+    <motion.div 
+      variants={{
+        hidden: { opacity: 0, scale: 0.95, y: 30 },
+        show: { 
+          opacity: 1, 
+          scale: 1, 
+          y: 0, 
+          transition: { type: 'spring', stiffness: 280, damping: 25, mass: 0.8 } 
+        }
+      }}
+      className="relative w-full h-[460px] rounded-[32px] overflow-hidden group"
+    >
       <motion.div 
         ref={cardRef}
         style={isNative ? undefined : { rotateX, rotateY, transformPerspective: 1200 }}
         whileHover={isNative ? undefined : { y: -8, transition: { duration: 0.3 } }}
-        variants={{
-          hidden: { opacity: 0, scale: 0.98, y: 20 },
-          show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-        }}
         className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card transform-gpu will-change-transform bg-transparent"
       >
         {/* GPU-Accelerated Interactive Flashlight */}
@@ -407,6 +414,6 @@ export const TripCard = ({ trip }) => {
 
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };

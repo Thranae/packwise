@@ -1,15 +1,15 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutGrid, Map, Bot, Compass, User } from 'lucide-react';
+import { LayoutGrid, Map, Bot, Compass, User, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
-  { label: 'Trips', path: '/trips', icon: Map, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
-  { label: 'Genie', path: '/assistant', icon: Bot, activeColor: 'text-white', isCenter: true },
-  { label: 'Explore', path: '/explore', icon: Compass, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
+  { label: 'Trips', path: '/trips', icon: Compass, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
+  { label: 'Genie', path: '/assistant', icon: Sparkles, activeColor: 'text-white', isCenter: true },
+  { label: 'Explore', path: '/explore', icon: Map, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
   { label: 'Profile', path: '/profile', icon: User, activeColor: 'text-rose-400', shadowColor: 'shadow-rose-500/50' },
 ];
 
@@ -18,7 +18,7 @@ export function BottomNav() {
   const { lightTap } = useHaptics();
   const { playSound } = useSoundEffect();
 
-  const handleNavClick = () => {
+  const handleNavClick = (path) => {
     lightTap();
     playSound('tap');
   };
@@ -44,7 +44,7 @@ export function BottomNav() {
             <NavLink
               key={item.path}
               to={item.path}
-              onClick={handleNavClick}
+              onClick={() => handleNavClick(item.path)}
               className={`relative flex items-center justify-center w-[50px] h-full rounded-[20px] transition-all duration-300 z-10 ${item.isCenter ? '-mt-6' : ''} group`}
             >
               {/* 3D Glass Pill for Active State */}
@@ -63,7 +63,7 @@ export function BottomNav() {
                   <div className="w-[58px] h-[58px] rounded-full bg-gradient-to-b from-[#1E293B] to-[#0F172A] p-[2px] shadow-[0_12px_24px_rgba(0,0,0,0.7)]">
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center shadow-[inset_0_6px_10px_rgba(255,255,255,0.5),inset_0_-4px_10px_rgba(0,0,0,0.6)] border-[1.5px] border-white/40 relative overflow-hidden group-active:scale-95 transition-transform duration-200">
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-                      <Icon size={26} className="text-white group-hover:rotate-12 transition-transform duration-500" />
+                      <Icon className="w-[22px] h-[22px] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
                       
                       {/* Pulse Indicator */}
                       <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-emerald-400 rounded-full border-2 border-indigo-700 shadow-[0_0_12px_rgba(52,211,153,1),inset_0_2px_4px_rgba(255,255,255,0.8)] animate-pulse" />
@@ -72,8 +72,8 @@ export function BottomNav() {
                 </div>
               ) : (
                 <>
-                  <div className={`relative z-10 flex flex-col items-center justify-center transition-all duration-400 ${isActive ? `-translate-y-2.5 scale-105 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] ${item.activeColor}` : 'text-white/50 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] group-hover:text-white/90 group-hover:scale-110'}`}>
-                    <Icon size={26} className={isActive ? 'stroke-[2.5px]' : 'stroke-2'} />
+                  <div className={`relative z-10 flex flex-col items-center justify-center transition-all duration-400 ${isActive ? `drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)] ${item.activeColor}` : 'text-white/60 drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] group-hover:text-white group-hover:scale-110'}`}>
+                    <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 1.8} />
                   </div>
                   <span className={`absolute bottom-1.5 text-[8.5px] font-extrabold tracking-widest uppercase transition-all duration-300 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] z-10 ${isActive ? `${item.activeColor} opacity-100 translate-y-0` : 'text-white/40 opacity-0 translate-y-2'}`}>
                     {item.label}
