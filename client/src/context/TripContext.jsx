@@ -309,54 +309,53 @@ export const TripProvider = ({ children }) => {
       setLoadingStep("Done.");
       
       // Delay before redirecting to let the user see 'Done.'
-      setTimeout(async () => {
-        const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
-        
-        // Use user's explicit values or fallback to AI data
-        const tripStartDate = meta.startDate ? new Date(meta.startDate) : (aiData.startDate ? new Date(aiData.startDate) : new Date());
-        const tripDuration = parseInt(meta.duration || aiData.duration || 7);
-        const tripEndDate = new Date(tripStartDate.getTime() + tripDuration * 24 * 60 * 60 * 1000);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
+      
+      // Use user's explicit values or fallback to AI data
+      const tripStartDate = meta.startDate ? new Date(meta.startDate) : (aiData.startDate ? new Date(aiData.startDate) : new Date());
+      const tripDuration = parseInt(meta.duration || aiData.duration || 7);
+      const tripEndDate = new Date(tripStartDate.getTime() + tripDuration * 24 * 60 * 60 * 1000);
 
-        const newTripData = {
-          ...aiData,
-          destination: aiData.destination || fallbackDest,
-          country: aiData.country || "Unknown",
-          startDate: tripStartDate.toISOString(),
-          endDate: tripEndDate.toISOString(),
-          duration: `${tripDuration} Days`,
-          budget: aiData.budget || 3000,
-          currency: aiData.currency || "USD",
-          timezone: aiData.timezone || "UTC",
-          gender: aiData.gender || "Not specified",
-          travelers: aiData.travelers || 1,
-          status: "planning"
-        };
-        
-        // Optimistic Local Write
-        const localId = "local-" + Date.now();
-        newTripData._id = localId;
-        await db.trips.put(newTripData);
-        setCurrentTrip(newTripData);
-        
-        setManualTheme(null);
+      const newTripData = {
+        ...aiData,
+        destination: aiData.destination || fallbackDest,
+        country: aiData.country || "Unknown",
+        startDate: tripStartDate.toISOString(),
+        endDate: tripEndDate.toISOString(),
+        duration: `${tripDuration} Days`,
+        budget: aiData.budget || 3000,
+        currency: aiData.currency || "USD",
+        timezone: aiData.timezone || "UTC",
+        gender: aiData.gender || "Not specified",
+        travelers: aiData.travelers || 1,
+        status: "planning"
+      };
+      
+      // Optimistic Local Write (Awaited so it finishes before navigating)
+      const localId = "local-" + Date.now();
+      newTripData._id = localId;
+      await db.trips.put(newTripData);
+      setCurrentTrip(newTripData);
+      
+      setManualTheme(null);
 
-        // Await Sync before removing loading state, to guarantee the trip is real for sharing
-        try {
-          const apiRes = await api.post('/trips', newTripData);
-          if ((apiRes.status === 200 || apiRes.status === 201) && apiRes.data.data) {
-            const realTrip = apiRes.data.data;
-            await db.trips.delete(localId); // Remove temp
-            await db.trips.put(realTrip); // Add real
-            setCurrentTrip(realTrip);
-          }
-        } catch (e) {
-          console.error("Sync failed for new trip:", e);
-          // Trip remains in local DB with local ID
+      // Background Sync to Backend (Not awaited so navigation is fast)
+      api.post('/trips', newTripData).then(async (apiRes) => {
+        if ((apiRes.status === 200 || apiRes.status === 201) && apiRes.data.data) {
+          const realTrip = apiRes.data.data;
+          await db.trips.delete(localId); // Remove temp
+          await db.trips.put(realTrip); // Add real
+          setCurrentTrip(realTrip);
         }
+      }).catch(e => {
+        console.error("Sync failed for new trip:", e);
+        // Trip remains in local DB with local ID
+      });
 
-        setIsGenerating(false);
-        setLoadingStep(null);
-      }, 500);
+      setIsGenerating(false);
+      setLoadingStep(null);
     } catch (error) {
       console.error("Failed to generate trip:", error);
       clearInterval(msgInterval);
