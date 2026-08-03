@@ -44,6 +44,13 @@ const scaleIn = {
   show: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
 };
 
+const SLIDESHOW_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2940&auto=format&fit=crop", place: "Swiss Alps, Switzerland" },
+  { url: "https://images.unsplash.com/photo-1512850183-6d7990f42385?q=80&w=2000&auto=format&fit=crop", place: "Kyoto, Japan" },
+  { url: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?q=80&w=2000&auto=format&fit=crop", place: "Santorini, Greece" },
+  { url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=2000&auto=format&fit=crop", place: "Cinque Terre, Italy" }
+];
+
 // ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
@@ -55,6 +62,15 @@ export default function HomePage() {
   const navigate = useNavigate();
   const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
   const { image: nextTripImage } = useDestinationImage(nextTrip?.destination);
+  
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % SLIDESHOW_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   
   const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
   const tripImage = nextTrip?.heroImage || nextTrip?.image || nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop';
@@ -315,7 +331,7 @@ export default function HomePage() {
               
               {/* Center Map / Main Art */}
               <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[0%] lg:top-[5%] left-[0%] lg:left-[2%] w-[100%] lg:w-[96%] h-[95%] lg:h-[85%] z-20">
-                <div style={{ transformStyle: "preserve-3d", transform: "perspective(1000px) rotateX(4deg) rotateY(-4deg)" }} className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
+                <div className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
                   {/* iOS Noise Texture Overlay */}
                   <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                   
@@ -334,11 +350,21 @@ export default function HomePage() {
                      
                      {/* Hero Image Section */}
                      <div className="w-full h-[60%] md:h-[65%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
-                        <Image src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2940&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                        <AnimatePresence mode="wait">
+                          <motion.img 
+                            key={currentSlideIndex}
+                            src={SLIDESHOW_IMAGES[currentSlideIndex].url}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1 }}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                          />
+                        </AnimatePresence>
                         <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/95 via-black/40 to-transparent" />
                         <div className="absolute bottom-5 left-6 right-6">
                            <h3 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-2 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
-                             <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> Voyage Genie
+                             <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> {SLIDESHOW_IMAGES[currentSlideIndex].place}
                            </h3>
                            <p className="text-[11px] sm:text-[13px] text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">AI Travel Companion</p>
                         </div>
