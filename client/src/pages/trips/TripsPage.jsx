@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import { Plus, Search, Map, Compass, MapPin, Loader2, Sparkles, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
+import { Plus, Search, Map, Compass, Globe, MapPin, Loader2, Sparkles, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/common/PageTransition';
@@ -31,7 +31,9 @@ const GeneratingTripCard = ({ destination }) => (
         {/* Static elegant thin inner ring */}
         <div className="absolute inset-3 rounded-full border border-white/[0.15]" />
         {/* Central Icon */}
-        <Compass className="w-8 h-8 text-white/90 animate-pulse drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" strokeWidth={1} />
+        <div className="absolute inset-0 flex items-center justify-center animate-[spin_10s_linear_infinite]">
+          <Globe className="w-10 h-10 text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" strokeWidth={1} />
+        </div>
       </div>
       
       {/* Refined Typography */}

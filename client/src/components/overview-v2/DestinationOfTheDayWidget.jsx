@@ -101,7 +101,7 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
         />
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#060B14]/90 via-[#060B14]/40 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#060B14]/70 to-transparent pointer-events-none" />
 
       <div className="absolute top-6 left-6 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
         <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -117,14 +117,14 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            <div className="flex items-center gap-2 text-white/70 mb-1">
-              <MapPin className="w-4 h-4" />
-              <span className="text-sm font-semibold tracking-wide">{currentDest.country}</span>
+            <div className="flex items-center gap-2 text-white mb-1">
+              <MapPin className="w-4 h-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+              <span className="text-sm font-semibold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{currentDest.country}</span>
             </div>
-            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-lg mb-1">
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] mb-1">
               {currentDest.name}
             </h3>
-            <p className="text-white/80 font-medium text-sm sm:text-base mb-4 drop-shadow-md">
+            <p className="text-white/90 font-medium text-sm sm:text-base mb-4 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
               {currentDest.tagline}
             </p>
             

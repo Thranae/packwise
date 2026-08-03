@@ -183,8 +183,8 @@ export const TripCard = ({ trip }) => {
                 style={{ backgroundImage: `url(${displayImage})` }}
               />
             )}
-            {/* Gradient to blend with content */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#060B14]/80 to-transparent pointer-events-none" />
+            {/* Gradient to blend with content - highly reduced for brighter image */}
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#060B14]/70 to-transparent pointer-events-none" />
           </div>
           
           {/* Top Badges (Now outside overflow-hidden) */}
@@ -299,12 +299,12 @@ export const TripCard = ({ trip }) => {
             </div>
           </div>
 
-          <div className="absolute bottom-4 inset-x-5 flex flex-col ios-3d-element z-10">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <MapPin className="w-4 h-4 text-blue-400" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/70 drop-shadow-md">{trip.country}</span>
+          <div className="absolute bottom-4 inset-x-5 flex flex-col items-center text-center ios-3d-element z-10">
+            <div className="flex items-center justify-center gap-1.5 mb-1.5">
+              <MapPin className="w-4 h-4 text-blue-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{trip.country}</span>
             </div>
-            <h3 className="text-2xl font-semibold tracking-tighter text-white drop-shadow-lg truncate leading-tight">
+            <h3 className="text-2xl font-semibold tracking-tighter text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] truncate leading-tight w-full">
               {trip.destination}
             </h3>
           </div>
@@ -314,90 +314,93 @@ export const TripCard = ({ trip }) => {
         <div className="p-6 flex flex-col justify-between flex-1 relative ios-3d-element bg-transparent">
           
           {/* Date & Duration Row */}
-          <div className="flex items-center justify-between mb-4 mt-2">
+          <div className="flex items-center justify-center mb-4 mt-2">
             {isEditing ? (
-              <div className="flex items-center gap-2 w-full">
+              <div className="flex items-center justify-center gap-2 w-full">
                 <input 
                   type="date" 
                   value={editedStartDate} 
                   onChange={(e) => setEditedStartDate(e.target.value)} 
                   onClick={(e) => e.stopPropagation()}
-                  className="w-1/2 bg-white/10 border border-white/20 text-white p-2 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark]"
+                  className="w-[120px] bg-white/10 border border-white/20 text-white px-2 py-1.5 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark] text-center"
                 />
+                <span className="text-white/50 text-xs">-</span>
                 <input 
                   type="date" 
                   value={editedEndDate} 
                   onChange={(e) => setEditedEndDate(e.target.value)} 
                   onClick={(e) => e.stopPropagation()}
-                  className="w-1/2 bg-white/10 border border-white/20 text-white p-2 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark]"
+                  className="w-[120px] bg-white/10 border border-white/20 text-white px-2 py-1.5 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark] text-center"
                 />
               </div>
             ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                    <Calendar className="w-4 h-4 text-white/80" />
+              <div className="flex flex-col items-center gap-1.5 w-full">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                    <Calendar className="w-3 h-3 text-white/80" />
                   </div>
                   <span className="text-sm font-semibold text-white/90 tracking-wide">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white tracking-wide">{getDuration(trip.startDate, trip.endDate)}</span>
-                  <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                    <Clock className="w-4 h-4 text-emerald-400" />
+                  <div className="w-6 h-6 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] ml-1">
+                    <Clock className="w-3 h-3 text-emerald-400" />
                   </div>
+                  <span className="text-sm font-bold text-white tracking-wide">{getDuration(trip.startDate, trip.endDate)}</span>
                 </div>
-              </>
+              </div>
             )}
           </div>
 
           {/* 3 Metrics Grid */}
-          <div className="grid grid-cols-3 gap-3 mb-auto">
+          <div className="grid grid-cols-3 gap-3 mb-auto text-center">
             {/* Budget */}
-            <div className="ios-3d-element flex flex-col gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
-              <div className="flex items-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors">
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+              <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <Wallet className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Budget</span>
               </div>
               {isEditing ? (
-                <div className="flex items-center gap-1">
-                  <input type="text" value={editedBudget} onChange={(e) => setEditedBudget(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-full bg-transparent border-b border-white/30 text-[13px] font-bold text-white outline-none focus:border-blue-400" />
+                <div className="flex items-center justify-center w-full">
+                  <select value={editedBudget} onChange={(e) => setEditedBudget(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-[85px] bg-black/40 border border-white/30 rounded-lg text-[11px] font-bold text-white outline-none focus:border-blue-400 p-1 text-center cursor-pointer appearance-none">
+                    <option value="Budget" className="text-black">💰 Budget</option>
+                    <option value="Moderate" className="text-black">💰💰 Moderate</option>
+                    <option value="Luxury" className="text-black">💰💰💰 Luxury</option>
+                  </select>
                 </div>
               ) : (
-                <span className="text-[13px] font-bold text-white truncate">{trip.budget} {trip.currency}</span>
+                <span className="text-[13px] font-bold text-white truncate w-full">{trip.budget} {trip.currency}</span>
               )}
             </div>
             {/* Travelers */}
-            <div className="ios-3d-element flex flex-col gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
-              <div className="flex items-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors">
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+              <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <CloudSun className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Travelers</span>
               </div>
               {isEditing ? (
-                <div className="flex items-center gap-1">
-                  <input type="number" min="1" max="20" value={editedTravelers} onChange={(e) => setEditedTravelers(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-full bg-transparent border-b border-white/30 text-[13px] font-bold text-white outline-none focus:border-blue-400" />
+                <div className="flex items-center justify-center w-full">
+                  <input type="number" min="1" max="20" value={editedTravelers} onChange={(e) => setEditedTravelers(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-[60px] bg-black/40 border border-white/30 rounded-lg p-1 text-[12px] font-bold text-white outline-none focus:border-blue-400 text-center" />
                 </div>
               ) : (
-                <span className="text-[13px] font-bold text-white truncate">{trip.travelers} Guests</span>
+                <span className="text-[13px] font-bold text-white truncate w-full">{trip.travelers} Guests</span>
               )}
             </div>
-            {/* Packing */}
-            <div className="ios-3d-element flex flex-col gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
-              <div className="flex items-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors">
+            {/* Status */}
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+              <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <Box className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Status</span>
               </div>
-              <span className="text-[13px] font-bold text-white truncate capitalize">{trip.status}</span>
+              <span className="text-[13px] font-bold text-white truncate capitalize w-full">{trip.status}</span>
             </div>
           </div>
 
           {/* Bottom CTA */}
           <div className="mt-5 relative z-20 ios-3d-element">
             {isEditing ? (
-              <div className="flex items-center gap-2">
-                <button onClick={handleCancelEdit} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-sm tracking-wide transition-colors cursor-pointer disabled:opacity-50">
+              <div className="flex items-center gap-2 w-full">
+                <button onClick={handleCancelEdit} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-red-600/90 to-rose-600/90 hover:from-red-500 hover:to-rose-500 shadow-[0_4px_12px_rgba(225,29,72,0.3)] text-white font-bold text-sm tracking-wide transition-all duration-300 cursor-pointer disabled:opacity-50">
                   <X className="w-4 h-4 mr-1.5" /> Cancel
                 </button>
-                <button onClick={handleSave} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(52,211,153,0.3)] cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 disabled:opacity-50">
+                <button onClick={handleSave} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 shadow-[0_4px_12px_rgba(16,185,129,0.3)] text-white font-bold text-sm tracking-wide transition-all duration-300 cursor-pointer disabled:opacity-50">
                   {isSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />} Save
                 </button>
               </div>
