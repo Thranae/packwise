@@ -139,9 +139,9 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
       return;
     }
 
-    onSearching?.(true);
-    setIsLocalSearching(true);
     const timeoutId = setTimeout(async () => {
+      onSearching?.(true);
+      setIsLocalSearching(true);
       try {
         const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
         let results = [];
@@ -336,14 +336,12 @@ export const TripBuilderWizard = () => {
     const genderContext = (males > 0 || females > 0) ? ` Travelers: ${males + females} total (${males} male, ${females} female).` : "";
     const fullPrompt = `Destination: ${prompt}.${flightContext} Start Date: ${startDate}. Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     
-    // Explicitly pass dates to bypass AI hallucination
-    await generateTrip(fullPrompt, { startDate, duration }); 
-    
-    successTap();
-    playSound('success');
-    
+    // Trigger animation and redirect FIRST so the user sees the 3D scanning card
     triggerTripGenerationAnimation(prompt);
     navigate(ROUTES.TRIPS);
+    
+    // Generate trip in the background
+    generateTrip(fullPrompt, { startDate, duration }); 
   };
 
   const handleSelectLocation = (loc) => {
@@ -364,9 +362,6 @@ export const TripBuilderWizard = () => {
   return (
 <div className="w-full h-full flex flex-col lg:flex-row items-start justify-start gap-8 max-w-[1400px]">
       <div className="flex flex-col items-start w-full h-full lg:flex-1 lg:max-w-4xl relative z-10">
-        {/* Background Ambient Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full pointer-events-none z-0" />
-
         <div className="relative w-full h-full ios-glass-card rounded-[24px] sm:rounded-[32px] p-4 sm:p-5 group/card shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-shadow duration-700 z-10 flex flex-col min-h-0">
 
         <div className="flex items-center justify-between mb-6 sm:mb-8 relative z-10 px-2 sm:px-6 shrink-0">
