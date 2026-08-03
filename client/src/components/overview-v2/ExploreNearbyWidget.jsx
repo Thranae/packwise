@@ -9,6 +9,8 @@ import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useAI } from '@/hooks/useAI';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useToast } from '@/hooks/useToast';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 // Reusable styling constants for exact match to current glass
 const GLASS_BASE = "bg-white/[0.02] border-0 shadow-[0_8px_32px_rgba(0,0,0,0.2)] ring-1 ring-white/10 before:absolute before:inset-0 before:rounded-[24px] before:border before:border-white/20 before:shadow-[inset_0_2px_3px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(255,255,255,0.1),inset_1px_0_2px_rgba(255,255,255,0.1),inset_-1px_0_2px_rgba(255,255,255,0.1)] before:pointer-events-none before:z-20";
@@ -277,6 +279,7 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
   const { currentTrip } = useTripContext();
   const { getRecommendations, loading } = useAI();
   const [places, setPlaces] = useState([]);
+  const navigate = useNavigate();
   
   const cardRef = useRef(null);
   const scrollRef = useRef(null);
@@ -405,15 +408,35 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
       {/* Horizontal Scrolling Carousel */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-x-auto overflow-y-hidden flex gap-4 pb-8 pt-2 -mx-2 px-2 scrollbar-none snap-x snap-mandatory relative [transform:translateZ(20px)]" 
+        className={`flex-1 overflow-x-auto overflow-y-hidden flex gap-4 pb-8 pt-2 -mx-2 px-2 scrollbar-none relative [transform:translateZ(20px)] ${!currentTrip?.destination ? 'items-center justify-center' : 'snap-x snap-mandatory'}`} 
         style={{ scrollbarWidth: 'none' }}
       >
-        {loading ? (
+        {!currentTrip?.destination ? (
+          <div className="w-full max-w-sm mx-auto h-[260px] sm:h-[320px] flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-[24px] border border-white/10 shadow-[inset_0_2px_4px_rgba(255,255,255,0.05),0_8px_32px_rgba(0,0,0,0.2)] group transition-all hover:bg-white/10">
+            <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform duration-500">
+              <MapPin className="w-6 h-6 text-blue-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2 tracking-tight">No Active Trip</h3>
+            <p className="text-sm font-medium text-white/60 mb-6 leading-relaxed">Create your first trip to get AI-powered recommendations for places to explore.</p>
+            <button 
+              onClick={() => navigate(ROUTES.TRIPS)} 
+              className="ios-liquid-button px-6 py-3 rounded-full text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-center gap-2 group/btn active:scale-95 transition-all"
+            >
+              <span className="drop-shadow-md">Plan a Trip</span>
+              <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform drop-shadow-md" />
+            </button>
+          </div>
+        ) : loading ? (
           <>
             {[1, 2, 3, 4].map((i) => (
               <PlaceCardSkeleton key={i} />
             ))}
           </>
+        ) : places.length === 0 ? (
+          <div className="w-full h-full flex flex-col items-center justify-center text-center p-6 text-white/50 text-sm">
+             <span className="mb-2">No places found.</span>
+             <button onClick={handleRefresh} className="text-blue-400 font-semibold underline">Try refreshing</button>
+          </div>
         ) : (
           <AnimatePresence mode="popLayout">
             {places.map(place => (
