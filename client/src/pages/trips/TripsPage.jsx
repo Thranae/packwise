@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import { Plus, Search, Map, Compass, MapPin, Loader2 } from 'lucide-react';
+import { Plus, Search, Map, Compass, MapPin, Loader2, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/common/PageTransition';
@@ -11,19 +11,41 @@ import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
 const GeneratingTripCard = ({ destination }) => (
   <motion.div 
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.95 }}
-    className="relative group rounded-[32px] overflow-hidden bg-[#0B101E]/80 border border-white/10 shadow-lg min-h-[300px] flex flex-col justify-center items-center p-8 backdrop-blur-2xl"
+    key="generating"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    className="col-span-full flex justify-center"
   >
-    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-purple-500/10 animate-pulse" />
-    <Loader2 className="w-12 h-12 text-purple-400 animate-spin mb-6 relative z-10" />
-    <h3 className="text-xl font-bold text-white relative z-10 tracking-tight text-center">Crafting itinerary...</h3>
-    <p className="text-sm text-white/50 relative z-10 text-center mt-2 font-medium max-w-[80%]">Curating the best of {destination}</p>
+    <div className="relative w-full max-w-md rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
+      {/* Subtle static gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-purple-500/[0.06]" />
+      
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center py-12 px-8">
+        {/* Orbital loading animation */}
+        <div className="relative w-20 h-20 mb-8">
+          <div className="absolute inset-0 rounded-full border-2 border-white/[0.06]" />
+          <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-400/80 animate-spin" style={{ animationDuration: '1.5s' }} />
+          <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400/60 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }} />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Sparkles className="w-7 h-7 text-white/90" />
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-white tracking-tight text-center mb-2">Crafting itinerary...</h3>
+        <p className="text-sm text-white/45 text-center font-medium leading-relaxed">Curating the best of {destination}</p>
+      </div>
+      
+      {/* Progress bar */}
+      <div className="relative h-1 w-full bg-white/[0.04] overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500 to-purple-500 animate-[gen-progress_7s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
+      </div>
+    </div>
     
-    <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 animate-[loading-bar_7s_ease-in-out_forwards]" style={{ width: '100%' }} />
     <style>{`
-      @keyframes loading-bar {
+      @keyframes gen-progress {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(0%); }
       }
@@ -190,10 +212,9 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
         {/* Trips Grid or Skeletons */}
         <AnimatePresence mode="wait">
-          {showGenerating && (
+          {showGenerating ? (
             <GeneratingTripCard destination={destName} />
-          )}
-          {loadingTrips ? (
+          ) : loadingTrips ? (
             <motion.div
               key="skeletons"
               initial={{ opacity: 0 }}

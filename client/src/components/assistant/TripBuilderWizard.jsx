@@ -47,7 +47,7 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
       <button
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(true); }}
-        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-all duration-300 cursor-pointer"
+        className="w-full h-full px-5 bg-white/[0.03] hover:bg-white/[0.08]  border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-[28px] shadow-[0_12px_32px_rgba(0,0,0,0.3),inset_0_2px_8px_rgba(255,255,255,0.1)] flex items-center justify-between text-white font-semibold text-lg transition-colors duration-200 cursor-pointer"
       >
         <span className="pointer-events-none">{formattedValue}</span>
         <Calendar className="w-5 h-5 text-white/50 pointer-events-none" />
@@ -69,9 +69,9 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                 className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#0f172a]/95  border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1)]"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
+                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
                   <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
-                  <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-all"><ChevronRight className="w-4 h-4 text-white" /></button>
+                  <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 text-white" /></button>
                 </div>
                 
                 <div className="grid grid-cols-7 gap-2 mb-2">
@@ -93,10 +93,10 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
                         disabled={isPast}
                         onClick={(e) => handleSelectDate(e, d)}
                         className={`
-                          relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-[transform,color,background-color] duration-200
+                          relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-colors duration-150
                           ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
-                          ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 scale-110 z-10 border border-white/30' : ''}
-                          ${!isSelected && !isPast ? 'hover:bg-white/10 hover:scale-105 hover:border hover:border-white/20' : ''}
+                          ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 z-10 border border-white/30' : ''}
+                          ${!isSelected && !isPast ? 'hover:bg-white/10' : ''}
                           ${isToday && !isSelected ? 'ring-2 ring-indigo-500/50 text-white' : ''}
                         `}
                       >
