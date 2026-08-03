@@ -32,7 +32,32 @@ export const CommandCenterWidget = ({ className = "" }) => {
   const dailyBudget = currentTrip ? Math.round(currentTrip.budget / duration) : 0;
   
   const [localTime, setLocalTime] = useState('--:--');
+  const [countdown, setCountdown] = useState('--');
   
+  useEffect(() => {
+    const updateCountdown = () => {
+      if (!currentTrip?.startDate) {
+        setCountdown('--');
+        return;
+      }
+      const diff = new Date(currentTrip.startDate) - new Date();
+      if (diff <= 0) {
+        setCountdown('Started');
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+      
+      setCountdown(`${days}d ${hours}h ${mins}m ${secs}s`);
+    };
+    
+    updateCountdown();
+    const ctimer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(ctimer);
+  }, [currentTrip?.startDate]);
+
   useEffect(() => {
     const updateTime = () => {
       if (currentTrip?.timezone) {
@@ -132,11 +157,7 @@ export const CommandCenterWidget = ({ className = "" }) => {
         <div className="flex flex-col items-end">
           <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/50 mb-0.5">Departs</span>
           <span className="text-xl font-semibold tracking-tighter text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)] truncate">
-            {currentTrip?.startDate ? (() => {
-              const diff = new Date(currentTrip.startDate) - new Date();
-              const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-              return days > 0 ? `In ${days} Days` : 'Started';
-            })() : '--'}
+            {countdown}
           </span>
         </div>
       </div>

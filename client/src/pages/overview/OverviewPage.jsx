@@ -13,7 +13,8 @@ import { CommandCenterWidget } from '@/components/overview-v2/CommandCenterWidge
 import { ExploreNearbyWidget } from '@/components/overview-v2/ExploreNearbyWidget';
 import { AIAssistantWidget } from '@/components/overview-v2/AIAssistantWidget';
 import { TripScoreWidget } from '@/components/overview-v2/TripScoreWidget';
-
+import { DestinationOfTheDayWidget } from '@/components/overview-v2/DestinationOfTheDayWidget';
+import { TravelerStatsWidget } from '@/components/overview-v2/TravelerStatsWidget';
 const HeroSection = React.lazy(() => import('@/components/overview-v2/HeroSection').then(m => ({ default: m.HeroSection })));
 const InteractiveGlobeWidget = React.lazy(() => import('@/components/overview-v2/InteractiveGlobeWidget').then(m => ({ default: m.InteractiveGlobeWidget })));
 
@@ -79,6 +80,9 @@ export default function OverviewPage() {
       <AIAssistantWidget className="col-span-12 lg:col-span-4" />
 
       <TripScoreWidget className="col-span-12 lg:col-span-6" />
+      <DestinationOfTheDayWidget className="col-span-12 lg:col-span-6" />
+
+      <TravelerStatsWidget className="col-span-12 lg:col-span-12" />
 
       <ExploreNearbyWidget className="col-span-12" />
     </motion.div>
