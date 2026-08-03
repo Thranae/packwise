@@ -1,50 +1,73 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Sparkles, MapPinned, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, ArrowRight, ArrowLeft, Sparkles, Users, Gauge, Wallet, UserCircle, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { updateProfile } from '@/services/user.service';
 import { ROUTES } from '@/constants/routes';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { ThemeToggle } from '@/components/navigation/ThemeToggle';
-import { cn } from '@/utils/cn';
 
-const containerVariants = {
+// ---------------------------------------------------------------------------
+// Step definitions
+// ---------------------------------------------------------------------------
+const STEPS = [
+  { id: 'welcome', label: 'Welcome' },
+  { id: 'style', label: 'Travel Style' },
+  { id: 'pace', label: 'Pace & Budget' },
+  { id: 'details', label: 'Details' },
+];
+
+// ---------------------------------------------------------------------------
+// Animation variants
+// ---------------------------------------------------------------------------
+const pageVariants = {
+  enter: (direction) => ({ x: direction > 0 ? 120 : -120, opacity: 0, scale: 0.96 }),
+  center: { x: 0, opacity: 1, scale: 1 },
+  exit: (direction) => ({ x: direction > 0 ? -120 : 120, opacity: 0, scale: 0.96 }),
+};
+
+const cardStagger = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
+  show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: 'spring', bounce: 0.3 } }
+const cardItem = {
+  hidden: { opacity: 0, y: 18, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 280, damping: 22 } },
 };
 
-const SelectableCard = ({ selected, onClick, icon, title, description }) => (
-  <button
+// ---------------------------------------------------------------------------
+// Reusable selectable card
+// ---------------------------------------------------------------------------
+const SelectCard = ({ selected, onClick, icon, title, description }) => (
+  <motion.button
     type="button"
     onClick={onClick}
-    className={cn(
-      "w-full p-4 flex flex-col items-center justify-center text-center border rounded-2xl transition-all duration-700",
-      selected 
-        ? "bg-[var(--color-accent)]/10 border-[var(--color-accent)] shadow-[0_4px_16px_rgba(79,125,255,0.15)] ring-1 ring-[var(--color-accent)]" 
-        : "glass-card hover:bg-[var(--theme-bg-surface)] hover:border-[var(--theme-border-subtle)]"
-    )}
+    variants={cardItem}
+    whileHover={{ y: -4, transition: { duration: 0.25 } }}
+    whileTap={{ scale: 0.97 }}
+    className={`w-full p-5 flex flex-col items-center justify-center text-center rounded-[24px] transition-all duration-500 outline-none group
+      ${selected
+        ? 'bg-blue-500/15 border-2 border-blue-400/60 shadow-[0_0_24px_rgba(59,130,246,0.2),inset_0_1px_2px_rgba(255,255,255,0.15)] ring-1 ring-blue-400/30'
+        : 'bg-white/[0.03] border border-white/10 hover:bg-white/[0.06] hover:border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.06),0_4px_16px_rgba(0,0,0,0.2)]'
+      }`}
   >
-    <div className={cn("text-2xl mb-2 transition-transform duration-700", selected ? "scale-110" : "")}>{icon}</div>
-    <div className="font-bold text-sm text-text-primary">{title}</div>
-    {description && <div className="text-xs text-text-secondary mt-1">{description}</div>}
-  </button>
+    <div className={`text-3xl mb-2.5 transition-transform duration-500 ${selected ? 'scale-110' : 'group-hover:scale-105'}`}>{icon}</div>
+    <div className="font-bold text-sm text-white tracking-tight">{title}</div>
+    {description && <div className="text-[11px] text-white/50 mt-1 leading-snug">{description}</div>}
+  </motion.button>
 );
 
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
 export default function OnboardingPage() {
   const navigate = useNavigate();
-  const { updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
   const { success, error } = useToast();
+
+  const [step, setStep] = useState(0);
+  const [direction, setDirection] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,194 +76,344 @@ export default function OnboardingPage() {
     country: '',
     travelStyle: '',
     budget: '',
-    adventureLevel: ''
+    adventureLevel: '',
   });
 
-  const updateForm = (key, value) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-  };
+  const updateForm = (key, value) => setFormData(prev => ({ ...prev, [key]: value }));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const goNext = () => { setDirection(1); setStep(s => Math.min(s + 1, STEPS.length - 1)); };
+  const goBack = () => { setDirection(-1); setStep(s => Math.max(s - 1, 0)); };
+
+  const handleSkip = () => navigate(ROUTES.OVERVIEW, { replace: true });
+
+  const handleSubmit = async () => {
     setIsLoading(true);
     try {
       const response = await updateProfile({
         gender: formData.gender,
-        travelPreference: formData.travelStyle, // map to existing schema
-        // age, country, budget, adventureLevel are captured but might not be in backend yet. 
-        // passing them anyway so they are saved if backend supports it or ignored safely.
+        travelPreference: formData.travelStyle,
         preferences: {
           age: formData.age,
           country: formData.country,
           budget: formData.budget,
-          adventureLevel: formData.adventureLevel
-        }
+          adventureLevel: formData.adventureLevel,
+        },
       });
-      
+
       if (response.success) {
         updateUser(response.data);
-        success('Profile updated! Welcome to Voyage Genie.');
-        navigate(ROUTES.DASHBOARD, { replace: true });
+        success('You\'re all set! Welcome to Voyage Genie.');
       }
     } catch (err) {
-      error('Failed to save preferences. You can update them later in settings.');
-      // Proceed anyway
-      navigate(ROUTES.DASHBOARD, { replace: true });
+      error('Preferences saved locally. You can update them anytime in Settings.');
     } finally {
       setIsLoading(false);
+      navigate(ROUTES.OVERVIEW, { replace: true });
     }
   };
 
-  return (
-    <div className="min-h-screen w-full bg-[var(--theme-bg-base)] text-text-primary relative overflow-hidden flex flex-col pt-[calc(24px+env(safe-area-inset-top))] md:pt-8 pb-20">
-      
-      {/* Background Orbs */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] h-[600px] w-[600px] rounded-full bg-[var(--color-accent)] opacity-[0.06] blur-[120px]" />
-        <div className="absolute top-[20%] -right-[10%] h-[700px] w-[700px] rounded-full bg-purple-500 opacity-[0.05] blur-[140px]" />
+  const progressPct = ((step + 1) / STEPS.length) * 100;
+  const displayName = user?.name?.split(' ')[0] || 'Traveler';
+
+  // ---------------------------------------------------------------------------
+  // Step renderers
+  // ---------------------------------------------------------------------------
+  const renderWelcome = () => (
+    <motion.div variants={cardStagger} initial="hidden" animate="show" className="flex flex-col items-center text-center px-2">
+      <motion.div variants={cardItem} className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(59,130,246,0.15)]">
+        <Sparkles className="w-9 h-9 text-blue-400 drop-shadow-[0_2px_4px_rgba(59,130,246,0.5)]" />
+      </motion.div>
+
+      <motion.h1 variants={cardItem} className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3 leading-tight">
+        Hey, {displayName}! 👋
+      </motion.h1>
+
+      <motion.p variants={cardItem} className="text-base text-white/60 leading-relaxed max-w-sm mb-10">
+        Let's personalize your experience. This takes about 30 seconds and helps our AI craft better trips for you.
+      </motion.p>
+
+      <motion.button
+        variants={cardItem}
+        onClick={goNext}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-base shadow-[0_8px_32px_rgba(59,130,246,0.4)] flex items-center gap-2.5 group"
+      >
+        Let's Go
+        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+      </motion.button>
+    </motion.div>
+  );
+
+  const renderTravelStyle = () => (
+    <motion.div variants={cardStagger} initial="hidden" animate="show" className="w-full">
+      <motion.div variants={cardItem} className="flex items-center gap-3 mb-2">
+        <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+          <Users className="w-5 h-5 text-blue-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-white tracking-tight">Who do you travel with?</h2>
+      </motion.div>
+      <motion.p variants={cardItem} className="text-sm text-white/50 mb-8 pl-[52px]">Pick the one that fits you best.</motion.p>
+
+      <motion.div variants={cardStagger} className="grid grid-cols-2 gap-4">
+        {[
+          { id: 'solo', icon: '👤', title: 'Solo', desc: 'Just me & the world' },
+          { id: 'couple', icon: '👫', title: 'Couple', desc: 'Romantic getaways' },
+          { id: 'family', icon: '👨‍👩‍👧‍👦', title: 'Family', desc: 'Fun for everyone' },
+          { id: 'business', icon: '💼', title: 'Business', desc: 'Work + leisure' },
+        ].map(item => (
+          <SelectCard
+            key={item.id}
+            selected={formData.travelStyle === item.id}
+            onClick={() => updateForm('travelStyle', item.id)}
+            icon={item.icon}
+            title={item.title}
+            description={item.desc}
+          />
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+
+  const renderPaceBudget = () => (
+    <motion.div variants={cardStagger} initial="hidden" animate="show" className="w-full space-y-10">
+      {/* Pace */}
+      <div>
+        <motion.div variants={cardItem} className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+            <Gauge className="w-5 h-5 text-emerald-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white tracking-tight">What's your pace?</h2>
+        </motion.div>
+        <motion.p variants={cardItem} className="text-sm text-white/50 mb-6 pl-[52px]">How packed should your days be?</motion.p>
+
+        <motion.div variants={cardStagger} className="grid grid-cols-3 gap-3">
+          {[
+            { id: 'relaxed', icon: '🍹', title: 'Relaxed', desc: 'No rush' },
+            { id: 'balanced', icon: '🚶', title: 'Balanced', desc: 'Best of both' },
+            { id: 'explorer', icon: '⛰️', title: 'Explorer', desc: 'Max adventure' },
+          ].map(item => (
+            <SelectCard
+              key={item.id}
+              selected={formData.adventureLevel === item.id}
+              onClick={() => updateForm('adventureLevel', item.id)}
+              icon={item.icon}
+              title={item.title}
+              description={item.desc}
+            />
+          ))}
+        </motion.div>
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 w-full max-w-5xl mx-auto px-6 flex justify-between items-center mb-12">
-        <div className="flex items-center gap-2">
-          <div className="bg-[var(--color-accent)] p-2 rounded-xl text-white shadow-lg">
-            <MapPinned className="h-5 w-5" />
+      {/* Budget */}
+      <div>
+        <motion.div variants={cardItem} className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+            <Wallet className="w-5 h-5 text-amber-400" />
           </div>
-          <span className="text-xl font-semibold tracking-tighter">Voyage Genie<span className="text-[var(--color-accent)]">.</span></span>
+          <h2 className="text-2xl font-bold text-white tracking-tight">Budget per trip?</h2>
+        </motion.div>
+        <motion.p variants={cardItem} className="text-sm text-white/50 mb-6 pl-[52px]">We'll suggest options within your range.</motion.p>
+
+        <motion.div variants={cardStagger} className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { id: 'budget', title: '$500', desc: 'Budget' },
+            { id: 'moderate', title: '$1,500', desc: 'Moderate' },
+            { id: 'premium', title: '$3,000', desc: 'Premium' },
+            { id: 'luxury', title: '$5,000+', desc: 'Luxury' },
+          ].map(item => (
+            <SelectCard
+              key={item.id}
+              selected={formData.budget === item.id}
+              onClick={() => updateForm('budget', item.id)}
+              icon={item.title}
+              title={item.desc}
+            />
+          ))}
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+
+  const renderDetails = () => (
+    <motion.div variants={cardStagger} initial="hidden" animate="show" className="w-full">
+      <motion.div variants={cardItem} className="flex items-center gap-3 mb-2">
+        <div className="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+          <UserCircle className="w-5 h-5 text-purple-400" />
         </div>
-        <div className="glass-panel p-1 rounded-full border border-border-subtle">
-          <ThemeToggle />
+        <h2 className="text-2xl font-bold text-white tracking-tight">A few more details</h2>
+      </motion.div>
+      <motion.p variants={cardItem} className="text-sm text-white/50 mb-8 pl-[52px]">Helps us tailor AI packing lists & itineraries.</motion.p>
+
+      <motion.div variants={cardStagger} className="space-y-5">
+        {/* Gender */}
+        <motion.div variants={cardItem}>
+          <label className="block text-xs font-bold text-white/40 uppercase tracking-widest mb-2 pl-1">Gender</label>
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { id: 'male', icon: '♂️', title: 'Male' },
+              { id: 'female', icon: '♀️', title: 'Female' },
+              { id: 'other', icon: '⚧️', title: 'Other' },
+            ].map(item => (
+              <SelectCard
+                key={item.id}
+                selected={formData.gender === item.id}
+                onClick={() => updateForm('gender', item.id)}
+                icon={item.icon}
+                title={item.title}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Age & Country */}
+        <motion.div variants={cardItem} className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold text-white/40 uppercase tracking-widest mb-2 pl-1">Age (optional)</label>
+            <input
+              type="number"
+              placeholder="25"
+              value={formData.age}
+              onChange={(e) => updateForm('age', e.target.value)}
+              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-sm font-medium placeholder:text-white/30 outline-none focus:border-blue-500/50 focus:bg-white/[0.06] transition-all duration-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-white/40 uppercase tracking-widest mb-2 pl-1">Country</label>
+            <input
+              type="text"
+              placeholder="e.g. India"
+              value={formData.country}
+              onChange={(e) => updateForm('country', e.target.value)}
+              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-sm font-medium placeholder:text-white/30 outline-none focus:border-blue-500/50 focus:bg-white/[0.06] transition-all duration-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]"
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+
+  const stepRenderers = [renderWelcome, renderTravelStyle, renderPaceBudget, renderDetails];
+
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+  return (
+    <div className="min-h-screen w-full bg-[#020617] text-white relative overflow-hidden flex flex-col">
+      {/* Ambient background glows */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute -top-[15%] -left-[15%] h-[600px] w-[600px] rounded-full bg-blue-500 opacity-[0.04] blur-[140px]" />
+        <div className="absolute top-[30%] -right-[15%] h-[700px] w-[700px] rounded-full bg-purple-500 opacity-[0.03] blur-[160px]" />
+        <div className="absolute bottom-[10%] left-[20%] h-[500px] w-[500px] rounded-full bg-emerald-500 opacity-[0.03] blur-[120px]" />
+      </div>
+
+      {/* Top bar — progress + skip */}
+      <header className="relative z-20 w-full max-w-lg mx-auto px-6 pt-[calc(16px+env(safe-area-inset-top))] md:pt-8 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-[0_4px_12px_rgba(59,130,246,0.3)]">
+              <MapPin className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-base font-bold tracking-tight text-white">Voyage Genie</span>
+          </div>
+          <button
+            onClick={handleSkip}
+            className="text-xs font-bold text-white/40 hover:text-white/70 transition-colors uppercase tracking-widest"
+          >
+            Skip
+          </button>
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-full h-1 rounded-full bg-white/[0.06] overflow-hidden">
+          <motion.div
+            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPct}%` }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </div>
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-1.5">
+          {STEPS.map((s, i) => (
+            <div key={s.id} className="flex items-center gap-1.5">
+              <span className={`text-[11px] font-bold transition-colors duration-300 ${i <= step ? 'text-white/70' : 'text-white/20'}`}>
+                {s.label}
+              </span>
+              {i < STEPS.length - 1 && <ChevronRight className={`w-3 h-3 transition-colors duration-300 ${i < step ? 'text-white/40' : 'text-white/10'}`} />}
+            </div>
+          ))}
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 w-full max-w-3xl mx-auto px-6 flex-1 flex flex-col">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center justify-center p-3 bg-[var(--color-accent)]/10 text-[var(--color-accent)] rounded-2xl mb-6 shadow-sm border border-[var(--color-accent)]/20">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">Tell us about your travel style.</h1>
-          <p className="text-lg text-text-secondary">We'll use this to tailor your AI recommendations and itineraries.</p>
-        </motion.div>
-
-        <form onSubmit={handleSubmit}>
-          <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-12">
-            
-            {/* Travel Style */}
-            <motion.div variants={itemVariants}>
-              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">1. Who do you usually travel with?</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { id: 'solo', icon: '👤', title: 'Solo' },
-                  { id: 'couple', icon: '👫', title: 'Couple' },
-                  { id: 'family', icon: '👨‍👩‍👧‍👦', title: 'Family' },
-                  { id: 'business', icon: '💼', title: 'Business' }
-                ].map(item => (
-                  <SelectableCard 
-                    key={item.id}
-                    selected={formData.travelStyle === item.id}
-                    onClick={() => updateForm('travelStyle', item.id)}
-                    icon={item.icon}
-                    title={item.title}
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Adventure Level */}
-            <motion.div variants={itemVariants}>
-              <h3 className="text-lg font-bold mb-4">2. What's your pace?</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  { id: 'relaxed', icon: '🍹', title: 'Relaxed', desc: 'Take it easy, no rush.' },
-                  { id: 'balanced', icon: '🚶‍♂️', title: 'Balanced', desc: 'A mix of chill and sightseeing.' },
-                  { id: 'explorer', icon: '⛰️', title: 'Explorer', desc: 'Maximize every hour.' }
-                ].map(item => (
-                  <SelectableCard 
-                    key={item.id}
-                    selected={formData.adventureLevel === item.id}
-                    onClick={() => updateForm('adventureLevel', item.id)}
-                    icon={item.icon}
-                    title={item.title}
-                    description={item.desc}
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Budget */}
-            <motion.div variants={itemVariants}>
-              <h3 className="text-lg font-bold mb-4">3. Budget Preference (per trip)</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { id: '10k', title: '₹10K' },
-                  { id: '25k', title: '₹25K' },
-                  { id: '50k', title: '₹50K' },
-                  { id: '100k+', title: '₹100K+' }
-                ].map(item => (
-                  <SelectableCard 
-                    key={item.id}
-                    selected={formData.budget === item.id}
-                    onClick={() => updateForm('budget', item.id)}
-                    title={item.title}
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Demographics */}
-            <motion.div variants={itemVariants} className="pt-4 border-t border-border-subtle">
-              <h3 className="text-lg font-bold mb-4">4. Final Details</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-2 pl-1">Gender</label>
-                  <select 
-                    className="glass-input w-full px-4 py-3 outline-none focus:border-[var(--color-accent)]"
-                    value={formData.gender}
-                    onChange={(e) => updateForm('gender', e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Prefer not to say</option>
-                  </select>
-                </div>
-                <div>
-                  <Input 
-                    label="Age (Optional)"
-                    type="number"
-                    placeholder="25"
-                    value={formData.age}
-                    onChange={(e) => updateForm('age', e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Input 
-                    label="Country"
-                    type="text"
-                    placeholder="e.g. India"
-                    value={formData.country}
-                    onChange={(e) => updateForm('country', e.target.value)}
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Submit */}
-            <motion.div variants={itemVariants} className="pt-8 flex justify-end">
-              <Button type="submit" size="lg" isLoading={isLoading} className="rounded-2xl px-8 flex items-center gap-2 group">
-                Complete Setup <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </motion.div>
-
+      {/* Step content */}
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-w-lg mx-auto px-6 py-8">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={step}
+            custom={direction}
+            variants={pageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            {stepRenderers[step]()}
           </motion.div>
-        </form>
+        </AnimatePresence>
       </main>
+
+      {/* Footer navigation */}
+      {step > 0 && (
+        <footer className="relative z-20 w-full max-w-lg mx-auto px-6 pb-[calc(24px+env(safe-area-inset-bottom))] md:pb-8">
+          <div className="flex items-center justify-between gap-4">
+            <motion.button
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              onClick={goBack}
+              className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/[0.04] border border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08] transition-all duration-300 font-semibold text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </motion.button>
+
+            {step < STEPS.length - 1 ? (
+              <motion.button
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={goNext}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-sm shadow-[0_8px_24px_rgba(59,130,246,0.3)] group"
+              >
+                Next
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            ) : (
+              <motion.button
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={handleSubmit}
+                disabled={isLoading}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm shadow-[0_8px_24px_rgba(16,185,129,0.3)] group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Complete Setup
+                    <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                  </>
+                )}
+              </motion.button>
+            )}
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
-

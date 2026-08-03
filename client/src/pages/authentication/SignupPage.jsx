@@ -140,7 +140,7 @@ export default function SignupPage() {
         setIsWakingUp(false);
         
         toast.success(data.message || 'Email verified successfully! Welcome.');
-        navigate(ROUTES.OVERVIEW, { replace: true });
+        navigate(ROUTES.ONBOARDING, { replace: true });
       } else {
         toast.error(data.message || 'Verification failed. Please try again.');
       }
@@ -168,7 +168,7 @@ export default function SignupPage() {
           setAuthData(data.data.user, data.data.token);
           clearTimeout(wakeTimer);
           setIsWakingUp(false);
-          navigate(ROUTES.OVERVIEW, { replace: true });
+          navigate(ROUTES.ONBOARDING, { replace: true });
         } else {
           throw new Error(data.message || 'Signup failed on backend');
         }
@@ -206,7 +206,7 @@ export default function SignupPage() {
         setAuthData(data.data.user, data.data.token);
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
-        navigate(ROUTES.OVERVIEW, { replace: true });
+        navigate(ROUTES.ONBOARDING, { replace: true });
       } else {
         throw new Error(data.message || 'Signup failed on backend');
       }
