@@ -14,6 +14,7 @@ import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { ROUTES } from '@/constants/routes';
 import { Logo } from '@/components/ui/Logo';
 import { Image } from '@/components/ui/Image';
+import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 import { Navbar } from '@/components/navigation/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { AnimatedBackground } from '@/components/common/AnimatedBackground';
@@ -41,16 +42,6 @@ const staggerContainer = {
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.95 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-};
-
-const SLIDESHOW_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2940&auto=format&fit=crop", place: "Swiss Alps, Switzerland" },
-  { url: "https://images.unsplash.com/photo-1512850183-6d7990f42385?q=80&w=2000&auto=format&fit=crop", place: "Kyoto, Japan" },
-  { url: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?q=80&w=2000&auto=format&fit=crop", place: "Santorini, Greece" },
-  { url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=2000&auto=format&fit=crop", place: "Cinque Terre, Italy" }
-];
-
 // ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
@@ -68,7 +59,7 @@ export default function HomePage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlideIndex((prev) => (prev + 1) % SLIDESHOW_IMAGES.length);
-    }, 5000);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
   
@@ -350,23 +341,38 @@ export default function HomePage() {
                      
                      {/* Hero Image Section */}
                      <div className="w-full h-[60%] md:h-[65%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                           <motion.img 
-                            key={currentSlideIndex}
+                            key={`img-${currentSlideIndex}`}
                             src={SLIDESHOW_IMAGES[currentSlideIndex].url}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 1 }}
+                            transition={{ duration: 1.5, ease: "easeInOut" }}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                           />
                         </AnimatePresence>
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/95 via-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/95 via-black/40 to-transparent pointer-events-none" />
+                        
                         <div className="absolute bottom-5 left-6 right-6">
-                           <h3 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-2 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
-                             <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> {SLIDESHOW_IMAGES[currentSlideIndex].place}
-                           </h3>
-                           <p className="text-[11px] sm:text-[13px] text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">AI Travel Companion</p>
+                           <AnimatePresence mode="wait">
+                             <motion.div
+                               key={`text-${currentSlideIndex}`}
+                               initial={{ opacity: 0, y: 15 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               exit={{ opacity: 0, y: -15 }}
+                               transition={{ duration: 0.8, ease: "easeOut" }}
+                               className="flex flex-col"
+                             >
+                               <h3 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+                                 <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" /> 
+                                 <span className="truncate">{SLIDESHOW_IMAGES[currentSlideIndex].city}</span>
+                               </h3>
+                               <p className="text-[12px] sm:text-[14px] text-white/70 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pl-[40px] sm:pl-[48px] truncate">
+                                 {SLIDESHOW_IMAGES[currentSlideIndex].country}
+                               </p>
+                             </motion.div>
+                           </AnimatePresence>
                         </div>
                      </div>
                      
