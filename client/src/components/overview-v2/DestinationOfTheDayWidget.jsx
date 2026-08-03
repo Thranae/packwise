@@ -115,19 +115,19 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <div className="flex flex-col">
-              <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+            <div className="flex flex-col gap-1 w-full md:w-3/4">
+              <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] flex items-center gap-2">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" />
                 <span className="truncate">{currentDest.name}</span>
               </h3>
-              <p className="text-[10px] sm:text-[12px] text-white/90 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] pl-[32px] sm:pl-[40px] truncate mb-3">
+              <p className="text-[10px] sm:text-[12px] text-white/90 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] truncate mb-4">
                 {currentDest.country} - {currentDest.tagline}
               </p>
             </div>
             
             <button
               onClick={() => handleGenerate(currentDest)}
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group/btn w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)] ml-[32px] sm:ml-[40px]"
+              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group/btn w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)] relative z-20"
             >
               <span className="text-sm font-bold text-white tracking-wide">Plan a Trip Here</span>
               <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-1 transition-transform" />
@@ -136,7 +136,7 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
         </AnimatePresence>
         
         {/* Pagination Dots */}
-        <div className="absolute bottom-8 right-8 flex gap-1.5">
+        <div className="absolute bottom-6 sm:bottom-8 right-6 sm:right-8 flex gap-1.5 z-10 hidden sm:flex">
           {DESTINATIONS.map((_, i) => (
             <div 
               key={i} 
