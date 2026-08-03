@@ -56,7 +56,45 @@ export default function HomePage() {
   const navigate = useNavigate();
   const nextTrip = currentTrip || (trips && trips.length > 0 ? trips[0] : null);
   const { image: nextTripImage } = useDestinationImage(nextTrip?.destination);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % SLIDESHOW_IMAGES.length);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
   
+  const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
+  const tripImage = nextTrip?.heroImage || nextTrip?.image || nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop';
+  const tripCountry = nextTrip?.country || 'Japan';
+  
+  const daysUntil = nextTrip?.startDate 
+      ? Math.max(0, Math.ceil((new Date(nextTrip.startDate) - new Date()) / (1000 * 60 * 60 * 24)))
+      : 12;
+  const startsText = nextTrip?.startDate ? `Starts in ${daysUntil} days` : 'Starts in 12 days';
+  const tripDestCode = nextTrip?.destination ? (nextTrip.destination.length > 3 ? nextTrip.destination.substring(0,3).toUpperCase() : nextTrip.destination.toUpperCase()) : "HND";
+
+  const { scrollY } = useScroll();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Parallax Values
+  const yBg = useTransform(scrollY, [0, 1000], [0, -150]);
+  const floatY1 = useTransform(scrollY, [0, 1000], [0, -250]);
+  const floatY2 = useTransform(scrollY, [0, 1000], [0, -150]);
+  const floatY3 = useTransform(scrollY, [0, 1000], [0, -350]);
+  const floatY4 = useTransform(scrollY, [0, 1000], [0, -200]);
+
+  return (
+    <div className="bg-[#020617] min-h-screen text-white overflow-x-hidden font-sans selection:bg-white/20 selection:text-white transition-colors duration-700">
+      
       <AnimatedBackground />
 
               {/* Native-feeling static frosted glass edges */}
