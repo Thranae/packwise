@@ -66,14 +66,14 @@ export default function SignupPage() {
       
       const responseData = res.data;
       if (responseData.success) {
-        localStorage.setItem('token', responseData.data.token);
-        setAuthData(responseData.data.user, responseData.data.token);
+        setSignupEmail(data.email);
+        setIsOtpMode(true);
+        setResendTimer(40);
         
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
         
-        toast.success('Account created successfully! Welcome.');
-        navigate(ROUTES.OVERVIEW, { replace: true });
+        toast.success('A verification code has been sent to your email.');
       } else {
         toast.error(responseData.message || 'Failed to create account.');
       }
