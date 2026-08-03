@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
-import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, Copy, Share2, Trash2, Heart, FileDown, Plane } from 'lucide-react';
+import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, Copy, Share2, Trash2, Heart, FileDown, Plane, Check, X, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -30,7 +30,7 @@ export const TripCard = ({ trip }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
   const triggerTransition = useTransitionNavigate();
-  const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip, addNotification } = useTripContext();
+  const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip, addNotification, updateTripLocal } = useTripContext();
   const { addToast } = useToast();
   const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
   const tiltConfig = isNative ? { maxTilt: 0, stiffness: 0, damping: 0 } : { maxTilt: 6, stiffness: 250, damping: 25 };
@@ -44,6 +44,43 @@ export const TripCard = ({ trip }) => {
   
   const [tripScore, setTripScore] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  // Edit Mode State
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedStartDate, setEditedStartDate] = useState(trip.startDate ? trip.startDate.split('T')[0] : '');
+  const [editedEndDate, setEditedEndDate] = useState(trip.endDate ? trip.endDate.split('T')[0] : '');
+  const [editedBudget, setEditedBudget] = useState(trip.budget || '');
+  const [editedTravelers, setEditedTravelers] = useState(trip.travelers || 1);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async (e) => {
+    e.stopPropagation();
+    setIsSaving(true);
+    try {
+      await updateTripLocal(trip._id, {
+        startDate: new Date(editedStartDate).toISOString(),
+        endDate: new Date(editedEndDate).toISOString(),
+        budget: editedBudget,
+        travelers: parseInt(editedTravelers) || 1
+      });
+      addToast('success', 'Trip updated!');
+      setIsEditing(false);
+    } catch (err) {
+      addToast('error', 'Failed to update trip');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancelEdit = (e) => {
+    e.stopPropagation();
+    setIsEditing(false);
+    // Reset state
+    setEditedStartDate(trip.startDate ? trip.startDate.split('T')[0] : '');
+    setEditedEndDate(trip.endDate ? trip.endDate.split('T')[0] : '');
+    setEditedBudget(trip.budget || '');
+    setEditedTravelers(trip.travelers || 1);
+  };
   
   useEffect(() => {
     if (!trip._id || trip._id.startsWith('mock')) return;
@@ -174,7 +211,7 @@ export const TripCard = ({ trip }) => {
               
               <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[24px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-3xl border border-white/30 shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_10px_rgba(255,255,255,0.1)] transition-all duration-400 z-[100] flex flex-col gap-1.5 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-2'}`}>
                 
-                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); selectTrip(trip._id); navigate(ROUTES.TRIPS_NEW); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); setIsEditing(true); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>
                 </button>
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); duplicateTrip(trip._id); addToast('success', 'Trip duplicated'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
@@ -278,18 +315,39 @@ export const TripCard = ({ trip }) => {
           
           {/* Date & Duration Row */}
           <div className="flex items-center justify-between mb-4 mt-2">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                <Calendar className="w-4 h-4 text-white/80" />
+            {isEditing ? (
+              <div className="flex items-center gap-2 w-full">
+                <input 
+                  type="date" 
+                  value={editedStartDate} 
+                  onChange={(e) => setEditedStartDate(e.target.value)} 
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-1/2 bg-white/10 border border-white/20 text-white p-2 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark]"
+                />
+                <input 
+                  type="date" 
+                  value={editedEndDate} 
+                  onChange={(e) => setEditedEndDate(e.target.value)} 
+                  onClick={(e) => e.stopPropagation()}
+                  className="w-1/2 bg-white/10 border border-white/20 text-white p-2 rounded-xl text-xs font-semibold outline-none focus:border-blue-400 transition-colors [color-scheme:dark]"
+                />
               </div>
-              <span className="text-sm font-semibold text-white/90 tracking-wide">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white tracking-wide">{getDuration(trip.startDate, trip.endDate)}</span>
-              <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                <Clock className="w-4 h-4 text-emerald-400" />
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                    <Calendar className="w-4 h-4 text-white/80" />
+                  </div>
+                  <span className="text-sm font-semibold text-white/90 tracking-wide">{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-white tracking-wide">{getDuration(trip.startDate, trip.endDate)}</span>
+                  <div className="w-8 h-8 rounded-[10px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                    <Clock className="w-4 h-4 text-emerald-400" />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* 3 Metrics Grid */}
@@ -300,15 +358,27 @@ export const TripCard = ({ trip }) => {
                 <Wallet className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Budget</span>
               </div>
-              <span className="text-[13px] font-bold text-white truncate">{trip.budget} {trip.currency}</span>
+              {isEditing ? (
+                <div className="flex items-center gap-1">
+                  <input type="text" value={editedBudget} onChange={(e) => setEditedBudget(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-full bg-transparent border-b border-white/30 text-[13px] font-bold text-white outline-none focus:border-blue-400" />
+                </div>
+              ) : (
+                <span className="text-[13px] font-bold text-white truncate">{trip.budget} {trip.currency}</span>
+              )}
             </div>
-            {/* Weather */}
+            {/* Travelers */}
             <div className="ios-3d-element flex flex-col gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
               <div className="flex items-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors">
                 <CloudSun className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Travelers</span>
               </div>
-              <span className="text-[13px] font-bold text-white truncate">{trip.travelers} Guests</span>
+              {isEditing ? (
+                <div className="flex items-center gap-1">
+                  <input type="number" min="1" max="20" value={editedTravelers} onChange={(e) => setEditedTravelers(e.target.value)} onClick={(e) => e.stopPropagation()} className="w-full bg-transparent border-b border-white/30 text-[13px] font-bold text-white outline-none focus:border-blue-400" />
+                </div>
+              ) : (
+                <span className="text-[13px] font-bold text-white truncate">{trip.travelers} Guests</span>
+              )}
             </div>
             {/* Packing */}
             <div className="ios-3d-element flex flex-col gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
@@ -322,9 +392,20 @@ export const TripCard = ({ trip }) => {
 
           {/* Bottom CTA */}
           <div className="mt-5 relative z-20 ios-3d-element">
-            <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] cursor-pointer group/btn">
-              Open Trip Overview
-            </button>
+            {isEditing ? (
+              <div className="flex items-center gap-2">
+                <button onClick={handleCancelEdit} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold text-sm tracking-wide transition-colors cursor-pointer disabled:opacity-50">
+                  <X className="w-4 h-4 mr-1.5" /> Cancel
+                </button>
+                <button onClick={handleSave} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(52,211,153,0.3)] cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 disabled:opacity-50">
+                  {isSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />} Save
+                </button>
+              </div>
+            ) : (
+              <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] cursor-pointer group/btn">
+                Open Trip Overview
+              </button>
+            )}
           </div>
 
         </div>
