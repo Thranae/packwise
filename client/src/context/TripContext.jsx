@@ -61,15 +61,22 @@ export const TripProvider = ({ children }) => {
   // Global state for Trip Generation Animation
   const [isGeneratingTrip, setIsGeneratingTrip] = useState(false);
   const [generatingDestination, setGeneratingDestination] = useState('');
+  const generationStartTime = React.useRef(0);
 
   const triggerTripGenerationAnimation = useCallback((destination) => {
     setIsGeneratingTrip(true);
     setGeneratingDestination(destination);
+    generationStartTime.current = Date.now();
   }, []);
 
   const endTripGenerationAnimation = useCallback(() => {
-    setIsGeneratingTrip(false);
-    setGeneratingDestination('');
+    const elapsed = Date.now() - generationStartTime.current;
+    const remainingTime = Math.max(0, 7000 - elapsed);
+    
+    setTimeout(() => {
+      setIsGeneratingTrip(false);
+      setGeneratingDestination('');
+    }, remainingTime);
   }, []);
 
   const [isGenerating, setIsGenerating] = useState(false);

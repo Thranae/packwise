@@ -15,7 +15,7 @@ const buildImageQuery = (destination) => {
   if (!destination) return null;
   // If the destination already has a comma (city, country), return it as-is
   // The backend will extract just the city name for a precise search
-  return destination.trim();
+  return destination.trim() + ' scenic landscape';
 };
 
 export const useDestinationImage = (destination, type = null) => {

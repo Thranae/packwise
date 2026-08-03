@@ -127,10 +127,10 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
             
             <button
               onClick={() => handleGenerate(currentDest)}
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group/btn w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)] relative z-20"
+              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)] relative z-20"
             >
               <span className="text-sm font-bold text-white tracking-wide">Plan a Trip Here</span>
-              <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
             </button>
           </motion.div>
         </AnimatePresence>

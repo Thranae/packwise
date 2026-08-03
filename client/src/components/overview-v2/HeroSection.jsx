@@ -168,8 +168,6 @@ export const HeroSection = ({ isSharedView = false }) => {
                     style={{ backgroundImage: `url(${displayImage})` }}
                   />
                 )}
-                {/* Soft Dark Overlay for Text Readability - Lightened so it is not dull */}
-                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0F172A]/70 to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <motion.div 
