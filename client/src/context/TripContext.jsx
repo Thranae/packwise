@@ -65,10 +65,11 @@ export const TripProvider = ({ children }) => {
   const triggerTripGenerationAnimation = useCallback((destination) => {
     setIsGeneratingTrip(true);
     setGeneratingDestination(destination);
-    setTimeout(() => {
-      setIsGeneratingTrip(false);
-      setGeneratingDestination('');
-    }, 7000);
+  }, []);
+
+  const endTripGenerationAnimation = useCallback(() => {
+    setIsGeneratingTrip(false);
+    setGeneratingDestination('');
   }, []);
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -356,11 +357,13 @@ export const TripProvider = ({ children }) => {
 
       setIsGenerating(false);
       setLoadingStep(null);
+      endTripGenerationAnimation();
     } catch (error) {
       console.error("Failed to generate trip:", error);
       clearInterval(msgInterval);
       setIsGenerating(false);
       setLoadingStep(null);
+      endTripGenerationAnimation();
     }
   };
 
@@ -476,6 +479,7 @@ export const TripProvider = ({ children }) => {
       isGeneratingTrip,
       generatingDestination,
       triggerTripGenerationAnimation,
+      endTripGenerationAnimation,
       loadingStep,
       generateTrip,
       modifyTrip,

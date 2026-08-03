@@ -315,21 +315,32 @@ export default function HomePage() {
               
               {/* Center Map / Main Art */}
               <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[5%] lg:top-[10%] left-[5%] w-[90%] h-[90%] lg:h-[75%] z-20">
-                <div className={`${glassStyle} w-full h-full p-2 flex items-center justify-center relative overflow-hidden group`}>
+                <div className="relative w-full h-full rounded-[32px] md:rounded-[40px] flex flex-col group shadow-[0_20px_48px_rgba(0,0,0,0.2)] hover:shadow-[0_40px_80px_rgba(59,130,246,0.25)] hover:-translate-y-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ios-glass-card">
+                  {/* Liquid Glass Border Stroke Overlay */}
+                  <div className="absolute inset-0 rounded-[32px] md:rounded-[40px] pointer-events-none border-[2px] border-white/30 border-t-white/70 border-l-white/50 shadow-[inset_0_2px_16px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.5)] z-20 transition-all duration-700 group-hover:border-t-white/90 group-hover:border-l-white/70 group-hover:shadow-[inset_0_2px_24px_rgba(255,255,255,0.4),inset_0_1px_4px_rgba(255,255,255,0.8)]" />
+                  
                   <Image 
                     src={tripImage} 
                     alt={tripDestination} 
-                    className="absolute inset-0 w-full h-full object-cover rounded-[16px] transition-transform duration-1000 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-[16px]" />
-                  <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10 text-white">
-                    <div>
-                      <div className="text-sm font-medium text-white/80 mb-1">Current Itinerary</div>
-                      <div className="text-2xl font-bold truncate max-w-[200px]">{tripDestination}</div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  
+                  <div className="absolute bottom-6 left-6 right-6 flex flex-col z-10 text-white gap-2">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-sm font-medium text-white/80 mb-1 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-purple-400" /> Voyage Genie
+                        </div>
+                        <div className="text-2xl font-bold truncate max-w-[200px]">{tripDestination}</div>
+                      </div>
+                      <div className="px-4 py-2 text-xs font-bold text-white bg-white/20 backdrop-blur-md rounded-full border border-white/20">
+                        Active
+                      </div>
                     </div>
-                    <div className="px-4 py-2 text-xs font-bold text-white bg-white/20 backdrop-blur-md rounded-full border border-white/20">
-                      Active
-                    </div>
+                    <p className="text-sm text-white/70 mt-1 font-light leading-relaxed">
+                      Your AI travel companion. Voyage Genie instantly crafts hyper-personalized itineraries, manages your budget, and discovers hidden gems just for you.
+                    </p>
                   </div>
                 </div>
               </motion.div>
