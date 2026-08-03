@@ -6,7 +6,7 @@ import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 
 const navItems = [
-  { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
+  { label: 'Home', path: '/', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
   { label: 'Trips', path: '/trips', icon: Compass, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
   { label: 'Genie', path: '/assistant', icon: Sparkles, activeColor: 'text-white', isCenter: true },
   { label: 'Explore', path: '/explore', icon: Map, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
