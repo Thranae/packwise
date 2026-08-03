@@ -308,7 +308,7 @@ export const TripBuilderWizard = () => {
   const navigate = useNavigate();
   const triggerTransition = useTransitionNavigate();
   const [step, setStep] = useState(1);
-  const { generateTrip, isGenerating, loadingStep, currentTrip } = useTripContext();
+  const { generateTrip, isGenerating, loadingStep, currentTrip, triggerTripGenerationAnimation } = useTripContext();
   const { playSound } = useSoundEffect();
   const { lightTap, successTap } = useHaptics();
   const [prompt, setPrompt] = useState("");
@@ -341,7 +341,9 @@ export const TripBuilderWizard = () => {
     
     successTap();
     playSound('success');
-    navigate(ROUTES.TRIPS, { state: { generatingTrip: true, destination: prompt } });
+    
+    triggerTripGenerationAnimation(prompt);
+    navigate(ROUTES.TRIPS);
   };
 
   const handleSelectLocation = (loc) => {

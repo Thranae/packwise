@@ -16,7 +16,7 @@ const GeneratingTripCard = ({ destination }) => (
     animate={{ opacity: 1, scale: 1 }}
     exit={{ opacity: 0, scale: 0.95 }}
     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    className="relative w-full h-[380px] sm:h-[400px] xl:h-[420px] rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl flex flex-col justify-center items-center p-6"
+    className="relative w-full h-[460px] rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl flex flex-col justify-center items-center p-6"
   >
     {/* Subtle static gradient background */}
     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-purple-500/[0.06]" />
@@ -54,7 +54,7 @@ const GeneratingTripCard = ({ destination }) => (
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
 
   export default function TripsPage() {
-    const { trips, loadingTrips, fetchTrips } = useTripContext();
+    const { trips, loadingTrips, fetchTrips, isGeneratingTrip, generatingDestination } = useTripContext();
     const location = useLocation();
     const [searchQuery, setSearchQuery] = useState('');
     const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -62,19 +62,6 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const { lightTap, successTap } = useHaptics();
     
-    const [showGenerating, setShowGenerating] = useState(location.state?.generatingTrip || false);
-    const destName = location.state?.destination || 'New Destination';
-
-    useEffect(() => {
-      if (showGenerating) {
-        const timer = setTimeout(() => {
-          setShowGenerating(false);
-          fetchTrips();
-        }, 7000);
-        return () => clearTimeout(timer);
-      }
-    }, [showGenerating]);
-
     useRoutePreload(2000); // Preload heavy route chunks after 2s of idle
 
   const filteredTrips = useMemo(() => {
@@ -222,7 +209,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                 <Skeleton key={i} className="h-[400px] w-full rounded-[32px]" />
               ))}
             </motion.div>
-          ) : (showGenerating || filteredTrips.length > 0) ? (
+          ) : (isGeneratingTrip || filteredTrips.length > 0) ? (
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
@@ -231,7 +218,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8"
             >
               <AnimatePresence>
-                {showGenerating && <GeneratingTripCard destination={destName} />}
+                {isGeneratingTrip && <GeneratingTripCard destination={generatingDestination} />}
               </AnimatePresence>
               {filteredTrips.map(trip => (
                 <TripCard key={trip._id} trip={trip} />

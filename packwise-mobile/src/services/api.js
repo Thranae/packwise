@@ -1,7 +1,10 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { STORAGE_KEYS } from '../constants/app';
+import { router } from 'expo-router';
+
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:5000/api',
+  baseURL: process.env.EXPO_PUBLIC_API_URL || 'https://packwise.onrender.com/api',
   timeout: 120000,
   headers: {
     'Content-Type': 'application/json',
@@ -10,12 +13,16 @@ const api = axios.create({
 
 // Request interceptor — attach JWT Bearer token if present
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-    if (token) {
-      // Token is stored as a JSON string — strip surrounding quotes
-      const cleanToken = token.replace(/^"|"$/g, '');
-      config.headers.Authorization = `Bearer ${cleanToken}`;
+  async (config) => {
+    try {
+      const token = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN);
+      if (token) {
+        // Token is stored as a JSON string — strip surrounding quotes
+        const cleanToken = token.replace(/^"|"$/g, '');
+        config.headers.Authorization = `Bearer ${cleanToken}`;
+      }
+    } catch (e) {
+      console.warn("AsyncStorage error", e);
     }
     return config;
   },
@@ -25,11 +32,13 @@ api.interceptors.request.use(
 // Response interceptor — handle 401s globally and normalize errors
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+      try {
+        await AsyncStorage.removeItem(STORAGE_KEYS.TOKEN);
+        router.replace('/(auth)/login');
+      } catch (e) {
+        // ignore
       }
     }
 

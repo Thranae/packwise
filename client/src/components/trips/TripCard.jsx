@@ -147,7 +147,7 @@ export const TripCard = ({ trip }) => {
               />
             )}
             {/* Gradient to blend with content */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#060B14] via-black/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#060B14]/80 to-transparent pointer-events-none" />
           </div>
           
           {/* Top Badges (Now outside overflow-hidden) */}

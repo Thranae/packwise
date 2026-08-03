@@ -57,6 +57,20 @@ export const TripProvider = ({ children }) => {
   
   const [loadingTrips, setLoadingTrips] = useState(false);
   const [loadingStep, setLoadingStep] = useState(null);
+  
+  // Global state for Trip Generation Animation
+  const [isGeneratingTrip, setIsGeneratingTrip] = useState(false);
+  const [generatingDestination, setGeneratingDestination] = useState('');
+
+  const triggerTripGenerationAnimation = useCallback((destination) => {
+    setIsGeneratingTrip(true);
+    setGeneratingDestination(destination);
+    setTimeout(() => {
+      setIsGeneratingTrip(false);
+      setGeneratingDestination('');
+    }, 7000);
+  }, []);
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [manualTheme, setManualTheme] = useState(null);
 
@@ -460,6 +474,9 @@ export const TripProvider = ({ children }) => {
       setCurrentTrip,
       selectTrip,
       isGenerating,
+      isGeneratingTrip,
+      generatingDestination,
+      triggerTripGenerationAnimation,
       loadingStep,
       generateTrip,
       modifyTrip,
