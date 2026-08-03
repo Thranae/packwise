@@ -198,7 +198,9 @@ class AIService {
   }
 
   async generateItinerary(destination, days) {
-    const prompt = `Create a daily itinerary for ${days} days in ${destination}. Return JSON strictly matching this format:
+    const prompt = `Create a highly accurate daily itinerary for ${days} days in ${destination}. 
+    CRITICAL: You MUST use real, verifiable locations, restaurants, and landmarks that actually exist in ${destination}. Do NOT invent or hallucinate places.
+    Return ONLY a JSON array strictly matching this format:
     [
       { "day": 1, "title": "Arrival", "activities": [{ "time": "10:00 AM", "description": "Check in" }] }
     ]`;
@@ -207,11 +209,12 @@ class AIService {
 
   async generateFullTrip(prompt) {
     const aiPrompt = `Parse the following user trip request: "${prompt}". 
-    Determine the best destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
+    Determine the best real destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
+    CRITICAL: Ensure the destination is a real geographical location.
     Determine the number of travelers and their gender directly from the prompt.
     Extract the requested start date in YYYY-MM-DD format.
     Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.
-    Return JSON strictly matching this format:
+    Return ONLY valid JSON strictly matching this format:
     {
       "destination": "City Name",
       "country": "Country Name",
@@ -287,11 +290,11 @@ class AIService {
     };
 
     const aiPrompt = `You are a world-class travel expert with deep knowledge of real places. Recommend exactly 6 real, famous ${category} for tourists visiting ${destination}. 
-    These MUST be real, well-known locations that actually exist in ${destination}.
+    CRITICAL: These MUST be real, world-renowned locations that actually exist in ${destination}. Do NOT hallucinate or invent generic names like 'The Grand Market'.
     For each place, provide a very specific "imageQuery" that will return accurate, real photographs when searched on stock photo sites (e.g., "Eiffel Tower Paris night lights", "Shibuya Crossing Tokyo crowd").
     Return ONLY a valid JSON array of exactly 6 objects:
     [{ 
-      "name": "REAL place name (e.g. Shibuya Crossing, not 'The Grand Market')", 
+      "name": "REAL verifiable place name (e.g. Shibuya Crossing)", 
       "category": "${category}", 
       "rating": "4.7", 
       "distance": "2.5 km", 

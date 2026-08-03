@@ -175,10 +175,10 @@ export default function HomePage() {
                          <div className="w-full h-[150px] sm:h-[170px] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 group transform-gpu z-10 border border-white/10">
                             <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
-                            <div className="absolute bottom-4 left-5">
-                               <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-none mb-1 drop-shadow-md truncate max-w-[200px]">{tripDestination}</h3>
-                               <p className="text-[10px] sm:text-xs text-emerald-400 font-bold tracking-widest uppercase drop-shadow-md">{startsText}</p>
-                            </div>
+                           <div className="absolute bottom-4 left-5">
+                              <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate max-w-[200px]">{tripDestination}</h3>
+                              <p className="text-[10px] sm:text-xs text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{startsText}</p>
+                           </div>
                             <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
                                <span className="relative flex h-2 w-2">
                                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -192,8 +192,8 @@ export default function HomePage() {
                          <div className="px-5 py-3 relative z-10">
                             <div className="flex justify-between items-center relative z-10">
                                <div className="text-left">
-                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">SFO</span>
-                                 <p className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest mt-0.5 font-bold">Outbound</p>
+                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/60 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">SFO</span>
+                                 <p className="text-[9px] sm:text-[10px] text-white/50 uppercase tracking-widest mt-0.5 font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">Outbound</p>
                                </div>
                                
                                <div className="flex-1 flex items-center justify-center relative px-4">
@@ -202,8 +202,8 @@ export default function HomePage() {
                                </div>
                                
                                <div className="text-right">
-                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">{tripDestCode}</span>
-                                 <p className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-widest mt-0.5 font-bold">Arrival</p>
+                                 <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/60 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">{tripDestCode}</span>
+                                 <p className="text-[9px] sm:text-[10px] text-white/50 uppercase tracking-widest mt-0.5 font-bold drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">Arrival</p>
                                </div>
                             </div>
                             
@@ -337,10 +337,10 @@ export default function HomePage() {
                         <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
                         <div className="absolute bottom-4 left-5">
-                           <h3 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-none mb-1 drop-shadow-md truncate max-w-[200px] flex items-center gap-2">
-                             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" /> Voyage Genie
+                           <h3 className="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate max-w-[200px] flex items-center gap-2">
+                             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> Voyage Genie
                            </h3>
-                           <p className="text-[9px] sm:text-[10px] text-emerald-400 font-bold tracking-widest uppercase drop-shadow-md">AI Travel Companion</p>
+                           <p className="text-[9px] sm:text-[10px] text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">AI Travel Companion</p>
                         </div>
                         <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
                            <span className="relative flex h-2 w-2">
@@ -353,7 +353,7 @@ export default function HomePage() {
                      
                      {/* Bottom Info Section */}
                      <div className="px-3 sm:px-5 py-2 sm:py-3 relative z-10 flex-1 flex flex-col justify-center border-t border-white/5">
-                        <p className="text-xs sm:text-sm text-white/80 font-light leading-relaxed text-center drop-shadow-md">
+                        <p className="text-xs sm:text-sm text-white font-medium leading-relaxed text-center drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]">
                           Design the perfect journey. Voyage Genie instantly crafts hyper-personalized itineraries, automates logistics, and discovers hidden gems just for you.
                         </p>
                      </div>

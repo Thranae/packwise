@@ -15,7 +15,7 @@ const extractPrimaryTerm = (query) => {
   }
   // Otherwise, remove generic travel keywords to keep query focused
   return query
-    .replace(/\b(travel landmark scenic|travel landmark|landmark scenic|travel)\b/gi, '')
+    .replace(/\b(travel landmark scenic|travel landmark|landmark scenic|travel|tourism|vacation|tour|photo|background|wallpaper|trip)\b/gi, '')
     .trim();
 };
 
@@ -88,19 +88,31 @@ const fetchFromPixabay = async (keys, query) => {
 const fetchFromWikipedia = async (query) => {
   try {
     const searchRes = await axios.get('https://en.wikipedia.org/w/api.php', {
-      params: { action: 'query', list: 'search', srsearch: query, format: 'json', utf8: 1, srlimit: 3 },
+      params: { action: 'query', list: 'search', srsearch: query, format: 'json', utf8: 1, srlimit: 5 },
       timeout: 8000
     });
     if (searchRes.data.query?.search?.length > 0) {
-      const title = searchRes.data.query.search[0].title;
-      const imageRes = await axios.get('https://en.wikipedia.org/w/api.php', {
-        params: { action: 'query', prop: 'pageimages', format: 'json', piprop: 'original', titles: title },
-        timeout: 8000
-      });
-      const pages = imageRes.data.query.pages;
-      const pageId = Object.keys(pages)[0];
-      if (pages[pageId]?.original?.source) {
-        return pages[pageId].original.source;
+      const titles = searchRes.data.query.search.map(s => s.title);
+      for (const title of titles) {
+        const imageRes = await axios.get('https://en.wikipedia.org/w/api.php', {
+          params: { action: 'query', prop: 'pageimages', format: 'json', piprop: 'original', titles: title },
+          timeout: 8000
+        });
+        const pages = imageRes.data.query.pages;
+        const pageId = Object.keys(pages)[0];
+        const source = pages[pageId]?.original?.source;
+        if (source) {
+          const lowerSrc = source.toLowerCase();
+          // Filter out maps, SVGs, icons, and flags to ensure we get a scenic photo
+          if (!lowerSrc.endsWith('.svg') && 
+              !lowerSrc.includes('map') && 
+              !lowerSrc.includes('icon') && 
+              !lowerSrc.includes('flag') && 
+              !lowerSrc.includes('coat_of_arms') &&
+              !lowerSrc.includes('locator')) {
+            return source;
+          }
+        }
       }
     }
   } catch (err) {
