@@ -239,10 +239,27 @@ export default function ExplorePage() {
         </motion.p>
       </div>
 
-      {/* Responsive 3D Masonry Grid */}
+      {/* Responsive 3D Masonry Grid or Empty State */}
       <div className="w-full px-4 md:px-8 perspective-[2000px] min-h-[400px]">
-        {loading ? (
-          <div className="w-full h-full flex items-center justify-center">
+        {!currentTrip?.destination ? (
+          <div className="w-full max-w-lg mx-auto mt-10 h-[320px] flex flex-col items-center justify-center text-center p-8 bg-white/5 rounded-[32px] border border-white/10 shadow-[inset_0_2px_4px_rgba(255,255,255,0.05),0_8px_32px_rgba(0,0,0,0.2)]">
+            <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center mb-6 border border-cyan-500/30">
+              <Navigation className="w-8 h-8 text-cyan-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">No Active Trip</h3>
+            <p className="text-base text-white/60 mb-8 leading-relaxed">Create your first trip to unlock Discovery Mode and get AI-powered recommendations for places to explore.</p>
+            <button 
+              onClick={() => {
+                // We'll navigate to trips
+                window.location.href = '/trips';
+              }} 
+              className="ios-liquid-button px-8 py-4 rounded-full text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-center gap-2 active:scale-95 transition-all"
+            >
+              <span className="drop-shadow-md">Plan a Trip</span>
+            </button>
+          </div>
+        ) : loading ? (
+          <div className="w-full h-full flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
           </div>
         ) : (
