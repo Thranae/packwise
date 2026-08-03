@@ -4,11 +4,13 @@ import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane, BookOpen } from 'lucide-react';
 import { LogoIcon, useLogoDoubleTap } from '@/components/ui/Logo';
 import { motion } from 'framer-motion';
+import { useTransitionNavigate } from '@/contexts/TransitionContext';
+
 export const GLASS = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] rounded-[24px]";
 export const GLASS_HOVER = "transition-all duration-700 hover:-translate-y-1 hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.2),0_24px_48px_rgba(0,0,0,0.5)] hover:bg-[rgba(255,255,255,0.04)]";
 
 const navItems = [
-  { label: 'Home', path: '/', icon: LayoutGrid, colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
+  { label: 'Home', path: '/overview', icon: LayoutGrid, colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
   { label: 'Trips', path: '/trips', icon: Compass, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
   { label: 'AI Planner', path: '/assistant', icon: Sparkles, colorClass: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
   { label: 'Packing', path: '/packing', icon: Box, colorClass: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]' },
@@ -26,6 +28,7 @@ export function Sidebar() {
   const sidebarRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(sidebarRef, { maxTilt: 3, stiffness: 200, damping: 20 });
   const { isHoverSimulated, handlePointerDown } = useLogoDoubleTap();
+  const triggerTransition = useTransitionNavigate();
 
   return (
     <motion.aside
@@ -72,6 +75,12 @@ export function Sidebar() {
             <NavLink
               key={item.path}
               to={item.path}
+              onClick={(e) => {
+                if (item.path === '/overview') {
+                  e.preventDefault();
+                  triggerTransition(item.path, { text: 'Fetching real time data...' });
+                }
+              }}
               className={`group flex items-center gap-3 px-3 py-2.5 rounded-[16px] transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)] relative overflow-hidden ${
                 isActive 
                   ? 'bg-white/[0.08] border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_16px_rgba(0,0,0,0.2)]' 

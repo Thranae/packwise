@@ -138,12 +138,12 @@ export const TripCard = ({ trip }) => {
   return (
     <motion.div 
       variants={{
-        hidden: { opacity: 0, scale: 0.95, y: 30 },
+        hidden: { opacity: 0, scale: 0.98, y: 15 },
         show: { 
           opacity: 1, 
           scale: 1, 
           y: 0, 
-          transition: { type: 'spring', stiffness: 280, damping: 25, mass: 0.8 } 
+          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
         }
       }}
       className="relative w-full h-[460px] rounded-[32px] overflow-hidden group"

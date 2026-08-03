@@ -4,9 +4,10 @@ import { LayoutGrid, Map, Bot, Compass, User, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
+import { useTransitionNavigate } from '@/contexts/TransitionContext';
 
 const navItems = [
-  { label: 'Home', path: '/', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
+  { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
   { label: 'Trips', path: '/trips', icon: Compass, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
   { label: 'Genie', path: '/assistant', icon: Sparkles, activeColor: 'text-white', isCenter: true },
   { label: 'Explore', path: '/explore', icon: Map, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
@@ -17,10 +18,17 @@ export function BottomNav() {
   const location = useLocation();
   const { lightTap } = useHaptics();
   const { playSound } = useSoundEffect();
+  const triggerTransition = useTransitionNavigate();
 
-  const handleNavClick = (path) => {
+  const handleNavClick = (e, path) => {
     lightTap();
     playSound('tap');
+    
+    // Trigger the fake delay animation whenever navigating to Home
+    if (path === '/overview') {
+      e.preventDefault();
+      triggerTransition(path, { text: 'Fetching real time data...' });
+    }
   };
 
   return (
@@ -44,7 +52,7 @@ export function BottomNav() {
             <NavLink
               key={item.path}
               to={item.path}
-              onClick={() => handleNavClick(item.path)}
+              onClick={(e) => handleNavClick(e, item.path)}
               className={`relative flex items-center justify-center w-[50px] h-full rounded-[20px] transition-all duration-300 z-10 ${item.isCenter ? '-mt-6' : ''} group`}
             >
               {/* 3D Glass Pill for Active State */}
