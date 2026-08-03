@@ -107,6 +107,112 @@ function GuestRoute({ children }) {
 
 /** Redirects unauthenticated users to the login page. */
 function ProtectedRoute({ children }) {
+import { App as CapacitorApp } from '@capacitor/app';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
+import { TransitionProvider } from './contexts/TransitionContext';
+import { TripProvider } from '@/context/TripContext';
+import { PremiumProvider } from './context/PremiumContext';
+import { useAuth } from './hooks/useAuth';
+import { useToast } from './hooks/useToast';
+import { ROUTES } from './constants/routes';
+import { cn } from './utils/cn';
+import { Loader2, Compass, PlaneTakeoff } from 'lucide-react';
+import { LogoIcon } from '@/components/ui/Logo';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { OnboardingTutorial } from './components/common/OnboardingTutorial';
+
+
+import { WifiOff } from 'lucide-react';
+// ---------------------------------------------------------------------------
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/authentication/LoginPage'));
+const SignupPage = lazy(() => import('./pages/authentication/SignupPage'));
+
+const OverviewPage = lazy(() => import('./pages/overview/OverviewPage'));
+const CostIntelligencePage = lazy(() => import('./pages/budget/CostIntelligencePage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const OnboardingPage = lazy(() => import('./pages/authentication/OnboardingPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+
+// New Modules
+const TripsPage = lazy(() => import('./pages/trips/TripsPage'));
+const PackingPage = lazy(() => import('./pages/packing/PackingPage'));
+const DocumentsPage = lazy(() => import('./pages/documents/DocumentsPage'));
+const AssistantPage = lazy(() => import('./pages/assistant/AssistantPage'));
+const ExplorePage = lazy(() => import('./pages/explore/ExplorePage'));
+const CalendarPage = lazy(() => import('./pages/calendar/CalendarPage'));
+const JournalPage = lazy(() => import('./pages/journal/JournalPage'));
+const FlightsPage = lazy(() => import('./pages/flights/FlightsPage'));
+const SharedTripPage = lazy(() => import('./pages/public/SharedTripPage').then(m => ({ default: m.SharedTripPage })));
+
+// ---------------------------------------------------------------------------
+// Full-page loading spinner (Liquid Shimmer)
+// ---------------------------------------------------------------------------
+function Spinner() {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-[#030712]"
+    >
+      <div className="flex-1 flex flex-col items-center justify-center relative w-full h-full">
+        {/* Ultra-Premium Minimalist Logo Reveal */}
+        <motion.div 
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="relative flex items-center justify-center w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-[32px] bg-white/[0.02] border border-white/5 transform-gpu"
+        >
+          {/* Very subtle static glow behind the icon */}
+          <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-blue-500/5 to-purple-500/5" />
+          
+          {/* The icon stays perfectly straight and stable */}
+          <div className="relative z-10 scale-[1.2]">
+            <LogoIcon size="xl" className="text-white" />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Powered By Footer */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.8 }}
+        className="pb-12 sm:pb-16 text-center"
+      >
+        <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/30">
+          Powered by
+        </span>
+        <div className="text-[14px] sm:text-[15px] font-semibold tracking-[0.2em] uppercase text-white/80 mt-1">
+          Thranaeswanth
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Route guards
+// ---------------------------------------------------------------------------
+
+/** Redirects authenticated users away from guest-only pages (login/signup). */
+function GuestRoute({ children }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return <Spinner />;
+  if (isAuthenticated) return <Navigate to={ROUTES.OVERVIEW} replace />;
+
+  return children;
+}
+
+/** Redirects unauthenticated users to the login page. */
+function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) return <Spinner />;
@@ -125,20 +231,16 @@ function ToastContainer() {
   const { toasts, removeToast } = useToast();
 
   const typeStyles = {
-    success:
-      'border-success-500/30 bg-success-500/10 text-success-500',
-    error:
-      'border-error-500/30 bg-error-500/10 text-error-500',
-    warning:
-      'border-warning-500/30 bg-warning-500/10 text-warning-500',
-    info:
-      'border-info-500/30 bg-info-500/10 text-info-500',
+    success: 'border-success-500/30 bg-success-500/10 text-success-500',
+    error: 'border-error-500/30 bg-error-500/10 text-error-500',
+    warning: 'border-warning-500/30 bg-warning-500/10 text-warning-500',
+    info: 'border-info-500/30 bg-info-500/10 text-info-500',
   };
 
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-6 right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none w-[90%] sm:w-auto max-w-sm">
+    <div className="fixed top-[calc(16px+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-[9999] flex flex-col items-center sm:items-end gap-3 pointer-events-none w-[90%] sm:w-auto max-w-sm">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <motion.div
@@ -149,9 +251,9 @@ function ToastContainer() {
               typeStyles[toast.type] || typeStyles.info,
             )}
             role="alert"
-            initial={{ opacity: 0, scale: 0.95, x: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95, x: 20 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <span className="flex-1">{toast.message}</span>

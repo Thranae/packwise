@@ -22,7 +22,27 @@ export function ToastProvider({ children }) {
       const id = `toast-${++toastIdCounter}`;
       const toast = { id, type, message, duration };
 
-      setToasts((prev) => [...prev, toast]);
+      setToasts((prev) => {
+        // Prevent exact duplicates in the queue
+        if (prev.some(t => t.message === message)) {
+          return prev;
+        }
+        
+        // Add new toast and limit to 1 maximum on mobile for cleanliness
+        const newToasts = [...prev, toast];
+        if (newToasts.length > 1) {
+          // Clear timers for dropped toasts
+          const dropped = newToasts.slice(0, newToasts.length - 1);
+          dropped.forEach(d => {
+            if (timersRef.current[d.id]) {
+              clearTimeout(timersRef.current[d.id]);
+              delete timersRef.current[d.id];
+            }
+          });
+          return newToasts.slice(-1);
+        }
+        return newToasts;
+      });
 
       // Auto-dismiss after duration
       if (duration > 0) {
