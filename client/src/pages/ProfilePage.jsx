@@ -146,10 +146,10 @@ export default function ProfilePage() {
       {/* Ambient Mesh Background */}
       <div className="fixed inset-0 mesh-bg z-[-1] pointer-events-none w-full h-full object-cover"></div>
 
-      <main className="max-w-4xl mx-auto px-4 md:px-8 pt-12 pb-32">
+      <main className="max-w-3xl mx-auto px-4 md:px-6 pt-10 pb-24">
         {/* Profile Header Section */}
-        <section className="flex flex-col items-center justify-center space-y-6 mb-20">
-          <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden neon-glow p-1 bg-gradient-to-br from-[#a078ff]/30 to-[#4cd7f6]/30 cursor-pointer group" onClick={handleImageClick}>
+        <section className="flex flex-col items-center justify-center space-y-4 mb-10">
+          <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden neon-glow p-1 bg-gradient-to-br from-[#a078ff]/30 to-[#4cd7f6]/30 cursor-pointer group ios-3d-element" onClick={handleImageClick}>
             <input
               type="file"
               ref={fileInputRef}
@@ -176,71 +176,71 @@ export default function ProfilePage() {
             </div>
           </div>
           
-          <div className="text-center space-y-2">
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">{userName}</h2>
-            <p className="text-lg text-white/60">{userEmail}</p>
+          <div className="text-center space-y-1">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">{userName}</h2>
+            <p className="text-base text-white/60">{userEmail}</p>
           </div>
           
           <button 
             onClick={handleSave}
             disabled={isSaving}
-            className={`rounded-full px-8 py-3 text-sm font-bold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all flex items-center gap-2 ${
+            className={`rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all flex items-center gap-2 mt-2 ios-liquid-button ${
               isEditing ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'btn-primary text-white'
             }`}
           >
-            {isEditing ? (isSaving ? <Loader2 className="w-[18px] h-[18px] animate-spin" /> : <Save className="w-[18px] h-[18px]" />) : <Edit3 className="w-[18px] h-[18px]" />}
+            {isEditing ? (isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />) : <Edit3 className="w-4 h-4" />}
             {isEditing ? (isSaving ? 'Saving...' : 'Save Changes') : 'Edit Profile'}
           </button>
         </section>
 
         {/* Dynamic Forms/Preferences Section */}
-        <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-12">
+        <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-8">
           
           {/* Form fields (Only visible when editing for a minimal look, or disabled view) */}
-          <motion.section variants={fadeInUp} className="space-y-6">
-            <h3 className="text-sm font-bold text-[#4cd7f6] uppercase tracking-widest pl-2">Personal Details</h3>
-            <div className="liquid-card rounded-3xl p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.section variants={fadeInUp} className="space-y-4">
+            <h3 className="text-xs font-bold text-[#4cd7f6] uppercase tracking-widest pl-2">Personal Details</h3>
+            <div className="ios-glass-card rounded-[24px] p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider">Full Name</label>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <input 
                     type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={!isEditing}
-                    className="w-full h-12 bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
+                    className="w-full h-10 bg-white/5 border border-white/10 rounded-xl pl-10 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider">Display Name</label>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Display Name</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <input 
                     type="text" name="displayName" value={formData.displayName} onChange={handleInputChange} disabled={!isEditing}
-                    className="w-full h-12 bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
+                    className="w-full h-10 bg-white/5 border border-white/10 rounded-xl pl-10 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider">Email Address</label>
+              <div className="space-y-1.5 md:col-span-2">
+                <label className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Email Address</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <input 
                     type="email" name="email" value={formData.email} onChange={handleInputChange} disabled={!isEditing}
-                    className="w-full h-12 bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
+                    className="w-full h-10 bg-white/5 border border-white/10 rounded-xl pl-10 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
                   />
                 </div>
               </div>
               
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-bold text-white/50 uppercase tracking-wider">Home Airport</label>
+              <div className="space-y-1.5 md:col-span-2">
+                <label className="text-[11px] font-bold text-white/50 uppercase tracking-wider">Home Airport</label>
                 <div className="relative">
-                  <Plane className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                  <Plane className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                   <input 
                     type="text" name="homeAirport" value={formData.homeAirport} onChange={handleInputChange} disabled={!isEditing} placeholder="e.g. SFO"
-                    className="w-full h-12 bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
+                    className="w-full h-10 bg-white/5 border border-white/10 rounded-xl pl-10 pr-3 text-sm text-white focus:outline-none focus:border-[#a078ff] focus:bg-white/10 transition-all disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -249,25 +249,25 @@ export default function ProfilePage() {
           </motion.section>
 
           {/* Travel Preferences Bento Grid */}
-          <motion.section variants={fadeInUp} className="space-y-6">
-            <h3 className="text-sm font-bold text-[#4cd7f6] uppercase tracking-widest pl-2">Travel Preferences</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.section variants={fadeInUp} className="space-y-4">
+            <h3 className="text-xs font-bold text-[#4cd7f6] uppercase tracking-widest pl-2">Travel Preferences</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               
               {/* Card 1: Budget */}
-              <div className="liquid-card rounded-3xl p-6 flex flex-col gap-4">
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="p-3 rounded-full bg-[#4cd7f6]/10 text-[#4cd7f6]">
-                    <DollarSign className="w-5 h-5" />
+              <div className="ios-glass-card rounded-[24px] p-5 flex flex-col gap-3">
+                <div className="flex items-center gap-3 mb-1">
+                  <div className="p-2.5 rounded-full bg-[#4cd7f6]/10 text-[#4cd7f6]">
+                    <DollarSign className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-white/50 uppercase">Budget</p>
-                    <p className="text-lg text-white font-medium capitalize">{formData.budgetPreference}</p>
+                    <p className="text-[10px] font-bold text-white/50 uppercase">Budget</p>
+                    <p className="text-base text-white font-medium capitalize">{formData.budgetPreference}</p>
                   </div>
                 </div>
                 {isEditing && (
                   <div className="flex gap-2">
                     {['budget', 'moderate', 'luxury'].map(b => (
-                      <button key={b} onClick={() => togglePreference('budgetPreference', b)} className={`flex-1 py-2 rounded-xl text-xs font-bold capitalize transition-all border ${formData.budgetPreference === b ? 'bg-[#4cd7f6]/20 border-[#4cd7f6]/50 text-[#4cd7f6] shadow-[0_0_10px_rgba(76,215,246,0.3)]' : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'}`}>
+                      <button key={b} onClick={() => togglePreference('budgetPreference', b)} className={`flex-1 py-1.5 rounded-xl text-[11px] font-bold capitalize transition-all ios-glass-pill ${formData.budgetPreference === b ? 'bg-[#4cd7f6]/20 border border-[#4cd7f6]/50 text-[#4cd7f6] shadow-[0_0_10px_rgba(76,215,246,0.3)]' : 'border-transparent text-white/70'}`}>
                         {b}
                       </button>
                     ))}
@@ -276,22 +276,22 @@ export default function ProfilePage() {
               </div>
 
               {/* Card 2: Travel Style */}
-              <div className="liquid-card rounded-3xl p-6 flex flex-col gap-4">
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="p-3 rounded-full bg-[#a078ff]/10 text-[#a078ff]">
-                    <Mountain className="w-5 h-5" />
+              <div className="ios-glass-card rounded-[24px] p-5 flex flex-col gap-3">
+                <div className="flex items-center gap-3 mb-1">
+                  <div className="p-2.5 rounded-full bg-[#a078ff]/10 text-[#a078ff]">
+                    <Mountain className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-white/50 uppercase">Travel Style</p>
-                    <p className="text-lg text-white font-medium">{formData.travelStyle.length > 0 ? formData.travelStyle.join(', ') : 'None selected'}</p>
+                    <p className="text-[10px] font-bold text-white/50 uppercase">Travel Style</p>
+                    <p className="text-base text-white font-medium">{formData.travelStyle.length > 0 ? formData.travelStyle.join(', ') : 'None selected'}</p>
                   </div>
                 </div>
                 {isEditing && (
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-1">
                     {STYLE_OPTIONS.map(style => {
                       const isSelected = formData.travelStyle.includes(style);
                       return (
-                        <button key={style} onClick={() => togglePreference('travelStyle', style)} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${isSelected ? 'bg-[#a078ff]/20 border-[#a078ff]/50 text-[#a078ff] shadow-[0_0_10px_rgba(160,120,255,0.3)]' : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'}`}>
+                        <button key={style} onClick={() => togglePreference('travelStyle', style)} className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all ios-glass-pill ${isSelected ? 'bg-[#a078ff]/20 border border-[#a078ff]/50 text-[#a078ff] shadow-[0_0_10px_rgba(160,120,255,0.3)]' : 'border-transparent text-white/70'}`}>
                           {style}
                         </button>
                       );
@@ -301,22 +301,22 @@ export default function ProfilePage() {
               </div>
 
               {/* Card 3: Dietary Restrictions */}
-              <div className="liquid-card rounded-3xl p-6 flex flex-col gap-4 md:col-span-2">
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="p-3 rounded-full bg-orange-500/10 text-orange-400">
-                    <Leaf className="w-5 h-5" />
+              <div className="ios-glass-card rounded-[24px] p-5 flex flex-col gap-3 md:col-span-2">
+                <div className="flex items-center gap-3 mb-1">
+                  <div className="p-2.5 rounded-full bg-orange-500/10 text-orange-400">
+                    <Leaf className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-white/50 uppercase">Dietary Restrictions</p>
-                    <p className="text-lg text-white font-medium">{formData.dietaryRestrictions.length > 0 ? formData.dietaryRestrictions.join(', ') : 'None selected'}</p>
+                    <p className="text-[10px] font-bold text-white/50 uppercase">Dietary Restrictions</p>
+                    <p className="text-base text-white font-medium">{formData.dietaryRestrictions.length > 0 ? formData.dietaryRestrictions.join(', ') : 'None selected'}</p>
                   </div>
                 </div>
                 {isEditing && (
-                  <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-1">
                     {DIETARY_OPTIONS.map(diet => {
                       const isSelected = formData.dietaryRestrictions.includes(diet);
                       return (
-                        <button key={diet} onClick={() => togglePreference('dietaryRestrictions', diet)} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${isSelected ? 'bg-orange-500/20 border-orange-500/50 text-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/10'}`}>
+                        <button key={diet} onClick={() => togglePreference('dietaryRestrictions', diet)} className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all ios-glass-pill ${isSelected ? 'bg-orange-500/20 border border-orange-500/50 text-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'border-transparent text-white/70'}`}>
                           {diet}
                         </button>
                       );
