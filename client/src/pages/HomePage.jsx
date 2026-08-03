@@ -314,8 +314,8 @@ export default function HomePage() {
             <div className="lg:col-span-6 relative h-[380px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-2 lg:mt-0 transform origin-center order-2">
               
               {/* Center Map / Main Art */}
-              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[5%] lg:top-[10%] left-[5%] w-[90%] h-[90%] lg:h-[75%] z-20">
-                <div className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
+              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[0%] lg:top-[5%] left-[0%] lg:left-[2%] w-[100%] lg:w-[96%] h-[95%] lg:h-[85%] z-20">
+                <div style={{ transformStyle: "preserve-3d", transform: "perspective(1000px) rotateX(4deg) rotateY(-4deg)" }} className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
                   {/* iOS Noise Texture Overlay */}
                   <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                   
@@ -327,33 +327,26 @@ export default function HomePage() {
                   <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/30 blur-[40px] rounded-full animate-pulse z-0" style={{ animationDelay: "1s" }} />
 
                   {/* Inner frosted content */}
-                  <div className="bg-[#030712]/30 rounded-[31px] p-2.5 flex flex-col gap-3 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] w-full h-full">
+                  <div className="bg-[#030712]/30 rounded-[31px] p-3 sm:p-4 flex flex-col gap-4 relative z-10 overflow-hidden shadow-[inset_0_0_20px_rgba(255,255,255,0.05)] w-full h-full">
                      {/* Beautiful subtle animated background glow */}
                      <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
                      <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
                      
                      {/* Hero Image Section */}
-                     <div className="w-full h-[55%] md:h-[60%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
-                        <Image src={tripImage} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/90 via-black/20 to-transparent" />
-                        <div className="absolute bottom-4 left-5">
-                           <h3 className="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate max-w-[200px] flex items-center gap-2">
-                             <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> Voyage Genie
+                     <div className="w-full h-[60%] md:h-[65%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
+                        <Image src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2940&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/95 via-black/40 to-transparent" />
+                        <div className="absolute bottom-5 left-6 right-6">
+                           <h3 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-2 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+                             <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" /> Voyage Genie
                            </h3>
-                           <p className="text-[9px] sm:text-[10px] text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">AI Travel Companion</p>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-1.5 shadow-lg">
-                           <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                           </span>
-                           <span className="text-[9px] uppercase font-bold text-white/90 tracking-wider">Active</span>
+                           <p className="text-[11px] sm:text-[13px] text-emerald-400 font-black tracking-widest uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">AI Travel Companion</p>
                         </div>
                      </div>
                      
                      {/* Bottom Info Section */}
-                     <div className="px-3 sm:px-5 py-2 sm:py-3 relative z-10 flex-1 flex flex-col justify-center border-t border-white/5">
-                        <p className="text-xs sm:text-sm text-white font-medium leading-relaxed text-center drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]">
+                     <div className="px-4 sm:px-6 py-2 sm:py-3 relative z-10 flex-1 flex flex-col justify-center border-t border-white/5">
+                        <p className="text-sm sm:text-base text-white font-medium leading-relaxed text-center drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)]">
                           Design the perfect journey. Voyage Genie instantly crafts hyper-personalized itineraries, automates logistics, and discovers hidden gems just for you.
                         </p>
                      </div>
