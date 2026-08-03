@@ -1,155 +1,83 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe } from 'lucide-react';
+import { Compass, Sparkles } from 'lucide-react';
 
 export const GeneratingTripCard = ({ destination }) => (
   <motion.div 
     key="generating"
-    initial={{ opacity: 0, scale: 0.92, y: 30 }}
+    initial={{ opacity: 0, scale: 0.98, y: 15 }}
     animate={{ opacity: 1, scale: 1, y: 0 }}
     exit={{ opacity: 0, scale: 0.95, y: -20 }}
     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-    className="relative w-full h-[460px] rounded-[32px] overflow-hidden transform-gpu will-change-transform max-w-lg mx-auto"
+    className="relative w-full h-[460px] rounded-[32px] overflow-hidden transform-gpu will-change-transform group flex flex-col justify-between p-8"
   >
-    {/* Multi-layer Liquid Glass Background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-[#0a0e1a]/90 via-[#0d1220]/95 to-[#080c18]/90 backdrop-blur-3xl" />
-    <div className="absolute inset-0 rounded-[32px] border border-white/[0.12] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_1px_rgba(0,0,0,0.3),0_20px_60px_rgba(0,0,0,0.5)]" />
+    {/* Ultra-Premium Liquid Glass Background */}
+    <div className="absolute inset-0 bg-[#050B14]/40 backdrop-blur-[60px] backdrop-saturate-[250%]" />
+    <div className="absolute inset-0 rounded-[32px] border-[1.5px] border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.1)] pointer-events-none" />
     
-    {/* Aurora Gradient — morphing color wash */}
-    <div className="absolute inset-0 opacity-40 animate-[aurora_8s_ease-in-out_infinite]" style={{ background: 'radial-gradient(ellipse 80% 50% at 20% 80%, rgba(56,189,248,0.3), transparent), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(168,85,247,0.25), transparent), radial-gradient(ellipse 50% 60% at 50% 50%, rgba(52,211,153,0.15), transparent)' }} />
-    
-    {/* Noise texture */}
-    <div className="absolute inset-0 opacity-[0.08] mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E")' }} />
+    {/* Extremely Subtle Ambient Glow */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-gradient-to-b from-blue-500/10 to-transparent blur-3xl opacity-50 pointer-events-none" />
+    <div className="absolute -inset-1/2 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 animate-[pulse_6s_ease-in-out_infinite] opacity-60 pointer-events-none" />
 
-    {/* Shimmer sweep */}
-    <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,transparent_40%,rgba(255,255,255,0.04)_45%,rgba(255,255,255,0.08)_50%,rgba(255,255,255,0.04)_55%,transparent_60%,transparent_100%)] bg-[length:250%_100%] animate-[glass-shimmer_4s_ease-in-out_infinite]" />
-
-    {/* Orbiting Particles */}
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {[0, 1, 2, 3, 4, 5].map(i => (
-        <div key={i} className="absolute w-1.5 h-1.5 rounded-full animate-[orbit_6s_linear_infinite]" style={{ 
-          background: `radial-gradient(circle, ${['#38bdf8','#a855f7','#34d399','#f472b6','#fbbf24','#818cf8'][i]}, transparent)`,
-          boxShadow: `0 0 8px ${['#38bdf8','#a855f7','#34d399','#f472b6','#fbbf24','#818cf8'][i]}`,
-          animationDelay: `${i * -1}s`,
-          offsetPath: 'ellipse(140px 90px)',
-          offsetRotate: '0deg'
-        }} />
-      ))}
+    {/* Top Header */}
+    <div className="relative z-10 flex items-center justify-between w-full">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
+        <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+        <span className="text-[11px] font-bold tracking-widest text-white/80 uppercase">AI Architect</span>
+      </div>
     </div>
 
-    {/* Central Content */}
-    <div className="relative z-10 flex flex-col items-center justify-center h-full px-8">
+    {/* Center Content: Minimalist Loading Indicator */}
+    <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full gap-6 mt-4">
       
-      {/* Globe with 3D depth rings */}
-      <div className="relative w-24 h-24 mb-8 flex items-center justify-center">
-        {/* Outer pulsing glow */}
-        <div className="absolute -inset-4 rounded-full bg-blue-500/10 animate-[pulse_3s_ease-in-out_infinite] blur-xl" />
+      {/* Elegant Breathing Compass */}
+      <div className="relative w-20 h-20 flex items-center justify-center">
+        {/* Soft pulsing aura */}
+        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-[pulse_3s_ease-in-out_infinite]" />
         
-        {/* Concentric rotating rings */}
-        <div className="absolute inset-[-8px] rounded-full border border-white/[0.06] animate-[spin_20s_linear_infinite]">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-blue-400/60 shadow-[0_0_6px_rgba(96,165,250,0.8)]" />
-        </div>
-        <div className="absolute inset-[-2px] rounded-full border border-dashed border-white/[0.08] animate-[spin_15s_linear_infinite_reverse]" />
-        <div className="absolute inset-[6px] rounded-full border border-white/[0.1] animate-[spin_25s_linear_infinite]">
-          <div className="absolute bottom-0 right-0 w-1 h-1 rounded-full bg-purple-400/70 shadow-[0_0_6px_rgba(168,85,247,0.8)]" />
-        </div>
+        {/* Subtle spinning dashed ring */}
+        <div className="absolute inset-[-4px] rounded-full border border-dashed border-white/20 animate-[spin_10s_linear_infinite]" />
         
-        {/* Globe icon with glow */}
-        <div className="relative flex items-center justify-center animate-[float_4s_ease-in-out_infinite]">
-          <div className="absolute w-10 h-10 bg-blue-500/20 rounded-full blur-lg" />
-          <Globe className="w-10 h-10 text-white/90 drop-shadow-[0_0_20px_rgba(96,165,250,0.6)]" strokeWidth={1.2} />
+        {/* Glass Icon Container */}
+        <div className="relative w-16 h-16 rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/20 shadow-[0_8px_16px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.3)] backdrop-blur-md flex items-center justify-center">
+          <Compass className="w-8 h-8 text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" strokeWidth={1.5} />
         </div>
       </div>
-      
-      {/* Status text with stagger animation */}
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="flex items-center gap-2 mb-5"
-      >
-        <div className="flex gap-[3px]">
-          {[0,1,2].map(i => (
-            <div key={i} className="w-[3px] h-[3px] rounded-full bg-blue-400/80 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: `${i * 0.2}s` }} />
-          ))}
-        </div>
-        <h3 className="text-[11px] font-bold text-white/70 tracking-[0.3em] uppercase">Curating Journey</h3>
-        <div className="flex gap-[3px]">
-          {[0,1,2].map(i => (
-            <div key={i} className="w-[3px] h-[3px] rounded-full bg-blue-400/80 animate-[pulse_1.5s_ease-in-out_infinite]" style={{ animationDelay: `${i * 0.2 + 0.6}s` }} />
-          ))}
-        </div>
-      </motion.div>
-      
-      {/* Destination name with reveal */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center"
-      >
-        <p className="text-[13px] text-white/40 font-medium tracking-wide mb-2">Destination</p>
-        <p className="text-2xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.15)]">{destination}</p>
-      </motion.div>
 
-      {/* Animated loading steps */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="mt-8 flex items-center gap-3"
-      >
-        <div className="flex gap-1">
-          {[0,1,2,3].map(i => (
-            <div key={i} className="w-1 h-4 rounded-full bg-white/10 animate-[eq_1.2s_ease-in-out_infinite]" style={{ animationDelay: `${i * 0.15}s` }} />
-          ))}
+      <div className="flex flex-col items-center gap-1 text-center">
+        <h3 className="text-2xl font-semibold text-white tracking-tight drop-shadow-md">
+          {destination}
+        </h3>
+        
+        <div className="flex items-center gap-2 mt-2">
+          {/* Gentle blinking dots */}
+          <span className="flex gap-[3px]">
+            {[0, 1, 2].map((i) => (
+              <span 
+                key={i} 
+                className="w-1 h-1 rounded-full bg-blue-400/80 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]" 
+                style={{ animationDelay: `${i * 0.2}s` }} 
+              />
+            ))}
+          </span>
+          <p className="text-[13px] text-white/50 font-medium tracking-wide">
+            Crafting your perfect itinerary
+          </p>
         </div>
-        <span className="text-[11px] text-white/30 font-medium tracking-wider uppercase animate-pulse">Analyzing routes & experiences</span>
-      </motion.div>
+      </div>
     </div>
-    
-    {/* Scanning Laser Line — refined with blur trail */}
-    <div className="absolute inset-x-0 z-10 animate-[scan_4s_ease-in-out_infinite]">
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-blue-400/60 to-transparent" />
-      <div className="h-8 bg-gradient-to-b from-blue-400/[0.07] to-transparent -mt-4" />
+
+    {/* Bottom Minimal Progress Bar */}
+    <div className="relative z-10 w-full mt-auto mb-2">
+      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]">
+        <div className="h-full bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 rounded-full w-full origin-left animate-[scale-x_7s_cubic-bezier(0.16,1,0.3,1)_forwards]" />
+      </div>
     </div>
-    
-    {/* Bottom progress bar */}
-    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/[0.03] overflow-hidden z-20">
-      <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500/70 via-purple-500/70 to-emerald-400/70 animate-[gen-progress_7s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
-    </div>
-    
+
     <style>{`
-      @keyframes scan {
-        0% { top: -5%; opacity: 0; }
-        5% { opacity: 1; }
-        95% { opacity: 1; }
-        100% { top: 105%; opacity: 0; }
-      }
-      @keyframes glass-shimmer {
-        0% { background-position: 250% 0; }
-        100% { background-position: -250% 0; }
-      }
-      @keyframes gen-progress {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(0%); }
-      }
-      @keyframes aurora {
-        0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
-        33% { opacity: 0.5; transform: scale(1.1) rotate(2deg); }
-        66% { opacity: 0.35; transform: scale(0.95) rotate(-2deg); }
-      }
-      @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-6px); }
-      }
-      @keyframes orbit {
-        from { offset-distance: 0%; }
-        to { offset-distance: 100%; }
-      }
-      @keyframes eq {
-        0%, 100% { height: 4px; opacity: 0.3; }
-        50% { height: 16px; opacity: 0.8; }
+      @keyframes scale-x {
+        0% { transform: scaleX(0); }
+        100% { transform: scaleX(1); }
       }
     `}</style>
   </motion.div>
