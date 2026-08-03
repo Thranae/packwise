@@ -324,8 +324,8 @@ export default function HomePage() {
             <div className="lg:col-span-6 relative h-[380px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-2 lg:mt-0 transform origin-center order-2">
               
               {/* Center Map / Main Art */}
-              <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[0%] lg:top-[5%] left-[0%] lg:left-[2%] w-[100%] lg:w-[96%] h-[95%] lg:h-[85%] z-20">
-                <div className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-700 cursor-pointer">
+              <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 8, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }} className="absolute top-[0%] lg:top-[5%] left-[0%] lg:left-[2%] w-[100%] lg:w-[96%] h-[95%] lg:h-[85%] z-20">
+                <div className="relative w-full h-full p-[1.5px] rounded-[32px] bg-gradient-to-br from-white/50 via-white/10 to-black/20 shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_10px_rgba(255,255,255,0.5),inset_0_-2px_10px_rgba(0,0,0,0.3)] backdrop-blur-[40px] transform-gpu preserve-3d overflow-hidden group hover:scale-[1.02] transition-transform duration-1000 cursor-pointer">
                   {/* iOS Noise Texture Overlay */}
                   <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-0" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')" }}></div>
                   
@@ -351,7 +351,7 @@ export default function HomePage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 1.5, ease: "easeInOut" }}
+                            transition={{ duration: 2.5, ease: [0.4, 0, 0.2, 1] }}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                           />
                         </AnimatePresence>
@@ -360,10 +360,10 @@ export default function HomePage() {
                            <AnimatePresence mode="wait">
                              <motion.div
                                key={`text-${currentSlideIndex}`}
-                               initial={{ opacity: 0, y: 15 }}
+                               initial={{ opacity: 0, y: 20 }}
                                animate={{ opacity: 1, y: 0 }}
-                               exit={{ opacity: 0, y: -15 }}
-                               transition={{ duration: 0.8, ease: "easeOut" }}
+                               exit={{ opacity: 0, y: -20 }}
+                               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                                className="flex flex-col"
                              >
                                <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
