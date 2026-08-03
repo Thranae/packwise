@@ -197,6 +197,7 @@ function AppRoutes() {
 
   return (
     <Suspense fallback={<Spinner />}>
+      <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path={ROUTES.HOME} element={<HomePage />} />
 
@@ -368,6 +369,7 @@ function AppRoutes() {
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </AnimatePresence>
     </Suspense>
   );
 }
