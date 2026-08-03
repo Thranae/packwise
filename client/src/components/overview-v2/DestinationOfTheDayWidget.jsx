@@ -26,6 +26,41 @@ const DESTINATIONS = [
     tagline: "Majestic Peaks & Valleys",
     image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800&auto=format&fit=crop",
     styles: ["Nature", "Fast-paced"]
+  },
+  {
+    name: "Santorini",
+    country: "Greece",
+    tagline: "Whitewashed Dreams & Sunsets",
+    image: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?q=80&w=800&auto=format&fit=crop",
+    styles: ["Romantic", "Luxury"]
+  },
+  {
+    name: "Bali",
+    country: "Indonesia",
+    tagline: "Lush Jungles & Tranquil Beaches",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop",
+    styles: ["Relaxed", "Nature"]
+  },
+  {
+    name: "Banff National Park",
+    country: "Canada",
+    tagline: "Turquoise Lakes & Glaciers",
+    image: "https://images.unsplash.com/photo-1561134643-668b813b1f0c?q=80&w=800&auto=format&fit=crop",
+    styles: ["Adventure", "Nature"]
+  },
+  {
+    name: "Dubai",
+    country: "UAE",
+    tagline: "Futuristic Skylines & Desert Oasis",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop",
+    styles: ["Luxury", "Fast-paced"]
+  },
+  {
+    name: "Machu Picchu",
+    country: "Peru",
+    tagline: "Ancient Ruins & Cloud Forests",
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop",
+    styles: ["Adventure", "Culture"]
   }
 ];
 

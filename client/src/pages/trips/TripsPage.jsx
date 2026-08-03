@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import { Plus, Search, Map, Compass, MapPin, Loader2, Sparkles } from 'lucide-react';
+import { Plus, Search, Map, Compass, MapPin, Loader2, Sparkles, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/common/PageTransition';
@@ -9,6 +9,7 @@ import { useTripContext } from '@/context/TripContext';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
+
 const GeneratingTripCard = ({ destination }) => (
   <motion.div 
     key="generating"
@@ -16,29 +17,92 @@ const GeneratingTripCard = ({ destination }) => (
     animate={{ opacity: 1, scale: 1 }}
     exit={{ opacity: 0, scale: 0.95 }}
     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    className="relative w-full h-[460px] rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl flex flex-col justify-center items-center p-6"
+    className="relative w-full h-[460px] rounded-[32px] overflow-hidden bg-[#0B101E]/90 border border-white/[0.12] shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl flex flex-col items-center justify-center p-0"
   >
-    {/* Subtle static gradient background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-purple-500/[0.06]" />
+    {/* Grid Background */}
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
     
-    {/* Content */}
-    <div className="relative z-10 flex flex-col items-center">
-      {/* Orbital loading animation */}
-      <div className="relative w-20 h-20 mb-8">
-        <div className="absolute inset-0 rounded-full border-2 border-white/[0.06]" />
-        <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-purple-400/80 animate-spin" style={{ animationDuration: '1.5s' }} />
-        <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-blue-400/60 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }} />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Sparkles className="w-7 h-7 text-white/90" />
-        </div>
-      </div>
+    {/* Animated Checklist Container (centered inside the card) */}
+    <div className="relative w-[280px] h-[220px] bg-[#020617]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_16px_32px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden z-10 mb-6 scale-100">
       
-      <h3 className="text-xl font-bold text-white tracking-tight text-center mb-2">Crafting itinerary...</h3>
-      <p className="text-sm text-white/45 text-center font-medium leading-relaxed max-w-[200px]">Curating the best of {destination}</p>
+      {/* Header */}
+      <div className="w-full h-8 bg-white/5 border-b border-white/10 flex items-center justify-center px-4 z-30 shrink-0">
+         <span className="text-[9px] font-bold tracking-[0.25em] text-white/50">BUILDING ITINERARY</span>
+      </div>
+
+      {/* Scrolling List Area */}
+      <div className="flex-1 relative w-full overflow-hidden bg-transparent">
+        
+        {/* Selection Highlight Box (Static in center) */}
+        <div className="absolute left-2.5 right-2.5 h-[42px] bg-blue-500/10 border border-blue-500/30 rounded-xl pointer-events-none z-20 shadow-[inset_0_0_12px_rgba(59,130,246,0.15)]" style={{ top: '44px' }} />
+
+        {/* Top and Bottom Fade Gradients */}
+        <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-b from-[#020617] to-transparent z-30 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[#020617] to-transparent z-30 pointer-events-none" />
+
+        {/* The Scrolling Content */}
+        <motion.div 
+          className="w-[calc(100%-20px)] flex flex-col gap-2 z-10 absolute left-2.5"
+          style={{ top: '44px' }}
+          animate={{ y: [0, 0, -50, -50, -100, -100, -150, -150, -200, -200, -250, -250] }}
+          transition={{ 
+            duration: 4.5, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            times: [0, 0.13, 0.18, 0.31, 0.36, 0.49, 0.54, 0.67, 0.72, 0.85, 0.90, 1] 
+          }}
+        >
+           {[
+            { id: 1, label: "FLIGHTS & TRANSIT", icon: Plane, color: "text-blue-400 bg-blue-500/20 border-blue-500/30" },
+            { id: 2, label: "ACCOMMODATIONS", icon: Home, color: "text-purple-400 bg-purple-500/20 border-purple-500/30" },
+            { id: 3, label: "DAILY ACTIVITIES", icon: MapPin, color: "text-emerald-400 bg-emerald-500/20 border-emerald-500/30" },
+            { id: 4, label: "BUDGET ANALYSIS", icon: Wallet, color: "text-rose-400 bg-rose-500/20 border-rose-500/30" },
+            { id: 5, label: "WEATHER CHECK", icon: CloudSun, color: "text-amber-400 bg-amber-500/20 border-amber-500/30" },
+            { id: 6, label: "FLIGHTS & TRANSIT", icon: Plane, color: "text-blue-400 bg-blue-500/20 border-blue-500/30" }, // Duplicate for loop
+           ].map((item, index) => (
+             <div key={`trip-gen-${index}`} className="w-full h-[42px] bg-white/5 rounded-xl flex items-center px-2.5 shadow-sm border border-white/5 flex-shrink-0">
+               <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${item.color}`}>
+                 <item.icon className="w-4 h-4 drop-shadow-sm" strokeWidth={2.5} />
+               </div>
+               
+               <div className="flex flex-col ml-2.5 justify-center">
+                  <span className="text-[10px] font-bold text-white tracking-wider drop-shadow-sm truncate max-w-[120px]">{item.label}</span>
+                  <span className="text-[8px] text-white/50 mt-0 font-medium">Processing...</span>
+               </div>
+
+               <motion.div
+                 className="ml-auto text-blue-400"
+                 animate={index === 0 ? { scale: 1, opacity: 1 } : { scale: [0, 0, 1.4, 1], opacity: [0, 0, 1, 1] }}
+                 transition={
+                   index === 0 
+                   ? { duration: 0 }
+                   : {
+                       duration: 4.5,
+                       repeat: Infinity,
+                       ease: ["linear", "linear", "backOut", "linear"],
+                       times: [
+                         0,
+                         index * 0.18,
+                         Math.min(0.99, index * 0.18 + 0.05),
+                         1
+                       ]
+                     }
+                 }
+               >
+                  <CheckCircle2 className="w-5 h-5 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]" strokeWidth={3} />
+               </motion.div>
+             </div>
+           ))}
+        </motion.div>
+      </div>
     </div>
+
+    {/* Typography */}
+    <h3 className="text-xl font-bold text-white tracking-tight text-center mb-2 z-10">Crafting itinerary...</h3>
+    <p className="text-sm text-white/45 text-center font-medium leading-relaxed max-w-[200px] z-10">Curating the best of {destination}</p>
     
     {/* Progress bar */}
-    <div className="absolute bottom-0 left-0 right-0 h-1.5 w-full bg-white/[0.04] overflow-hidden">
+    <div className="absolute bottom-0 left-0 right-0 h-1.5 w-full bg-white/[0.04] overflow-hidden z-20">
       <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-blue-500 to-purple-500 animate-[gen-progress_7s_cubic-bezier(0.4,0,0.2,1)_forwards]" />
     </div>
     
