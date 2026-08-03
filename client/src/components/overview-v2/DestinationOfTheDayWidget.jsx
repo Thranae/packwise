@@ -42,10 +42,10 @@ const DESTINATIONS = [
     styles: ["Relaxed", "Nature"]
   },
   {
-    name: "Banff National Park",
+    name: "Banff",
     country: "Canada",
     tagline: "Turquoise Lakes & Glaciers",
-    image: "https://images.unsplash.com/photo-1561134643-668b813b1f0c?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2000&auto=format&fit=crop",
     styles: ["Adventure", "Nature"]
   },
   {
@@ -88,20 +88,18 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
 
   return (
     <div className={`relative rounded-[32px] overflow-hidden ios-glass-card group flex flex-col min-h-[300px] ${className}`}>
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.img
           key={currentDest.name}
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.5, ease: 'easeInOut' }}
+          transition={{ duration: 2.5, ease: [0.4, 0, 0.2, 1] }}
           src={currentDest.image}
           alt={currentDest.name}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110"
         />
       </AnimatePresence>
-
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#060B14]/70 to-transparent pointer-events-none" />
 
       <div className="absolute top-6 left-6 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
         <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -109,28 +107,27 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
       </div>
 
       <div className="relative z-10 p-6 sm:p-8 mt-auto flex flex-col gap-4">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={currentDest.name}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <div className="flex items-center gap-2 text-white mb-1">
-              <MapPin className="w-4 h-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
-              <span className="text-sm font-semibold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{currentDest.country}</span>
+            <div className="flex flex-col">
+              <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" />
+                <span className="truncate">{currentDest.name}</span>
+              </h3>
+              <p className="text-[10px] sm:text-[12px] text-white/90 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] pl-[32px] sm:pl-[40px] truncate mb-3">
+                {currentDest.country} - {currentDest.tagline}
+              </p>
             </div>
-            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] mb-1">
-              {currentDest.name}
-            </h3>
-            <p className="text-white/90 font-medium text-sm sm:text-base mb-4 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
-              {currentDest.tagline}
-            </p>
             
             <button
               onClick={() => handleGenerate(currentDest)}
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group/btn w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)]"
+              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md px-5 py-3 rounded-full transition-all active:scale-95 group/btn w-max shadow-[0_8px_16px_rgba(0,0,0,0.2)] ml-[32px] sm:ml-[40px]"
             >
               <span className="text-sm font-bold text-white tracking-wide">Plan a Trip Here</span>
               <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-1 transition-transform" />

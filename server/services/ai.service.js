@@ -37,7 +37,7 @@ class AIService {
   }
 
   async generateTripPlan(destination, days) {
-    const prompt = `Create a high-level trip plan for ${days} days in ${destination}. Return JSON with { title: String, summary: String, highlights: [String] }`;
+    const prompt = `Create a precise, highly accurate trip plan for ${days} days in ${destination}. Guarantee that the summary and highlights reflect real-world facts about the location. Return JSON with { title: String, summary: String, highlights: [String] }`;
     return this._generateJson(prompt, { title: `Trip to ${destination}`, summary: "Ready to plan your trip!", highlights: [] }, 'planning');
   }
 
@@ -199,7 +199,7 @@ class AIService {
 
   async generateItinerary(destination, days) {
     const prompt = `Create a highly accurate daily itinerary for ${days} days in ${destination}. 
-    CRITICAL: You MUST use real, verifiable locations, restaurants, and landmarks that actually exist in ${destination}. Do NOT invent or hallucinate places.
+    CRITICAL: You MUST use strictly real, verifiable locations, restaurants, and landmarks that actually exist in ${destination}. Do NOT invent, hallucinate, or guess places. Cross-reference real-world geographical data to guarantee absolute precision.
     Return ONLY a JSON array strictly matching this format:
     [
       { "day": 1, "title": "Arrival", "activities": [{ "time": "10:00 AM", "description": "Check in" }] }
@@ -210,7 +210,7 @@ class AIService {
   async generateFullTrip(prompt) {
     const aiPrompt = `Parse the following user trip request: "${prompt}". 
     Determine the best real destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
-    CRITICAL: Ensure the destination is a real geographical location.
+    CRITICAL: You MUST use an absolutely precise, real-world geographical location. Do NOT hallucinate. Validate that the country, currency, and timezone perfectly match the destination.
     Determine the number of travelers and their gender directly from the prompt.
     Extract the requested start date in YYYY-MM-DD format.
     Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.

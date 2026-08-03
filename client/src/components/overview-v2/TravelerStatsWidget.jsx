@@ -15,9 +15,9 @@ export const TravelerStatsWidget = ({ className = "" }) => {
   const activeTripsCount = trips?.length || 0;
   
   const stats = {
-    countries: Math.max(1, new Set(trips?.map(t => t.country).filter(Boolean)).size),
-    trips: activeTripsCount > 0 ? activeTripsCount : 3, // Mock if 0 for visual flair in empty state
-    miles: (completedTrips.length * 2400) + 12450 // Mock logic
+    countries: new Set(trips?.map(t => t.country).filter(Boolean)).size || 0,
+    trips: activeTripsCount || 0,
+    miles: completedTrips.length * 2400
   };
 
   const badges = [
