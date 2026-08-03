@@ -94,7 +94,7 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 2.5, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
           src={currentDest.image}
           alt={currentDest.name}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110"
@@ -107,13 +107,13 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
       </div>
 
       <div className="relative z-10 p-6 sm:p-8 mt-auto flex flex-col gap-4">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
             key={currentDest.name}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex flex-col gap-1 w-full md:w-3/4">
               <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] flex items-center gap-2">
