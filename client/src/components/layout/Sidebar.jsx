@@ -11,12 +11,12 @@ export const GLASS_HOVER = "transition-all duration-700 hover:-translate-y-1 hov
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
-  { label: 'Trips', path: '/trips', icon: Compass, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
+  { label: 'Trips', path: '/trips', icon: Map, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
   { label: 'AI Planner', path: '/assistant', icon: Sparkles, colorClass: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
   { label: 'Packing', path: '/packing', icon: Box, colorClass: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]' },
   { label: 'Calendar', path: '/calendar', icon: Calendar, colorClass: 'group-hover:text-pink-400 group-hover:drop-shadow-[0_0_8px_rgba(244,114,182,0.8)]' },
   { label: 'Budget', path: '/budget', icon: Wallet, colorClass: 'group-hover:text-green-400 group-hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]' },
-  { label: 'Explore', path: '/explore', icon: Map, colorClass: 'group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' },
+  { label: 'Explore', path: '/explore', icon: Compass, colorClass: 'group-hover:text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]' },
   { label: 'Journal', path: '/journal', icon: BookOpen, colorClass: 'group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]' },
   { label: 'Flights', path: '/flights', icon: Plane, colorClass: 'group-hover:text-sky-400 group-hover:drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]' },
   { label: 'Profile', path: '/profile', icon: User, colorClass: 'group-hover:text-rose-400 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.8)]' },

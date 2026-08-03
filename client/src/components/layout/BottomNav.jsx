@@ -8,9 +8,9 @@ import { useTransitionNavigate } from '@/contexts/TransitionContext';
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
-  { label: 'Trips', path: '/trips', icon: Compass, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
+  { label: 'Trips', path: '/trips', icon: Map, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
   { label: 'Genie', path: '/assistant', icon: Sparkles, activeColor: 'text-white', isCenter: true },
-  { label: 'Explore', path: '/explore', icon: Map, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
+  { label: 'Explore', path: '/explore', icon: Compass, activeColor: 'text-cyan-400', shadowColor: 'shadow-cyan-500/50' },
   { label: 'Profile', path: '/profile', icon: User, activeColor: 'text-rose-400', shadowColor: 'shadow-rose-500/50' },
 ];
 
