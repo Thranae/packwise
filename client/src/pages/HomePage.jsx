@@ -470,8 +470,10 @@ export default function HomePage() {
             )}
           </section>
 
-        {/* FEATURES */}
-        <section id="features" className="py-16 lg:py-32 relative z-20">
+        {!isAuthenticated && (
+          <>
+            {/* FEATURES */}
+            <section id="features" className="py-16 lg:py-32 relative z-20">
           <motion.div 
             initial="hidden"
             whileInView="show"
@@ -778,6 +780,8 @@ export default function HomePage() {
             </div>
           </div>
         </footer>
+          </>
+        )}
 
       </main>
     </div>

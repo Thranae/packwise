@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import { Plus, Search, Map, Compass, MapPin } from 'lucide-react';
+import { Plus, Search, Map, Compass, MapPin, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { PageTransition } from '@/components/common/PageTransition';
@@ -49,6 +49,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
       if (showGenerating) {
         const timer = setTimeout(() => {
           setShowGenerating(false);
+          fetchTrips();
         }, 7000);
         return () => clearTimeout(timer);
       }
@@ -189,6 +190,9 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
         {/* Trips Grid or Skeletons */}
         <AnimatePresence mode="wait">
+          {showGenerating && (
+            <GeneratingTripCard destination={destName} />
+          )}
           {loadingTrips ? (
             <motion.div
               key="skeletons"
