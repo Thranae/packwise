@@ -183,8 +183,6 @@ export const TripCard = ({ trip }) => {
                 style={{ backgroundImage: `url(${displayImage})` }}
               />
             )}
-            {/* Gradient to blend with content - highly reduced for brighter image */}
-            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#060B14]/70 to-transparent pointer-events-none" />
           </div>
           
           {/* Top Badges (Now outside overflow-hidden) */}

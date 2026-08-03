@@ -584,8 +584,8 @@ export default function HomePage() {
               {/* 3D Noise Texture, Vignette & Color Gradients */}
               <div className="absolute inset-0 opacity-[0.25] pointer-events-none mix-blend-overlay z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
               
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/40 via-transparent to-purple-600/40 mix-blend-overlay pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000 z-0" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/95 via-[#020617]/40 to-transparent pointer-events-none z-0" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-transparent to-purple-600/20 mix-blend-overlay pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000 z-0" />
+              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020617]/90 to-transparent pointer-events-none z-0" />
               
               {/* Scanning Laser Line Animation */}
               <motion.div 

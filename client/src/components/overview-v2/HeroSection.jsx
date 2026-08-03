@@ -169,7 +169,7 @@ export const HeroSection = ({ isSharedView = false }) => {
                   />
                 )}
                 {/* Soft Dark Overlay for Text Readability - Lightened so it is not dull */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0F172A]/70 to-transparent pointer-events-none" />
               </motion.div>
             ) : (
               <motion.div 
@@ -237,10 +237,10 @@ export const HeroSection = ({ isSharedView = false }) => {
         {/* Title Content */}
         <div className="relative z-10 flex flex-col gap-1 md:gap-2 ios-3d-element">
           <div className="flex items-center gap-2 text-white/90">
-            <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-            <span className="text-xs md:text-lg font-bold tracking-wide">{currentTrip.country}</span>
+            <MapPin className="w-4 h-4 md:w-5 md:h-5 text-blue-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+            <span className="text-xs md:text-lg font-bold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{currentTrip.country}</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white drop-shadow-lg leading-tight break-words overflow-hidden">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] leading-tight break-words overflow-hidden">
             {currentTrip.destination}
           </h1>
           <div className="flex flex-row flex-wrap sm:items-center gap-2 sm:gap-6 mt-1">
