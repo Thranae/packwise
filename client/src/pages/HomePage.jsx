@@ -355,7 +355,6 @@ export default function HomePage() {
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
                           />
                         </AnimatePresence>
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#030712]/95 via-black/40 to-transparent pointer-events-none" />
                         
                         <div className="absolute bottom-5 left-6 right-6">
                            <AnimatePresence mode="wait">
@@ -367,11 +366,11 @@ export default function HomePage() {
                                transition={{ duration: 0.8, ease: "easeOut" }}
                                className="flex flex-col"
                              >
-                               <h3 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
-                                 <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" /> 
+                               <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+                                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" /> 
                                  <span className="truncate">{SLIDESHOW_IMAGES[currentSlideIndex].city}</span>
                                </h3>
-                               <p className="text-[12px] sm:text-[14px] text-white/70 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] pl-[40px] sm:pl-[48px] truncate">
+                               <p className="text-[10px] sm:text-[12px] text-white/90 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] pl-[32px] sm:pl-[40px] truncate">
                                  {SLIDESHOW_IMAGES[currentSlideIndex].country}
                                </p>
                              </motion.div>
