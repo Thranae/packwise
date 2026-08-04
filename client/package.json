@@ -25,6 +25,7 @@
     "@react-oauth/google": "^0.13.5",
     "@revenuecat/purchases-capacitor": "^13.2.5",
     "@tanstack/react-query": "^5.62.16",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
