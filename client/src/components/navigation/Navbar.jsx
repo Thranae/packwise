@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Plane, Globe, Book, ArrowRight, Sparkles } from 'lucide-react';
+import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Plane, Globe, Book, ArrowRight, Rocket } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { ROUTES } from '@/constants/routes';
@@ -405,25 +405,29 @@ export const Navbar = () => {
                   </div>
 
                   {/* CTA Buttons */}
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-3 px-1 mt-2">
                     <Link to={ROUTES.SIGNUP} onClick={() => setMobileMenuOpen(false)} className="w-full block">
-                      <button className="w-full relative overflow-hidden group py-3 rounded-[16px] text-white transition-all duration-300 active:scale-[0.97] flex items-center px-2" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #6366F1 100%)' }}>
+                      <button className="w-full relative overflow-hidden group py-3.5 rounded-[20px] text-white transition-all duration-300 active:scale-[0.96] flex items-center px-2 shadow-[0_8px_20px_rgba(79,124,255,0.4),inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.2)] border border-[#83a4ff]/50 bg-gradient-to-r from-[#4F7CFF] to-[#6366F1]">
                         <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
-                        <div className="w-10 h-10 rounded-[12px] bg-white/20 border border-white/30 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_4px_8px_rgba(0,0,0,0.2)] mr-3 relative z-10">
-                          <Sparkles className="w-5 h-5 text-white drop-shadow-md" />
+                        <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-white/40 to-white/10 border border-white/40 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),0_4px_8px_rgba(0,0,0,0.2)] mr-3.5 relative z-10 transition-transform duration-300 group-hover:scale-105">
+                          <Rocket className="w-6 h-6 text-white drop-shadow-md" />
                         </div>
-                        <span className="relative z-10 font-bold text-[15px] tracking-wide flex-1 text-left">Get Started</span>
-                        <ArrowRight className="w-5 h-5 relative z-10 mr-2 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        <span className="relative z-10 font-extrabold text-[16px] tracking-wide flex-1 text-left">Get Started</span>
+                        <div className="relative z-10 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-2 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)] border border-white/20">
+                          <ArrowRight className="w-4 h-4 text-white" />
+                        </div>
                       </button>
                     </Link>
 
                     <Link to={ROUTES.LOGIN} onClick={() => setMobileMenuOpen(false)} className="w-full block mt-1">
-                      <button className="w-full py-3 rounded-[16px] bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.12] text-white transition-all duration-200 active:scale-[0.97] flex items-center px-2 group">
-                        <div className="w-10 h-10 rounded-[12px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] mr-3">
-                          <User className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                      <button className="w-full relative py-3.5 rounded-[20px] bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-xl border border-white/20 hover:border-white/30 text-white transition-all duration-200 active:scale-[0.96] flex items-center px-2 group shadow-[0_8px_16px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.1)]">
+                        <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-white/20 to-white/5 border border-white/20 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_8px_rgba(0,0,0,0.15)] mr-3.5 transition-transform duration-300 group-hover:scale-105">
+                          <User className="w-6 h-6 text-white/90 drop-shadow-sm group-hover:text-white transition-colors" />
                         </div>
-                        <span className="font-semibold text-[14px] text-white/80 group-hover:text-white transition-colors flex-1 text-left">Log in</span>
-                        <ArrowRight className="w-4 h-4 mr-2 text-white/30 group-hover:text-white/60 transition-colors" />
+                        <span className="font-bold text-[16px] tracking-wide text-white/90 group-hover:text-white transition-colors flex-1 text-left">Log in</span>
+                        <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center mr-2 border border-white/10 group-hover:bg-white/10 transition-colors">
+                          <ArrowRight className="w-4 h-4 text-white/50 group-hover:text-white/80 transition-colors" />
+                        </div>
                       </button>
                     </Link>
                   </div>
