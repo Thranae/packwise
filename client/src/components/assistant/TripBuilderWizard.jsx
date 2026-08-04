@@ -315,6 +315,97 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
   );
 };
 
+const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSelectStyle }) => {
+  // Data for Step 1
+  const destinations = [
+    { id: 1, title: 'Tokyo, Japan', subtitle: 'Neon & Sushi', image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=400&q=80', query: 'Tokyo, Japan' },
+    { id: 2, title: 'Paris, France', subtitle: 'Romance', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=400&q=80', query: 'Paris, France' },
+    { id: 3, title: 'Bali, Indonesia', subtitle: 'Tropical Escape', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80', query: 'Bali, Indonesia' },
+    { id: 4, title: 'Rome, Italy', subtitle: 'Ancient History', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=400&q=80', query: 'Rome, Italy' },
+  ];
+
+  // Data for Step 2
+  const seasons = [
+    { id: 1, title: 'Summer Europe', subtitle: 'Jul - Aug', image: 'https://images.unsplash.com/photo-1516483638261-f408892288b6?auto=format&fit=crop&w=400&q=80', date: '2026-07-15', duration: 14 },
+    { id: 2, title: 'Cherry Blossoms', subtitle: 'Mar - Apr', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80', date: '2027-03-25', duration: 10 },
+    { id: 3, title: 'Ski Season', subtitle: 'Dec - Feb', image: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?auto=format&fit=crop&w=400&q=80', date: '2026-12-20', duration: 7 },
+    { id: 4, title: 'Autumn Colors', subtitle: 'Oct - Nov', image: 'https://images.unsplash.com/photo-1507371341162-763b5e419408?auto=format&fit=crop&w=400&q=80', date: '2026-10-15', duration: 8 },
+  ];
+
+  // Data for Step 3
+  const curatedStyles = [
+    { id: 1, title: 'Luxury Escape', subtitle: '5-Star Comfort', image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=400&q=80', styles: ['Luxury', 'Relaxed'] },
+    { id: 2, title: 'Backpacker', subtitle: 'Budget & Culture', image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80', styles: ['Culture', 'Fast-paced', 'Budget'] },
+    { id: 3, title: 'Foodie Heaven', subtitle: 'Culinary Tour', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80', styles: ['Foodie', 'Relaxed'] },
+    { id: 4, title: 'Wilderness', subtitle: 'Nature Adventure', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80', styles: ['Nature', 'Fast-paced'] },
+  ];
+
+  let items = [];
+  let onCardClick = () => {};
+  let headerTitle = "";
+  let headerSubtitle = "";
+
+  if (step === 1) {
+    items = destinations;
+    headerTitle = "Trending Destinations";
+    headerSubtitle = "Tap to auto-fill your next adventure";
+    onCardClick = (item) => onSelectDestination(item.query);
+  } else if (step === 2) {
+    items = seasons;
+    headerTitle = "Smart Season Insights";
+    headerSubtitle = "Pick a perfect travel window";
+    onCardClick = (item) => onSelectSeason(item.date, item.duration);
+  } else if (step === 3) {
+    items = curatedStyles;
+    headerTitle = "Curated Vibes";
+    headerSubtitle = "Select a pre-built travel style";
+    onCardClick = (item) => onSelectStyle(item.styles);
+  }
+
+  if (items.length === 0) return null;
+
+  return (
+    <motion.div
+      key={`carousel-${step}`}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="mt-6 w-full"
+    >
+      <div className="flex items-end justify-between px-2 mb-3">
+        <div>
+          <h4 className="text-[15px] font-bold text-white tracking-wide drop-shadow-md">{headerTitle}</h4>
+          <p className="text-[12px] font-medium text-white/50">{headerSubtitle}</p>
+        </div>
+      </div>
+      
+      {/* Scrollable Container */}
+      <div className="w-full overflow-x-auto custom-scrollbar pb-4 -mx-2 px-2 snap-x snap-mandatory flex gap-3 sm:gap-4">
+        {items.map((item, idx) => (
+          <motion.button
+            key={item.id}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: idx * 0.05 }}
+            onClick={() => onCardClick(item)}
+            className="relative shrink-0 w-[130px] sm:w-[150px] aspect-[3/4] rounded-[20px] overflow-hidden group snap-center bg-black shadow-[0_12px_24px_rgba(0,0,0,0.4),0_2px_4px_rgba(255,255,255,0.05)] active:scale-[0.96] transition-all duration-300 border border-white/10 hover:border-white/30"
+          >
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050b14]/90 via-[#050b14]/20 to-transparent z-10" />
+            <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            
+            <div className="absolute bottom-3.5 left-3 right-3 z-20 text-left">
+              <h5 className="text-[13px] sm:text-[14px] font-bold text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{item.title}</h5>
+              <p className="text-[10px] sm:text-[11px] font-semibold text-white/60 mt-0.5">{item.subtitle}</p>
+            </div>
+          </motion.button>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
 export const TripBuilderWizard = () => {
   const navigate = useNavigate();
   const triggerTransition = useTransitionNavigate();
@@ -338,6 +429,27 @@ export const TripBuilderWizard = () => {
 
   const toggleStyle = (style) => {
     setStyles(prev => prev.includes(style) ? prev.filter(s => s !== style) : [...prev, style]);
+  };
+
+  const handleSelectDestination = (locString) => {
+    lightTap();
+    playSound('tap');
+    setPrompt(locString);
+    setStep(2);
+  };
+
+  const handleSelectSeason = (date, dur) => {
+    lightTap();
+    playSound('tap');
+    setStartDate(date);
+    setDuration(dur);
+    setStep(3);
+  };
+
+  const handleSelectStyle = (newStyles) => {
+    lightTap();
+    playSound('tap');
+    setStyles(newStyles);
   };
 
   const handleGenerate = async () => {
@@ -627,60 +739,15 @@ export const TripBuilderWizard = () => {
         </AnimatePresence>
       </div>
 
-      {/* Dynamic Feature Card */}
+      {/* Dynamic Feature Card -> Inspiration Carousel */}
       <AnimatePresence mode="wait">
         {!isGenerating && (
-          <motion.div
-            key={`feature-card-${step}`}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 w-full ios-glass-card rounded-2xl p-4 sm:p-5 border border-white/5 shadow-[0_8px_16px_rgba(0,0,0,0.2)] flex items-start gap-3 sm:gap-4 relative overflow-hidden"
-          >
-            {/* Glass shine effect */}
-            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            
-            {step === 1 && (
-              <>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
-                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400 drop-shadow-md" />
-                </div>
-                <div>
-                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Need Inspiration?</h4>
-                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
-                    Try searching for "Somewhere tropical" or "European city with great food" and let Voyage Genie work its magic.
-                  </p>
-                </div>
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
-                  <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 drop-shadow-md" />
-                </div>
-                <div>
-                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Smart Pricing</h4>
-                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
-                    Your budget level adjusts the hotel tier and dining recommendations. We automatically find optimal flights for your dates.
-                  </p>
-                </div>
-              </>
-            )}
-            {step === 3 && (
-              <>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
-                  <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 drop-shadow-md" />
-                </div>
-                <div>
-                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Curating Your Vibe</h4>
-                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
-                    We blend iconic landmarks with local hidden gems to perfectly match your group's pace and interests.
-                  </p>
-                </div>
-              </>
-            )}
-          </motion.div>
+          <InspirationCarousel 
+            step={step}
+            onSelectDestination={handleSelectDestination}
+            onSelectSeason={handleSelectSeason}
+            onSelectStyle={handleSelectStyle}
+          />
         )}
       </AnimatePresence>
     </div>
