@@ -68,7 +68,7 @@ export const AIAssistantWidget = ({ className = "" }) => {
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
                 <div className="relative w-20 h-20 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl overflow-visible">
-                  <div className="absolute inset-[-20px] pointer-events-none mix-blend-screen">
+                  <div className="w-28 h-28 relative flex items-center justify-center pointer-events-none mix-blend-screen">
                      <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
                   </div>
                   <div className="absolute top-0 -right-0 w-3 h-3 bg-emerald-400 rounded-full border-[1.5px] border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)] z-10" />
