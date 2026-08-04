@@ -56,8 +56,19 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
   }, [deferredSearchQuery, activeFilter, trips]);
 
   return (
-    <PageTransition className="col-span-12">
-      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide relative z-0">
+    <PageTransition className="col-span-12 relative">
+      {/* 3D Stackable Glass Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen overflow-hidden">
+        <iframe 
+          src="https://my.spline.design/stackableglass-31A0B3Kcmae5ah8U898DTaXT-dVR/" 
+          frameBorder="0" 
+          width="100%" 
+          height="100%"
+          title="Stackable Glass Background"
+        ></iframe>
+      </div>
+      
+      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide relative z-10">
         <div className="min-h-screen px-3 md:px-8 lg:px-10 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-8">
         
         {/* Header Section */}
