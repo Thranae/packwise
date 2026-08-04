@@ -5,63 +5,61 @@ import { useTripContext } from '@/context/TripContext';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 
-import { getTripImage } from '@/utils/imageUtils';
-
 const DESTINATIONS = [
   {
     name: "Kyoto",
     country: "Japan",
     tagline: "Temples & Timeless Tradition",
-    image: getTripImage("Kyoto Japan"),
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop",
     styles: ["Culture", "Relaxed"]
   },
   {
     name: "Amalfi Coast",
     country: "Italy",
     tagline: "Sun-drenched Cliffs & Sea",
-    image: getTripImage("Amalfi Coast Italy"),
+    image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=800&auto=format&fit=crop",
     styles: ["Luxury", "Foodie"]
   },
   {
     name: "Swiss Alps",
     country: "Switzerland",
     tagline: "Majestic Peaks & Valleys",
-    image: getTripImage("Swiss Alps"),
+    image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800&auto=format&fit=crop",
     styles: ["Nature", "Fast-paced"]
   },
   {
     name: "Santorini",
     country: "Greece",
     tagline: "Whitewashed Dreams & Sunsets",
-    image: getTripImage("Santorini Greece"),
+    image: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?q=80&w=800&auto=format&fit=crop",
     styles: ["Romantic", "Luxury"]
   },
   {
     name: "Bali",
     country: "Indonesia",
     tagline: "Lush Jungles & Tranquil Beaches",
-    image: getTripImage("Bali Indonesia"),
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop",
     styles: ["Relaxed", "Nature"]
   },
   {
     name: "Banff",
     country: "Canada",
     tagline: "Turquoise Lakes & Glaciers",
-    image: getTripImage("Banff Canada"),
+    image: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2000&auto=format&fit=crop",
     styles: ["Adventure", "Nature"]
   },
   {
     name: "Dubai",
     country: "UAE",
     tagline: "Futuristic Skylines & Desert Oasis",
-    image: getTripImage("Dubai UAE"),
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop",
     styles: ["Luxury", "Fast-paced"]
   },
   {
     name: "Machu Picchu",
     country: "Peru",
     tagline: "Ancient Ruins & Cloud Forests",
-    image: getTripImage("Machu Picchu Peru"),
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop",
     styles: ["Adventure", "Culture"]
   }
 ];

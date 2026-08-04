@@ -296,14 +296,14 @@ export default function ProfilePage() {
                         <Mountain className="w-4 h-4" />
                       </div>
                       <p className="text-[11px] font-bold text-white/70 uppercase">Travel Style</p>
-                      {!isEditing && <span className="ml-auto text-sm font-medium text-white text-right">{formData.travelStyle.length > 0 ? formData.travelStyle.join(', ') : 'None'}</span>}
+                      {!isEditing && <span className="ml-auto text-sm font-medium text-white text-right">{formData.travelStyles?.length > 0 ? formData.travelStyles.join(', ') : 'None'}</span>}
                     </div>
                     {isEditing && (
                       <div className="flex flex-wrap gap-2 mt-3">
                         {STYLE_OPTIONS.map(style => {
-                          const isSelected = formData.travelStyle.includes(style);
+                          const isSelected = formData.travelStyles?.includes(style);
                           return (
-                            <button key={style} onClick={() => togglePreference('travelStyle', style)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'ios-liquid-button bg-purple-500 text-white shadow-[0_2px_10px_rgba(168,85,247,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
+                            <button key={style} onClick={() => togglePreference('travelStyles', style)} className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-all ${isSelected ? 'ios-liquid-button bg-purple-500 text-white shadow-[0_2px_10px_rgba(168,85,247,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
                               {style}
                             </button>
                           );
