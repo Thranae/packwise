@@ -58,7 +58,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
   return (
     <PageTransition className="col-span-12">
       <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide relative z-0">
-        <div className="min-h-screen px-3 md:px-8 lg:px-10 pb-24 pt-[calc(24px+env(safe-area-inset-top))] md:pt-8">
+        <div className="min-h-screen px-3 md:px-8 lg:px-10 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-8">
         
         {/* Header Section */}
         <div className="flex flex-row items-start justify-between gap-4 mb-8 md:mb-10 mt-2">
@@ -127,33 +127,26 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
           </div>
 
           {/* Filter Chips */}
-          <div className="flex flex-wrap items-center justify-start gap-2 md:gap-3 pb-6 pt-4 px-1">
+          <motion.div layout className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap items-center justify-start sm:gap-3 pb-6 pt-4 px-1 w-full max-w-full">
             {FILTERS.map(filter => (
               <button
                 key={filter}
                 onClick={() => { setActiveFilter(filter); lightTap(); }}
                 className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-4 md:px-6 min-h-[34px] md:min-h-[38px] rounded-full text-[12px] font-bold tracking-wide
-                  transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                  ios-liquid-button shrink-0 relative flex items-center justify-center px-1 sm:px-4 md:px-6 min-h-[34px] md:min-h-[38px] w-full sm:w-auto rounded-[12px] sm:rounded-full text-[10.5px] sm:text-[12px] font-bold tracking-wide
+                  transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                   outline-none
                   ${activeFilter === filter 
-                    ? 'text-white scale-[1.03] z-10' 
-                    : 'text-white/60 hover:text-white/90 hover:scale-[1.03]'
+                    ? 'text-white scale-[1.03] z-10 bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150' 
+                    : 'text-white/60 hover:text-white/90 hover:scale-[1.03] bg-transparent'
                   }
                 `}
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                {activeFilter === filter && (
-                  <motion.div
-                    layoutId="tripsFilterActive"
-                    className="absolute inset-0 rounded-full bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150 pointer-events-none"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className={`relative z-10 block drop-shadow-md capitalize truncate text-center ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
+                <span className={`relative z-10 block drop-shadow-md capitalize truncate text-center w-full ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
               </button>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Trips Grid or Skeletons */}

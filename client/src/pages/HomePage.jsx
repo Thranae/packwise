@@ -19,11 +19,14 @@ import { Navbar } from '@/components/navigation/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { AnimatedBackground } from '@/components/common/AnimatedBackground';
 import { GeneratingTripCard } from '@/components/trips/GeneratingTripCard';
+import { DiscoverySwipe } from '@/components/explore/DiscoverySwipe';
+import { QuickLaunchModal } from '@/components/explore/QuickLaunchModal';
 
 // ---------------------------------------------------------------------------
-const glassBase = "bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]";
+// Optimization: Stripped backdrop-blur-[12px] to improve PWA/Android frame rates on deeply nested items.
+const glassBase = "bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]";
 const glassRadius = "rounded-[32px]";
-const glassHover = "transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] hover:-translate-y-2 hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2),0_24px_48px_rgba(0,0,0,0.5)] hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(255,255,255,0.15)] cursor-pointer";
+const glassHover = "transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)] hover:-translate-y-2 hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2),0_24px_48px_rgba(0,0,0,0.5)] hover:bg-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)] cursor-pointer transform-gpu";
 const glassStyle = `${glassBase} ${glassRadius}`;
 const glassPill = `${glassBase} rounded-full`;
 
@@ -78,6 +81,15 @@ export default function HomePage() {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Quick Launch State
+  const [selectedDestination, setSelectedDestination] = useState(null);
+  const [isQuickLaunchOpen, setIsQuickLaunchOpen] = useState(false);
+
+  const handleSwipeRight = (destinationName) => {
+    setSelectedDestination(destinationName);
+    setIsQuickLaunchOpen(true);
+  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -98,20 +110,19 @@ export default function HomePage() {
       <AnimatedBackground />
 
               {/* Native-feeling static frosted glass edges */}
-        <div className="fixed top-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
-        <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
+        <div className="fixed top-0 left-0 right-0 h-[calc(10px+var(--safe-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
+        <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+var(--safe-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
 
         <Navbar />
         {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-32 sm:pt-36 lg:pt-40" : "pt-32 sm:pt-36 lg:pt-48"}`}>
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-[calc(96px+var(--safe-top))] sm:pt-[calc(112px+var(--safe-top))] lg:pt-[calc(128px+var(--safe-top))]" : "pt-[calc(120px+var(--safe-top))] sm:pt-[calc(140px+var(--safe-top))] lg:pt-[calc(160px+var(--safe-top))]"}`}>
         
         {/* HERO SECTION */}
-        <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh]"}`}>
-          {isAuthenticated ? (
-              <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
-              {/* Authenticated Dashboard: Left Side */}
+        <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh] pt-8"}`}>
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
+            {isAuthenticated ? (
               <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
                 <motion.h1 variants={fadeInUp} className="text-3xl sm:text-4xl lg:text-[50px] font-semibold tracking-tighter leading-tight truncate w-full max-w-full text-[var(--theme-text-primary)]">
                   Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{user?.displayName?.split(' ')[0] || user?.name?.split(' ')[0] || 'Traveler'}</span>.
@@ -124,7 +135,7 @@ export default function HomePage() {
                   <motion.div variants={fadeInUp} className="mt-8 relative group cursor-pointer">
                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-fuchsia-500/20 to-blue-500/20 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
                      <div onClick={(e) => { e.preventDefault(); addToast("AI Voice Assistant is coming in the next update!", "info"); }}>
-                       <div className="relative flex items-center bg-[#030712]/40 backdrop-blur-xl border border-white/10 rounded-full p-2 pl-4 pr-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:bg-[#030712]/60 group-hover:border-white/20">
+                       <div className="relative flex items-center bg-[#030712]/40 backdrop-blur-sm border border-white/10 rounded-full p-2 pl-4 pr-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_20px_rgba(0,0,0,0.5)] transition-all duration-300 group-hover:bg-[#030712]/60 group-hover:border-white/20">
                            {/* Mic Icon */}
                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] relative overflow-hidden shrink-0 group-hover:shadow-[0_0_20px_rgba(168,85,247,0.8)] transition-shadow">
                               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
@@ -285,39 +296,39 @@ export default function HomePage() {
                 Design the perfect journey. Automate logistics, discover hidden gems, and experience seamless travel tailored exclusively to you.
               </motion.p>
               
-              <motion.div variants={fadeInUp} className="hidden lg:flex mt-8 sm:mt-12 flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto">
-                {isAuthenticated ? (
-                  <>
-                    <Link to={ROUTES.TRIPS} className="w-full sm:w-auto">
-                      <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                        <Map className="w-5 h-5 text-emerald-400" />
-                        My Trips
-                      </button>
-                    </Link>
-                    <Link to={ROUTES.ASSISTANT} className="w-full sm:w-auto">
-                      <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                        <Sparkles className="w-5 h-5 text-purple-400" />
-                        AI Planner
-                      </button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link to={ROUTES.SIGNUP} className="w-full sm:w-auto">
-                      <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                        <MapPin className="w-5 h-5" />
-                        Start Exploring
-                      </button>
-                    </Link>
-                    <a href="#features" className="w-full sm:w-auto">
-                      <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                        <PlayCircle className="w-5 h-5 opacity-70" /> Explore Features
-                      </button>
-                    </a>
-                  </>
-                )}
               </motion.div>
-            </motion.div>
+            ) : (
+              <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
+                <motion.div variants={fadeInUp} className="group cursor-pointer relative overflow-hidden px-5 py-2 text-sm font-bold text-blue-400 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(59,130,246,0.2)] rounded-full mb-6 inline-flex items-center justify-center hover:-translate-y-1 hover:scale-105 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(59,130,246,0.4)] hover:text-white transition-all duration-700">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                  <span className="relative z-10 flex items-center gap-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                    <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Voyage Genie AI 2.0
+                  </span>
+                </motion.div>
+                
+                <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tighter leading-tight text-[var(--theme-text-primary)]">
+                  The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 drop-shadow-[0_2px_10px_rgba(59,130,246,0.5)]">Intelligent</span> Way to Travel.
+                </motion.h1>
+                
+                <motion.p variants={fadeInUp} className="mt-6 text-lg sm:text-xl text-[var(--theme-text-secondary)] font-light max-w-lg leading-relaxed">
+                  Design the perfect journey. Voyage Genie instantly crafts hyper-personalized itineraries, automates logistics, and discovers hidden gems just for you.
+                </motion.p>
+                
+                <motion.div variants={fadeInUp} className="hidden lg:flex mt-12 flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
+                  <Link to={ROUTES.SIGNUP} className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 primary-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <Sparkles className="w-5 h-5" />
+                      Start Exploring Free
+                    </button>
+                  </Link>
+                  <a href="#how-it-works" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
+                      <PlayCircle className="w-5 h-5 opacity-70" /> See How It Works
+                    </button>
+                  </a>
+                </motion.div>
+              </motion.div>
+            )}
 
             {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
             <div className="lg:col-span-6 relative h-[380px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-2 lg:mt-0 transform origin-center order-2">
@@ -423,9 +434,7 @@ export default function HomePage() {
               )}
             </motion.div>
           </div>
-        
-            )}
-          </section>
+        </section>
 
         {!isAuthenticated && (
           <>
@@ -557,7 +566,7 @@ export default function HomePage() {
                 animate={{ y: [0, -15, 0], rotateZ: [0, 3, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               >
-                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-3xl border-white/30 bg-white/10 group-hover:[transform:translateZ(60px)] transition-transform duration-700`}>
+                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-md border-white/30 bg-white/10 group-hover:[transform:translateZ(60px)] transition-transform duration-700`}>
                   <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/30 flex items-center justify-center border border-blue-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_15px_rgba(59,130,246,0.6)] overflow-hidden">
                     <div className="absolute inset-0 bg-blue-400/20 animate-ping opacity-50" />
                     <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-blue-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
@@ -574,7 +583,7 @@ export default function HomePage() {
                 animate={{ y: [0, 15, 0], rotateZ: [0, -3, 0] }}
                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
               >
-                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-3xl border-white/30 bg-white/10 group-hover:[transform:translateZ(90px)] transition-transform duration-700`}>
+                <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-md border-white/30 bg-white/10 group-hover:[transform:translateZ(90px)] transition-transform duration-700`}>
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/30 flex items-center justify-center border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_15px_rgba(16,185,129,0.6)]">
                     <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
                   </div>

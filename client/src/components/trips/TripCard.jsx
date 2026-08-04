@@ -37,7 +37,7 @@ export const TripCard = ({ trip }) => {
   const { rotateX, rotateY, mouseX, mouseY } = useMouseTilt(cardRef, tiltConfig);
   
   // Pass the raw destination — the server extracts the most specific term (city name)
-  const { image: destinationImage, loading: imageLoading } = useDestinationImage(trip.destination);
+  const { image: destinationImage, loading: imageLoading } = useDestinationImage(trip.destination, null, trip.heroImageSearchQuery);
   const displayImage = trip.heroImage || destinationImage;
   const glowColor = useImageColor(displayImage);
   const { heavyTap } = useHaptics();
@@ -136,41 +136,41 @@ export const TripCard = ({ trip }) => {
   };
   
   return (
-    <motion.div 
+    <motion.div
       variants={{
-        hidden: { opacity: 0, scale: 0.98, y: 15 },
-        show: { 
-          opacity: 1, 
-          scale: 1, 
-          y: 0, 
-          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
+        hidden: { opacity: 0, scale: 0.98, y: 10 },
+        show: {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
         }
       }}
       className="relative w-full h-[460px] rounded-[32px] overflow-hidden group"
     >
-      <motion.div 
+      <motion.div
         ref={cardRef}
-        style={isNative ? undefined : { rotateX, rotateY, transformPerspective: 1200 }}
-        whileHover={isNative ? undefined : { y: -8, transition: { duration: 0.3 } }}
+        style={isNative ? undefined : { rotateX, rotateY, transformPerspective: 1000 }}
+        whileHover={isNative ? undefined : { y: -6, transition: { duration: 0.25 } }}
         className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card transform-gpu will-change-transform bg-transparent"
       >
-        {/* GPU-Accelerated Interactive Flashlight */}
+        {/* Simplified Flashlight Effect - Reduced size and complexity */}
         {!isNative && (
           <motion.div
-            className="pointer-events-none absolute w-[600px] h-[600px] -left-[300px] -top-[300px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-50 mix-blend-overlay will-change-transform"
+            className="pointer-events-none absolute w-[400px] h-[400px] -left-[200px] -top-[200px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 mix-blend-overlay will-change-transform"
             style={{
               x: mouseX,
               y: mouseY,
-              background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%)'
+              background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%)'
             }}
           />
         )}
-        
-        {/* Dynamic Glow Effect (Hardware Accelerated Layer) */}
+
+        {/* Simplified Glow Effect */}
         {!isNative && (
-          <div 
-            className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10 blur-xl will-change-opacity transform-gpu"
-            style={{ background: `linear-gradient(to bottom right, ${glowColor}40, transparent)`, transform: 'translateZ(0)' }}
+          <div
+            className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-lg will-change-opacity transform-gpu"
+            style={{ background: `linear-gradient(to bottom right, ${glowColor}30, transparent)`, transform: 'translateZ(0)' }}
           />
         )}
         
@@ -190,27 +190,27 @@ export const TripCard = ({ trip }) => {
           
           {/* Top Badges (Now outside overflow-hidden) */}
           <div className="absolute top-5 inset-x-5 flex items-start justify-between ios-3d-element z-50">
-            <div className="px-4 py-1.5 flex items-center justify-center rounded-[12px] bg-black/10 hover:bg-black/30 backdrop-blur-xl border border-white/20 hover:border-white/40 shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),0_8px_16px_rgba(0,0,0,0.2)] hover:shadow-[inset_0_1px_4px_rgba(255,255,255,0.6),0_12px_24px_rgba(0,0,0,0.4)] hover:scale-110 hover:-translate-y-1 transition-all duration-500 cursor-default">
-              <span className={`text-[11px] font-extrabold tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${getStatusColor(trip.status)}`}>
+            <div className="px-4 py-1.5 flex items-center justify-center rounded-[12px] bg-black/10 hover:bg-black/30 backdrop-blur-lg border border-white/20 hover:border-white/40 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),0_6px_12px_rgba(0,0,0,0.15)] hover:shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),0_8px_16px_rgba(0,0,0,0.25)] hover:scale-105 hover:-translate-y-0.5 transition-all duration-300 cursor-default">
+              <span className={`text-[11px] font-extrabold tracking-widest uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${getStatusColor(trip.status)}`}>
                 {trip.status}
               </span>
             </div>
 
             {tripScore && (
               <div className="absolute top-0 right-14 px-3 py-1.5 flex items-center gap-1.5 rounded-[12px] bg-black/40 backdrop-blur-md border border-white/20 shadow-lg cursor-default group/score" title={tripScore.label}>
-                <div className={`w-2 h-2 rounded-full ${tripScore.overallScore >= 80 ? 'bg-emerald-400' : tripScore.overallScore >= 50 ? 'bg-amber-400' : 'bg-red-400'} animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]`} />
+                <div className={`w-2 h-2 rounded-full ${tripScore.overallScore >= 80 ? 'bg-emerald-400' : tripScore.overallScore >= 50 ? 'bg-amber-400' : 'bg-red-400'} animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.4)]`} />
                 <span className="text-[11px] font-bold text-white tracking-wide">{tripScore.overallScore}%</span>
               </div>
             )}
-            
-            
+
+
             {/* Quick Actions Dropdown */}
             <div className="relative group/menu" onMouseLeave={() => setIsMenuOpen(false)} onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); setIsMenuOpen(!isMenuOpen); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] flex items-center justify-center text-white transition-all duration-500">
+              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); setIsMenuOpen(!isMenuOpen); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-lg border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-center text-white transition-all duration-300">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
-              
-              <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[24px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-3xl border border-white/30 shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_10px_rgba(255,255,255,0.1)] transition-all duration-400 z-[100] flex flex-col gap-1.5 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-2'}`}>
+
+              <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[20px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-300 z-[100] flex flex-col gap-1 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-1'}`}>
                 
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); setIsEditing(true); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>
@@ -353,7 +353,7 @@ export const TripCard = ({ trip }) => {
           {/* 3 Metrics Grid */}
           <div className="grid grid-cols-3 gap-3 mb-auto text-center">
             {/* Budget */}
-            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group/metric hover:bg-white/10 transition-colors cursor-default">
               <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <Wallet className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Budget</span>
@@ -371,7 +371,7 @@ export const TripCard = ({ trip }) => {
               )}
             </div>
             {/* Travelers */}
-            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group/metric hover:bg-white/10 transition-colors cursor-default">
               <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <CloudSun className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Travelers</span>
@@ -385,7 +385,7 @@ export const TripCard = ({ trip }) => {
               )}
             </div>
             {/* Status */}
-            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] group/metric hover:bg-white/10 transition-colors cursor-default">
+            <div className="ios-3d-element flex flex-col items-center justify-center gap-1.5 p-3 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group/metric hover:bg-white/10 transition-colors cursor-default">
               <div className="flex items-center justify-center gap-1.5 text-white/50 group-hover/metric:text-white/70 transition-colors w-full">
                 <Box className="w-3.5 h-3.5 ios-3d-icon" />
                 <span className="text-[10px] font-semibold uppercase tracking-[0.15em]">Status</span>
@@ -395,18 +395,18 @@ export const TripCard = ({ trip }) => {
           </div>
 
           {/* Bottom CTA */}
-          <div className="mt-5 relative z-20 ios-3d-element">
+          <div className="mt-5 relative z-20">
             {isEditing ? (
               <div className="flex items-center gap-2 w-full">
-                <button onClick={handleCancelEdit} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-red-600/90 to-rose-600/90 hover:from-red-500 hover:to-rose-500 shadow-[0_4px_12px_rgba(225,29,72,0.3)] text-white font-bold text-sm tracking-wide transition-all duration-300 cursor-pointer disabled:opacity-50">
+                <button onClick={handleCancelEdit} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-red-600/90 to-rose-600/90 hover:from-red-500 hover:to-rose-500 shadow-[0_4px_10px_rgba(225,29,72,0.25)] text-white font-bold text-sm tracking-wide transition-all duration-200 cursor-pointer disabled:opacity-50">
                   <X className="w-4 h-4 mr-1.5" /> Cancel
                 </button>
-                <button onClick={handleSave} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 shadow-[0_4px_12px_rgba(16,185,129,0.3)] text-white font-bold text-sm tracking-wide transition-all duration-300 cursor-pointer disabled:opacity-50">
+                <button onClick={handleSave} disabled={isSaving} className="flex-1 flex items-center justify-center py-3.5 rounded-[16px] bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 shadow-[0_4px_10px_rgba(16,185,129,0.25)] text-white font-bold text-sm tracking-wide transition-all duration-200 cursor-pointer disabled:opacity-50">
                   {isSaving ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Check className="w-4 h-4 mr-1.5" />} Save
                 </button>
               </div>
             ) : (
-              <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(59,130,246,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] cursor-pointer group/btn">
+              <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.25),inset_0_2px_4px_rgba(255,255,255,0.3)] cursor-pointer group/btn">
                 Open Trip Overview
               </button>
             )}

@@ -19,3 +19,4 @@ Follow these behavioral guidelines at all times during this project:
 ## Autonomy and Execution
 9. **Act autonomously**: When you have enough information to act, act. Do not ask "Want me to...?" or "Shall I...?" for reversible actions. Proceed without asking. Stop only for destructive actions or genuine scope changes.
 10. **Do it now**: Before ending your turn, check your last paragraph. If it is a plan, an analysis, a question, a list of next steps, or a promise about work you have not done (e.g. "I'll do this next"), do that work NOW with tool calls. End your turn only when the task is complete or you are blocked on input only the user can provide.
+11. **Use installed skills proactively**: Always review and apply the installed skills (e.g., `emil-design-eng`, `apple-design`, `improve-animations`, etc.) appropriate to the task. Before starting work, identify which skills match the user's intent and follow their guidelines and principles strictly.

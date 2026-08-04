@@ -63,7 +63,7 @@ REQUIRED JSON STRUCTURE:
       "title": "Short title for the day",
       "activities": [
         // Breakfast, Morning Activity, Lunch, Afternoon, Dinner
-        { "time": "Morning", "place": "Place Name", "description": "What to do there", "imageSearchQuery": "keyword for unsplash search" }
+        { "time": "Morning", "place": "Place Name", "description": "What to do there", "imageSearchQuery": "specific high-quality stock photo search query" }
       ]
     }
   ],
@@ -91,7 +91,7 @@ REQUIRED JSON STRUCTURE:
   "tips": [
     "Tip 1", "Tip 2"
   ],
-  "heroImageSearchQuery": "high quality 2-3 word keyword to search unsplash for the main destination background"
+  "heroImageSearchQuery": "high quality 2-4 word keyword for a stock photo search of the main destination background"
 }
 
 IMPORTANT RULES:

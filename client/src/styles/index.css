@@ -7,16 +7,16 @@
 
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  
+
   --color-accent: #4F7CFF;
   --color-accent-hover: #74A6FF;
 
   --color-bg-base: var(--theme-bg-base);
   --color-bg-surface: var(--theme-bg-surface);
   --color-bg-glass: var(--theme-bg-glass);
-  
+
   --color-border-subtle: var(--theme-border-subtle);
-  
+
   --color-text-primary: var(--theme-text-primary);
   --color-text-secondary: var(--theme-text-secondary);
 
@@ -33,10 +33,11 @@
   }
   :root {
     --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
     /* LIGHT MODE */
     --theme-bg-base: #F2F5F9; /* Cooler background to contrast glass */
     --theme-bg-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-    --theme-bg-glass: rgba(255, 255, 255, 0.4); 
+    --theme-bg-glass: rgba(255, 255, 255, 0.4);
     --theme-border-glass: rgba(255, 255, 255, 0.8);
     --theme-border-glass-top: rgba(255, 255, 255, 1);
     --theme-border-glass-left: rgba(255, 255, 255, 0.9);
@@ -49,86 +50,16 @@
   }
 
   /* Force safe area padding on Android native where env() is often unreliable */
-  html.native-app {
+  html.native-android {
     --safe-top: 40px;
+    --safe-bottom: 24px;
   }
 
   .dark {
     /* DARK MODE */
     --theme-bg-base: #060B14; /* Deep navy */
     --theme-bg-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
-    --theme-bg-glass: rgba(255, 255, 255, 0.03); 
-    --theme-border-glass: rgba(255, 255, 255, 0.1);
-    --theme-border-glass-top: rgba(255, 255, 255, 0.25);
-    --theme-border-glass-left: rgba(255, 255, 255, 0.15);
-    --theme-border-subtle: rgba(255, 255, 255, 0.12);
-    --theme-shadow-glass: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.03), 0 0 40px rgba(59, 130, 246, 0.15), 0 0 40px rgba(167, 139, 250, 0.15);
-    --theme-shadow-glass-hover: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.05), 0 0 60px rgba(59, 130, 246, 0.2), 0 0 60px rgba(167, 139, 250, 0.2);
-    --theme-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    --theme-text-primary: #FFFFFF;
-    --theme-text-secondary: rgba(255, 255, 255, 0.6);
-  }
-}
-@theme {
-  --animate-shimmer: shimmer 1.5s infinite linear;
-}
-@import "tailwindcss";
-
-@variant dark (&:where(.dark, .dark *));
-
-@theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  
-  --color-accent: #4F7CFF;
-  --color-accent-hover: #74A6FF;
-
-  --color-bg-base: var(--theme-bg-base);
-  --color-bg-surface: var(--theme-bg-surface);
-  --color-bg-glass: var(--theme-bg-glass);
-  
-  --color-border-subtle: var(--theme-border-subtle);
-  
-  --color-text-primary: var(--theme-text-primary);
-  --color-text-secondary: var(--theme-text-secondary);
-
-  /* Smoothest of smoother default physics animations */
-  --default-transition-duration: 600ms;
-  --default-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --animate-fade-in: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@layer base {
-  body {
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  :root {
-    --safe-top: env(safe-area-inset-top, 0px);
-    /* LIGHT MODE */
-    --theme-bg-base: #F2F5F9; /* Cooler background to contrast glass */
-    --theme-bg-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-    --theme-bg-glass: rgba(255, 255, 255, 0.4); 
-    --theme-border-glass: rgba(255, 255, 255, 0.8);
-    --theme-border-glass-top: rgba(255, 255, 255, 1);
-    --theme-border-glass-left: rgba(255, 255, 255, 0.9);
-    --theme-border-subtle: rgba(0, 0, 0, 0.08);
-    --theme-shadow-glass: 0 10px 40px rgba(0, 0, 0, 0.04), inset 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 2px 20px rgba(255, 255, 255, 0.5);
-    --theme-shadow-glass-hover: 0 20px 50px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.6), inset 0 2px 20px rgba(255, 255, 255, 0.6);
-    --theme-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-    --theme-text-primary: #1A1D24;
-    --theme-text-secondary: rgba(26, 29, 36, 0.6);
-  }
-
-  /* Force safe area padding on Android native where env() is often unreliable */
-  html.native-app {
-    --safe-top: 40px;
-  }
-
-  .dark {
-    /* DARK MODE */
-    --theme-bg-base: #060B14; /* Deep navy */
-    --theme-bg-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
-    --theme-bg-glass: rgba(255, 255, 255, 0.03); 
+    --theme-bg-glass: rgba(255, 255, 255, 0.03);
     --theme-border-glass: rgba(255, 255, 255, 0.1);
     --theme-border-glass-top: rgba(255, 255, 255, 0.25);
     --theme-border-glass-left: rgba(255, 255, 255, 0.15);
@@ -273,9 +204,9 @@ input:-webkit-autofill:active{
     outline: none;
   }
 
-  /* iOS 26 3D Liquid Glass - Fluid & Thick (ZERO LAG VERSION) */
+  /* iOS 26 3D Liquid Glass - Fluid & Thick (OPTIMIZED FOR PERFORMANCE) */
   .ios-glass-card {
-    background: 
+    background:
       linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(20, 25, 40, 0.8) 100%),
       url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -283,13 +214,14 @@ input:-webkit-autofill:active{
     border-left-color: rgba(255, 255, 255, 0.2);
     border-right-color: rgba(255, 255, 255, 0.05);
     border-bottom-color: rgba(255, 255, 255, 0.02);
-    box-shadow: 
-      0 20px 40px rgba(0, 0, 0, 0.6), 
-      inset 0 1px 2px rgba(255, 255, 255, 0.3), 
-      inset 0 0 30px rgba(255, 255, 255, 0.03), 
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.6),
+      inset 0 1px 2px rgba(255, 255, 255, 0.3),
+      inset 0 0 30px rgba(255, 255, 255, 0.03),
       inset 0 -2px 6px rgba(0, 0, 0, 0.4);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, box-shadow;
+    /* Reduced backdrop-filter for performance - use only on hover */
   }
 
   .ios-3d-element, .ios-3d-icon {
@@ -301,59 +233,60 @@ input:-webkit-autofill:active{
 
   @media (hover: hover) and (pointer: fine) {
     .ios-glass-card:hover {
-      background: 
+      background:
         linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%),
         url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-      backdrop-filter: blur(30px) saturate(180%);
-      -webkit-backdrop-filter: blur(30px) saturate(180%);
-      transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
-      box-shadow: 
-        -15px 40px 80px rgba(59, 130, 246, 0.25), 
-        inset 0 4px 8px rgba(255, 255, 255, 0.5), 
-        inset 0 0 40px rgba(255, 255, 255, 0.1), 
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      transform: translateY(-6px);
+      box-shadow:
+        -10px 30px 60px rgba(59, 130, 246, 0.2),
+        inset 0 4px 8px rgba(255, 255, 255, 0.5),
+        inset 0 0 30px rgba(255, 255, 255, 0.1),
         inset 0 -2px 6px rgba(0, 0, 0, 0.25);
       border-color: rgba(255, 255, 255, 0.15);
-      border-top-color: rgba(255, 255, 255, 0.6);
-      border-left-color: rgba(255, 255, 255, 0.4);
+      border-top-color: rgba(255, 255, 255, 0.5);
+      border-left-color: rgba(255, 255, 255, 0.3);
       z-index: 50;
     }
 
     .ios-glass-card:hover .ios-3d-element {
-      transform: translateZ(30px);
+      transform: translateZ(20px);
     }
 
     .ios-glass-card:hover .ios-3d-icon {
-      transform: translateZ(50px);
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+      transform: translateZ(30px);
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
     }
   }
 
-  /* Compact 3D Liquid Glass Pill */
+  /* Compact 3D Liquid Glass Pill (OPTIMIZED) */
   .ios-glass-pill {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.001) 100%);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     transform-style: preserve-3d;
     perspective: 1000px;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     transform: translateZ(0);
+    will-change: transform, box-shadow;
   }
 
   .ios-glass-pill:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
     border-top-color: rgba(255, 255, 255, 0.5);
     border-left-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15), inset 0 2px 8px rgba(255,255,255,0.5), inset 0 0 20px rgba(255,255,255,0.05);
-    transform: translateY(-3px) scale(1.02) rotateX(4deg) rotateY(-2deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.5), inset 0 0 15px rgba(255,255,255,0.05);
+    transform: translateY(-2px) scale(1.015);
     z-index: 50;
   }
 
   .ios-glass-pill:hover .ios-3d-element {
-    transform: translateZ(12px);
+    transform: translateZ(10px);
   }
 
   /* Deep Liquid Glass Button (Chromium Hover Glitch Free) */
@@ -395,10 +328,51 @@ input:-webkit-autofill:active{
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2);
   }
 
+  /* Colorful Primary Liquid Glass Button */
+  .primary-liquid-button {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .primary-liquid-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    pointer-events: none;
+  }
+
+  .primary-liquid-button:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(168, 85, 247, 1) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 16px 40px rgba(99, 102, 241, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.6), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) scale(1.02);
+  }
+  
+  .primary-liquid-button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
   /* Removed Deep 3D Liquid Refraction for Nested Interactive Elements to prevent input glitching */
 
   .lucide {
-    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     border-radius: 50%;
     padding: 6px;
     margin: -6px;
@@ -406,44 +380,28 @@ input:-webkit-autofill:active{
     transform-style: preserve-3d;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    will-change: transform, box-shadow;
   }
 
   .lucide:hover {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.08);
     z-index: 100;
     position: relative;
     cursor: pointer;
-    animation: premium-float-2d 2s infinite alternate ease-in-out;
+    animation: none;
   }
 
   .ios-glass-card .lucide:hover {
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 24px 4px rgba(59, 130, 246, 0.2);
-    animation: premium-float-3d 2s infinite alternate ease-in-out;
+    box-shadow: 0 0 18px 3px rgba(59, 130, 246, 0.15);
+    animation: none;
   }
 }
 
 /* Hardware Accelerated Transforms Only */
-@keyframes premium-float-2d {
-  0% { transform: scale(1.15) translateY(0px); }
-  100% { transform: scale(1.15) translateY(-4px); }
-}
-
-@keyframes premium-float-3d {
-  0% { transform: translateZ(40px) scale(1.2) rotate(-2deg) translateY(0px); }
-  100% { transform: translateZ(40px) scale(1.2) rotate(-2deg) translateY(-5px); }
-}
-
-@keyframes glass-shine {
-  0% { transform: translateX(-100%); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translateX(2000px); opacity: 0; }
-  100% { transform: translateX(2000px); opacity: 0; }
-}
-
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
@@ -536,10 +494,10 @@ input:-webkit-autofill:active{
   }
 }
 
-/* --- STITCH UI CLASSES --- */
+/* --- STITCH UI CLASSES (OPTIMIZED) --- */
 .mesh-bg {
     background-color: #101415;
-    background-image: 
+    background-image:
         radial-gradient(at 80% 0%, hsla(280, 100%, 70%, 0.15) 0px, transparent 50%),
         radial-gradient(at 0% 50%, hsla(190, 100%, 60%, 0.15) 0px, transparent 50%),
         radial-gradient(at 80% 100%, hsla(280, 100%, 70%, 0.1) 0px, transparent 50%),
@@ -548,16 +506,18 @@ input:-webkit-autofill:active{
 }
 
 @keyframes breathe {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.05); opacity: 1; }
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
 }
 
 .liquid-card {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(40px) saturate(150%);
-    border: 1px solid transparent;
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     background-clip: padding-box;
     position: relative;
+    will-change: transform;
 }
 
 .liquid-card::before {
@@ -567,7 +527,7 @@ input:-webkit-autofill:active{
     z-index: -1;
     margin: -1px;
     border-radius: inherit;
-    background: linear-gradient(to bottom right, rgba(255,255,255,0.15), rgba(255,255,255,0.02));
+    background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0.01));
 }
 
 .neon-glow {

@@ -269,13 +269,13 @@ export default function SignupPage() {
               <div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-white/50" />
+                    <User className="h-5 w-5 text-white/50 drop-shadow-md" />
                   </div>
                   <input
                     type="text"
                     placeholder="Full Name"
                     {...register('name')}
-                    className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-4 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.name ? '!border-red-500' : ''}`}
+                    className={`w-full h-[50px] glass-input pl-11 pr-4 text-[15px] font-medium placeholder-white/40 transition-all duration-300 ${errors.name ? '!border-red-500' : ''}`}
                   />
                 </div>
                 {errors.name && (
@@ -287,13 +287,13 @@ export default function SignupPage() {
               <div>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-white/50" />
+                    <Mail className="h-5 w-5 text-white/50 drop-shadow-md" />
                   </div>
                   <input
                     type="email"
                     placeholder="Email address"
                     {...register('email')}
-                    className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-4 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.email ? '!border-red-500' : ''}`}
+                    className={`w-full h-[50px] glass-input pl-11 pr-4 text-[15px] font-medium placeholder-white/40 transition-all duration-300 ${errors.email ? '!border-red-500' : ''}`}
                   />
                 </div>
                 {errors.email && (
@@ -306,20 +306,20 @@ export default function SignupPage() {
                 <div className="w-1/2">
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-white/50" />
+                      <Lock className="h-5 w-5 text-white/50 drop-shadow-md" />
                     </div>
                     <input
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
                       {...register('password')}
-                      className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-10 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.password ? '!border-red-500' : ''}`}
+                      className={`w-full h-[50px] glass-input pl-11 pr-10 text-[15px] font-medium placeholder-white/40 transition-all duration-300 ${errors.password ? '!border-red-500' : ''}`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/50 hover:text-white transition-colors"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showPassword ? <EyeOff className="h-4 w-4 drop-shadow-md" /> : <Eye className="h-4 w-4 drop-shadow-md" />}
                     </button>
                   </div>
                   {errors.password && (
@@ -331,20 +331,20 @@ export default function SignupPage() {
                 <div className="w-1/2">
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-white/50" />
+                      <Lock className="h-5 w-5 text-white/50 drop-shadow-md" />
                     </div>
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="Confirm"
                       {...register('confirmPassword')}
-                      className={`w-full h-[50px] rounded-[16px] bg-white/5 border border-white/10 text-white pl-11 pr-10 text-[15px] font-medium placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 hover:bg-white/10 transition-all duration-300 ${errors.confirmPassword ? '!border-red-500' : ''}`}
+                      className={`w-full h-[50px] glass-input pl-11 pr-10 text-[15px] font-medium placeholder-white/40 transition-all duration-300 ${errors.confirmPassword ? '!border-red-500' : ''}`}
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/50 hover:text-white transition-colors"
                     >
-                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4 drop-shadow-md" /> : <Eye className="h-4 w-4 drop-shadow-md" />}
                     </button>
                   </div>
                   {errors.confirmPassword && (
@@ -357,7 +357,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={isSubmitting || isGoogleLoading}
-                className="w-full h-[52px] rounded-[16px] ios-liquid-button text-white text-[15px] font-bold flex items-center justify-center hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none mt-2"
+                className="w-full h-[52px] rounded-[16px] primary-liquid-button text-white text-[15px] font-bold flex items-center justify-center mt-2 disabled:opacity-70 disabled:pointer-events-none"
               >
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">
@@ -409,14 +409,14 @@ export default function SignupPage() {
                     setIsOtpMode(false);
                     setOtpCode('');
                   }}
-                  className="flex-1 h-[52px] rounded-[16px] bg-white/5 border border-white/10 text-white text-[15px] font-bold flex items-center justify-center hover:bg-white/10 transition-all duration-300"
+                  className="flex-1 h-[52px] rounded-[16px] ios-liquid-button text-white text-[15px] font-bold flex items-center justify-center transition-all duration-300"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={isOtpLoading}
-                  className="flex-1 h-[52px] rounded-[16px] ios-liquid-button text-white text-[15px] font-bold flex items-center justify-center hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none"
+                  className="flex-1 h-[52px] rounded-[16px] primary-liquid-button text-white text-[15px] font-bold flex items-center justify-center mt-2 disabled:opacity-70 disabled:pointer-events-none"
                 >
                   {isOtpLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -452,7 +452,7 @@ export default function SignupPage() {
               type="button"
               onClick={onGoogleClick}
               disabled={isGoogleLoading || isSubmitting}
-              className="w-full h-[52px] rounded-[16px] bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[15px] font-bold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
+              className="w-full h-[52px] rounded-[16px] ios-liquid-button text-white text-[15px] font-bold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm disabled:opacity-70 disabled:pointer-events-none"
             >
               {isGoogleLoading ? (
                 <div className="flex items-center gap-2">

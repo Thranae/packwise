@@ -9,15 +9,15 @@ class AIRouter {
    */
   _getPrimaryProviderForTask(taskType) {
     switch (taskType) {
-      case 'json':
-        return 'openai';
-      case 'casual':
-        return 'groq'; // The implementation uses groq for fast casual chat
-      case 'lightweight':
-        return 'mistral';
       case 'planning':
+      case 'json':
+        // The hardest tasks go to OpenRouter Nemotron
+        return 'openrouter-nemotron';
+      case 'casual':
+      case 'lightweight':
       default:
-        return 'gemini';
+        // Lighter, faster conversational tasks go to OpenRouter Claude
+        return 'openrouter-claude';
     }
   }
 
@@ -27,18 +27,28 @@ class AIRouter {
    * @returns {string[]} array of provider IDs to try sequentially
    */
   _getFallbackChain(providerId) {
-    // The prompt requested: Gemini -> OpenAI -> OpenRouter
+    if (providerId === 'openrouter-nemotron') {
+      return ['openrouter-nemotron', 'openrouter-gpt', 'nvidia', 'gemini', 'openrouter'];
+    }
+
+    if (providerId === 'openrouter-claude') {
+      return ['openrouter-claude', 'gemini', 'openrouter-gpt', 'openai', 'openrouter'];
+    }
+
     if (providerId === 'gemini') {
-      return ['gemini', 'openai', 'openrouter'];
+      return ['gemini', 'openrouter-claude', 'openrouter-gpt', 'nvidia', 'openai', 'openrouter'];
     }
     
-    // If starting with OpenAI (e.g. JSON), fallback to OpenRouter, then Gemini
+    if (providerId === 'nvidia') {
+      return ['nvidia', 'openrouter-nemotron', 'openrouter-gpt', 'gemini', 'openai', 'openrouter'];
+    }
+
     if (providerId === 'openai') {
-      return ['openai', 'openrouter', 'gemini'];
+      return ['openai', 'openrouter-gpt', 'nvidia', 'openrouter-claude', 'openrouter', 'gemini'];
     }
 
     // Default fallback chain for other models
-    return [providerId, 'openai', 'openrouter', 'gemini'];
+    return [providerId, 'openrouter-gpt', 'openrouter-claude', 'openrouter-nemotron', 'nvidia', 'openai', 'openrouter', 'gemini'];
   }
 
   /**
@@ -124,7 +134,7 @@ class AIRouter {
           'Content-Type': 'application/json'
         };
         
-        if (provider.id === 'openrouter') {
+        if (provider.id.startsWith('openrouter')) {
           headers['HTTP-Referer'] = 'http://localhost:3000';
           headers['X-Title'] = 'PackWise';
         }
@@ -134,12 +144,24 @@ class AIRouter {
           messages: [{ role: "user", content: prompt }]
         };
 
+        if (provider.extraConfig) {
+          Object.assign(payload, provider.extraConfig);
+        }
+
         if (isJsonMode && provider.supportsJSONMode) {
           payload.response_format = { type: "json_object" };
         }
 
         const response = await axios.post(provider.baseUrl, payload, { headers, timeout: 30000 });
         responseText = response.data.choices[0].message.content;
+      }
+
+      if (isJsonMode) {
+        // AI models frequently hallucinate markdown code blocks around JSON.
+        // Strip out ```json and ``` if they exist.
+        if (responseText.startsWith('```')) {
+          responseText = responseText.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '');
+        }
       }
 
       const latency = Date.now() - startTime;
@@ -210,8 +232,11 @@ class AIRouter {
    * @returns {Promise<stream.Readable>}
    */
   async routeRequestStream(prompt, taskType = 'casual') {
-    // For simplicity, we use Groq/OpenAI compatible endpoints for streaming
-    let provider = ProviderRegistry.getProvider('groq');
+    // For simplicity, we use OpenAI compatible endpoints for streaming
+    let provider = ProviderRegistry.getProvider('nvidia');
+    if (!provider || provider.status === 'unconfigured') {
+      provider = ProviderRegistry.getProvider('groq');
+    }
     if (!provider || provider.status === 'unconfigured') {
       provider = ProviderRegistry.getProvider('openai');
     }
@@ -227,6 +252,10 @@ class AIRouter {
       messages: [{ role: "user", content: prompt }],
       stream: true
     };
+    
+    if (provider.extraConfig) {
+      Object.assign(payload, provider.extraConfig);
+    }
 
     const response = await axios.post(provider.baseUrl, payload, { 
       headers, 

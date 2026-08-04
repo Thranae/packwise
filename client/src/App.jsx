@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useEffect } from 'react';
 import { InstallPromptWidget } from '@/components/pwa/InstallPromptWidget';
 import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { App as CapacitorApp } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -17,6 +18,7 @@ import { Loader2, Compass, PlaneTakeoff } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/Logo';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { OnboardingTutorial } from './components/common/OnboardingTutorial';
+import { TravelProfileOnboarding } from './components/onboarding/TravelProfileOnboarding';
 
 
 import { WifiOff } from 'lucide-react';
@@ -106,12 +108,20 @@ function GuestRoute({ children }) {
 }
 /** Redirects unauthenticated users to the login page. */
 function ProtectedRoute({ children }) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) return <Spinner />;
   if (!isAuthenticated) return <Navigate to={ROUTES.LOGIN} replace />;
 
-  return children;
+  // Force onboarding if travel preferences aren't set
+  const needsPreferences = user && (!user.travelPreferences || !user.travelPreferences.budget);
+
+  return (
+    <>
+      {children}
+      {needsPreferences && <TravelProfileOnboarding />}
+    </>
+  );
 }
 
 import { AppLayout } from './components/layout/AppLayout';
@@ -133,7 +143,7 @@ function ToastContainer() {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-[calc(16px+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-[9999] flex flex-col items-center sm:items-end gap-3 pointer-events-none w-[90%] sm:w-auto max-w-sm">
+    <div className="fixed top-[calc(16px+var(--safe-top))] left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-[9999] flex flex-col items-center sm:items-end gap-3 pointer-events-none w-[90%] sm:w-auto max-w-sm">
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => (
           <motion.div
@@ -402,7 +412,7 @@ function OfflineIndicator() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          className="fixed top-0 left-0 right-0 z-[100000] flex justify-center pt-[calc(12px+env(safe-area-inset-top))] pointer-events-none"
+          className="fixed top-0 left-0 right-0 z-[100000] flex justify-center pt-[calc(12px+var(--safe-top))] pointer-events-none"
         >
           <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-black/40 backdrop-blur-3xl border border-white/20 shadow-[0_16px_32px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.3)] ios-3d-element">
             <WifiOff className="w-4 h-4 text-rose-400" />
@@ -416,6 +426,12 @@ function OfflineIndicator() {
 
 function AppContent() {
   const [splashComplete, setSplashComplete] = useState(false);
+  
+  useEffect(() => {
+    if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
+      document.documentElement.classList.add('native-android');
+    }
+  }, []);
   
   return (
     <>

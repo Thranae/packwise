@@ -122,18 +122,22 @@ const fetchFromWikipedia = async (query) => {
 };
 
 export const getDestinationImage = catchAsync(async (req, res) => {
-  const { query: rawQuery, type } = req.query;
+  const { query: rawQuery, type, exact } = req.query;
   if (!rawQuery) {
     return ApiResponse.sendError(res, 400, 'Query parameter is required');
   }
 
   // Extract the most specific term to avoid country-level mismatches
-  let primaryQuery = extractPrimaryTerm(rawQuery);
-  if (type) {
-    primaryQuery = `${primaryQuery} ${type}`;
+  // If exact=true is passed (usually from AI), we trust the query and don't strip it
+  let primaryQuery = rawQuery;
+  if (exact !== 'true') {
+    primaryQuery = extractPrimaryTerm(rawQuery);
+    if (type) {
+      primaryQuery = `${primaryQuery} ${type}`;
+    }
   }
   
-  console.log(`[Image] Fetching for: "${primaryQuery}" (raw: "${rawQuery}", type: "${type}")`);
+  console.log(`[Image] Fetching for: "${primaryQuery}" (raw: "${rawQuery}", type: "${type}", exact: "${exact}")`);
 
   const pexelsKeys = process.env.PEXELS_API_KEY ? process.env.PEXELS_API_KEY.split(',').map(k => k.trim()) : [];
   const unsplashKeys = process.env.UNSPLASH_API_KEY ? process.env.UNSPLASH_API_KEY.split(',').map(k => k.trim()) : [];

@@ -50,9 +50,10 @@ export const getTripPlan = async (req, res) => {
 export const generateTrip = async (req, res) => {
   try {
     const { prompt } = req.body;
-    const cacheKey = `trip_${prompt}`;
+    const travelPreferences = req.user?.travelPreferences || null;
+    const cacheKey = `trip_${prompt}_${JSON.stringify(travelPreferences || {})}`;
     const result = await getCachedOrGenerate(cacheKey, async () => {
-      const aiTrip = await aiService.generateFullTrip(prompt);
+      const aiTrip = await aiService.generateFullTrip(prompt, travelPreferences);
       try {
         const liveWeather = await weatherService.getWeather(aiTrip.destination);
         if (liveWeather && liveWeather.current) {

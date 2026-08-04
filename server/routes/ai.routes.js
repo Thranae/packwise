@@ -1,9 +1,10 @@
 import express from 'express';
 import * as aiController from '../controllers/ai.controller.js';
+import { optionalAuthMiddleware } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-router.post('/trip', aiController.generateTrip);
+router.post('/trip', optionalAuthMiddleware, aiController.generateTrip);
 router.post('/plan', aiController.getTripPlan);
 router.post('/packing', aiController.getPackingList);
 router.post('/packing/alternative', aiController.getPackingAlternative);

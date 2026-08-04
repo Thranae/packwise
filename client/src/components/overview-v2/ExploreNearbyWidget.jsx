@@ -25,7 +25,7 @@ const PlaceCard = ({ place, onSelect }) => {
   
   // Use AI-generated imageQuery for accuracy; fall back to "place name + city"
   const imageQuery = place.imageQuery || `${place.name} ${cityOnly}`;
-  const { image, loading } = useDestinationImage(imageQuery, 'explore');
+  const { image, loading } = useDestinationImage('', 'explore', imageQuery);
   const displayImage = image || place.image;
 
   return (
@@ -134,7 +134,7 @@ const PlaceModal = ({ place, onClose }) => {
   const { addToast } = useToast();
   const { lightTap, mediumTap } = useHaptics();
   const imageQuery = place.imageQuery || `${place.name} ${currentTrip?.destination || ''}`;
-  const { image, loading } = useDestinationImage(imageQuery, 'explore');
+  const { image, loading } = useDestinationImage('', 'explore', imageQuery);
   const displayImage = image || place.image;
   const controls = useAnimation();
 
@@ -256,7 +256,7 @@ const PlaceModal = ({ place, onClose }) => {
               </div>
             </div>
 
-            <div className="flex gap-3 mt-auto md:mt-0 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-0 shrink-0">
+            <div className="flex gap-3 mt-auto md:mt-0 pb-[calc(1rem+var(--safe-bottom))] md:pb-0 shrink-0">
               <button onClick={() => { lightTap?.(); window.open(`https://maps.google.com/?q=${encodeURIComponent(place.name + ' ' + place.vicinity)}`, '_blank'); }} className="flex-[2] flex items-center justify-center gap-2 py-3.5 rounded-2xl ios-liquid-button text-white group hover:!bg-gradient-to-br hover:from-sky-400 hover:to-blue-600 hover:shadow-[0_20px_40px_rgba(14,165,233,0.5),inset_0_2px_6px_rgba(255,255,255,0.6)] hover:-translate-y-1 transition-all duration-300">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm font-bold drop-shadow-md">Get Directions</span>

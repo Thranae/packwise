@@ -84,14 +84,24 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    budgetPreference: {
-      type: String,
-      enum: ['budget', 'moderate', 'luxury'],
-      default: 'moderate',
-    },
-    travelStyle: {
-      type: [String],
-      default: [],
+    travelPreferences: {
+      budget: {
+        type: String,
+        enum: ['Budget', 'Medium', 'Luxury'],
+        default: 'Medium',
+      },
+      males: {
+        type: Number,
+        default: 1,
+      },
+      females: {
+        type: Number,
+        default: 1,
+      },
+      styles: {
+        type: [String],
+        default: [],
+      },
     },
     profileImage: {
       type: String,

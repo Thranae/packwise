@@ -27,3 +27,23 @@ export const authMiddleware = catchAsync(async (req, res, next) => {
     throw new ApiError(401, 'Invalid token');
   }
 });
+
+export const optionalAuthMiddleware = catchAsync(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next();
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded.id);
+
+    if (user) {
+      req.user = user;
+    }
+  } catch (error) {
+    // Silently ignore auth errors for optional routes
+  }
+  next();
+});

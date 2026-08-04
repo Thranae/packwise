@@ -12,7 +12,7 @@ export default function AssistantPage() {
 
   return (
     <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0">
-      <div className="h-full min-h-0 px-3 sm:px-6 md:px-10 pb-2 pt-[calc(8px+env(safe-area-inset-top))] md:pt-4 flex flex-col items-start w-full relative z-10">
+      <div className="h-full min-h-0 px-3 sm:px-6 md:px-10 pb-2 pt-[calc(8px+var(--safe-top))] md:pt-4 flex flex-col items-start w-full relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
         
         {/* Compact Header */}
         <div className="w-full max-w-[700px] mx-auto flex items-center justify-between gap-3 mb-3 z-20 relative shrink-0">

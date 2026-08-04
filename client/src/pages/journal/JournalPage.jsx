@@ -50,7 +50,7 @@ function FeedCard({ entry }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className="group relative rounded-[32px] overflow-hidden bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.2)] hover:border-white/20"
+      className="group relative rounded-[32px] overflow-hidden bg-[rgba(255,255,255,0.02)] backdrop-blur-sm border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.2)] hover:border-white/20"
     >
 
       {/* Photo Hero (if any) */}
@@ -228,7 +228,7 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="col-span-12 w-full min-h-full flex flex-col max-w-[1400px] mx-auto px-4 md:px-8 pb-8 md:pb-12 pt-[calc(32px+env(safe-area-inset-top))] md:pt-12 perspective-[2000px] gap-8">
+    <div className="col-span-12 w-full min-h-full flex flex-col max-w-[1400px] mx-auto px-4 md:px-8 pb-8 md:pb-12 pt-[calc(32px+var(--safe-top))] md:pt-12 perspective-[2000px] gap-8">
       
       {/* Page Header */}
       <div className="flex flex-col gap-2 drop-shadow-xl w-full">
@@ -257,7 +257,7 @@ export default function JournalPage() {
             ref={composerRef}
             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="group relative w-full rounded-[32px] overflow-hidden bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]"
+            className="group relative w-full rounded-[32px] overflow-hidden bg-[rgba(255,255,255,0.02)] backdrop-blur-sm border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]"
           >
 
             <div className="relative z-10 p-5 pb-0 flex flex-col gap-5" style={{ transform: "translateZ(30px)" }}>
@@ -354,7 +354,7 @@ export default function JournalPage() {
             </AnimatePresence>
 
               {/* Action Footer */}
-            <div className="relative z-10 px-5 py-5 bg-white/[0.02] border-t border-white/10 flex justify-between items-center backdrop-blur-2xl" style={{ transform: "translateZ(20px)" }}>
+            <div className="relative z-10 px-5 py-5 bg-white/[0.02] border-t border-white/10 flex justify-between items-center backdrop-blur-sm" style={{ transform: "translateZ(20px)" }}>
               <button 
                 onClick={() => setIsPhotoMode(!isPhotoMode)}
                 className={`flex items-center justify-center w-12 h-12 rounded-full transition-all shrink-0 ${isPhotoMode || selectedImage ? 'bg-pink-500 text-white shadow-[0_0_20px_rgba(236,72,153,0.5),inset_0_2px_4px_rgba(255,255,255,0.4)] scale-105' : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]'}`}
@@ -403,7 +403,7 @@ export default function JournalPage() {
           {entries.length === 0 ? (
             <motion.div 
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="w-full flex-1 flex flex-col items-center justify-center px-4 opacity-90 text-center rounded-[32px] bg-[rgba(255,255,255,0.02)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]"
+              className="w-full flex-1 flex flex-col items-center justify-center px-4 opacity-90 text-center rounded-[32px] bg-[rgba(255,255,255,0.02)] backdrop-blur-sm border border-[rgba(255,255,255,0.08)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.2),0_16px_40px_rgba(0,0,0,0.4)]"
             >
               <Book className="w-20 h-20 text-white/30 mb-8 drop-shadow-lg" />
               <h3 className="text-3xl font-black text-white mb-3 drop-shadow-md">No entries yet</h3>

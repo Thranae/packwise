@@ -137,14 +137,27 @@ export function AuthProvider({ children }) {
     navigate(ROUTES.LOGIN, { replace: true });
   }, [navigate]);
 
-  /**
-   * Merge updated user data into the current user state.
-   * Used after profile updates without needing to refetch from the server.
-   *
-   * @param {object} userData - Partial user object with updated fields.
-   */
   const updateUser = useCallback((userData) => {
     setUser((prev) => (prev ? { ...prev, ...userData } : userData));
+  }, []);
+
+  const updateTravelPreferences = useCallback(async (preferences) => {
+    try {
+      const response = await authService.updatePreferences(preferences);
+      if (response.success) {
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to update travel preferences:', error);
+      // Fallback optimistic update if API fails
+      setUser((prev) => {
+        const updatedUser = { 
+          ...prev, 
+          travelPreferences: { ...(prev?.travelPreferences || {}), ...preferences } 
+        };
+        return updatedUser;
+      });
+    }
   }, []);
 
   /**
@@ -171,6 +184,7 @@ export function AuthProvider({ children }) {
         signup,
         logout,
         updateUser,
+        updateTravelPreferences,
         setAuthData,
       }}
     >

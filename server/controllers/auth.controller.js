@@ -55,3 +55,13 @@ export const logout = catchAsync(async (req, res) => {
 export const getMe = catchAsync(async (req, res) => {
   ApiResponse.send(res, 200, 'User profile fetched', req.user);
 });
+
+export const updatePreferences = catchAsync(async (req, res) => {
+  const user = req.user;
+  user.travelPreferences = {
+    ...user.travelPreferences,
+    ...req.body
+  };
+  await user.save();
+  ApiResponse.send(res, 200, 'Preferences updated successfully', user);
+});

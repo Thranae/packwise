@@ -8,9 +8,13 @@ class ProviderManager {
    */
   async initialize() {
     this._registerGemini();
+    this._registerNvidia();
     this._registerOpenAI();
     this._registerMistral();
     this._registerGroq();
+    this._registerOpenRouterGPT();
+    this._registerOpenRouterClaude();
+    this._registerOpenRouterNemotron();
     this._registerOpenRouter();
 
     await this._runHealthChecks();
@@ -29,6 +33,28 @@ class ProviderManager {
       supportsToolCalling: true,
       supportsJSONMode: true,
       supportsVision: true
+    });
+  }
+
+  _registerNvidia() {
+    ProviderRegistry.registerProvider({
+      id: 'nvidia',
+      name: 'NVIDIA NIM',
+      apiKey: process.env.NVIDIA_API_KEY,
+      baseUrl: process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1/chat/completions',
+      model: 'nvidia/nemotron-3-super-120b-a12b',
+      priority: 2,
+      supportsStreaming: true,
+      supportsToolCalling: true,
+      supportsJSONMode: true,
+      supportsVision: false,
+      extraConfig: {
+        temperature: 1,
+        top_p: 0.95,
+        max_tokens: 16384,
+        reasoning_budget: 16384,
+        chat_template_kwargs: {"enable_thinking":true}
+      }
     });
   }
 
@@ -70,6 +96,51 @@ class ProviderManager {
       baseUrl: 'https://api.groq.com/openai/v1/chat/completions',
       model: 'llama-3.3-70b-versatile',
       priority: 3,
+      supportsStreaming: true,
+      supportsToolCalling: true,
+      supportsJSONMode: true,
+      supportsVision: false
+    });
+  }
+
+  _registerOpenRouterGPT() {
+    ProviderRegistry.registerProvider({
+      id: 'openrouter-gpt',
+      name: 'OpenRouter GPT',
+      apiKey: process.env.OPENROUTER_GPT_KEY,
+      baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
+      model: 'openai/gpt-4o',
+      priority: 2,
+      supportsStreaming: true,
+      supportsToolCalling: true,
+      supportsJSONMode: true,
+      supportsVision: true
+    });
+  }
+
+  _registerOpenRouterClaude() {
+    ProviderRegistry.registerProvider({
+      id: 'openrouter-claude',
+      name: 'OpenRouter Claude',
+      apiKey: process.env.OPENROUTER_CLAUDE_KEY,
+      baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
+      model: 'anthropic/claude-3.5-sonnet',
+      priority: 2,
+      supportsStreaming: true,
+      supportsToolCalling: true,
+      supportsJSONMode: true,
+      supportsVision: true
+    });
+  }
+
+  _registerOpenRouterNemotron() {
+    ProviderRegistry.registerProvider({
+      id: 'openrouter-nemotron',
+      name: 'OpenRouter Nemotron',
+      apiKey: process.env.OPENROUTER_NEMOTRON_KEY,
+      baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
+      model: 'nvidia/nemotron-4-340b-instruct',
+      priority: 2,
       supportsStreaming: true,
       supportsToolCalling: true,
       supportsJSONMode: true,

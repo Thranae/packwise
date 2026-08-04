@@ -47,58 +47,76 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
       <button
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(true); }}
-        className="w-full h-12 px-4 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-between text-white font-semibold text-sm transition-colors duration-200 cursor-pointer"
+        className="w-full h-12 px-4 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-between text-white font-semibold text-sm transition-all duration-300 cursor-pointer group hover:bg-[#0f172a]/60 hover:border-white/20"
       >
-        <span className="pointer-events-none truncate">{formattedValue}</span>
-        <Calendar className="w-4 h-4 text-white/50 pointer-events-none shrink-0" />
+        <span className="pointer-events-none truncate min-w-[110px] text-left">{formattedValue}</span>
+        
+        {/* 3D Liquid Glass Calendar Icon */}
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500/40 to-purple-500/40 flex items-center justify-center border-[1.5px] border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-1px_2px_rgba(0,0,0,0.5),0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-110 transition-transform duration-300 pointer-events-none shrink-0 relative overflow-hidden backdrop-blur-md">
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+          <Calendar className="w-3.5 h-3.5 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] relative z-10" />
+        </div>
       </button>
 
-      {isOpen && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          <div 
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#050b14]/90 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1),inset_0_-2px_6px_rgba(0,0,0,0.8)]">
-            <div className="flex items-center justify-between mb-6">
-              <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
-              <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
-              <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 text-white" /></button>
-            </div>
-            
-            <div className="grid grid-cols-7 gap-1.5 mb-2">
-              {weekdays.map(w => <div key={w} className="text-center text-xs font-bold text-white/40 pb-2">{w}</div>)}
-            </div>
-            
-            <div className="grid grid-cols-7 gap-1.5">
-              {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
-              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => {
-                const thisDate = new Date(year, month, d);
-                thisDate.setHours(0,0,0,0);
-                const isPast = thisDate < today;
-                const isSelected = thisDate.getTime() === selectedDate.getTime();
-                const isToday = thisDate.getTime() === today.getTime();
+      {createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                onClick={() => setIsOpen(false)}
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="relative z-[101] w-[90vw] max-w-[340px] p-5 sm:p-6 rounded-[32px] bg-[#050b14]/90 backdrop-blur-3xl border-[1.5px] border-white/20 border-t-white/40 shadow-[0_40px_80px_rgba(0,0,0,0.8),inset_0_4px_16px_rgba(255,255,255,0.1),inset_0_-2px_6px_rgba(0,0,0,0.8)]"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <button onClick={handlePrevMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 rotate-180 text-white" /></button>
+                  <span className="text-white font-bold text-lg tracking-wide">{monthName}</span>
+                  <button onClick={handleNextMonth} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors"><ChevronRight className="w-4 h-4 text-white" /></button>
+                </div>
                 
-                return (
-                  <button
-                    key={`${year}-${month}-${d}`}
-                    disabled={isPast}
-                    onClick={(e) => handleSelectDate(e, d)}
-                    className={`
-                      relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-colors duration-150
-                      ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
-                      ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 z-10 border border-white/30' : ''}
-                      ${!isSelected && !isPast ? 'hover:bg-white/10' : ''}
-                      ${isToday && !isSelected ? 'ring-2 ring-indigo-500/50 text-white' : ''}
-                    `}
-                  >
-                    {d}
-                  </button>
-                );
-              })}
+                <div className="grid grid-cols-7 gap-1.5 mb-2">
+                  {weekdays.map(w => <div key={w} className="text-center text-xs font-bold text-white/40 pb-2">{w}</div>)}
+                </div>
+                
+                <div className="grid grid-cols-7 gap-1.5">
+                  {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
+                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => {
+                    const thisDate = new Date(year, month, d);
+                    thisDate.setHours(0,0,0,0);
+                    const isPast = thisDate < today;
+                    const isSelected = thisDate.getTime() === selectedDate.getTime();
+                    const isToday = thisDate.getTime() === today.getTime();
+                    
+                    return (
+                      <button
+                        key={`${year}-${month}-${d}`}
+                        disabled={isPast}
+                        onClick={(e) => handleSelectDate(e, d)}
+                        className={`
+                          relative aspect-square flex items-center justify-center rounded-2xl text-[14px] font-bold transition-colors duration-150
+                          ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white/70 hover:text-white cursor-pointer'}
+                          ${isSelected ? '!text-white shadow-[0_4px_16px_rgba(99,102,241,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)] bg-gradient-to-br from-indigo-400 to-purple-600 z-10 border border-white/30' : ''}
+                          ${!isSelected && !isPast ? 'hover:bg-white/10' : ''}
+                          ${isToday && !isSelected ? 'ring-2 ring-indigo-500/50 text-white' : ''}
+                        `}
+                      >
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
             </div>
-          </div>
-        </div>,
+          )}
+        </AnimatePresence>,
         document.body
       )}
     </div>
@@ -232,6 +250,12 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
           onFocus={() => {
             onFocus?.();
             if (suggestions.length > 0) setShowDropdown(true);
+          }}
+          onBlur={() => {
+            // Delay to allow clicks on dropdown to register
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 200);
           }}
           placeholder={placeholder}
           autoFocus={autoFocus}
@@ -391,7 +415,7 @@ export const TripBuilderWizard = () => {
             >
               {/* ─── Step 1: Destination ─── */}
               {step === 1 && (
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 min-h-[170px]">
                   <LocationInput 
                     label="Where do you want to go?"
                     value={prompt}
@@ -414,7 +438,7 @@ export const TripBuilderWizard = () => {
 
               {/* ─── Step 2: Duration, Date & Budget ─── */}
               {step === 2 && (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 min-h-[170px]">
                   {/* Duration + Date in a row */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -455,16 +479,16 @@ export const TripBuilderWizard = () => {
                   {/* Budget */}
                   <div>
                     <label className="block text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Budget Level</label>
-                    <div className="flex items-center gap-1.5 p-1 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)]">
+                    <div className="flex items-center gap-1.5 p-1 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] overflow-visible">
                       {['Budget', 'Moderate', 'Luxury'].map((b) => {
                         const isActive = budget === b;
                         return (
                           <button 
                             key={b} 
                             onClick={() => setBudget(b)}
-                            className={`flex-1 py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-300 ${
+                            className={`flex-1 py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-300 relative overflow-visible ${
                               isActive 
-                                ? 'bg-gradient-to-r from-blue-500 to-indigo-500 shadow-[0_4px_12px_rgba(59,130,246,0.4)] text-white' 
+                                ? 'ios-liquid-button text-white scale-[1.03] z-10' 
                                 : 'text-white/50 hover:text-white/80 hover:bg-white/5'
                             }`}
                           >
@@ -480,7 +504,7 @@ export const TripBuilderWizard = () => {
 
               {/* ─── Step 3: Style & Travelers (compact) ─── */}
               {step === 3 && (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 min-h-[170px]">
                   {/* Travel Style */}
                   <div>
                     <label className="block text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Travel Style</label>
@@ -600,31 +624,35 @@ export const TripBuilderWizard = () => {
 
 function DollarSignIcon({ count, isActive, level }) {
   const activeColors = {
-    'Budget': 'bg-gradient-to-b from-rose-400 to-red-700 drop-shadow-[0_4px_6px_rgba(225,29,72,0.5)] scale-110',
-    'Moderate': 'bg-gradient-to-b from-yellow-300 to-amber-600 drop-shadow-[0_4px_6px_rgba(245,158,11,0.5)] scale-110',
-    'Luxury': 'bg-gradient-to-b from-emerald-300 to-emerald-600 drop-shadow-[0_4px_6px_rgba(16,185,129,0.5)] scale-110'
+    'Budget': 'bg-gradient-to-br from-emerald-400 to-teal-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(52,211,153,0.6)] border-white/50',
+    'Moderate': 'bg-gradient-to-br from-blue-400 to-indigo-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(96,165,250,0.6)] border-white/50',
+    'Luxury': 'bg-gradient-to-br from-purple-400 to-pink-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(192,132,252,0.6)] border-white/50'
   };
   
   const inactiveColors = {
-    'Budget': 'bg-gradient-to-b from-rose-400/40 to-red-600/40',
-    'Moderate': 'bg-gradient-to-b from-yellow-400/40 to-amber-600/40',
-    'Luxury': 'bg-gradient-to-b from-emerald-400/40 to-emerald-600/40'
+    'Budget': 'bg-emerald-500/10 border-white/5',
+    'Moderate': 'bg-blue-500/10 border-white/5',
+    'Luxury': 'bg-purple-500/10 border-white/5'
   };
 
   return (
-    <div className="flex items-center">
-      {[1, 2, 3].map((i) => (
-        <span 
-          key={i} 
-          className={`inline-block text-lg font-black tracking-tighter transition-all duration-500 bg-clip-text text-transparent px-0.5 py-1 leading-tight ${
-            i <= count 
-              ? (isActive ? activeColors[level] : inactiveColors[level]) 
-              : 'bg-gradient-to-b from-white/80 to-white/40 opacity-70'
-          }`}
-        >
-          $
-        </span>
-      ))}
+    <div className="flex items-center -space-x-1.5">
+      {[1, 2, 3].map((i) => {
+        const isFilled = i <= count;
+        return (
+          <div 
+            key={i} 
+            className={`w-[22px] h-[22px] rounded-full flex items-center justify-center border transition-all duration-500 relative overflow-hidden backdrop-blur-md ${
+              isFilled 
+                ? (isActive ? `${activeColors[level]} scale-110 z-20` : `${inactiveColors[level]} text-white/50 z-10`) 
+                : 'bg-white/5 border-white/5 text-white/20 z-0'
+            }`}
+          >
+             {isFilled && isActive && <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 opacity-70 pointer-events-none rounded-full" />}
+             <span className={`text-[11px] font-black leading-none ${isFilled && isActive ? 'text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)] relative z-10' : ''}`}>$</span>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -42,3 +42,15 @@ export const getMe = async () => {
   const response = await api.get(API_ENDPOINTS.AUTH.ME);
   return response.data;
 };
+
+/**
+ * Update the user's travel preferences.
+ *
+ * @param {object} preferences
+ * @returns {Promise<{ success: boolean, message: string, data: object }>}
+ */
+export const updatePreferences = async (preferences) => {
+  // In API endpoints, it will resolve to /auth/preferences
+  const response = await api.put('/auth/preferences', preferences);
+  return response.data;
+};

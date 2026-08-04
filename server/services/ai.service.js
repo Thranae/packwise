@@ -207,13 +207,22 @@ class AIService {
     return this._generateJson(prompt, [], 'planning');
   }
 
-  async generateFullTrip(prompt) {
+  async generateFullTrip(prompt, travelPreferences = null) {
+    let prefContext = "Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.";
+    if (travelPreferences) {
+      const totalTravelers = (travelPreferences.males || 0) + (travelPreferences.females || 0);
+      prefContext = `USER PREFERENCES (CRITICAL TO FOLLOW): 
+      - Budget level: ${travelPreferences.budget || 'Medium'}.
+      - Total travelers: ${totalTravelers || 1} (Males: ${travelPreferences.males || 0}, Females: ${travelPreferences.females || 0}).
+      - Preferred Travel Styles: ${travelPreferences.styles && travelPreferences.styles.length ? travelPreferences.styles.join(', ') : 'Mixed'}.
+      Adjust the realistic budget, activities, and recommendations explicitly to match these preferences.`;
+    }
+
     const aiPrompt = `Parse the following user trip request: "${prompt}". 
-    Determine the best real destination, country, a realistic default budget for that destination, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
+    Determine the best real destination, country, a realistic default budget for that destination based on the user's budget preference, the exact 3-letter currency code (e.g. USD, EUR, JPY), and the exact IANA timezone string (e.g. Europe/Paris, Asia/Tokyo). 
     CRITICAL: You MUST use an absolutely precise, real-world geographical location. Do NOT hallucinate. Validate that the country, currency, and timezone perfectly match the destination.
-    Determine the number of travelers and their gender directly from the prompt.
-    Extract the requested start date in YYYY-MM-DD format.
-    Assume a 7-day trip if duration is not specified. Assume 1 traveler if not specified.
+    Determine the requested start date in YYYY-MM-DD format.
+    ${prefContext}
     Return ONLY valid JSON strictly matching this format:
     {
       "destination": "City Name",

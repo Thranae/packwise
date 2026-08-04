@@ -168,7 +168,7 @@ const SpatialCard = React.memo(({ src, rot, onClick, gender }) => {
         style={{ rotateX, rotateY, transformPerspective: 1000 }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="w-full h-full relative cursor-pointer transition-all duration-500 ease-out hover:scale-[1.03] hover:-translate-y-3 rounded-[26px] p-[3px] bg-white/5 border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_8px_24px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:border-white/40 hover:shadow-[-8px_24px_40px_rgba(0,0,0,0.6),inset_2px_4px_8px_rgba(255,255,255,0.5),inset_-2px_-4px_8px_rgba(0,0,0,0.3)] backdrop-blur-3xl saturate-150 transform-gpu"
+        className="w-full h-full relative cursor-pointer transition-all duration-500 ease-out hover:scale-[1.03] hover:-translate-y-3 rounded-[26px] p-[3px] bg-white/5 border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_8px_24px_rgba(0,0,0,0.4)] hover:bg-white/10 hover:border-white/40 hover:shadow-[-8px_24px_40px_rgba(0,0,0,0.6),inset_2px_4px_8px_rgba(255,255,255,0.5),inset_-2px_-4px_8px_rgba(0,0,0,0.3)] backdrop-blur-sm saturate-150 transform-gpu"
       >
         {/* Push-pin */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-rose-500 shadow-[0_4px_8px_rgba(0,0,0,0.8),inset_0_-2px_4px_rgba(0,0,0,0.3)] z-30 border border-rose-700">
@@ -760,7 +760,7 @@ export default function PackingPage() {
         <div className="grid flex-1 relative">
               {/* AI Scanner Overlay - Compact PWA Widget Theme */}
               {isAiLoading && cat.id === 1 && (
-                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-slate-900/90 backdrop-blur-xl border-t border-white/10 flex flex-col items-center justify-center">
+                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-slate-900/90 backdrop-blur-sm border-t border-white/10 flex flex-col items-center justify-center">
                   
                   {/* Minimalist Grid Background */}
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
@@ -977,7 +977,7 @@ export default function PackingPage() {
 
   return (
     <PageTransition className="col-span-12">
-      <div className="w-full pt-[calc(32px+env(safe-area-inset-top))] md:pt-8 pb-24">
+      <div className="w-full pt-[calc(32px+var(--safe-top))] md:pt-8 pb-24">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 z-20 relative">
           <div className="flex flex-col items-start">
@@ -1092,7 +1092,7 @@ export default function PackingPage() {
 
         {/* Tab Toggle */}
         <div className="flex justify-center mb-8 z-20 relative">
-          <div className="ios-glass-card p-1.5 flex gap-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]">
+          <div className="ios-glass-card p-1.5 flex gap-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.4)]">
             <button 
               onClick={() => setActiveTab('checklist')}
               className={`px-8 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${activeTab === 'checklist' ? 'bg-white/20 border border-white/30 text-white shadow-[0_4px_16px_rgba(255,255,255,0.1)] scale-[1.02]' : 'text-white/50 hover:text-white/90 hover:bg-white/5 border border-transparent'}`}
@@ -1525,7 +1525,7 @@ export default function PackingPage() {
                   fetchMoodboard(nextPage);
                 }}
                 disabled={isFetchingMoodboard}
-                className="relative z-0 group px-6 py-2.5 rounded-full bg-black/20 backdrop-blur-2xl border border-white/10 transition-all duration-500 hover:scale-[1.05] active:scale-95 disabled:opacity-50 disabled:pointer-events-none shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden cursor-pointer"
+                className="relative z-0 group px-6 py-2.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/10 transition-all duration-500 hover:scale-[1.05] active:scale-95 disabled:opacity-50 disabled:pointer-events-none shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden cursor-pointer"
               >
                 {/* Outer Holographic Glow */}
                 <div className="absolute inset-[-2px] rounded-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-500 opacity-40 group-hover:opacity-100 blur-md transition-opacity duration-700 -z-10" />

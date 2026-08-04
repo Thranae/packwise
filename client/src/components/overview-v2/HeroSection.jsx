@@ -103,7 +103,7 @@ export const HeroSection = ({ isSharedView = false }) => {
   const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
 
   // Pass raw destination — the server extracts the city name for precision
-  const { image: destinationImage, loading: imageLoading } = useDestinationImage(currentTrip?.destination);
+  const { image: destinationImage, loading: imageLoading } = useDestinationImage(currentTrip?.destination, null, currentTrip?.heroImageSearchQuery);
 
   if (!currentTrip) return null;
 

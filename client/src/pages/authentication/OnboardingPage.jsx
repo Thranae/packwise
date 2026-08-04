@@ -137,7 +137,7 @@ export default function OnboardingPage() {
         onClick={goNext}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-base shadow-[0_8px_32px_rgba(59,130,246,0.4)] flex items-center gap-2.5 group"
+        className="px-8 py-4 primary-liquid-button rounded-full text-white font-bold text-base flex items-center gap-2.5 group"
       >
         Let's Go
         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -275,7 +275,7 @@ export default function OnboardingPage() {
               placeholder="25"
               value={formData.age}
               onChange={(e) => updateForm('age', e.target.value)}
-              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-sm font-medium placeholder:text-white/30 outline-none focus:border-blue-500/50 focus:bg-white/[0.06] transition-all duration-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]"
+              className="w-full h-[50px] px-4 rounded-2xl glass-input text-white text-sm font-medium placeholder:text-white/30 outline-none transition-all duration-300"
             />
           </div>
           <div>
@@ -285,7 +285,7 @@ export default function OnboardingPage() {
               placeholder="e.g. India"
               value={formData.country}
               onChange={(e) => updateForm('country', e.target.value)}
-              className="w-full px-4 py-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-white text-sm font-medium placeholder:text-white/30 outline-none focus:border-blue-500/50 focus:bg-white/[0.06] transition-all duration-300 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]"
+              className="w-full h-[50px] px-4 rounded-2xl glass-input text-white text-sm font-medium placeholder:text-white/30 outline-none transition-all duration-300"
             />
           </div>
         </motion.div>
@@ -308,7 +308,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* Top bar — progress + skip */}
-      <header className="relative z-20 w-full max-w-lg mx-auto px-6 pt-[calc(16px+env(safe-area-inset-top))] md:pt-8 flex flex-col gap-4">
+      <header className="relative z-20 w-full max-w-lg mx-auto px-6 pt-[calc(16px+var(--safe-top))] md:pt-8 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-[0_4px_12px_rgba(59,130,246,0.3)]">
@@ -367,13 +367,13 @@ export default function OnboardingPage() {
 
       {/* Footer navigation */}
       {step > 0 && (
-        <footer className="relative z-20 w-full max-w-lg mx-auto px-6 pb-[calc(24px+env(safe-area-inset-bottom))] md:pb-8">
+        <footer className="relative z-20 w-full max-w-lg mx-auto px-6 pb-[calc(24px+var(--safe-bottom))] md:pb-8">
           <div className="flex items-center justify-between gap-4">
             <motion.button
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               onClick={goBack}
-              className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/[0.04] border border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08] transition-all duration-300 font-semibold text-sm"
+              className="flex items-center gap-2 px-5 py-3 rounded-full ios-liquid-button text-white/80 hover:text-white transition-all duration-300 font-semibold text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -386,7 +386,7 @@ export default function OnboardingPage() {
                 onClick={goNext}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-sm shadow-[0_8px_24px_rgba(59,130,246,0.3)] group"
+                className="flex items-center gap-2 px-7 py-3 rounded-full primary-liquid-button text-white font-bold text-sm group"
               >
                 Next
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -399,7 +399,7 @@ export default function OnboardingPage() {
                 disabled={isLoading}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm shadow-[0_8px_24px_rgba(16,185,129,0.3)] group disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-7 py-3 rounded-full ios-liquid-button bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-sm shadow-[0_8px_24px_rgba(16,185,129,0.3)] group disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

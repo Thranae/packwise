@@ -83,7 +83,7 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-3xl h-[80vh] max-h-[800px] flex flex-col bg-[#0A101C]/60 backdrop-blur-3xl border border-white/10 rounded-[32px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+              className="relative w-full max-w-3xl h-[80vh] max-h-[800px] flex flex-col bg-[#0A101C]/70 backdrop-blur-xl border border-white/10 rounded-[32px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)]"
             >
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5">

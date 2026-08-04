@@ -32,7 +32,7 @@ export function BottomNav() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-[100] lg:hidden pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 px-4 pointer-events-none">
+    <div className="fixed bottom-0 left-0 w-full z-[100] lg:hidden pb-[calc(0.5rem+var(--safe-bottom))] pt-2 px-4 pointer-events-none">
       
       <div className="w-full h-[56px] relative flex items-center justify-around px-2 pointer-events-auto">
         

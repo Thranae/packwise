@@ -18,7 +18,7 @@ const buildImageQuery = (destination) => {
   return destination.trim() + ' scenic landscape';
 };
 
-export const useDestinationImage = (destination, type = null) => {
+export const useDestinationImage = (destination, type = null, searchQuery = null) => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,7 +27,8 @@ export const useDestinationImage = (destination, type = null) => {
     let isMounted = true;
 
     const fetchImage = async () => {
-      const query = buildImageQuery(destination);
+      // If we have an AI-generated specific search query, use it!
+      const query = searchQuery || buildImageQuery(destination);
 
       if (!query) {
         setImage(getFallbackImage('Unknown'));
@@ -36,7 +37,8 @@ export const useDestinationImage = (destination, type = null) => {
       }
 
       const normalizedQuery = query.trim().toLowerCase();
-      const cacheKey = type ? `${normalizedQuery}_${type}` : normalizedQuery;
+      // Add exact flag to cache key if we are using an exact AI query
+      const cacheKey = searchQuery ? `${normalizedQuery}_exact` : (type ? `${normalizedQuery}_${type}` : normalizedQuery);
 
       // Only serve from cache if it's a real URL (not a fallback)
       if (imageCache.has(cacheKey)) {
@@ -51,9 +53,12 @@ export const useDestinationImage = (destination, type = null) => {
 
       try {
         let url = `/images/search?query=${encodeURIComponent(query)}`;
-        if (type) {
+        if (searchQuery) {
+          url += `&exact=true`;
+        } else if (type) {
           url += `&type=${encodeURIComponent(type)}`;
         }
+        
         const { data } = await api.get(url);
 
         if (data.success && data.data && data.data.imageUrl) {
@@ -67,7 +72,7 @@ export const useDestinationImage = (destination, type = null) => {
           throw new Error('Image not found');
         }
       } catch (err) {
-        console.warn(`[Image] Failed to fetch for "${destination}", using static fallback.`, err.message);
+        console.warn(`[Image] Failed to fetch for "${query}", using static fallback.`, err.message);
         // Do NOT cache fallbacks — allow retry on next mount
         if (isMounted) {
           setError(err.message || 'Failed to fetch image');
@@ -85,7 +90,7 @@ export const useDestinationImage = (destination, type = null) => {
     return () => {
       isMounted = false;
     };
-  }, [destination, type]); // Also re-run if type changes
+  }, [destination, type, searchQuery]); // Also re-run if type or searchQuery changes
 
   return { image, loading, error };
 };

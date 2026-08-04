@@ -18,17 +18,17 @@ export function AppLayout({ children }) {
       <GenieCommandPalette />
       
       {/* Native-feeling static frosted glass edges */}
-      <div className="fixed top-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
-      <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+env(safe-area-inset-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
+      <div className="fixed top-0 left-0 right-0 h-[calc(10px+var(--safe-top))] z-[60] backdrop-blur-sm bg-gradient-to-b from-[#030712]/90 to-transparent pointer-events-none" />
+      <div className="fixed bottom-0 left-0 right-0 h-[calc(10px+var(--safe-bottom))] z-[60] backdrop-blur-sm bg-gradient-to-t from-[#030712]/90 to-transparent pointer-events-none" />
 
       <Sidebar />
       <BottomNav />
       <LayoutGroup>
-        <div className="relative z-10 flex flex-col min-h-screen px-4 pb-[calc(80px+env(safe-area-inset-bottom))] pt-2 lg:pl-[288px] lg:pr-8 lg:pb-8 lg:pt-0 w-full overflow-x-hidden">
+        <div className="relative z-10 flex flex-col min-h-screen px-4 pb-[calc(80px+var(--safe-bottom))] pt-2 lg:pl-[288px] lg:pr-8 lg:pb-8 lg:pt-0 w-full overflow-x-hidden">
           {!hideTopHeader && <TopHeader />}
           <main className={`flex-1 flex flex-col min-h-0 w-full ${hideTopHeader ? 'mt-0' : 'mt-4 lg:mt-6'}`}>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0 relative">
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
