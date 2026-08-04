@@ -75,7 +75,12 @@ export default function ProfilePage() {
 
     try {
       setIsSaving(true);
-      const response = await userService.updateProfile(formData);
+      
+      const payload = { ...formData };
+      if (!payload.name) delete payload.name;
+      if (!payload.email) delete payload.email;
+
+      const response = await userService.updateProfile(payload);
       const isSuccess = response.success !== false;
       const userData = response.data || response;
       
@@ -86,7 +91,8 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error('Profile save error:', error);
-      toast.error(error.message || 'Failed to update profile');
+      const errorMsg = error.errors?.length ? error.errors.join(', ') : (error.message || 'Failed to update profile');
+      toast.error(errorMsg);
     } finally {
       setIsSaving(false);
     }
@@ -120,7 +126,11 @@ export default function ProfilePage() {
     setFormData(prev => ({ ...prev, [type]: newValue }));
 
     try {
-      const response = await userService.updateProfile({ ...formData, [type]: newValue });
+      const payload = { ...formData, [type]: newValue };
+      if (!payload.name) delete payload.name;
+      if (!payload.email) delete payload.email;
+
+      const response = await userService.updateProfile(payload);
       if (response.success && response.data) {
         updateUser(response.data);
         playSound('success');
@@ -128,7 +138,8 @@ export default function ProfilePage() {
     } catch (error) {
       console.error('Preference save error:', error);
       setFormData(prev => ({ ...prev, [type]: formData[type] }));
-      toast.error(error.message || 'Failed to save preference');
+      const errorMsg = error.errors?.length ? error.errors.join(', ') : (error.message || 'Failed to save preference');
+      toast.error(errorMsg);
     }
   };
 
