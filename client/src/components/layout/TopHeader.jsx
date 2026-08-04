@@ -467,22 +467,30 @@ export const TopHeader = () => {
                     <button onClick={async () => {
                       setProfileMenuOpen(false);
                       await promptInstall();
-                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-blue-500/15 active:scale-[0.98] text-blue-400 hover:text-blue-300 transition-all text-sm font-bold group/item">
-                      <Download className="w-4 h-4 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
+                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-blue-500/15 active:scale-[0.98] text-white hover:text-blue-200 transition-all text-sm font-bold group/item">
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(59,130,246,0.5)] border border-blue-300 flex items-center justify-center">
+                        <Download className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                      </div>
                       Install App
                     </button>
                   )}
                   <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                    <User className="w-4 h-4 text-blue-400 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(99,102,241,0.5)] border border-indigo-300 flex items-center justify-center">
+                      <User className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                    </div>
                     My Profile
                   </Link>
                   <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                    <Settings className="w-4 h-4 text-purple-400 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-fuchsia-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(168,85,247,0.5)] border border-purple-300 flex items-center justify-center">
+                      <Settings className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                    </div>
                     Settings
                   </Link>
                   <div className="h-px w-full bg-white/10 my-1" />
-                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-red-500/20 active:scale-[0.98] text-red-400 hover:text-red-300 transition-all text-sm font-bold w-full text-left group/item">
-                    <LogOut className="w-4 h-4 text-red-500 group-hover/item:scale-110 group-hover/item:translate-x-0.5 transition-transform drop-shadow-md" />
+                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-red-500/20 active:scale-[0.98] text-red-100 hover:text-red-50 transition-all text-sm font-bold w-full text-left group/item">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(225,29,72,0.5)] border border-red-300 flex items-center justify-center">
+                      <LogOut className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:translate-x-0.5 transition-transform drop-shadow-sm" />
+                    </div>
                     Log Out
                   </button>
                 </div>
