@@ -104,7 +104,7 @@ export const TopHeader = () => {
     <motion.header 
       ref={headerRef}
       whileHover={{ y: -2, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className="relative z-50 w-full flex items-center justify-between h-[60px] lg:h-[72px] mt-[calc(8px+var(--safe-top))] lg:mt-[calc(24px+var(--safe-top))] px-4 lg:px-6 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[24px] lg:rounded-[36px]"
+      className="sticky top-[calc(8px+var(--safe-top))] lg:top-[calc(16px+var(--safe-top))] z-[100] w-full flex items-center justify-between h-[60px] lg:h-[72px] mt-[calc(8px+var(--safe-top))] lg:mt-[calc(16px+var(--safe-top))] mb-4 lg:mb-6 px-4 lg:px-6 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[24px] lg:rounded-[36px]"
     >
       
       {/* Mobile Logo */}
