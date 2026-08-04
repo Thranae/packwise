@@ -386,7 +386,6 @@ function AppRoutes() {
 // Root App component — context providers & global overlays
 // ---------------------------------------------------------------------------
 import { GlobalSpotlight } from './components/common/GlobalSpotlight';
-import { SplashScreen } from './components/common/SplashScreen';
 
 function OfflineIndicator() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -431,18 +430,28 @@ function AppContent() {
     if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
       document.documentElement.classList.add('native-android');
     }
+
+    // Force the minimalist Spinner to act as a 4-second splash screen
+    const timer = setTimeout(() => {
+      setSplashComplete(true);
+    }, 4000);
+    return () => clearTimeout(timer);
   }, []);
   
   return (
     <>
       <GlobalSpotlight />
       <OfflineIndicator />
-      <AnimatePresence mode="wait">
-        {!splashComplete && <SplashScreen onComplete={() => setSplashComplete(true)} />}
-      </AnimatePresence>
+      
+      {/* Background App loading */}
       <AppRoutes />
       <InstallPromptWidget />
       <ToastContainer />
+
+      {/* 4-second Splash Screen Overlay */}
+      <AnimatePresence>
+        {!splashComplete && <Spinner key="splash" />}
+      </AnimatePresence>
     </>
   );
 }
