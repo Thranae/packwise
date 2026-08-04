@@ -82,7 +82,8 @@ export default function ProfilePage() {
         setIsEditing(false);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to update profile');
+      console.error('Profile save error:', error);
+      toast.error(error.message || 'Failed to update profile');
     } finally {
       setIsSaving(false);
     }
@@ -122,8 +123,9 @@ export default function ProfilePage() {
         playSound('success');
       }
     } catch (error) {
+      console.error('Preference save error:', error);
       setFormData(prev => ({ ...prev, [type]: formData[type] }));
-      toast.error('Failed to save preference');
+      toast.error(error.message || 'Failed to save preference');
     }
   };
 
