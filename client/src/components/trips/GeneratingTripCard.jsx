@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Compass, Sparkles } from 'lucide-react';
+import Spline from '@splinetool/react-spline';
 
 export const GeneratingTripCard = ({ destination }) => (
   <motion.div 
@@ -30,17 +31,14 @@ export const GeneratingTripCard = ({ destination }) => (
     {/* Center Content: Minimalist Loading Indicator */}
     <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full gap-6 mt-4">
       
-      {/* Elegant Breathing Compass */}
-      <div className="relative w-20 h-20 flex items-center justify-center">
+      {/* 3D Rocket */}
+      <div className="relative w-32 h-32 flex items-center justify-center mb-2">
         {/* Soft pulsing aura */}
-        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-[pulse_3s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl animate-[pulse_3s_ease-in-out_infinite]" />
         
-        {/* Subtle spinning dashed ring */}
-        <div className="absolute inset-[-4px] rounded-full border border-dashed border-white/20 animate-[spin_10s_linear_infinite]" />
-        
-        {/* Glass Icon Container */}
-        <div className="relative w-16 h-16 rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/20 shadow-[0_8px_16px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.3)] backdrop-blur-md flex items-center justify-center">
-          <Compass className="w-8 h-8 text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" strokeWidth={1.5} />
+        {/* Spline Model */}
+        <div className="w-48 h-48 relative flex items-center justify-center pointer-events-none mix-blend-screen">
+          <Spline scene="https://prod.spline.design/ThPn4M3nsd9g-wAj/scene.splinecode" />
         </div>
       </div>
 
