@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutGrid, Map, Bot, Banknote, User, Plane } from 'lucide-react';
+import { LayoutGrid, Map, Bot, Banknote, User, PlaneTakeoff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
@@ -9,7 +9,7 @@ import { useTransitionNavigate } from '@/contexts/TransitionContext';
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
   { label: 'Trips', path: '/trips', icon: Map, activeColor: 'text-yellow-400', shadowColor: 'shadow-yellow-500/50' },
-  { label: 'Genie', path: '/assistant', icon: Plane, activeColor: 'text-white', isCenter: true },
+  { label: 'Genie', path: '/assistant', icon: PlaneTakeoff, activeColor: 'text-white', isCenter: true },
   { label: 'Budget', path: '/budget', icon: Banknote, activeColor: 'text-emerald-400', shadowColor: 'shadow-emerald-500/50' },
   { label: 'Profile', path: '/profile', icon: User, activeColor: 'text-rose-400', shadowColor: 'shadow-rose-500/50' },
 ];
@@ -34,6 +34,17 @@ export function BottomNav() {
   return (
     <div className="fixed bottom-0 left-0 w-full z-[100] lg:hidden pb-[calc(0.5rem+var(--safe-bottom))] pt-2 px-4 pointer-events-none">
       
+      {/* SVG Definitions for 3D Icon Textures */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <linearGradient id="icon-3d-blue-takeoff" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#93c5fd" />
+            <stop offset="100%" stopColor="#3b82f6" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className="w-full h-[56px] relative flex items-center justify-around px-2 pointer-events-auto">
         
         {/* iOS 18 Ultra Liquid Glass Background */}
@@ -67,14 +78,16 @@ export function BottomNav() {
               {/* Center Floating 3D Genie Button */}
               {item.isCenter ? (
                 <div className="relative group-hover:-translate-y-1 transition-transform duration-500 z-20">
-                  <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-emerald-400 opacity-50 blur-[12px] -z-10 animate-[spin_4s_linear_infinite]" />
-                  <div className="w-[58px] h-[58px] rounded-full bg-gradient-to-b from-[#1E293B] to-[#0F172A] p-[2px] shadow-[0_12px_24px_rgba(0,0,0,0.7)]">
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center shadow-[inset_0_6px_10px_rgba(255,255,255,0.5),inset_0_-4px_10px_rgba(0,0,0,0.6)] border-[1.5px] border-white/40 relative overflow-hidden group-active:scale-95 transition-transform duration-200">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-                      <Icon className="w-[22px] h-[22px] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" strokeWidth={2.5} />
-                      
-                      {/* Pulse Indicator */}
-                      <div className="absolute top-[5px] right-[5px] w-3 h-3 bg-emerald-400 rounded-full border-2 border-indigo-700 shadow-[0_0_12px_rgba(52,211,153,1),inset_0_2px_4px_rgba(255,255,255,0.8)] animate-pulse" />
+                  {/* Mild Aurora */}
+                  <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-400/30 via-blue-500/30 to-purple-500/30 blur-[16px] -z-10 animate-pulse" />
+                  <div className="w-[58px] h-[58px] rounded-[22px] bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
+                    <div className="w-full h-full rounded-[22px] bg-gradient-to-br from-[#5b8cff] to-[#4d7fff] flex items-center justify-center shadow-[inset_0_4px_8px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active:scale-95 transition-transform duration-200">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                      <Icon 
+                        className="w-[28px] h-[28px] text-white" 
+                        strokeWidth={2.5} 
+                        style={{ stroke: 'url(#icon-3d-blue-takeoff)', filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }}
+                      />
                     </div>
                   </div>
                 </div>
