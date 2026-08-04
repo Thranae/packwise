@@ -6,6 +6,7 @@ import { User, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { Capacitor } from '@capacitor/core';
+import Spline from '@splinetool/react-spline';
 import { LogoIcon, Logo } from '@/components/ui/Logo';
 import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';
@@ -242,13 +243,18 @@ export default function SignupPage() {
       </div>
 
       {/* Heading & Subtitle */}
-      <div className="mb-6">
-        <h2 className="text-[28px] font-extrabold text-white tracking-tight mb-2 drop-shadow-md">
-          Create Account
-        </h2>
-        <p className="text-[15px] text-white/70 font-medium leading-relaxed">
-          Start your journey with Voyage Genie today.
-        </p>
+      <div className="mb-6 flex justify-between items-start">
+        <div className="relative z-10 flex-1">
+          <h2 className="text-[28px] font-extrabold text-white tracking-tight mb-2 drop-shadow-md">
+            Create Account
+          </h2>
+          <p className="text-[15px] text-white/70 font-medium leading-relaxed pr-2">
+            Start your journey with Voyage Genie today.
+          </p>
+        </div>
+        <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 pointer-events-none -mt-4 -mr-2">
+          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
+        </div>
       </div>
 
       {/* Form Area with AnimatePresence */}
