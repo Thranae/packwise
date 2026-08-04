@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Spline from '@splinetool/react-spline';
 import { MapPin, ArrowRight, ArrowLeft, Sparkles, Users, Gauge, Wallet, UserCircle, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
@@ -120,8 +121,10 @@ export default function OnboardingPage() {
   // ---------------------------------------------------------------------------
   const renderWelcome = () => (
     <motion.div variants={cardStagger} initial="hidden" animate="show" className="flex flex-col items-center text-center px-2">
-      <motion.div variants={cardItem} className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(59,130,246,0.15)]">
-        <Sparkles className="w-9 h-9 text-blue-400 drop-shadow-[0_2px_4px_rgba(59,130,246,0.5)]" />
+      <motion.div variants={cardItem} className="w-48 h-48 mb-4 relative flex items-center justify-center">
+        <div className="absolute inset-[-20px] pointer-events-none mix-blend-screen">
+          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
+        </div>
       </motion.div>
 
       <motion.h1 variants={cardItem} className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3 leading-tight">

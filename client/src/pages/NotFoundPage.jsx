@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
+import Spline from '@splinetool/react-spline';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/Button';
 
@@ -14,7 +15,11 @@ export default function NotFoundPage() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
+        className="w-full flex flex-col items-center"
       >
+        <div className="w-64 h-64 mx-auto mb-2 relative pointer-events-none mix-blend-screen">
+          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
+        </div>
         <p className="text-base font-semibold text-primary-600 dark:text-primary-400">404</p>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-surface-900 dark:text-white sm:text-5xl">
           Page not found

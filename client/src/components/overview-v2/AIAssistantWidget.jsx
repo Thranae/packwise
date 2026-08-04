@@ -6,6 +6,7 @@ import { LogoIcon } from '@/components/ui/Logo';
 import { useTripContext } from '@/context/TripContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Spline from '@splinetool/react-spline';
 import api from '@/services/api';
 
 export const AIAssistantWidget = ({ className = "" }) => {
@@ -66,9 +67,11 @@ export const AIAssistantWidget = ({ className = "" }) => {
             >
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
-                <div className="relative w-12 h-12 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl">
-                  <Sparkles className="w-6 h-6 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.6)]" />
-                  <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <div className="relative w-20 h-20 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl overflow-visible">
+                  <div className="absolute inset-[-20px] pointer-events-none mix-blend-screen">
+                     <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
+                  </div>
+                  <div className="absolute top-0 -right-0 w-3 h-3 bg-emerald-400 rounded-full border-[1.5px] border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)] z-10" />
                 </div>
                 <div className="flex flex-col text-center bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[20px] p-3 mx-2 hover:bg-white/10 transition-all duration-700 cursor-default group">
                   <h3 className="text-lg font-semibold tracking-tighter text-white group-hover:scale-105 transition-transform duration-700 mb-0.5 drop-shadow-md">Voyage Genie AI</h3>
