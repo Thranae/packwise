@@ -616,7 +616,7 @@ function DollarSignIcon({ count, isActive, level }) {
       {[1, 2, 3].map((i) => (
         <span 
           key={i} 
-          className={`inline-block text-lg font-black tracking-tighter transition-all duration-500 bg-clip-text text-transparent pb-[2px] leading-none ${
+          className={`inline-block text-lg font-black tracking-tighter transition-all duration-500 bg-clip-text text-transparent px-0.5 py-1 leading-tight ${
             i <= count 
               ? (isActive ? activeColors[level] : inactiveColors[level]) 
               : 'bg-gradient-to-b from-white/80 to-white/40 opacity-70'
