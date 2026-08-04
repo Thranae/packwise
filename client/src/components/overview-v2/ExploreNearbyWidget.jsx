@@ -420,10 +420,10 @@ export const ExploreNearbyWidget = ({ className = "" }) => {
             <p className="text-sm font-medium text-white/60 mb-6 leading-relaxed">Create your first trip to get AI-powered recommendations for places to explore.</p>
             <button 
               onClick={() => navigate(ROUTES.TRIPS)} 
-              className="ios-liquid-button px-6 py-3 rounded-full text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-center gap-2 group/btn active:scale-95 transition-all"
+              className="ios-liquid-button px-6 py-3 rounded-full text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] flex items-center gap-2 group active:scale-95 transition-all"
             >
               <span className="drop-shadow-md">Plan a Trip</span>
-              <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform drop-shadow-md" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform drop-shadow-md" />
             </button>
           </div>
         ) : loading ? (

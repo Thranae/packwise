@@ -184,11 +184,17 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             >
               {isGeneratingTrip && <GeneratingTripCard key="generating-card" destination={generatingDestination} />}
               {filteredTrips.map(trip => {
-                if (isGeneratingTrip && generatingDestination) {
-                  const genDest = generatingDestination.toLowerCase();
-                  const tripDest = (trip.destination || '').toLowerCase();
-                  // Hide the trip if either name contains the other (handles "Lapland" vs "Lapland, Finland")
-                  if (genDest.includes(tripDest) || tripDest.includes(genDest)) return null;
+                if (isGeneratingTrip) {
+                  // Hide any trip created in the last 15 seconds to avoid showing both the generating card and the actual card
+                  const isRecentlyCreated = trip.createdAt && (Date.now() - new Date(trip.createdAt).getTime() < 15000);
+                  if (isRecentlyCreated) return null;
+                  
+                  // Fallback to name matching just in case
+                  if (generatingDestination) {
+                    const genDest = generatingDestination.toLowerCase();
+                    const tripDest = (trip.destination || '').toLowerCase();
+                    if (genDest.includes(tripDest) || tripDest.includes(genDest)) return null;
+                  }
                 }
                 return <TripCard key={trip._id} trip={trip} />;
               })}
