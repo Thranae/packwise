@@ -8,6 +8,7 @@ import './styles/index.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Configure native status bar on Capacitor platforms
 if (Capacitor.isNativePlatform()) {
@@ -53,5 +54,6 @@ createRoot(document.getElementById('root')).render(
         </BrowserRouter>
       </QueryClientProvider>
     </GoogleOAuthProvider>
+    <SpeedInsights />
   </StrictMode>,
 );
