@@ -121,8 +121,8 @@ export default function HomePage() {
         
         {/* HERO SECTION */}
         <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh] pt-8"}`}>
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
-            {isAuthenticated ? (
+          {isAuthenticated ? (
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
               <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
                 <motion.h1 variants={fadeInUp} className="text-3xl sm:text-4xl lg:text-[50px] font-semibold tracking-tighter leading-tight truncate w-full max-w-full text-[var(--theme-text-primary)]">
                   Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{user?.displayName?.split(' ')[0] || user?.name?.split(' ')[0] || 'Traveler'}</span>.
@@ -262,42 +262,6 @@ export default function HomePage() {
               <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
             
             {/* Hero Left Content */}
-            <motion.div 
-              variants={staggerContainer}
-              initial="hidden"
-              animate="show"
-              className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1"
-            >
-              <motion.div variants={fadeInUp} className={`${glassPill} inline-flex items-center gap-3 px-4 py-2 mb-4 lg:mb-8`}>
-                <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
-                <span className="text-xs font-semibold tracking-wider text-[var(--theme-text-primary)] opacity-90 uppercase">Next Generation Planning</span>
-              </motion.div>
-              
-              <motion.h1 
-                variants={fadeInUp} 
-                animate={isScrolled ? "show" : "show"} // Keeps standard variants working
-                whileTap={{ scale: 0.95 }}
-                onDoubleClick={(e) => {
-                  e.currentTarget.animate([
-                    { transform: 'scale(1)', filter: 'hue-rotate(0deg)' },
-                    { transform: 'scale(1.1) rotate(2deg)', filter: 'hue-rotate(90deg)' },
-                    { transform: 'scale(0.9) rotate(-2deg)', filter: 'hue-rotate(180deg)' },
-                    { transform: 'scale(1.05) rotate(1deg)', filter: 'hue-rotate(270deg)' },
-                    { transform: 'scale(1)', filter: 'hue-rotate(360deg)' }
-                  ], { duration: 600, easing: 'ease-in-out' });
-                }}
-                className="text-4xl sm:text-6xl lg:text-[88px] font-semibold tracking-tighter leading-[1.05] text-[var(--theme-text-primary)] cursor-pointer select-none"
-              >
-                Travel Smarter <br className="hidden lg:block" />
-                with AI.
-              </motion.h1>
-              
-              <motion.p variants={fadeInUp} className="mt-4 sm:mt-8 text-base sm:text-xl lg:text-2xl text-[var(--theme-text-secondary)] max-w-xl font-light leading-relaxed">
-                Design the perfect journey. Automate logistics, discover hidden gems, and experience seamless travel tailored exclusively to you.
-              </motion.p>
-              
-              </motion.div>
-            ) : (
               <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
                 <motion.div variants={fadeInUp} className="group cursor-pointer relative overflow-hidden px-5 py-2 text-sm font-bold text-blue-400 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(59,130,246,0.2)] rounded-full mb-6 inline-flex items-center justify-center hover:-translate-y-1 hover:scale-105 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(59,130,246,0.4)] hover:text-white transition-all duration-700">
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -328,8 +292,6 @@ export default function HomePage() {
                   </a>
                 </motion.div>
               </motion.div>
-            )}
-
             {/* Hero Right Visuals - 6 Floating Cards (Now visible on mobile/PWA) */}
             <div className="lg:col-span-6 relative h-[380px] sm:h-[550px] lg:h-[700px] w-full perspective-[1200px] z-10 mt-2 lg:mt-0 transform origin-center order-2">
               
@@ -434,6 +396,7 @@ export default function HomePage() {
               )}
             </motion.div>
           </div>
+          )}
         </section>
 
         {!isAuthenticated && (
