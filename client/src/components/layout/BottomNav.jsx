@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useTransitionNavigate } from '@/contexts/TransitionContext';
+import Spline from '@splinetool/react-spline';
 
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, activeColor: 'text-blue-400', shadowColor: 'shadow-blue-500/50' },
@@ -82,12 +83,10 @@ export function BottomNav() {
                   <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-400/30 via-blue-500/30 to-purple-500/30 blur-[16px] -z-10 animate-pulse" />
                   <div className="w-[58px] h-[58px] rounded-full bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-[#5b8cff] to-[#4d7fff] flex items-center justify-center shadow-[inset_0_4px_8px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active:scale-95 transition-transform duration-200">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-                      <Icon 
-                        className="w-[28px] h-[28px] text-white" 
-                        strokeWidth={2.5} 
-                        style={{ stroke: 'url(#icon-3d-blue-takeoff)', filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.3))' }}
-                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none z-30" />
+                      <div className="absolute inset-[-12px] z-10 pointer-events-none">
+                        <Spline scene="https://prod.spline.design/EwSZ9kvSdaWyxSKZ/scene.splinecode" />
+                      </div>
                     </div>
                   </div>
                 </div>
