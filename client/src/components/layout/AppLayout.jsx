@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { TopHeader } from './TopHeader';
 import { AnimatedBackground } from '../common/AnimatedBackground';
@@ -37,7 +38,9 @@ export function AppLayout({ children }) {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="col-span-1 lg:col-span-12 w-full h-full grid grid-cols-1 lg:grid-cols-12 gap-6"
               >
-                {children}
+                <Suspense fallback={<div className="col-span-1 lg:col-span-12 flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-white/50 animate-spin" /></div>}>
+                  {children}
+                </Suspense>
               </motion.div>
             </AnimatePresence>
           </div>
