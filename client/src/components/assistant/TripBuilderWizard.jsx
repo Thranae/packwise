@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Sparkles, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Spline from '@splinetool/react-spline';
 import { ROUTES } from '@/constants/routes';
 import { useTripContext } from '@/context/TripContext';
 import { useTransitionNavigate } from '@/contexts/TransitionContext';
@@ -53,10 +52,9 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
         <span className="pointer-events-none truncate text-left">{formattedValue}</span>
         
         {/* 3D Liquid Glass Calendar Icon */}
-        <div className="w-8 h-8 rounded-full bg-transparent flex items-center justify-center group-hover:scale-110 transition-transform duration-300 pointer-events-none shrink-0 relative overflow-visible">
-          <div className="absolute inset-[-10px] pointer-events-none mix-blend-screen">
-            <Spline scene="https://prod.spline.design/rEv6bOK8rTeuiYSu/scene.splinecode" />
-          </div>
+        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500/40 to-purple-500/40 flex items-center justify-center border-[1.5px] border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-1px_2px_rgba(0,0,0,0.5),0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-110 transition-transform duration-300 pointer-events-none shrink-0 relative overflow-hidden backdrop-blur-md">
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+          <Calendar className="w-3 h-3 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] relative z-10" />
         </div>
       </button>
 
