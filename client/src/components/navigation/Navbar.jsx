@@ -244,7 +244,7 @@ export const Navbar = () => {
                               )}
                             </div>
                             <div className="flex flex-col min-w-0">
-                              <span className="text-sm font-bold text-white truncate tracking-tight">{user?.name || 'User'}</span>
+                              <span className="text-sm font-bold text-white truncate tracking-tight">{user?.displayName || user?.name || 'User'}</span>
                               <span className="text-[11px] font-medium text-white/80 truncate">{user?.email}</span>
                             </div>
                           </div>
@@ -332,7 +332,7 @@ export const Navbar = () => {
                         )}
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="font-semibold text-white text-[15px] truncate">{user?.name || 'User'}</span>
+                        <span className="font-semibold text-white text-[15px] truncate">{user?.displayName || user?.name || 'User'}</span>
                         <span className="text-[12px] text-white/40 truncate">{user?.email}</span>
                       </div>
                     </div>

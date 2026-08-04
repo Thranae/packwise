@@ -23,12 +23,13 @@ export default function ProfilePage() {
   
   const [formData, setFormData] = useState({
     name: user?.name || '',
-    displayName: user?.displayName || user?.name?.split(' ')[0] || '',
+    displayName: user?.displayName || '',
     email: user?.email || '',
     homeAirport: user?.homeAirport || '',
     dietaryRestrictions: user?.dietaryRestrictions || [],
-    budgetPreference: user?.budgetPreference || 'moderate',
-    travelStyle: user?.travelStyle || [],
+    travelStyles: user?.travelStyles || user?.travelPreferences?.styles || [],
+    budgetPreference: user?.budgetPreference || user?.travelPreferences?.budget || 'Moderate',
+    currency: user?.currency || 'USD'
   });
 
   const fileInputRef = useRef(null);

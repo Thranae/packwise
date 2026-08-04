@@ -8,8 +8,25 @@ export const getProfile = catchAsync(async (req, res) => {
 });
 
 export const updateProfile = catchAsync(async (req, res) => {
-  const updatedUser = await userService.updateProfile(req.user._id, req.body);
-  ApiResponse.send(res, 200, 'Profile updated', updatedUser);
+  const updateData = { ...req.body };
+  
+  // Map flat frontend fields to nested schema structure if present
+  if (updateData.budgetPreference || updateData.travelStyles) {
+    updateData.travelPreferences = {};
+    if (updateData.budgetPreference) updateData.travelPreferences.budget = updateData.budgetPreference;
+    if (updateData.travelStyles) updateData.travelPreferences.styles = updateData.travelStyles;
+    delete updateData.budgetPreference;
+    delete updateData.travelStyles;
+  }
+
+  const updatedUser = await userService.updateProfile(req.user._id, updateData);
+  
+  // To avoid frontend mismatches, ensure the returned user object has the flat fields the frontend expects
+  const userResponse = updatedUser.toObject();
+  userResponse.budgetPreference = userResponse.travelPreferences?.budget || 'Medium';
+  userResponse.travelStyles = userResponse.travelPreferences?.styles || [];
+
+  ApiResponse.send(res, 200, 'Profile updated', userResponse);
 });
 
 export const getTheme = catchAsync(async (req, res) => {
