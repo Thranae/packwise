@@ -395,6 +395,30 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
     onCardClick = (item) => onSelectStyle(item.styles);
   }
 
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    let scrollAmount = 0;
+    const scrollStep = () => {
+      if (!scrollContainer) return;
+      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      scrollAmount += scrollContainer.clientWidth / 2; // Scroll by one card width
+
+      if (scrollAmount >= maxScroll + 10) {
+        scrollAmount = 0;
+        scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        scrollContainer.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+      }
+    };
+
+    const intervalId = setInterval(scrollStep, 3500);
+    return () => clearInterval(intervalId);
+  }, [items]);
+
   if (items.length === 0) return null;
 
   return (
@@ -414,7 +438,10 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
       </div>
       
       {/* Scrollable Container */}
-      <div className="w-full overflow-x-auto custom-scrollbar pb-4 -mx-2 px-2 snap-x snap-mandatory flex gap-3 sm:gap-4">
+      <div 
+        ref={scrollRef}
+        className="w-full overflow-x-auto custom-scrollbar pb-4 -mx-2 px-2 snap-x snap-mandatory flex gap-3 sm:gap-4 scroll-smooth"
+      >
         {items.map((item, idx) => (
           <motion.button
             key={item.id}
@@ -422,11 +449,10 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: idx * 0.05 }}
             onClick={() => onCardClick(item)}
-            className="relative shrink-0 w-[140px] sm:w-[160px] aspect-[3/4] rounded-[24px] ios-glass-card p-2 group snap-center shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] active:scale-[0.96] transition-all duration-300 border border-white/5 hover:border-white/20 flex flex-col"
+            className="relative shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] aspect-[3/4] rounded-[24px] ios-glass-card p-2 group snap-center shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] active:scale-[0.96] transition-all duration-300 border border-white/5 hover:border-white/20 flex flex-col"
           >
             <div className="relative w-full h-full rounded-[16px] overflow-hidden">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 z-10" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050b14]/90 via-[#050b14]/20 to-transparent z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
               <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               
               <div className="absolute bottom-3.5 left-3 right-3 z-20 text-left">
