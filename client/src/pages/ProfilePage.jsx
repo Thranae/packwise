@@ -172,7 +172,7 @@ export default function ProfilePage() {
                 <div className="relative w-28 h-28 rounded-full overflow-hidden neon-glow p-1 bg-gradient-to-br from-[#a078ff]/40 to-[#4cd7f6]/40 cursor-pointer group ios-3d-element mb-4 mt-2" onClick={handleImageClick}>
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
                   {profileImage ? (
-                    <img alt="Profile Avatar" className="w-full h-full object-cover rounded-full border-2 border-[#020617]" src={profileImage} />
+                    <img alt="Profile Avatar" className="w-full h-full object-cover rounded-full border-2 border-[#020617]" src={profileImage} referrerPolicy="no-referrer" />
                   ) : (
                     <div className="w-full h-full bg-[#1d2022] rounded-full flex items-center justify-center text-3xl font-bold text-white border-2 border-[#020617]">
                       {getInitials(userName)}

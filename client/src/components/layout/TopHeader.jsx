@@ -429,7 +429,7 @@ export const TopHeader = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
             {user?.profileImage ? (
-              <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover relative z-0" />
+              <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover relative z-0" />
             ) : (
               <div className="w-full h-full bg-blue-500/10 flex items-center justify-center relative z-0">
                 <span className="text-white text-[13px] md:text-sm font-bold drop-shadow-md">{getInitials(user?.name || 'User')}</span>
@@ -449,7 +449,7 @@ export const TopHeader = () => {
                 <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20 flex items-center justify-center shadow-inner">
                     {user?.profileImage ? (
-                      <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
+                      <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                     ) : (
                       <span className="text-white text-sm font-bold drop-shadow-sm">{getInitials(user?.name || 'User')}</span>
                     )}

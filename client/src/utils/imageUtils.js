@@ -10,14 +10,6 @@ export const TRAVEL_IMAGES = [
 ];
 
 export const getTripImage = (destination) => {
-  if (!destination) return TRAVEL_IMAGES[0];
-  
-  // Simple deterministic hash based on destination string
-  let hash = 0;
-  for (let i = 0; i < destination.length; i++) {
-    hash = destination.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  
-  const index = Math.abs(hash) % TRAVEL_IMAGES.length;
-  return TRAVEL_IMAGES[index];
+  if (!destination) return "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=1600&auto=format&fit=crop";
+  return `https://image.pollinations.ai/prompt/beautiful%20scenic%20travel%20photo%20of%20${encodeURIComponent(destination)}?width=1200&height=800&nologo=true`;
 };

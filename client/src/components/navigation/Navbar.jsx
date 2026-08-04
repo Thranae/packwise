@@ -326,7 +326,7 @@ export const Navbar = () => {
                     <div className="flex items-center gap-3.5 px-2 py-3 mb-2">
                       <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 border border-white/20 shrink-0 overflow-hidden">
                         {user?.profileImage ? (
-                          <img src={user.profileImage} alt={user?.name || 'User'} className="w-full h-full object-cover" />
+                          <img src={user.profileImage} alt={user?.displayName || user?.name || 'User'} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-sm font-bold text-white">{getInitials(user?.name || 'User')}</span>
                         )}

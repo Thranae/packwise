@@ -166,10 +166,10 @@ export const getDestinationImage = catchAsync(async (req, res) => {
     imageUrl = await fetchFromWikipedia(primaryQuery);
   }
 
-  // Strategy 5: If primaryQuery failed, retry with the raw query on Wikipedia
-  if (!imageUrl && primaryQuery !== rawQuery) {
-    console.log(`[Image] Trying Wikipedia with raw query "${rawQuery}"`);
-    imageUrl = await fetchFromWikipedia(rawQuery);
+  // Strategy 5: Try Pollinations AI (free, no API key required, guarantees an image)
+  if (!imageUrl) {
+    console.log(`[Image] All other providers failed, using Pollinations AI for "${primaryQuery}"`);
+    imageUrl = `https://image.pollinations.ai/prompt/beautiful%20scenic%20travel%20photo%20of%20${encodeURIComponent(primaryQuery)}?width=1200&height=800&nologo=true`;
   }
 
   if (imageUrl) {
