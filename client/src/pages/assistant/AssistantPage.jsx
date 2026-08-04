@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { TripBuilderWizard } from '@/components/assistant/TripBuilderWizard';
 import UpgradeModal from '@/components/premium/UpgradeModal';
+import Spline from '@splinetool/react-spline';
 import { usePremium } from '@/context/PremiumContext';
 
 export default function AssistantPage() {
@@ -11,7 +12,12 @@ export default function AssistantPage() {
   const { isPremium } = usePremium();
 
   return (
-    <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0">
+    <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0 relative">
+      {/* 3D Flow Ribbon Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-70 mix-blend-screen">
+        <Spline scene="https://prod.spline.design/gY1H9OOhxszofiaW/scene.splinecode" />
+      </div>
+
       <div className="h-full min-h-0 px-3 sm:px-6 md:px-10 pb-2 pt-[calc(8px+var(--safe-top))] md:pt-4 flex flex-col items-start w-full relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
         
         {/* Compact Header */}
