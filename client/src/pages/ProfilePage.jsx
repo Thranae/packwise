@@ -28,7 +28,7 @@ export default function ProfilePage() {
     homeAirport: user?.homeAirport || '',
     dietaryRestrictions: user?.dietaryRestrictions || [],
     travelStyles: user?.travelStyles || user?.travelPreferences?.styles || [],
-    budgetPreference: user?.budgetPreference || user?.travelPreferences?.budget || 'Moderate',
+    budgetPreference: user?.budgetPreference || user?.travelPreferences?.budget || 'Medium',
     currency: user?.currency || 'USD'
   });
 
@@ -280,7 +280,7 @@ export default function ProfilePage() {
                     </div>
                     {isEditing && (
                       <div className="flex gap-2 mt-3">
-                        {['budget', 'moderate', 'luxury'].map(b => (
+                        {['Budget', 'Medium', 'Luxury'].map(b => (
                           <button key={b} onClick={() => togglePreference('budgetPreference', b)} className={`flex-1 py-2 rounded-xl text-[11px] font-bold capitalize transition-all ${formData.budgetPreference === b ? 'ios-liquid-button bg-blue-500 text-white shadow-[0_2px_10px_rgba(59,130,246,0.4)]' : 'ios-glass-pill bg-white/10 text-white/60 hover:bg-white/20'}`}>
                             {b}
                           </button>
