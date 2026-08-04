@@ -10,56 +10,56 @@ const DESTINATIONS = [
     name: "Kyoto",
     country: "Japan",
     tagline: "Temples & Timeless Tradition",
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop", // Asia / Temple
     styles: ["Culture", "Relaxed"]
   },
   {
     name: "Amalfi Coast",
     country: "Italy",
     tagline: "Sun-drenched Cliffs & Sea",
-    image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=800&auto=format&fit=crop", // Venice / Europe
     styles: ["Luxury", "Foodie"]
   },
   {
     name: "Swiss Alps",
     country: "Switzerland",
     tagline: "Majestic Peaks & Valleys",
-    image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800&auto=format&fit=crop", // Mountains / Lake
     styles: ["Nature", "Fast-paced"]
   },
   {
     name: "Santorini",
     country: "Greece",
     tagline: "Whitewashed Dreams & Sunsets",
-    image: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop", // Beach
     styles: ["Romantic", "Luxury"]
   },
   {
     name: "Bali",
     country: "Indonesia",
     tagline: "Lush Jungles & Tranquil Beaches",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop", // Tropical / Ocean
     styles: ["Relaxed", "Nature"]
   },
   {
     name: "Banff",
     country: "Canada",
     tagline: "Turquoise Lakes & Glaciers",
-    image: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2000&auto=format&fit=crop", // Mountain/Lake
     styles: ["Adventure", "Nature"]
   },
   {
     name: "Dubai",
     country: "UAE",
     tagline: "Futuristic Skylines & Desert Oasis",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop", // Dubai
     styles: ["Luxury", "Fast-paced"]
   },
   {
     name: "Machu Picchu",
     country: "Peru",
     tagline: "Ancient Ruins & Cloud Forests",
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop", // Machu Picchu
     styles: ["Adventure", "Culture"]
   }
 ];

@@ -117,7 +117,7 @@ export default function HomePage() {
         {isAuthenticated && <BottomNav />}
 
       {/* Main Layout Context */}
-      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-[calc(96px+var(--safe-top))] sm:pt-[calc(112px+var(--safe-top))] lg:pt-[calc(128px+var(--safe-top))]" : "pt-[calc(120px+var(--safe-top))] sm:pt-[calc(140px+var(--safe-top))] lg:pt-[calc(160px+var(--safe-top))]"}`}>
+      <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-[calc(64px+var(--safe-top))] sm:pt-[calc(80px+var(--safe-top))] lg:pt-[calc(96px+var(--safe-top))]" : "pt-[calc(80px+var(--safe-top))] sm:pt-[calc(96px+var(--safe-top))] lg:pt-[calc(112px+var(--safe-top))]"}`}>
         
         {/* HERO SECTION */}
         <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh] pt-4 sm:pt-8"}`}>

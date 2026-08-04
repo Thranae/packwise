@@ -76,8 +76,11 @@ export default function ProfilePage() {
     try {
       setIsSaving(true);
       const response = await userService.updateProfile(formData);
-      if (response.success && response.data) {
-        updateUser(response.data);
+      const isSuccess = response.success !== false;
+      const userData = response.data || response;
+      
+      if (isSuccess && userData) {
+        updateUser(userData);
         toast.success('Profile updated successfully');
         setIsEditing(false);
       }
