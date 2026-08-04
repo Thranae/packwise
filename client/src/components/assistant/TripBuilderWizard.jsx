@@ -47,14 +47,14 @@ const PremiumDatePicker = ({ value, onChange, minDate }) => {
       <button
         type="button"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(true); }}
-        className="w-full h-12 px-4 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-between text-white font-semibold text-sm transition-all duration-300 cursor-pointer group hover:bg-[#0f172a]/60 hover:border-white/20"
+        className="w-full h-[42px] px-3 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] flex items-center justify-between text-white font-semibold text-xs sm:text-sm transition-all duration-300 cursor-pointer group hover:bg-[#0f172a]/60 hover:border-white/20"
       >
-        <span className="pointer-events-none truncate min-w-[110px] text-left">{formattedValue}</span>
+        <span className="pointer-events-none truncate text-left">{formattedValue}</span>
         
         {/* 3D Liquid Glass Calendar Icon */}
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500/40 to-purple-500/40 flex items-center justify-center border-[1.5px] border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-1px_2px_rgba(0,0,0,0.5),0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-110 transition-transform duration-300 pointer-events-none shrink-0 relative overflow-hidden backdrop-blur-md">
+        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500/40 to-purple-500/40 flex items-center justify-center border-[1.5px] border-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-1px_2px_rgba(0,0,0,0.5),0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-110 transition-transform duration-300 pointer-events-none shrink-0 relative overflow-hidden backdrop-blur-md">
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-          <Calendar className="w-3.5 h-3.5 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] relative z-10" />
+          <Calendar className="w-3 h-3 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] relative z-10" />
         </div>
       </button>
 
@@ -442,32 +442,34 @@ export const TripBuilderWizard = () => {
                   {/* Duration + Date in a row */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Duration</label>
-                      <div className="flex items-center gap-1 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-1 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)]">
+                      <label className="block text-[11px] sm:text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Duration</label>
+                      <div className="flex items-center justify-between bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 p-1 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] h-[42px]">
                         <button 
                           onClick={() => setDuration(Math.max(1, (parseInt(duration) || 7) - 1))}
-                          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all duration-200 text-white/60 hover:text-white"
+                          className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all duration-200 text-white/60 hover:text-white shrink-0"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <input 
-                          type="number" 
-                          value={duration}
-                          onChange={(e) => setDuration(e.target.value)}
-                          placeholder="7" 
-                          className="w-10 h-9 text-center text-xl font-black bg-transparent text-white placeholder-white/20 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" 
-                        />
+                        <div className="flex items-baseline gap-0.5 justify-center">
+                          <input 
+                            type="number" 
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
+                            placeholder="7" 
+                            className="w-6 sm:w-8 h-8 text-center text-lg font-black bg-transparent text-white placeholder-white/20 outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" 
+                          />
+                          <span className="text-[10px] font-bold text-white/40 shrink-0">days</span>
+                        </div>
                         <button 
                           onClick={() => setDuration((parseInt(duration) || 7) + 1)}
-                          className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all duration-200 text-white/60 hover:text-white"
+                          className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all duration-200 text-white/60 hover:text-white shrink-0"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="text-xs font-bold text-white/40 pr-1">days</span>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Start Date</label>
+                      <label className="block text-[11px] sm:text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Start Date</label>
                       <PremiumDatePicker 
                         value={startDate}
                         onChange={setStartDate}
@@ -478,22 +480,28 @@ export const TripBuilderWizard = () => {
                   
                   {/* Budget */}
                   <div>
-                    <label className="block text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Budget Level</label>
+                    <label className="block text-[11px] sm:text-[12px] font-bold text-white/70 mb-1.5 tracking-wider uppercase">Budget Level</label>
                     <div className="flex items-center gap-1.5 p-1 bg-[#0f172a]/40 backdrop-blur-xl border-[1.5px] border-white/10 border-t-white/30 border-l-white/20 rounded-2xl shadow-[inset_0_2px_8px_rgba(255,255,255,0.1),inset_0_-1px_2px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.4)] overflow-visible">
                       {['Budget', 'Moderate', 'Luxury'].map((b) => {
                         const isActive = budget === b;
+                        
+                        let activeBg = 'from-indigo-500 to-purple-600 shadow-[0_4px_12px_rgba(99,102,241,0.4)]';
+                        if (b === 'Budget') activeBg = 'from-emerald-400 to-teal-500 shadow-[0_4px_12px_rgba(52,211,153,0.4)]';
+                        if (b === 'Moderate') activeBg = 'from-blue-400 to-indigo-500 shadow-[0_4px_12px_rgba(96,165,250,0.4)]';
+                        if (b === 'Luxury') activeBg = 'from-purple-400 to-pink-500 shadow-[0_4px_12px_rgba(192,132,252,0.4)]';
+
                         return (
                           <button 
                             key={b} 
                             onClick={() => setBudget(b)}
-                            className={`flex-1 py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-300 relative overflow-visible ${
+                            className={`flex-1 py-1.5 sm:py-2 px-1 rounded-xl flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 transition-all duration-300 relative overflow-hidden ${
                               isActive 
-                                ? 'ios-liquid-button text-white scale-[1.03] z-10' 
-                                : 'text-white/50 hover:text-white/80 hover:bg-white/5'
+                                ? `bg-gradient-to-br ${activeBg} text-white scale-[1.02] border-[1.5px] border-white/40 z-10` 
+                                : 'text-white/50 hover:text-white/80 hover:bg-white/5 border-[1.5px] border-transparent'
                             }`}
                           >
                             <DollarSignIcon count={b === 'Budget' ? 1 : b === 'Moderate' ? 2 : 3} isActive={isActive} level={b} />
-                            <span className={`text-[11px] font-bold tracking-wide ${isActive ? 'drop-shadow-md' : ''}`}>{b}</span>
+                            <span className={`text-[10px] sm:text-[11px] font-bold tracking-wide ${isActive ? 'drop-shadow-md' : ''}`}>{b}</span>
                           </button>
                         );
                       })}
@@ -623,33 +631,20 @@ export const TripBuilderWizard = () => {
 };
 
 function DollarSignIcon({ count, isActive, level }) {
-  const activeColors = {
-    'Budget': 'bg-gradient-to-br from-emerald-400 to-teal-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(52,211,153,0.6)] border-white/50',
-    'Moderate': 'bg-gradient-to-br from-blue-400 to-indigo-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(96,165,250,0.6)] border-white/50',
-    'Luxury': 'bg-gradient-to-br from-purple-400 to-pink-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.5),inset_0_-2px_4px_rgba(0,0,0,0.4),0_0_15px_rgba(192,132,252,0.6)] border-white/50'
-  };
-  
-  const inactiveColors = {
-    'Budget': 'bg-emerald-500/10 border-white/5',
-    'Moderate': 'bg-blue-500/10 border-white/5',
-    'Luxury': 'bg-purple-500/10 border-white/5'
-  };
-
   return (
-    <div className="flex items-center -space-x-1.5">
+    <div className="flex items-center gap-[2px]">
       {[1, 2, 3].map((i) => {
         const isFilled = i <= count;
         return (
           <div 
             key={i} 
-            className={`w-[22px] h-[22px] rounded-full flex items-center justify-center border transition-all duration-500 relative overflow-hidden backdrop-blur-md ${
+            className={`w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] rounded-full flex items-center justify-center border transition-all duration-300 ${
               isFilled 
-                ? (isActive ? `${activeColors[level]} scale-110 z-20` : `${inactiveColors[level]} text-white/50 z-10`) 
-                : 'bg-white/5 border-white/5 text-white/20 z-0'
+                ? (isActive ? 'bg-white border-white text-gray-900 shadow-sm' : 'bg-white/20 border-white/20 text-white') 
+                : (isActive ? 'bg-black/10 border-black/10 text-white/40' : 'bg-transparent border-white/10 text-white/20')
             }`}
           >
-             {isFilled && isActive && <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 opacity-70 pointer-events-none rounded-full" />}
-             <span className={`text-[11px] font-black leading-none ${isFilled && isActive ? 'text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.6)] relative z-10' : ''}`}>$</span>
+             <span className={`text-[8px] sm:text-[9px] font-black leading-none ${isFilled && !isActive ? 'drop-shadow-md' : ''}`}>$</span>
           </div>
         );
       })}
