@@ -120,7 +120,7 @@ export default function HomePage() {
       <main className={`relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 ${isAuthenticated ? "pt-[calc(96px+var(--safe-top))] sm:pt-[calc(112px+var(--safe-top))] lg:pt-[calc(128px+var(--safe-top))]" : "pt-[calc(120px+var(--safe-top))] sm:pt-[calc(140px+var(--safe-top))] lg:pt-[calc(160px+var(--safe-top))]"}`}>
         
         {/* HERO SECTION */}
-        <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh] pt-8"}`}>
+        <section className={`relative flex flex-col justify-start pb-10 lg:pb-20 ${isAuthenticated ? "mt-4 lg:mt-8" : "justify-center min-h-[70vh] lg:min-h-[90vh] pt-28 lg:pt-36"}`}>
           {isAuthenticated ? (
             <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full mt-4 sm:mt-8">
               <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
@@ -259,7 +259,7 @@ export default function HomePage() {
 
               </div>
             ) : (
-              <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+              <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 items-center mt-8 lg:mt-12">
             
             {/* Hero Left Content */}
               <motion.div variants={staggerContainer} initial="hidden" animate="show" className="lg:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left z-20 order-1">
