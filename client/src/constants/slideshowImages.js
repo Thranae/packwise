@@ -1,4 +1,4 @@
-import { getTripImage } from './imageUtils';
+import { getTripImage } from '@/utils/imageUtils';
 
 export const SLIDESHOW_IMAGES = [
   { url: getTripImage("Santorini GREECE"), city: "Santorini", country: "GREECE" },
