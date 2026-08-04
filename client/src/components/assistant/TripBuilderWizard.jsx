@@ -318,26 +318,59 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
 const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSelectStyle }) => {
   // Data for Step 1
   const destinations = [
-    { id: 1, title: 'Tokyo, Japan', subtitle: 'Neon & Sushi', image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=400&q=80', query: 'Tokyo, Japan' },
-    { id: 2, title: 'Paris, France', subtitle: 'Romance', image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=400&q=80', query: 'Paris, France' },
-    { id: 3, title: 'Bali, Indonesia', subtitle: 'Tropical Escape', image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80', query: 'Bali, Indonesia' },
-    { id: 4, title: 'Rome, Italy', subtitle: 'Ancient History', image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=400&q=80', query: 'Rome, Italy' },
+    { id: 1, title: 'Tokyo, Japan', subtitle: 'Neon & Sushi', image: `https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80` },
+    { id: 2, title: 'Paris, France', subtitle: 'Romance', image: `https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80` },
+    { id: 3, title: 'Bali, Indonesia', subtitle: 'Tropical Escape', image: `https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80` },
+    { id: 4, title: 'Rome, Italy', subtitle: 'Ancient History', image: `https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=400&q=80` },
+    { id: 5, title: 'New York City', subtitle: 'Concrete Jungle', image: `https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=400&q=80` },
+    { id: 6, title: 'Santorini, Greece', subtitle: 'Mediterranean', image: `https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=400&q=80` },
+    { id: 7, title: 'Kyoto, Japan', subtitle: 'Zen & Temples', image: `https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80` },
+    { id: 8, title: 'Maldives', subtitle: 'Ocean Villas', image: `https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=400&q=80` },
+    { id: 9, title: 'Cape Town, SA', subtitle: 'Mountain Meets Sea', image: `https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=400&q=80` },
+    { id: 10, title: 'Swiss Alps', subtitle: 'Alpine Wonder', image: `https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=400&q=80` },
+    { id: 11, title: 'Dubai, UAE', subtitle: 'Desert Luxury', image: `https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=400&q=80` },
+    { id: 12, title: 'Machu Picchu', subtitle: 'Inca Trail', image: `https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=400&q=80` },
+    { id: 13, title: 'Amalfi Coast', subtitle: 'Italian Charm', image: `https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=400&q=80` },
+    { id: 14, title: 'Banff, Canada', subtitle: 'Glacial Lakes', image: `https://images.unsplash.com/photo-1513519107127-1bed33748e4c?auto=format&fit=crop&w=400&q=80` },
+    { id: 15, title: 'Sydney, Australia', subtitle: 'Harbour Views', image: `https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=400&q=80` }
   ];
 
   // Data for Step 2
   const seasons = [
-    { id: 1, title: 'Summer Europe', subtitle: 'Jul - Aug', image: 'https://images.unsplash.com/photo-1516483638261-f408892288b6?auto=format&fit=crop&w=400&q=80', date: '2026-07-15', duration: 14 },
-    { id: 2, title: 'Cherry Blossoms', subtitle: 'Mar - Apr', image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80', date: '2027-03-25', duration: 10 },
-    { id: 3, title: 'Ski Season', subtitle: 'Dec - Feb', image: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?auto=format&fit=crop&w=400&q=80', date: '2026-12-20', duration: 7 },
-    { id: 4, title: 'Autumn Colors', subtitle: 'Oct - Nov', image: 'https://images.unsplash.com/photo-1507371341162-763b5e419408?auto=format&fit=crop&w=400&q=80', date: '2026-10-15', duration: 8 },
+    { id: 1, title: 'Summer Europe', subtitle: 'Jul - Aug', image: `https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=400&q=80`, date: '2027-07-15', duration: 14 },
+    { id: 2, title: 'Cherry Blossoms', subtitle: 'Mar - Apr', image: `https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=400&q=80`, date: '2027-03-25', duration: 10 },
+    { id: 3, title: 'Ski Season', subtitle: 'Dec - Feb', image: `https://images.unsplash.com/photo-1605540436563-5bca919ae766?auto=format&fit=crop&w=400&q=80`, date: '2026-12-20', duration: 7 },
+    { id: 4, title: 'Autumn Colors', subtitle: 'Oct - Nov', image: `https://images.unsplash.com/photo-1507371341162-763b5e419408?auto=format&fit=crop&w=400&q=80`, date: '2026-10-15', duration: 8 },
+    { id: 5, title: 'Tropical Winter', subtitle: 'Dec - Feb', image: `https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=400&q=80`, date: '2026-12-25', duration: 10 },
+    { id: 6, title: 'Spring in Japan', subtitle: 'Mar - May', image: `https://images.unsplash.com/photo-1492571350019-22de08371fd3?auto=format&fit=crop&w=400&q=80`, date: '2027-04-10', duration: 12 },
+    { id: 7, title: 'Mediterranean', subtitle: 'Jun - Sep', image: `https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=400&q=80`, date: '2027-06-20', duration: 14 },
+    { id: 8, title: 'Fall Foliage', subtitle: 'Oct', image: `https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?auto=format&fit=crop&w=400&q=80`, date: '2026-10-10', duration: 7 },
+    { id: 9, title: 'Northern Lights', subtitle: 'Nov - Feb', image: `https://images.unsplash.com/photo-1579033461380-adb47c3eb938?auto=format&fit=crop&w=400&q=80`, date: '2026-11-20', duration: 7 },
+    { id: 10, title: 'Caribbean Dry', subtitle: 'Dec - Apr', image: `https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80`, date: '2027-01-15', duration: 7 },
+    { id: 11, title: 'Oktoberfest', subtitle: 'Sep - Oct', image: `https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80`, date: '2026-09-20', duration: 10 },
+    { id: 12, title: 'Patagonia', subtitle: 'Dec - Feb', image: `https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80`, date: '2026-12-10', duration: 14 },
+    { id: 13, title: 'Safari Dry', subtitle: 'Jun - Oct', image: `https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=400&q=80`, date: '2027-08-10', duration: 10 },
+    { id: 14, title: 'Spring Break', subtitle: 'Mar - Apr', image: `https://images.unsplash.com/photo-1538964173425-93884d739596?auto=format&fit=crop&w=400&q=80`, date: '2027-03-15', duration: 7 },
+    { id: 15, title: 'Festive Markets', subtitle: 'Dec', image: `https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=400&q=80`, date: '2026-12-05', duration: 10 }
   ];
 
   // Data for Step 3
   const curatedStyles = [
-    { id: 1, title: 'Luxury Escape', subtitle: '5-Star Comfort', image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=400&q=80', styles: ['Luxury', 'Relaxed'] },
-    { id: 2, title: 'Backpacker', subtitle: 'Budget & Culture', image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80', styles: ['Culture', 'Fast-paced', 'Budget'] },
-    { id: 3, title: 'Foodie Heaven', subtitle: 'Culinary Tour', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80', styles: ['Foodie', 'Relaxed'] },
-    { id: 4, title: 'Wilderness', subtitle: 'Nature Adventure', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80', styles: ['Nature', 'Fast-paced'] },
+    { id: 1, title: 'Luxury Escape', subtitle: '5-Star Comfort', image: `https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=400&q=80`, styles: ["Luxury","Relaxed"] },
+    { id: 2, title: 'Backpacker', subtitle: 'Budget & Culture', image: `https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=400&q=80`, styles: ["Culture","Fast-paced","Budget"] },
+    { id: 3, title: 'Foodie Heaven', subtitle: 'Culinary Tour', image: `https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80`, styles: ["Foodie","Relaxed"] },
+    { id: 4, title: 'Wilderness', subtitle: 'Nature Adventure', image: `https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80`, styles: ["Nature","Fast-paced"] },
+    { id: 5, title: 'Cultural Immersion', subtitle: 'Local Life', image: `https://images.unsplash.com/photo-1518098268026-4e89f1a2cd8e?auto=format&fit=crop&w=400&q=80`, styles: ["Culture","Relaxed"] },
+    { id: 6, title: 'Romantic Getaway', subtitle: 'Couples Retreat', image: `https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80`, styles: ["Luxury","Relaxed"] },
+    { id: 7, title: 'Family Friendly', subtitle: 'Kids & Fun', image: `https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80`, styles: ["Relaxed"] },
+    { id: 8, title: 'Wellness & Spa', subtitle: 'Rejuvenate', image: `https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=400&q=80`, styles: ["Relaxed","Luxury"] },
+    { id: 9, title: 'Adrenaline Junkie', subtitle: 'Extreme Sports', image: `https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=400&q=80`, styles: ["Fast-paced","Nature"] },
+    { id: 10, title: 'Historic Sites', subtitle: 'Step Back in Time', image: `https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=400&q=80`, styles: ["Culture"] },
+    { id: 11, title: 'Beach Bum', subtitle: 'Sun & Sand', image: `https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80`, styles: ["Relaxed","Nature"] },
+    { id: 12, title: 'Photography', subtitle: 'Scenic Views', image: `https://images.unsplash.com/photo-1513519107127-1bed33748e4c?auto=format&fit=crop&w=400&q=80`, styles: ["Nature","Culture"] },
+    { id: 13, title: 'Off the Beaten Path', subtitle: 'Hidden Gems', image: `https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80`, styles: ["Fast-paced","Culture"] },
+    { id: 14, title: 'City Explorer', subtitle: 'Urban Jungle', image: `https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=400&q=80`, styles: ["Fast-paced","Culture"] },
+    { id: 15, title: 'Road Trip', subtitle: 'Scenic Drives', image: `https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=400&q=80`, styles: ["Fast-paced","Nature"] }
   ];
 
   let items = [];
