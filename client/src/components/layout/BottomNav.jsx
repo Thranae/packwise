@@ -85,7 +85,7 @@ export function BottomNav() {
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none z-30" />
                       <div className="absolute inset-[-12px] z-10 pointer-events-none" style={{ mixBlendMode: 'screen' }}>
                         <iframe 
-                          src="https://my.spline.design/liquidglass-9zVVhwqWkWcZ6xxZhK8FAUqG-Geg/" 
+                          src="https://my.spline.design/liquidglassmenucopycopy-p8qKMju3vtlufiUIcNUCH4O5-2eb/" 
                           frameBorder="0" 
                           width="100%" 
                           height="100%"
