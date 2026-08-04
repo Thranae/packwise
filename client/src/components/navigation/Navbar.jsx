@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Plane, Globe, Book, ArrowRight } from 'lucide-react';
+import { LayoutDashboard, Map, Package, Bot, Settings, LogOut, Menu, X, Banknote, Bell, User, Plane, Globe, Book, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { ROUTES } from '@/constants/routes';
@@ -93,16 +93,22 @@ export const Navbar = () => {
         </svg>
 
         <header
-          className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700 overflow-hidden"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.02)',
-            backdropFilter: 'blur(60px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(60px) saturate(200%)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.25)',
-            boxShadow: '0 24px 48px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -2px 6px rgba(0,0,0,0.5)'
-          }}
+          className="relative flex items-center justify-between w-full max-w-[1200px] px-5 sm:px-6 h-[56px] sm:h-[64px] rounded-[24px] pointer-events-auto transition-all duration-700"
         >
+          {/* Background layer detached from parent to prevent backdrop-filter stacking context bugs on mobile */}
+          <div 
+            className="absolute inset-0 rounded-[24px] -z-10 pointer-events-none"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+              backdropFilter: 'blur(60px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(60px) saturate(200%)',
+              border: '1.5px solid rgba(255, 255, 255, 0.12)',
+              borderTopColor: 'rgba(255, 255, 255, 0.3)',
+              borderLeftColor: 'rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3), inset 0 -1px 4px rgba(0, 0, 0, 0.2)'
+            }}
+          />
+
           {/* Subtle noise texture for frosted liquid look */}
           <div className="absolute inset-0 opacity-[0.15] pointer-events-none z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
           {/* Left: Logo */}
@@ -169,12 +175,11 @@ export const Navbar = () => {
                     <AnimatePresence>
                       {notificationsOpen && (
                         <motion.div
-                          initial={{ opacity: 0, scale: 0.8, y: -5 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.9, y: -5 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                          style={{ originX: 1, originY: 0 }}
-                          className="absolute right-0 top-full mt-4 w-80 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-4 z-[200] border border-white/[0.08]"
+                          initial={{ opacity: 0, marginTop: "4px" }}
+                          animate={{ opacity: 1, marginTop: "16px" }}
+                          exit={{ opacity: 0, marginTop: "4px" }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                          className="absolute right-0 top-full w-80 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-4 z-[200] border border-white/[0.08]"
                         >
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-sm font-bold text-white tracking-tight">Notifications</h3>
@@ -230,15 +235,14 @@ export const Navbar = () => {
                     <AnimatePresence>
                       {profileMenuOpen && (
                         <motion.div
-                          initial={{ opacity: 0, scale: 0.8, y: -5 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.9, y: -5 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                          style={{ originX: 1, originY: 0 }}
-                          className="absolute right-0 top-full mt-4 w-64 rounded-[24px] bg-white/[0.15] backdrop-blur-[40px] shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_1px_0_rgba(255,255,255,0.4)] p-2 z-[200] border border-white/20"
+                          initial={{ opacity: 0, marginTop: "4px" }}
+                          animate={{ opacity: 1, marginTop: "12px" }}
+                          exit={{ opacity: 0, marginTop: "4px" }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                          className="absolute right-0 top-full w-56 rounded-[24px] bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] p-1.5 z-[200]"
                         >
-                          <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-sky-400 to-blue-500 border border-sky-300/50 flex items-center justify-center shadow-inner">
+                          <div className="flex items-center gap-3 p-2.5 mb-1.5 border-b border-white/10">
+                            <div className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden bg-gradient-to-tr from-sky-400 to-blue-500 border border-sky-300/50 flex items-center justify-center shadow-inner">
                               {user?.profileImage ? (
                                 <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                               ) : (
@@ -251,25 +255,25 @@ export const Navbar = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-col gap-1">
-                            <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(56,189,248,0.5)] border border-sky-300 flex items-center justify-center">
-                                <User className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                          <div className="flex flex-col gap-0.5">
+                            <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold w-full group/item">
+                              <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-sky-400 to-blue-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-sky-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                                <User className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                               </div>
-                              My Profile
+                              <span className="group-hover/item:translate-x-1 transition-transform">My Profile</span>
                             </Link>
-                            <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-fuchsia-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(168,85,247,0.5)] border border-purple-300 flex items-center justify-center">
-                                <Settings className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                            <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold w-full group/item">
+                              <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-purple-400 to-fuchsia-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-purple-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                                <Settings className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                               </div>
-                              Settings
+                              <span className="group-hover/item:translate-x-1 transition-transform">Settings</span>
                             </Link>
                             <div className="h-px w-full bg-white/10 my-1" />
-                            <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-red-500/20 active:scale-[0.98] text-red-100 hover:text-red-50 transition-all text-sm font-bold w-full text-left group/item">
-                              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(225,29,72,0.5)] border border-red-300 flex items-center justify-center">
-                                <LogOut className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:translate-x-0.5 transition-transform drop-shadow-sm" />
+                            <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-red-500/20 active:scale-[0.98] text-red-100 hover:text-red-50 transition-all text-sm font-bold w-full text-left group/item">
+                              <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-red-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                                <LogOut className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                               </div>
-                              Log Out
+                              <span className="group-hover/item:translate-x-1 transition-transform">Log Out</span>
                             </button>
                           </div>
                         </motion.div>
@@ -317,15 +321,13 @@ export const Navbar = () => {
             
             {/* Menu Card - iOS 18 Liquid Glass */}
             <motion.div
-              initial={{ opacity: 0, y: -16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              style={{ willChange: 'transform, opacity' }}
-              className="absolute top-[calc(96px+var(--safe-top))] left-4 right-4 rounded-[32px] bg-[#111827]/75 backdrop-blur-md border border-white/[0.12] shadow-[0_32px_64px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.25),inset_0_0_32px_rgba(255,255,255,0.03)] p-5 flex flex-col overflow-hidden"
+              key="mobile-menu"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-[calc(96px+var(--safe-top))] left-6 right-6 rounded-[32px] bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] p-3 flex flex-col overflow-hidden z-[200]"
             >
-              {/* Subtle noise for glass texture */}
-              <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
               
               <div className="relative z-10 flex flex-col w-full">
               {isAuthenticated ? (
@@ -349,68 +351,85 @@ export const Navbar = () => {
 
                     {/* Navigation Items */}
                     <div className="flex flex-col gap-1 mt-1">
-                      {navItems.map((item) => (
-                        <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-3 rounded-[16px] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all duration-200">
-                          <div className="w-8 h-8 rounded-[12px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                            <item.icon className="h-[18px] w-[18px]" style={{ stroke: 'url(#icon-3d-slate)', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
-                          </div>
-                          <span className="font-semibold text-[15px] tracking-wide">{item.name}</span>
-                        </Link>
-                      ))}
+                      {navItems.map((item) => {
+                        let gradient = "from-gray-500 to-gray-600";
+                        let border = "border-gray-400";
+                        if (item.name === 'Overview') { gradient = "from-blue-400 to-indigo-500"; border = "border-blue-300"; }
+                        else if (item.name === 'Trips') { gradient = "from-emerald-400 to-green-600"; border = "border-emerald-300"; }
+                        else if (item.name === 'Journal') { gradient = "from-pink-400 to-rose-500"; border = "border-pink-300"; }
+                        else if (item.name === 'Packing') { gradient = "from-orange-400 to-amber-500"; border = "border-orange-300"; }
+                        else if (item.name === 'Budget') { gradient = "from-yellow-400 to-amber-600"; border = "border-yellow-300"; }
+                        else if (item.name === 'AI') { gradient = "from-cyan-400 to-blue-500"; border = "border-cyan-300"; }
+
+                        return (
+                          <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-2.5 rounded-[14px] hover:bg-white/[0.08] active:bg-white/10 text-white transition-all duration-200 group/nav">
+                            <div className={`w-8 h-8 rounded-[12px] bg-gradient-to-br ${gradient} border ${border} flex items-center justify-center shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover/nav:scale-105`}>
+                              <item.icon className="h-[16px] w-[16px] text-white drop-shadow-sm" />
+                            </div>
+                            <span className="font-semibold text-sm tracking-wide group-hover/nav:translate-x-1 transition-transform">{item.name}</span>
+                          </Link>
+                        );
+                      })}
                     </div>
 
-                    <div className="h-px w-full bg-white/[0.08] my-2" />
+                    <div className="h-px w-full bg-white/[0.08] my-1.5" />
                     
                     <div className="flex flex-col gap-1">
-                      <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-3 rounded-[16px] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all duration-200">
-                        <div className="w-8 h-8 rounded-[12px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                          <Settings className="h-[18px] w-[18px]" style={{ stroke: 'url(#icon-3d-slate)', filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
+                      <Link to={ROUTES.SETTINGS} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-3 py-2.5 rounded-[14px] text-white hover:bg-white/[0.08] active:bg-white/10 transition-all duration-200 group/nav">
+                        <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-purple-400 to-fuchsia-600 border border-purple-300 flex items-center justify-center shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover/nav:scale-105">
+                          <Settings className="h-[16px] w-[16px] text-white drop-shadow-sm" />
                         </div>
-                        <span className="font-semibold text-[15px] tracking-wide">Settings</span>
+                        <span className="font-semibold text-sm tracking-wide group-hover/nav:translate-x-1 transition-transform">Settings</span>
                       </Link>
 
-                      <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="flex items-center w-full gap-4 px-3 py-3 rounded-[16px] text-red-400/80 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200">
-                        <div className="w-8 h-8 rounded-[12px] bg-red-500/10 border border-red-500/20 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                          <LogOut className="h-[18px] w-[18px] text-red-400" style={{ filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))' }} />
+                      <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="flex items-center w-full gap-4 px-3 py-2.5 rounded-[14px] text-red-100 hover:bg-red-500/20 active:bg-red-500/30 transition-all duration-200 group/nav">
+                        <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-red-400 to-rose-600 border border-red-300 flex items-center justify-center shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover/nav:scale-105">
+                          <LogOut className="h-[16px] w-[16px] text-white drop-shadow-sm" />
                         </div>
-                        <span className="font-semibold text-[15px] tracking-wide">Log out</span>
+                        <span className="font-semibold text-sm tracking-wide group-hover/nav:translate-x-1 transition-transform">Log out</span>
                       </button>
                     </div>
                   </div>
               ) : (
-                <div className="flex flex-col w-full py-3 px-1">
+                <div className="flex flex-col w-full py-1">
                   {/* Compact travel-themed header */}
-                  <div className="flex items-center gap-4 px-2 mb-5">
-                    <div className="w-12 h-12 rounded-[16px] bg-white/[0.05] border border-white/[0.12] flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.15),0_8px_16px_rgba(0,0,0,0.4)] relative overflow-hidden">
+                  <div className="flex items-center gap-3 px-1 mb-4">
+                    <div className="w-10 h-10 rounded-[12px] bg-white/[0.05] border border-white/[0.12] flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.15),0_8px_16px_rgba(0,0,0,0.4)] relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20" />
-                      <Plane className="w-6 h-6 relative z-10" style={{ stroke: 'url(#icon-3d-blue)', filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.6))' }} />
+                      <Plane className="w-5 h-5 relative z-10" style={{ stroke: 'url(#icon-3d-blue)', filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.6))' }} />
                     </div>
                     <div>
-                      <h2 className="text-[16px] font-semibold text-white tracking-tight">Voyage Genie<span className="text-blue-400">.</span></h2>
-                      <p className="text-[11px] text-white/35">Plan your next adventure</p>
+                      <h2 className="text-[14px] font-semibold text-white tracking-tight">Voyage Genie<span className="text-blue-400">.</span></h2>
+                      <p className="text-[10px] text-white/35">Plan your next adventure</p>
                     </div>
                   </div>
 
                   {/* CTA Buttons */}
-                  <div className="flex flex-col gap-2.5 px-1">
+                  <div className="flex flex-col gap-2">
                     <Link to={ROUTES.SIGNUP} onClick={() => setMobileMenuOpen(false)} className="w-full block">
-                      <button className="w-full relative overflow-hidden group py-3.5 rounded-2xl text-white font-semibold text-[14px] tracking-wide transition-all duration-300 active:scale-[0.97]" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #6366F1 100%)' }}>
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          Get Started
-                          <ArrowRight className="w-4 h-4" />
-                        </span>
+                      <button className="w-full relative overflow-hidden group py-3 rounded-[16px] text-white transition-all duration-300 active:scale-[0.97] flex items-center px-2" style={{ background: 'linear-gradient(135deg, #4F7CFF 0%, #6366F1 100%)' }}>
+                        <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
+                        <div className="w-10 h-10 rounded-[12px] bg-white/20 border border-white/30 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_4px_8px_rgba(0,0,0,0.2)] mr-3 relative z-10">
+                          <Sparkles className="w-5 h-5 text-white drop-shadow-md" />
+                        </div>
+                        <span className="relative z-10 font-bold text-[15px] tracking-wide flex-1 text-left">Get Started</span>
+                        <ArrowRight className="w-5 h-5 relative z-10 mr-2 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                       </button>
                     </Link>
 
-                    <Link to={ROUTES.LOGIN} onClick={() => setMobileMenuOpen(false)} className="w-full block">
-                      <button className="w-full py-3.5 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-white/70 hover:text-white font-medium text-[14px] transition-colors duration-200 active:scale-[0.97]">
-                        Log in
+                    <Link to={ROUTES.LOGIN} onClick={() => setMobileMenuOpen(false)} className="w-full block mt-1">
+                      <button className="w-full py-3 rounded-[16px] bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.12] text-white transition-all duration-200 active:scale-[0.97] flex items-center px-2 group">
+                        <div className="w-10 h-10 rounded-[12px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] mr-3">
+                          <User className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                        </div>
+                        <span className="font-semibold text-[14px] text-white/80 group-hover:text-white transition-colors flex-1 text-left">Log in</span>
+                        <ArrowRight className="w-4 h-4 mr-2 text-white/30 group-hover:text-white/60 transition-colors" />
                       </button>
                     </Link>
                   </div>
 
                   {/* Footer */}
-                  <p className="text-[9px] font-medium tracking-[0.15em] text-white/15 uppercase mt-5 text-center">
+                  <p className="text-[9px] font-medium tracking-[0.15em] text-white/15 uppercase mt-3 mb-1 text-center">
                     Powered by Thranaeswanth
                   </p>
                 </div>

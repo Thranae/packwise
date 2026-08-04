@@ -104,8 +104,11 @@ export const TopHeader = () => {
     <motion.header 
       ref={headerRef}
       whileHover={{ y: -2, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className="sticky top-[calc(8px+var(--safe-top))] lg:top-[calc(16px+var(--safe-top))] z-[100] w-full flex items-center justify-between h-[60px] lg:h-[72px] mt-[calc(8px+var(--safe-top))] lg:mt-[calc(16px+var(--safe-top))] mb-4 lg:mb-6 px-4 lg:px-6 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[24px] lg:rounded-[36px]"
+      className="sticky top-[calc(8px+var(--safe-top))] lg:top-[calc(16px+var(--safe-top))] z-[100] w-full flex items-center justify-between h-[60px] lg:h-[72px] mt-[calc(8px+var(--safe-top))] lg:mt-[calc(16px+var(--safe-top))] mb-4 lg:mb-6 px-4 lg:px-6"
     >
+      {/* Background layer detached from parent to prevent backdrop-filter stacking context bugs on mobile */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] rounded-[24px] lg:rounded-[36px] -z-10 pointer-events-none" />
+
       
       {/* Mobile Logo */}
       <div className="md:hidden flex items-center gap-2 cursor-pointer" onPointerDown={handlePointerDown}>
@@ -380,12 +383,11 @@ export const TopHeader = () => {
           <AnimatePresence>
             {notificationsOpen && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: -5 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                style={{ originX: 1, originY: 0 }}
-                className="absolute right-0 top-full mt-4 w-80 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-4 z-[200] border border-white/[0.08]"
+                initial={{ opacity: 0, marginTop: "4px" }}
+                animate={{ opacity: 1, marginTop: "12px" }}
+                exit={{ opacity: 0, marginTop: "4px" }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="absolute right-0 top-full w-80 rounded-[24px] bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] p-4 z-[200]"
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white tracking-tight">Notifications</h3>
@@ -397,8 +399,8 @@ export const TopHeader = () => {
                 <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
                   {notifications && notifications.length > 0 ? notifications.map((notif) => (
                     <div key={notif.id} className={`flex gap-3 items-start p-2 rounded-xl transition-colors cursor-pointer group ${notif.read ? 'hover:bg-white/5 opacity-70' : 'bg-white/5 hover:bg-white/10'}`}>
-                      <div className={`w-8 h-8 rounded-full ${notif.type === 'pdf' ? 'bg-purple-500/20 border-purple-500/30' : 'bg-emerald-500/20 border-emerald-500/30'} border flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                        {notif.type === 'pdf' ? <Globe className="w-4 h-4 text-purple-400" /> : <Sparkles className="w-4 h-4 text-emerald-400" />}
+                      <div className={`w-8 h-8 rounded-[12px] ${notif.type === 'pdf' ? 'bg-gradient-to-br from-purple-400 to-fuchsia-600 border-purple-300' : 'bg-gradient-to-br from-emerald-400 to-teal-500 border-emerald-300'} border flex items-center justify-center flex-shrink-0 mt-0.5 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105`}>
+                        {notif.type === 'pdf' ? <Globe className="w-4 h-4 text-white drop-shadow-sm" /> : <Sparkles className="w-4 h-4 text-white drop-shadow-sm" />}
                       </div>
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex justify-between items-center w-full">
@@ -441,15 +443,14 @@ export const TopHeader = () => {
           <AnimatePresence>
             {profileMenuOpen && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: -5 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                style={{ originX: 1, originY: 0 }}
-                className="absolute right-0 top-full mt-4 w-64 rounded-[24px] bg-white/[0.15] backdrop-blur-[40px] shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_1px_0_rgba(255,255,255,0.4)] p-2 z-[200] border border-white/20"
+                initial={{ opacity: 0, marginTop: "4px" }}
+                animate={{ opacity: 1, marginTop: "12px" }}
+                exit={{ opacity: 0, marginTop: "4px" }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="absolute right-0 top-full w-56 rounded-[24px] bg-gradient-to-b from-white/20 to-white/5 backdrop-blur-md border border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] p-1.5 z-[200]"
               >
-                <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-sky-400 to-blue-500 border border-sky-300/50 flex items-center justify-center shadow-inner">
+                <div className="flex items-center gap-3 p-2.5 mb-1.5 border-b border-white/10">
+                  <div className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden bg-gradient-to-tr from-sky-400 to-blue-500 border border-sky-300/50 flex items-center justify-center shadow-inner">
                     {user?.profileImage ? (
                       <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                     ) : (
@@ -462,36 +463,36 @@ export const TopHeader = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-0.5">
                   {isInstallable && (
                     <button onClick={async () => {
                       setProfileMenuOpen(false);
                       await promptInstall();
-                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-blue-500/15 active:scale-[0.98] text-white hover:text-blue-200 transition-all text-sm font-bold group/item">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(59,130,246,0.5)] border border-blue-300 flex items-center justify-center">
-                        <Download className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                    }} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-white/10 active:scale-[0.98] text-white hover:text-white transition-all text-sm font-bold w-full text-left group/item">
+                      <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-blue-400 to-indigo-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-blue-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                        <Download className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                       </div>
-                      Install App
+                      <span className="group-hover/item:translate-x-1 transition-transform">Install App</span>
                     </button>
                   )}
-                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(56,189,248,0.5)] border border-sky-300 flex items-center justify-center">
-                      <User className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold w-full group/item">
+                    <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-sky-400 to-blue-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-sky-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                      <User className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                     </div>
-                    My Profile
+                    <span className="group-hover/item:translate-x-1 transition-transform">My Profile</span>
                   </Link>
-                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-fuchsia-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(168,85,247,0.5)] border border-purple-300 flex items-center justify-center">
-                      <Settings className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
+                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold w-full group/item">
+                    <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-purple-400 to-fuchsia-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-purple-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                      <Settings className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                     </div>
-                    Settings
+                    <span className="group-hover/item:translate-x-1 transition-transform">Settings</span>
                   </Link>
                   <div className="h-px w-full bg-white/10 my-1" />
-                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-red-500/20 active:scale-[0.98] text-red-100 hover:text-red-50 transition-all text-sm font-bold w-full text-left group/item">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(225,29,72,0.5)] border border-red-300 flex items-center justify-center">
-                      <LogOut className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:translate-x-0.5 transition-transform drop-shadow-sm" />
+                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-2.5 py-2 rounded-[12px] hover:bg-red-500/20 active:scale-[0.98] text-red-100 hover:text-red-50 transition-all text-sm font-bold w-full text-left group/item">
+                    <div className="w-8 h-8 rounded-[12px] bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] border border-red-300 flex items-center justify-center transition-transform duration-300 group-hover/item:scale-105">
+                      <LogOut className="w-[15px] h-[15px] text-white drop-shadow-sm" />
                     </div>
-                    Log Out
+                    <span className="group-hover/item:translate-x-1 transition-transform">Log Out</span>
                   </button>
                 </div>
               </motion.div>
