@@ -24,7 +24,19 @@ const fadeUp = {
 export default function DocumentsPage() {
   const { addToast } = useToast();
   return (
-    <PageTransition>
+    <PageTransition className="relative min-h-full">
+      {/* 3D Stackable Glass Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen overflow-hidden">
+        <iframe 
+          src="https://my.spline.design/stackableglass-31A0B3Kcmae5ah8U898DTaXT-dVR/" 
+          frameBorder="0" 
+          width="100%" 
+          height="100%"
+          title="Stackable Glass Background"
+        ></iframe>
+      </div>
+      
+      <div className="relative z-10 w-full pb-20">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
         <div>
@@ -102,6 +114,7 @@ export default function DocumentsPage() {
             </div>
           </motion.div>
         </motion.div>
+      </div>
       </div>
     </PageTransition>
   );
