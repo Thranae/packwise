@@ -446,10 +446,10 @@ export const TopHeader = () => {
                 exit={{ opacity: 0, scale: 0.9, y: -5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 style={{ originX: 1, originY: 0 }}
-                className="absolute right-0 top-full mt-4 w-64 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-2 z-[200] border border-white/[0.08]"
+                className="absolute right-0 top-full mt-4 w-64 rounded-[24px] bg-white/[0.15] backdrop-blur-[40px] shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_1px_0_rgba(255,255,255,0.4)] p-2 z-[200] border border-white/20"
               >
                 <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20 flex items-center justify-center shadow-inner">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-sky-400 to-blue-500 border border-sky-300/50 flex items-center justify-center shadow-inner">
                     {user?.profileImage ? (
                       <img src={user.profileImage} alt={user.name} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                     ) : (
