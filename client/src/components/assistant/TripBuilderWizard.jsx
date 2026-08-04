@@ -389,15 +389,17 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: idx * 0.05 }}
             onClick={() => onCardClick(item)}
-            className="relative shrink-0 w-[130px] sm:w-[150px] aspect-[3/4] rounded-[20px] overflow-hidden group snap-center bg-black shadow-[0_12px_24px_rgba(0,0,0,0.4),0_2px_4px_rgba(255,255,255,0.05)] active:scale-[0.96] transition-all duration-300 border border-white/10 hover:border-white/30"
+            className="relative shrink-0 w-[140px] sm:w-[160px] aspect-[3/4] rounded-[24px] ios-glass-card p-2 group snap-center shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] active:scale-[0.96] transition-all duration-300 border border-white/5 hover:border-white/20 flex flex-col"
           >
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050b14]/90 via-[#050b14]/20 to-transparent z-10" />
-            <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            
-            <div className="absolute bottom-3.5 left-3 right-3 z-20 text-left">
-              <h5 className="text-[13px] sm:text-[14px] font-bold text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{item.title}</h5>
-              <p className="text-[10px] sm:text-[11px] font-semibold text-white/60 mt-0.5">{item.subtitle}</p>
+            <div className="relative w-full h-full rounded-[16px] overflow-hidden">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050b14]/90 via-[#050b14]/20 to-transparent z-10" />
+              <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              
+              <div className="absolute bottom-3.5 left-3 right-3 z-20 text-left">
+                <h5 className="text-[13px] sm:text-[14px] font-bold text-white leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{item.title}</h5>
+                <p className="text-[10px] sm:text-[11px] font-semibold text-white/60 mt-0.5">{item.subtitle}</p>
+              </div>
             </div>
           </motion.button>
         ))}
