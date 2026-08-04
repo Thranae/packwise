@@ -21,14 +21,23 @@ export default function ProfilePage() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
+  const mapLegacyBudget = (val) => {
+    if (!val) return 'Medium';
+    const lower = val.toLowerCase();
+    if (lower === 'budget') return 'Budget';
+    if (lower === 'moderate' || lower === 'medium') return 'Medium';
+    if (lower === 'luxury') return 'Luxury';
+    return 'Medium';
+  };
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     displayName: user?.displayName || '',
     email: user?.email || '',
     homeAirport: user?.homeAirport || '',
     dietaryRestrictions: user?.dietaryRestrictions || [],
-    travelStyles: user?.travelStyles || user?.travelPreferences?.styles || [],
-    budgetPreference: user?.budgetPreference || user?.travelPreferences?.budget || 'Medium',
+    travelStyles: user?.travelStyles || user?.travelStyle || user?.travelPreferences?.styles || [],
+    budgetPreference: mapLegacyBudget(user?.budgetPreference || user?.travelPreferences?.budget),
     currency: user?.currency || 'USD'
   });
 
