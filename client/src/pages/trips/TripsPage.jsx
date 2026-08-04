@@ -202,12 +202,12 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center justify-center w-full min-h-[400px] rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] ios-3d-element"
             >
-              <div className="w-56 h-56 mb-4 relative flex items-center justify-center pointer-events-none mix-blend-screen">
+              <div className="w-56 h-56 mb-4 relative flex items-center justify-center pointer-events-none mx-auto">
                 <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
               </div>
               
               <h3 className="text-2xl font-semibold tracking-tighter text-white mb-2 drop-shadow-md">No trips yet.</h3>
-              <p className="text-white/60 text-[15px] font-medium mb-8 max-w-sm text-center">
+              <p className="text-white/60 text-[15px] font-medium mb-8 max-w-sm text-center px-4">
                 Your travel library is empty. Let's change that by planning your next unforgettable adventure.
               </p>
               
