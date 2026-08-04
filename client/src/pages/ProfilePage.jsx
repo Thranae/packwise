@@ -150,10 +150,10 @@ export default function ProfilePage() {
             <button 
               onClick={handleSave}
               disabled={isSaving}
-              className={`rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all flex items-center gap-2 ios-liquid-button ${
+              className={`rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-wider active:scale-95 transition-all flex items-center gap-2 ${
                 isEditing 
                   ? 'bg-green-500 hover:bg-green-600 text-white shadow-[0_4px_16px_rgba(34,197,94,0.4)] border border-green-400/50' 
-                  : 'bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md shadow-md'
+                  : 'ios-liquid-button bg-white/10 hover:bg-white/20 border border-white/20 text-white backdrop-blur-md shadow-md'
               }`}
             >
               {isEditing ? (isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />) : <Edit3 className="w-4 h-4" />}
