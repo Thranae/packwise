@@ -626,11 +626,80 @@ export const TripBuilderWizard = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Dynamic Feature Card */}
+      <AnimatePresence mode="wait">
+        {!isGenerating && (
+          <motion.div
+            key={`feature-card-${step}`}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 w-full ios-glass-card rounded-2xl p-4 sm:p-5 border border-white/5 shadow-[0_8px_16px_rgba(0,0,0,0.2)] flex items-start gap-3 sm:gap-4 relative overflow-hidden"
+          >
+            {/* Glass shine effect */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            
+            {step === 1 && (
+              <>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400 drop-shadow-md" />
+                </div>
+                <div>
+                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Need Inspiration?</h4>
+                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
+                    Try searching for "Somewhere tropical" or "European city with great food" and let Voyage Genie work its magic.
+                  </p>
+                </div>
+              </>
+            )}
+            {step === 2 && (
+              <>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
+                  <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 drop-shadow-md" />
+                </div>
+                <div>
+                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Smart Pricing</h4>
+                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
+                    Your budget level adjusts the hotel tier and dining recommendations. We automatically find optimal flights for your dates.
+                  </p>
+                </div>
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20 shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)]">
+                  <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 drop-shadow-md" />
+                </div>
+                <div>
+                  <h4 className="text-sm sm:text-[15px] font-bold text-white mb-0.5 sm:mb-1">Curating Your Vibe</h4>
+                  <p className="text-xs sm:text-[13px] text-white/60 leading-relaxed font-medium">
+                    We blend iconic landmarks with local hidden gems to perfectly match your group's pace and interests.
+                  </p>
+                </div>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 function DollarSignIcon({ count, isActive, level }) {
+  const activeStyles = {
+    'Budget': 'bg-gradient-to-br from-red-400 to-rose-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-2px_4px_rgba(0,0,0,0.3),0_2px_4px_rgba(239,68,68,0.5)] border-red-300 text-white',
+    'Moderate': 'bg-gradient-to-br from-amber-300 to-yellow-500 shadow-[inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.2),0_2px_4px_rgba(251,191,36,0.5)] border-amber-200 text-yellow-900',
+    'Luxury': 'bg-gradient-to-br from-emerald-400 to-teal-600 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-2px_4px_rgba(0,0,0,0.3),0_2px_4px_rgba(52,211,153,0.5)] border-emerald-300 text-white',
+  };
+
+  const inactiveStyles = {
+    'Budget': 'bg-red-500/10 border-red-500/20 text-red-500/60',
+    'Moderate': 'bg-amber-500/10 border-amber-500/20 text-amber-500/60',
+    'Luxury': 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500/60',
+  };
+
   return (
     <div className="flex items-center gap-[2px]">
       {[1, 2, 3].map((i) => {
@@ -638,13 +707,14 @@ function DollarSignIcon({ count, isActive, level }) {
         return (
           <div 
             key={i} 
-            className={`w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] rounded-full flex items-center justify-center border transition-all duration-300 ${
+            className={`w-[12px] h-[12px] sm:w-[14px] sm:h-[14px] rounded-full flex items-center justify-center border transition-all duration-300 relative overflow-hidden ${
               isFilled 
-                ? (isActive ? 'bg-white border-white text-gray-900 shadow-sm' : 'bg-white/20 border-white/20 text-white') 
-                : (isActive ? 'bg-black/10 border-black/10 text-white/40' : 'bg-transparent border-white/10 text-white/20')
+                ? (isActive ? activeStyles[level] + ' scale-110 z-10' : inactiveStyles[level]) 
+                : 'bg-white/5 border-white/5 text-white/20'
             }`}
           >
-             <span className={`text-[8px] sm:text-[9px] font-black leading-none ${isFilled && !isActive ? 'drop-shadow-md' : ''}`}>$</span>
+             {isFilled && isActive && <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-white/60 opacity-60 pointer-events-none rounded-full mix-blend-overlay" />}
+             <span className={`text-[8px] sm:text-[9px] font-black leading-none ${isFilled && !isActive ? 'drop-shadow-sm' : ''} ${isFilled && isActive ? 'drop-shadow-md' : ''}`}>$</span>
           </div>
         );
       })}
