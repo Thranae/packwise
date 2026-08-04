@@ -380,11 +380,12 @@ export const TopHeader = () => {
           <AnimatePresence>
             {notificationsOpen && (
               <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-[-60px] md:right-0 top-full mt-4 w-80 rounded-2xl bg-[#0F172A]/90 backdrop-blur-[40px] shadow-[0_24px_48px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] p-4 z-[200] border border-white/10"
+                initial={{ opacity: 0, scale: 0.8, y: -5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                style={{ originX: 1, originY: 0 }}
+                className="absolute right-0 top-full mt-4 w-80 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-4 z-[200] border border-white/[0.08]"
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white tracking-tight">Notifications</h3>
@@ -440,11 +441,12 @@ export const TopHeader = () => {
           <AnimatePresence>
             {profileMenuOpen && (
               <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-0 top-full mt-4 w-64 rounded-2xl bg-slate-900/95 backdrop-blur-[60px] shadow-[0_24px_48px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.25)] p-2 z-[200] border border-white/20"
+                initial={{ opacity: 0, scale: 0.8, y: -5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                style={{ originX: 1, originY: 0 }}
+                className="absolute right-0 top-full mt-4 w-64 rounded-[24px] bg-[#1a1c29]/70 backdrop-blur-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(255,255,255,0.1),inset_0_1px_0_rgba(255,255,255,0.2)] p-2 z-[200] border border-white/[0.08]"
               >
                 <div className="flex items-center gap-3 p-3 mb-2 border-b border-white/10">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-blue-500 to-purple-500 border border-white/20 flex items-center justify-center shadow-inner">
@@ -465,22 +467,22 @@ export const TopHeader = () => {
                     <button onClick={async () => {
                       setProfileMenuOpen(false);
                       await promptInstall();
-                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-blue-500/10 text-blue-400 hover:text-blue-300 transition-all text-sm font-bold group/item">
-                      <Download className="w-4 h-4 group-hover/item:scale-110 transition-transform drop-shadow-md" />
+                    }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-blue-500/15 active:scale-[0.98] text-blue-400 hover:text-blue-300 transition-all text-sm font-bold group/item">
+                      <Download className="w-4 h-4 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
                       Install App
                     </button>
                   )}
-                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white transition-all text-sm font-bold group/item">
-                    <User className="w-4 h-4 text-blue-400 group-hover/item:scale-110 transition-transform drop-shadow-md" />
+                  <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
+                    <User className="w-4 h-4 text-blue-400 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
                     My Profile
                   </Link>
-                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-white/10 text-white transition-all text-sm font-bold group/item">
-                    <Settings className="w-4 h-4 text-purple-400 group-hover/item:scale-110 transition-transform drop-shadow-md" />
+                  <Link to={ROUTES.SETTINGS} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
+                    <Settings className="w-4 h-4 text-purple-400 group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-md" />
                     Settings
                   </Link>
                   <div className="h-px w-full bg-white/10 my-1" />
-                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all text-sm font-bold w-full text-left group/item">
-                    <LogOut className="w-4 h-4 text-red-500 group-hover/item:scale-110 transition-transform drop-shadow-md" />
+                  <button onClick={() => { setProfileMenuOpen(false); logout(); }} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-red-500/20 active:scale-[0.98] text-red-400 hover:text-red-300 transition-all text-sm font-bold w-full text-left group/item">
+                    <LogOut className="w-4 h-4 text-red-500 group-hover/item:scale-110 group-hover/item:translate-x-0.5 transition-transform drop-shadow-md" />
                     Log Out
                   </button>
                 </div>
