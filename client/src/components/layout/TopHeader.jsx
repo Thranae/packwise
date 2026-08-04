@@ -475,7 +475,7 @@ export const TopHeader = () => {
                     </button>
                   )}
                   <Link to={ROUTES.PROFILE} onClick={() => setProfileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-[14px] hover:bg-white/10 active:scale-[0.98] text-white transition-all text-sm font-bold group/item">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(99,102,241,0.5)] border border-indigo-300 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_2px_4px_rgba(56,189,248,0.5)] border border-sky-300 flex items-center justify-center">
                       <User className="w-3.5 h-3.5 text-white group-hover/item:scale-110 group-hover/item:-translate-y-0.5 transition-transform drop-shadow-sm" />
                     </div>
                     My Profile
