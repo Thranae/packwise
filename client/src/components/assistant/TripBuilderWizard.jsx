@@ -592,7 +592,6 @@ export const TripBuilderWizard = ({ initialDestination = "" }) => {
                     onSearching={setIsSearching}
                     onFocus={() => setActiveField('destination')}
                     placeholder="e.g. Tokyo, Japan or 'Somewhere tropical'"
-                    autoFocus={true}
                   />
                   <LocationInput 
                     label={<span>Starting City <span className="text-white/40 font-medium normal-case">(Optional)</span></span>}
