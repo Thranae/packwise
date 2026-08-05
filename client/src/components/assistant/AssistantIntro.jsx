@@ -120,7 +120,8 @@ function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
         rotate: isTop ? rotate : 0,
         scale,
         y: yOffset,
-        zIndex: 10 - index
+        zIndex: 10 - index,
+        willChange: isTop ? 'transform' : 'auto'
       }}
       initial={{ opacity: 0, scale: 0.9, y: yOffset + 20 }}
       animate={{ opacity: 1, scale, y: yOffset }}
@@ -128,9 +129,10 @@ function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
       exit={(direction) => ({
         opacity: 0,
         scale: 0.8,
-        x: direction === 'right' ? 1000 : -1000,
+        x: direction === 'right' ? 800 : -800,
+        transition: { type: 'tween', duration: 0.3, ease: 'easeOut' }
       })}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25, mass: 1 }}
       drag={isTop ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
@@ -158,14 +160,22 @@ function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
 
       {/* Right Swipe (Green Light) */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none border-[2px] sm:border-[3px] border-green-400/60 rounded-[32px] sm:rounded-[40px] shadow-[inset_0_0_120px_rgba(74,222,128,0.4)] bg-green-500/10"
-        style={{ opacity: opacityRight }}
+        className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
+        style={{ 
+          opacity: opacityRight,
+          background: 'radial-gradient(circle at right center, rgba(74,222,128,0.4) 0%, transparent 60%)',
+          boxShadow: 'inset -10px 0 30px rgba(74,222,128,0.2)'
+        }}
       />
 
       {/* Left Swipe (Red Beam) */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none border-[2px] sm:border-[3px] border-red-500/60 rounded-[32px] sm:rounded-[40px] shadow-[inset_0_0_120px_rgba(239,68,68,0.4)] bg-red-500/10"
-        style={{ opacity: opacityLeft }}
+        className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
+        style={{ 
+          opacity: opacityLeft,
+          background: 'radial-gradient(circle at left center, rgba(239,68,68,0.4) 0%, transparent 60%)',
+          boxShadow: 'inset 10px 0 30px rgba(239,68,68,0.2)'
+        }}
       />
     </motion.div>
   );
