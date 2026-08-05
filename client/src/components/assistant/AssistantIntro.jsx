@@ -61,7 +61,7 @@ export default function AssistantIntro({ onStart, onClose }) {
                 
                 <button 
                   onClick={() => onStart(card)}
-                  className="w-full py-4 rounded-[16px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_32px_rgba(79,70,229,0.4)]"
+                  className="w-full py-4 rounded-[16px] bg-white hover:bg-white/90 active:scale-95 transition-all text-[#050B14] font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_32px_rgba(255,255,255,0.15)]"
                 >
                   <Plane className="w-5 h-5" />
                   Plan Trip Here
