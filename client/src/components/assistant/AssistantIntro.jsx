@@ -5,11 +5,15 @@ import { Bot, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function AssistantIntro({ onStart }) {
   const [cards, setCards] = useState(SLIDESHOW_IMAGES);
+  const [exitDirection, setExitDirection] = useState('right');
 
   // We only render top 3 to keep DOM light
   const activeCards = cards.slice(0, 3);
 
   const handleSwipe = (direction, cardData) => {
+    setExitDirection(direction);
+    // setTimeout allows React to batch the direction state change before unmounting,
+    // though React 18 batches this automatically.
     if (direction === 'right') {
       // User swiped right to plan trip
       onStart(cardData);
@@ -53,7 +57,7 @@ export default function AssistantIntro({ onStart }) {
 
       {/* Card Stack Container */}
       <div className="absolute inset-x-4 inset-y-[20vh] sm:inset-x-20 sm:inset-y-[15vh] z-10 perspective-[1000px]">
-        <AnimatePresence>
+        <AnimatePresence custom={exitDirection}>
           {activeCards.map((card, index) => {
             const isTop = index === 0;
             return (
@@ -62,6 +66,7 @@ export default function AssistantIntro({ onStart }) {
                 card={card} 
                 index={index}
                 isTop={isTop}
+                custom={exitDirection}
                 onSwipe={(dir) => handleSwipe(dir, card)}
               />
             );
@@ -88,7 +93,7 @@ export default function AssistantIntro({ onStart }) {
   );
 }
 
-function SwipeableCard({ card, index, isTop, onSwipe }) {
+function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
   const x = useMotionValue(0);
   // Map x to rotation (subtle)
   const rotate = useTransform(x, [-300, 300], [-8, 8]);
@@ -99,14 +104,10 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
   const scale = 1 - index * 0.04;
   const yOffset = index * 15;
 
-  const [exitX, setExitX] = useState(0);
-
   const handleDragEnd = (event, info) => {
     if (info.offset.x > 100 || info.velocity.x > 500) {
-      setExitX(1000);
       onSwipe('right');
     } else if (info.offset.x < -100 || info.velocity.x < -500) {
-      setExitX(-1000);
       onSwipe('left');
     }
   };
@@ -123,7 +124,12 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
       }}
       initial={{ opacity: 0, scale: 0.9, y: yOffset + 20 }}
       animate={{ opacity: 1, scale, y: yOffset }}
-      exit={{ opacity: 0, scale: 0.8, x: exitX }}
+      custom={custom}
+      exit={(direction) => ({
+        opacity: 0,
+        scale: 0.8,
+        x: direction === 'right' ? 1000 : -1000,
+      })}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       drag={isTop ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
