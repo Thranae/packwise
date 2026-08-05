@@ -1,138 +1,184 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import { MapPin } from 'lucide-react';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 import { getTripImage } from '@/utils/imageUtils';
 
-// Build 100+ destinations from the constant
 const DESTINATIONS = SLIDESHOW_IMAGES.map((img, index) => ({
   id: index,
   name: `${img.city}, ${img.country}`,
-  image: getTripImage(img.city), // Use the image utility for HD Unsplash images
+  image: getTripImage(img.city),
   description: `Experience the breathtaking beauty and culture of ${img.city}.`
 }));
 
 export function DiscoverySwipe() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
+  const [cards, setCards] = useState(DESTINATIONS);
+  const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
 
   const handleNext = () => {
     setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % DESTINATIONS.length);
+    setCards((prev) => {
+      const newArray = [...prev];
+      const topCard = newArray.shift();
+      newArray.push(topCard);
+      return newArray;
+    });
   };
 
   const handlePrev = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + DESTINATIONS.length) % DESTINATIONS.length);
+    setCards((prev) => {
+      const newArray = [...prev];
+      const bottomCard = newArray.pop();
+      newArray.unshift(bottomCard);
+      return newArray;
+    });
   };
+
+  const visibleCards = cards.slice(0, 3);
+
+  return (
+    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000 flex items-center justify-center">
+      <AnimatePresence mode="popLayout" initial={false}>
+        {visibleCards.map((card, idx) => (
+          <SwipeableCard
+            key={card.id}
+            card={card}
+            idx={idx}
+            direction={direction}
+            onNext={handleNext}
+            onPrev={handlePrev}
+          />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function SwipeableCard({ card, idx, direction, onNext, onPrev }) {
+  const isFront = idx === 0;
+  
+  // Physics & Gestures
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-300, 300], [-12, 12]);
+  
+  // Dynamic Light reflection simulation
+  const lightOverlayX = useTransform(x, [-200, 200], ['100%', '-100%']);
 
   const handleDragEnd = (event, info) => {
-    const threshold = 50;
-    if (info.offset.x > threshold) {
-      handlePrev(); // Swiping right goes to previous
-    } else if (info.offset.x < -threshold) {
-      handleNext(); // Swiping left goes to next
+    const threshold = 80;
+    const velocityThreshold = 400;
+    
+    // Swipe Left -> Next Card
+    if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
+      onNext();
+    } 
+    // Swipe Right -> Previous Card (Undo)
+    else if (info.offset.x > threshold || info.velocity.x > velocityThreshold) {
+      onPrev();
     }
   };
 
-  // Handle tap for left/right navigation (Instagram Stories style)
-  const handleTap = (event, info) => {
-    // Determine click position relative to the element
-    const rect = event.target.getBoundingClientRect();
+  const handleTap = (event) => {
+    if (!isFront) return;
+    const rect = event.currentTarget.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     
-    // If clicked on the left 40% of the card, go prev. Otherwise next.
+    // Click left 40% -> Previous
     if (clickX < rect.width * 0.4) {
-      handlePrev();
-    } else {
-      handleNext();
+      onPrev();
+    } 
+    // Click right 60% -> Next
+    else {
+      onNext();
     }
   };
 
-  // Get the current card to display
-  const currentCard = DESTINATIONS[currentIndex];
-
+  // Exit/Enter Animations
   const variants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.95,
-      rotate: direction > 0 ? 10 : -10
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        mass: 0.8
+    enter: ({ direction, idx }) => {
+      if (direction === 1) {
+        // Entering from the back (when user clicks Next, a new card appears at the bottom of the stack)
+        return { opacity: 0, scale: 0.8, y: 60, zIndex: 0 };
+      } else {
+        // Entering from the front (when user clicks Prev, the previous card flies in from the left)
+        return { opacity: 0, x: -400, rotate: -20, scale: 1.05, zIndex: 10 };
       }
     },
-    exit: (direction) => ({
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.95,
-      rotate: direction < 0 ? 10 : -10,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        mass: 0.8
+    exit: ({ direction, idx }) => {
+      if (direction === 1) {
+        // Exiting from the front (Top card thrown off to the left)
+        return { 
+          opacity: 0, 
+          x: -400, 
+          rotate: -20, 
+          scale: 0.9, 
+          zIndex: 10,
+          transition: { type: "spring", stiffness: 300, damping: 25, mass: 0.8 }
+        };
+      } else {
+        // Exiting from the back (Bottom card fades out)
+        return { opacity: 0, scale: 0.8, y: 60, zIndex: 0 };
       }
-    })
+    }
   };
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000 overflow-hidden rounded-[48px]">
-      <AnimatePresence initial={false} custom={direction} mode="popLayout">
-        <motion.div
-          key={currentIndex}
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.7}
-          onDragEnd={handleDragEnd}
-          onTap={handleTap}
-          whileDrag={{ scale: 0.98, cursor: 'grabbing' }}
-          className="absolute inset-0 w-full h-full rounded-[48px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.5)] touch-pan-y cursor-pointer transform-gpu"
-        >
-          <img 
-            src={currentCard.image} 
-            alt={currentCard.name} 
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
-          
-          {/* Gradient fade at bottom for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
-          
-          {/* Text Content */}
-          <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 pointer-events-none flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-white/90">
-              <MapPin className="w-5 h-5 text-emerald-400" />
-              <span className="text-sm font-bold uppercase tracking-widest">{currentCard.name}</span>
-            </div>
-            <h3 className="text-3xl sm:text-4xl font-black text-white">{currentCard.name.split(',')[0]}</h3>
-            <p className="text-white/80 text-sm sm:text-base font-medium">{currentCard.description}</p>
-          </div>
+    <motion.div
+      custom={{ direction, idx }}
+      variants={variants}
+      initial="enter"
+      exit="exit"
+      animate={{
+        opacity: 1 - (idx * 0.15),
+        scale: 1 - (idx * 0.05),
+        y: idx * 24, // Stack them downwards
+        x: 0,
+        rotate: 0,
+        zIndex: 3 - idx,
+      }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 350, 
+        damping: 30, 
+        mass: 0.8,
+        opacity: { duration: 0.2 } 
+      }}
+      style={isFront ? { x, rotate } : {}}
+      drag={isFront ? "x" : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.7}
+      onDragEnd={handleDragEnd}
+      onTap={handleTap}
+      whileDrag={{ scale: 0.98, cursor: 'grabbing' }}
+      className={`absolute top-0 w-full max-w-sm h-full rounded-[32px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.4)] transform-gpu ${isFront ? 'cursor-pointer touch-pan-y' : 'pointer-events-none'}`}
+    >
+      <img 
+        src={card.image} 
+        alt={card.name} 
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
+      
+      {/* Gradient fade at bottom for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+      
+      {/* Dynamic Light Catch Overlay (WOW Feature) */}
+      {isFront && (
+        <motion.div 
+          style={{ x: lightOverlayX }}
+          className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none mix-blend-overlay -left-[50%]"
+        />
+      )}
 
-          {/* Hint Overlay (Left/Right Chevrons) */}
-          <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-300 hidden md:flex">
-            <div className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center">
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center">
-              <ChevronRight className="w-6 h-6 text-white" />
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    </div>
+      {/* Text Content */}
+      <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 pointer-events-none flex flex-col gap-2">
+        <div className="flex items-center gap-2 text-white/90">
+          <MapPin className="w-5 h-5 text-emerald-400" />
+          <span className="text-sm font-bold uppercase tracking-widest">{card.name}</span>
+        </div>
+        <h3 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-md">{card.name.split(',')[0]}</h3>
+        <p className="text-white/80 text-sm sm:text-base font-medium drop-shadow-sm">{card.description}</p>
+      </div>
+    </motion.div>
   );
 }
