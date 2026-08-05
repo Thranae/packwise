@@ -1,29 +1,542 @@
 export const SLIDESHOW_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?q=80&w=600&auto=format&fit=crop", city: "Santorini", country: "GREECE" },
-  { url: "https://images.unsplash.com/photo-1512850183-6d7990f42385?q=80&w=600&auto=format&fit=crop", city: "Kyoto", country: "JAPAN" },
-  { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=600&auto=format&fit=crop", city: "Swiss Alps", country: "SWITZERLAND" },
-  { url: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=600&auto=format&fit=crop", city: "Cinque Terre", country: "ITALY" },
-  { url: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop", city: "Bora Bora", country: "FRENCH POLYNESIA" },
-  { url: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=600&auto=format&fit=crop", city: "Paris", country: "FRANCE" },
-  { url: "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=600&auto=format&fit=crop", city: "Machu Picchu", country: "PERU" },
-  { url: "https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=600&auto=format&fit=crop", city: "Dubai", country: "UAE" },
-  { url: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=600&auto=format&fit=crop", city: "New York City", country: "USA" },
-  { url: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=600&auto=format&fit=crop", city: "London", country: "UK" },
-  { url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=600&auto=format&fit=crop", city: "Lake Tahoe", country: "USA" },
-  { url: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?q=80&w=600&auto=format&fit=crop", city: "Amsterdam", country: "NETHERLANDS" },
-  { url: "https://images.unsplash.com/photo-1502602898657-3e907fa0a586?q=80&w=600&auto=format&fit=crop", city: "Rome", country: "ITALY" },
-  { url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=600&auto=format&fit=crop", city: "Banff", country: "CANADA" },
-  { url: "https://images.unsplash.com/photo-1498307833015-e7b400441eb8?q=80&w=600&auto=format&fit=crop", city: "Venice", country: "ITALY" },
-  { url: "https://images.unsplash.com/photo-1504150558240-0b4fd8946624?q=80&w=600&auto=format&fit=crop", city: "Sydney", country: "AUSTRALIA" },
-  { url: "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=600&auto=format&fit=crop", city: "Istanbul", country: "TURKEY" },
-  { url: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=600&auto=format&fit=crop", city: "Rio de Janeiro", country: "BRAZIL" },
-  { url: "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=600&auto=format&fit=crop", city: "Taj Mahal", country: "INDIA" },
-  { url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=600&auto=format&fit=crop", city: "Patagonia", country: "ARGENTINA" },
-  { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop", city: "Maldives", country: "MALDIVES" },
-  { url: "https://images.unsplash.com/photo-1518182170546-076616fd4aa6?q=80&w=600&auto=format&fit=crop", city: "Tokyo", country: "JAPAN" },
-  { url: "https://images.unsplash.com/photo-1498623116890-37e912163d5d?q=80&w=600&auto=format&fit=crop", city: "Bali", country: "INDONESIA" },
-  { url: "https://images.unsplash.com/photo-1473220464492-452fd65fb8cb?q=80&w=600&auto=format&fit=crop", city: "Reykjavik", country: "ICELAND" },
-  { url: "https://images.unsplash.com/photo-1489493173507-6feea31f12ff?q=80&w=600&auto=format&fit=crop", city: "Yellowstone", country: "USA" },
-  { url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600&auto=format&fit=crop", city: "Grand Canyon", country: "USA" },
-  { url: "https://images.unsplash.com/photo-1547471080-7cb2ac6b9df0?q=80&w=600&auto=format&fit=crop", city: "Petra", country: "JORDAN" }
+  {
+    "url": "/destinations/santorini.jpg",
+    "city": "Santorini",
+    "country": "GREECE"
+  },
+  {
+    "url": "/destinations/kyoto.jpg",
+    "city": "Kyoto",
+    "country": "JAPAN"
+  },
+  {
+    "url": "/destinations/swiss_alps.jpg",
+    "city": "Swiss Alps",
+    "country": "SWITZERLAND"
+  },
+  {
+    "url": "/destinations/cinque_terre.jpg",
+    "city": "Cinque Terre",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/bora_bora.jpg",
+    "city": "Bora Bora",
+    "country": "FRENCH POLYNESIA"
+  },
+  {
+    "url": "/destinations/paris.jpg",
+    "city": "Paris",
+    "country": "FRANCE"
+  },
+  {
+    "url": "/destinations/machu_picchu.jpg",
+    "city": "Machu Picchu",
+    "country": "PERU"
+  },
+  {
+    "url": "/destinations/dubai.jpg",
+    "city": "Dubai",
+    "country": "UAE"
+  },
+  {
+    "url": "/destinations/new_york_city.jpg",
+    "city": "New York City",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/london.jpg",
+    "city": "London",
+    "country": "UK"
+  },
+  {
+    "url": "/destinations/lake_tahoe.jpg",
+    "city": "Lake Tahoe",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/amsterdam.jpg",
+    "city": "Amsterdam",
+    "country": "NETHERLANDS"
+  },
+  {
+    "url": "/destinations/banff.jpg",
+    "city": "Banff",
+    "country": "CANADA"
+  },
+  {
+    "url": "/destinations/venice.jpg",
+    "city": "Venice",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/sydney.jpg",
+    "city": "Sydney",
+    "country": "AUSTRALIA"
+  },
+  {
+    "url": "/destinations/istanbul.jpg",
+    "city": "Istanbul",
+    "country": "TURKEY"
+  },
+  {
+    "url": "/destinations/rio_de_janeiro.jpg",
+    "city": "Rio de Janeiro",
+    "country": "BRAZIL"
+  },
+  {
+    "url": "/destinations/taj_mahal.jpg",
+    "city": "Taj Mahal",
+    "country": "INDIA"
+  },
+  {
+    "url": "/destinations/patagonia.jpg",
+    "city": "Patagonia",
+    "country": "ARGENTINA"
+  },
+  {
+    "url": "/destinations/maldives.jpg",
+    "city": "Maldives",
+    "country": "MALDIVES"
+  },
+  {
+    "url": "/destinations/bali.jpg",
+    "city": "Bali",
+    "country": "INDONESIA"
+  },
+  {
+    "url": "/destinations/yellowstone.jpg",
+    "city": "Yellowstone",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/grand_canyon.jpg",
+    "city": "Grand Canyon",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/santorini.jpg",
+    "city": "Santorini",
+    "country": "GREECE"
+  },
+  {
+    "url": "/destinations/kyoto.jpg",
+    "city": "Kyoto",
+    "country": "JAPAN"
+  },
+  {
+    "url": "/destinations/swiss_alps.jpg",
+    "city": "Swiss Alps",
+    "country": "SWITZERLAND"
+  },
+  {
+    "url": "/destinations/cinque_terre.jpg",
+    "city": "Cinque Terre",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/bora_bora.jpg",
+    "city": "Bora Bora",
+    "country": "FRENCH POLYNESIA"
+  },
+  {
+    "url": "/destinations/paris.jpg",
+    "city": "Paris",
+    "country": "FRANCE"
+  },
+  {
+    "url": "/destinations/machu_picchu.jpg",
+    "city": "Machu Picchu",
+    "country": "PERU"
+  },
+  {
+    "url": "/destinations/dubai.jpg",
+    "city": "Dubai",
+    "country": "UAE"
+  },
+  {
+    "url": "/destinations/new_york_city.jpg",
+    "city": "New York City",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/london.jpg",
+    "city": "London",
+    "country": "UK"
+  },
+  {
+    "url": "/destinations/lake_tahoe.jpg",
+    "city": "Lake Tahoe",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/amsterdam.jpg",
+    "city": "Amsterdam",
+    "country": "NETHERLANDS"
+  },
+  {
+    "url": "/destinations/banff.jpg",
+    "city": "Banff",
+    "country": "CANADA"
+  },
+  {
+    "url": "/destinations/venice.jpg",
+    "city": "Venice",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/sydney.jpg",
+    "city": "Sydney",
+    "country": "AUSTRALIA"
+  },
+  {
+    "url": "/destinations/istanbul.jpg",
+    "city": "Istanbul",
+    "country": "TURKEY"
+  },
+  {
+    "url": "/destinations/rio_de_janeiro.jpg",
+    "city": "Rio de Janeiro",
+    "country": "BRAZIL"
+  },
+  {
+    "url": "/destinations/taj_mahal.jpg",
+    "city": "Taj Mahal",
+    "country": "INDIA"
+  },
+  {
+    "url": "/destinations/patagonia.jpg",
+    "city": "Patagonia",
+    "country": "ARGENTINA"
+  },
+  {
+    "url": "/destinations/maldives.jpg",
+    "city": "Maldives",
+    "country": "MALDIVES"
+  },
+  {
+    "url": "/destinations/bali.jpg",
+    "city": "Bali",
+    "country": "INDONESIA"
+  },
+  {
+    "url": "/destinations/yellowstone.jpg",
+    "city": "Yellowstone",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/grand_canyon.jpg",
+    "city": "Grand Canyon",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/santorini.jpg",
+    "city": "Santorini",
+    "country": "GREECE"
+  },
+  {
+    "url": "/destinations/kyoto.jpg",
+    "city": "Kyoto",
+    "country": "JAPAN"
+  },
+  {
+    "url": "/destinations/swiss_alps.jpg",
+    "city": "Swiss Alps",
+    "country": "SWITZERLAND"
+  },
+  {
+    "url": "/destinations/cinque_terre.jpg",
+    "city": "Cinque Terre",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/bora_bora.jpg",
+    "city": "Bora Bora",
+    "country": "FRENCH POLYNESIA"
+  },
+  {
+    "url": "/destinations/paris.jpg",
+    "city": "Paris",
+    "country": "FRANCE"
+  },
+  {
+    "url": "/destinations/machu_picchu.jpg",
+    "city": "Machu Picchu",
+    "country": "PERU"
+  },
+  {
+    "url": "/destinations/dubai.jpg",
+    "city": "Dubai",
+    "country": "UAE"
+  },
+  {
+    "url": "/destinations/new_york_city.jpg",
+    "city": "New York City",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/london.jpg",
+    "city": "London",
+    "country": "UK"
+  },
+  {
+    "url": "/destinations/lake_tahoe.jpg",
+    "city": "Lake Tahoe",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/amsterdam.jpg",
+    "city": "Amsterdam",
+    "country": "NETHERLANDS"
+  },
+  {
+    "url": "/destinations/banff.jpg",
+    "city": "Banff",
+    "country": "CANADA"
+  },
+  {
+    "url": "/destinations/venice.jpg",
+    "city": "Venice",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/sydney.jpg",
+    "city": "Sydney",
+    "country": "AUSTRALIA"
+  },
+  {
+    "url": "/destinations/istanbul.jpg",
+    "city": "Istanbul",
+    "country": "TURKEY"
+  },
+  {
+    "url": "/destinations/rio_de_janeiro.jpg",
+    "city": "Rio de Janeiro",
+    "country": "BRAZIL"
+  },
+  {
+    "url": "/destinations/taj_mahal.jpg",
+    "city": "Taj Mahal",
+    "country": "INDIA"
+  },
+  {
+    "url": "/destinations/patagonia.jpg",
+    "city": "Patagonia",
+    "country": "ARGENTINA"
+  },
+  {
+    "url": "/destinations/maldives.jpg",
+    "city": "Maldives",
+    "country": "MALDIVES"
+  },
+  {
+    "url": "/destinations/bali.jpg",
+    "city": "Bali",
+    "country": "INDONESIA"
+  },
+  {
+    "url": "/destinations/yellowstone.jpg",
+    "city": "Yellowstone",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/grand_canyon.jpg",
+    "city": "Grand Canyon",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/santorini.jpg",
+    "city": "Santorini",
+    "country": "GREECE"
+  },
+  {
+    "url": "/destinations/kyoto.jpg",
+    "city": "Kyoto",
+    "country": "JAPAN"
+  },
+  {
+    "url": "/destinations/swiss_alps.jpg",
+    "city": "Swiss Alps",
+    "country": "SWITZERLAND"
+  },
+  {
+    "url": "/destinations/cinque_terre.jpg",
+    "city": "Cinque Terre",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/bora_bora.jpg",
+    "city": "Bora Bora",
+    "country": "FRENCH POLYNESIA"
+  },
+  {
+    "url": "/destinations/paris.jpg",
+    "city": "Paris",
+    "country": "FRANCE"
+  },
+  {
+    "url": "/destinations/machu_picchu.jpg",
+    "city": "Machu Picchu",
+    "country": "PERU"
+  },
+  {
+    "url": "/destinations/dubai.jpg",
+    "city": "Dubai",
+    "country": "UAE"
+  },
+  {
+    "url": "/destinations/new_york_city.jpg",
+    "city": "New York City",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/london.jpg",
+    "city": "London",
+    "country": "UK"
+  },
+  {
+    "url": "/destinations/lake_tahoe.jpg",
+    "city": "Lake Tahoe",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/amsterdam.jpg",
+    "city": "Amsterdam",
+    "country": "NETHERLANDS"
+  },
+  {
+    "url": "/destinations/banff.jpg",
+    "city": "Banff",
+    "country": "CANADA"
+  },
+  {
+    "url": "/destinations/venice.jpg",
+    "city": "Venice",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/sydney.jpg",
+    "city": "Sydney",
+    "country": "AUSTRALIA"
+  },
+  {
+    "url": "/destinations/istanbul.jpg",
+    "city": "Istanbul",
+    "country": "TURKEY"
+  },
+  {
+    "url": "/destinations/rio_de_janeiro.jpg",
+    "city": "Rio de Janeiro",
+    "country": "BRAZIL"
+  },
+  {
+    "url": "/destinations/taj_mahal.jpg",
+    "city": "Taj Mahal",
+    "country": "INDIA"
+  },
+  {
+    "url": "/destinations/patagonia.jpg",
+    "city": "Patagonia",
+    "country": "ARGENTINA"
+  },
+  {
+    "url": "/destinations/maldives.jpg",
+    "city": "Maldives",
+    "country": "MALDIVES"
+  },
+  {
+    "url": "/destinations/bali.jpg",
+    "city": "Bali",
+    "country": "INDONESIA"
+  },
+  {
+    "url": "/destinations/yellowstone.jpg",
+    "city": "Yellowstone",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/grand_canyon.jpg",
+    "city": "Grand Canyon",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/santorini.jpg",
+    "city": "Santorini",
+    "country": "GREECE"
+  },
+  {
+    "url": "/destinations/kyoto.jpg",
+    "city": "Kyoto",
+    "country": "JAPAN"
+  },
+  {
+    "url": "/destinations/swiss_alps.jpg",
+    "city": "Swiss Alps",
+    "country": "SWITZERLAND"
+  },
+  {
+    "url": "/destinations/cinque_terre.jpg",
+    "city": "Cinque Terre",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/bora_bora.jpg",
+    "city": "Bora Bora",
+    "country": "FRENCH POLYNESIA"
+  },
+  {
+    "url": "/destinations/paris.jpg",
+    "city": "Paris",
+    "country": "FRANCE"
+  },
+  {
+    "url": "/destinations/machu_picchu.jpg",
+    "city": "Machu Picchu",
+    "country": "PERU"
+  },
+  {
+    "url": "/destinations/dubai.jpg",
+    "city": "Dubai",
+    "country": "UAE"
+  },
+  {
+    "url": "/destinations/new_york_city.jpg",
+    "city": "New York City",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/london.jpg",
+    "city": "London",
+    "country": "UK"
+  },
+  {
+    "url": "/destinations/lake_tahoe.jpg",
+    "city": "Lake Tahoe",
+    "country": "USA"
+  },
+  {
+    "url": "/destinations/amsterdam.jpg",
+    "city": "Amsterdam",
+    "country": "NETHERLANDS"
+  },
+  {
+    "url": "/destinations/banff.jpg",
+    "city": "Banff",
+    "country": "CANADA"
+  },
+  {
+    "url": "/destinations/venice.jpg",
+    "city": "Venice",
+    "country": "ITALY"
+  },
+  {
+    "url": "/destinations/sydney.jpg",
+    "city": "Sydney",
+    "country": "AUSTRALIA"
+  },
+  {
+    "url": "/destinations/istanbul.jpg",
+    "city": "Istanbul",
+    "country": "TURKEY"
+  }
 ];
