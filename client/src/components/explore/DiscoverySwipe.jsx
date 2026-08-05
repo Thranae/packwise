@@ -1,167 +1,137 @@
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
-import { Heart, X, MapPin } from 'lucide-react';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 
-const DESTINATIONS = [
-  {
-    id: 1,
-    name: 'Kyoto, Japan',
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop',
-    description: 'Ancient temples, bamboo forests, and traditional tea houses.'
-  },
-  {
-    id: 2,
-    name: 'Santorini, Greece',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1000&auto=format&fit=crop',
-    description: 'White-washed buildings and stunning sunsets over the Aegean.'
-  },
-  {
-    id: 3,
-    name: 'Swiss Alps',
-    image: 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1000&auto=format&fit=crop',
-    description: 'Majestic peaks, crystal clear lakes, and alpine villages.'
-  },
-  {
-    id: 4,
-    name: 'Banff, Canada',
-    image: 'https://images.unsplash.com/photo-1544415893-6c0c29a8a619?q=80&w=1000&auto=format&fit=crop',
-    description: 'Turquoise glacial lakes and towering rocky mountains.'
-  }
-];
+// Build 100+ destinations from the constant
+const DESTINATIONS = SLIDESHOW_IMAGES.map((img, index) => ({
+  id: index,
+  name: `${img.city}, ${img.country}`,
+  image: img.url,
+  description: `Experience the breathtaking beauty and culture of ${img.city}.`
+}));
 
-export function DiscoverySwipe({ onSwipeRight }) {
-  const [cards, setCards] = useState(DESTINATIONS);
+export function DiscoverySwipe() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev
 
-  const removeCard = (id, direction) => {
-    setCards((prev) => prev.filter((card) => card.id !== id));
-    
-    // Trigger Heavy Haptic for Swipe Right
-    if (direction === 'right') {
-      try { Haptics.impact({ style: ImpactStyle.Heavy }); } catch (e) {}
-      
-      const swipedCard = cards.find(c => c.id === id);
-      if (onSwipeRight && swipedCard) {
-        onSwipeRight(swipedCard.name);
-      }
-    } else {
-      try { Haptics.impact({ style: ImpactStyle.Light }); } catch (e) {}
-    }
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % DESTINATIONS.length);
   };
 
-  if (cards.length === 0) {
-    return (
-      <div className="w-full h-[400px] flex flex-col items-center justify-center bg-white/5 rounded-[32px] border border-white/10">
-        <Bot className="w-8 h-8 text-white/30 mb-4" />
-        <p className="text-white/50">You've swiped through all destinations!</p>
-        <button 
-          onClick={() => setCards(DESTINATIONS)}
-          className="mt-4 px-6 py-2 bg-white/10 rounded-full hover:bg-white/20 transition"
-        >
-          Reset Deck
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000">
-      <AnimatePresence>
-        {cards.map((card, index) => {
-          const isFront = index === 0;
-          return (
-            <SwipeableCard 
-              key={card.id}
-              card={card}
-              isFront={isFront}
-              index={index}
-              onRemove={removeCard}
-            />
-          );
-        }).reverse()}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function SwipeableCard({ card, isFront, index, onRemove }) {
-  const x = useMotionValue(0);
-  
-  // As the card moves left/right, it rotates
-  const rotate = useTransform(x, [-200, 200], [-15, 15]);
-  // Fade out as it gets to the edges
-  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0, 1, 1, 1, 0]);
-  
-  // Background overlay colors for feedback (Green for right, Red for left)
-  const overlayBackground = useTransform(
-    x,
-    [-150, 0, 150],
-    ['rgba(239, 68, 68, 0.4)', 'rgba(0, 0, 0, 0)', 'rgba(16, 185, 129, 0.4)']
-  );
+  const handlePrev = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + DESTINATIONS.length) % DESTINATIONS.length);
+  };
 
   const handleDragEnd = (event, info) => {
-    const threshold = 100;
+    const threshold = 50;
     if (info.offset.x > threshold) {
-      onRemove(card.id, 'right');
+      handlePrev(); // Swiping right goes to previous
     } else if (info.offset.x < -threshold) {
-      onRemove(card.id, 'left');
+      handleNext(); // Swiping left goes to next
     }
   };
 
+  // Handle tap for left/right navigation (Instagram Stories style)
+  const handleTap = (event, info) => {
+    // Determine click position relative to the element
+    const rect = event.target.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    
+    // If clicked on the left 40% of the card, go prev. Otherwise next.
+    if (clickX < rect.width * 0.4) {
+      handlePrev();
+    } else {
+      handleNext();
+    }
+  };
+
+  // Get the current card to display
+  const currentCard = DESTINATIONS[currentIndex];
+
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.95,
+      rotate: direction > 0 ? 10 : -10
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        mass: 0.8
+      }
+    },
+    exit: (direction) => ({
+      x: direction < 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.95,
+      rotate: direction < 0 ? 10 : -10,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        mass: 0.8
+      }
+    })
+  };
+
   return (
-    <motion.div
-      style={{
-        x,
-        rotate,
-        opacity,
-        zIndex: 100 - index,
-        // Stack the cards visually
-        top: index * 10,
-        scale: 1 - index * 0.05,
-      }}
-      drag={isFront ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
-      onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 1.05, cursor: 'grabbing' }}
-      className="absolute top-0 w-full h-full rounded-[32px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.5)] touch-pan-y cursor-grab transform-gpu"
-    >
-      <img 
-        src={card.image} 
-        alt={card.name} 
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-      />
-      
-      {/* Gradient fade at bottom for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-      
-      {/* Dynamic Colored Overlay based on swipe direction */}
-      <motion.div 
-        style={{ backgroundColor: overlayBackground }}
-        className="absolute inset-0 pointer-events-none transition-colors duration-100"
-      />
+    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000 overflow-hidden rounded-[32px]">
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
+        <motion.div
+          key={currentIndex}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.7}
+          onDragEnd={handleDragEnd}
+          onTap={handleTap}
+          whileDrag={{ scale: 0.98, cursor: 'grabbing' }}
+          className="absolute inset-0 w-full h-full rounded-[32px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.5)] touch-pan-y cursor-pointer transform-gpu"
+        >
+          <img 
+            src={currentCard.image} 
+            alt={currentCard.name} 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+          
+          {/* Gradient fade at bottom for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+          
+          {/* Text Content */}
+          <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 pointer-events-none flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-white/90">
+              <MapPin className="w-5 h-5 text-emerald-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">{currentCard.name}</span>
+            </div>
+            <h3 className="text-3xl sm:text-4xl font-black text-white">{currentCard.name.split(',')[0]}</h3>
+            <p className="text-white/80 text-sm sm:text-base font-medium">{currentCard.description}</p>
+          </div>
 
-      <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 pointer-events-none">
-        <div className="flex items-center gap-2 mb-2 text-white/80">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm font-medium uppercase tracking-wider">{card.name}</span>
-        </div>
-        <h3 className="text-2xl sm:text-3xl font-light text-white mb-2">{card.name.split(',')[0]}</h3>
-        <p className="text-white/60 text-sm">{card.description}</p>
-      </div>
-
-      {/* Swipe Indicators */}
-      <motion.div 
-        style={{ opacity: useTransform(x, [0, 100], [0, 1]) }}
-        className="absolute top-8 left-8 w-14 h-14 rounded-full bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-center text-emerald-500 transform -rotate-12 pointer-events-none"
-      >
-        <Heart className="w-6 h-6 fill-emerald-500" />
-      </motion.div>
-      <motion.div 
-        style={{ opacity: useTransform(x, [0, -100], [0, 1]) }}
-        className="absolute top-8 right-8 w-14 h-14 rounded-full bg-red-500/20 border-2 border-red-500 flex items-center justify-center text-red-500 transform rotate-12 pointer-events-none"
-      >
-        <X className="w-6 h-6" />
-      </motion.div>
-    </motion.div>
+          {/* Hint Overlay (Left/Right Chevrons) */}
+          <div className="absolute inset-0 flex items-center justify-between p-4 pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-300 hidden md:flex">
+            <div className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center">
+              <ChevronLeft className="w-6 h-6 text-white" />
+            </div>
+            <div className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-white/20 flex items-center justify-center">
+              <ChevronRight className="w-6 h-6 text-white" />
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
