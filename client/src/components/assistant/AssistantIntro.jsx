@@ -156,7 +156,17 @@ function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
         </div>
       </div>
 
-      {/* Removed Swipe Badges for cleaner look */}
+      {/* Right Swipe (Green Light) */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none border-[2px] sm:border-[3px] border-green-400/60 rounded-[32px] sm:rounded-[40px] shadow-[inset_0_0_120px_rgba(74,222,128,0.4)] bg-green-500/10"
+        style={{ opacity: opacityRight }}
+      />
+
+      {/* Left Swipe (Red Beam) */}
+      <motion.div 
+        className="absolute inset-0 pointer-events-none border-[2px] sm:border-[3px] border-red-500/60 rounded-[32px] sm:rounded-[40px] shadow-[inset_0_0_120px_rgba(239,68,68,0.4)] bg-red-500/10"
+        style={{ opacity: opacityLeft }}
+      />
     </motion.div>
   );
 }
