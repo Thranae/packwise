@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Plus, CheckCircle2, Circle, MoreVertical, Wand2, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Wand2, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints, GripVertical, Check, RefreshCw } from 'lucide-react';
+import { Package, Plus, CheckCircle2, Circle, MoreVertical, Wand2, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints, GripVertical, Check, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import axios from 'axios';
 import { PageTransition } from '@/components/common/PageTransition';
