@@ -19,7 +19,6 @@ import { Navbar } from '@/components/navigation/Navbar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { AnimatedBackground } from '@/components/common/AnimatedBackground';
 import { GeneratingTripCard } from '@/components/trips/GeneratingTripCard';
-import { DiscoverySwipe } from '@/components/explore/DiscoverySwipe';
 import { QuickLaunchModal } from '@/components/explore/QuickLaunchModal';
 
 // ---------------------------------------------------------------------------
