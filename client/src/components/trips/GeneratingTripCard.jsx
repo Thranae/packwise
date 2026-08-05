@@ -37,8 +37,8 @@ export const GeneratingTripCard = ({ destination }) => (
         <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl animate-[pulse_3s_ease-in-out_infinite]" />
         
         {/* Spline Model */}
-        <div className="w-48 h-48 relative flex items-center justify-center pointer-events-none mix-blend-screen">
-          <Spline scene="https://prod.spline.design/ThPn4M3nsd9g-wAj/scene.splinecode" />
+        <div className="w-48 h-48 relative flex items-center justify-center pointer-events-none drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
         </div>
       </div>
 

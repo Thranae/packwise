@@ -434,10 +434,9 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
         </div>
       </div>
       
-      {/* Scrollable Container */}
       <div 
         ref={scrollRef}
-        className="w-full overflow-x-auto custom-scrollbar pb-4 -mx-2 px-2 snap-x snap-mandatory flex gap-3 sm:gap-4 scroll-smooth"
+        className="w-full overflow-x-auto custom-scrollbar pb-4 snap-x snap-mandatory flex gap-2 scroll-smooth"
       >
         {items.map((item, idx) => (
           <motion.button
@@ -446,7 +445,7 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: idx * 0.05 }}
             onClick={() => onCardClick(item)}
-            className="relative shrink-0 w-[calc(50%-6px)] sm:w-[calc(50%-8px)] aspect-[3/4] rounded-[24px] ios-glass-card p-2 group snap-start shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] active:scale-[0.96] transition-all duration-300 border border-white/5 hover:border-white/20 flex flex-col"
+            className="relative shrink-0 w-[calc(50%-4px)] aspect-[3/4] rounded-[24px] ios-glass-card p-2 group snap-start shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_1px_2px_rgba(255,255,255,0.2)] active:scale-[0.96] transition-all duration-300 border border-white/5 hover:border-white/20 flex flex-col"
           >
             <div className="relative w-full h-full rounded-[16px] overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />

@@ -121,7 +121,7 @@ export default function OnboardingPage() {
   // ---------------------------------------------------------------------------
   const renderWelcome = () => (
     <motion.div variants={cardStagger} initial="hidden" animate="show" className="flex flex-col items-center text-center px-2">
-      <motion.div variants={cardItem} className="w-56 h-56 mb-4 relative flex items-center justify-center pointer-events-none mx-auto">
+      <motion.div variants={cardItem} className="w-56 h-56 mb-4 relative flex items-center justify-center pointer-events-none mx-auto drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
         <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
       </motion.div>
 

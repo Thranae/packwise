@@ -17,7 +17,7 @@ export default function NotFoundPage() {
         transition={{ duration: 0.3 }}
         className="w-full flex flex-col items-center"
       >
-        <div className="w-64 h-64 mx-auto mb-2 relative pointer-events-none">
+        <div className="w-64 h-64 mx-auto mb-2 relative pointer-events-none drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
           <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
         </div>
         <p className="text-base font-semibold text-primary-600 dark:text-primary-400">404</p>
