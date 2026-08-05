@@ -21,7 +21,7 @@ export default function AssistantIntro({ onStart }) {
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col bg-[#030712]">
       
       {/* Typography Section (Top) */}
-      <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center">
+      <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center" style={{ willChange: 'transform, opacity' }}>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export default function AssistantIntro({ onStart }) {
       </div>
 
       {/* Card Stack Container */}
-      <div className="absolute inset-x-4 inset-y-[20vh] sm:inset-x-20 sm:inset-y-[15vh] z-10 perspective-[1000px]">
+      <div className="absolute inset-0 z-10 perspective-[1000px]">
         {activeCards.map((card, index) => {
           const isTop = index === 0;
           return (
@@ -123,7 +123,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
 
   return (
     <motion.div
-      className="absolute inset-0 rounded-[32px] sm:rounded-[40px] overflow-hidden shadow-2xl border border-white/10 origin-bottom"
+      className="absolute inset-0 overflow-hidden shadow-2xl origin-bottom bg-[#030712]"
       style={{ 
         x, 
         rotate: isTop ? rotate : 0,
@@ -146,7 +146,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80 pointer-events-none" />
       
       {/* City/Country Label */}
-      <div className="absolute bottom-8 left-6 right-6 sm:bottom-12 sm:left-10 sm:right-10 pointer-events-none flex flex-col items-start z-10">
+      <div className="absolute bottom-[calc(12vh+var(--safe-bottom))] left-6 right-6 sm:bottom-[calc(12vh+var(--safe-bottom))] sm:left-10 sm:right-10 pointer-events-none flex flex-col items-start z-10">
         <h2 className="text-white text-4xl sm:text-5xl font-bold tracking-tight">
           {card.city}
         </h2>
@@ -160,7 +160,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
 
       {/* Right Swipe (Green Light) */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
+        className="absolute inset-0 pointer-events-none"
         style={{ 
           opacity: opacityRight,
           background: 'radial-gradient(circle at right center, rgba(74,222,128,0.4) 0%, transparent 60%)'
@@ -169,7 +169,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
 
       {/* Left Swipe (Red Beam) */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
+        className="absolute inset-0 pointer-events-none"
         style={{ 
           opacity: opacityLeft,
           background: 'radial-gradient(circle at left center, rgba(239,68,68,0.4) 0%, transparent 60%)'
