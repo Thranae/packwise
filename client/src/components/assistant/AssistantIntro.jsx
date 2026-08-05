@@ -94,16 +94,19 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
   const opacityLeft = useTransform(x, [0, -150], [0, 1]);
 
   React.useEffect(() => {
+    // Instantly reset X if it's not the top card, so it doesn't visibly fly back from off-screen!
+    if (index > 0) {
+      x.set(0);
+    }
+    
     // When index changes, animate smoothly to new position in stack
-    // We also set x to 0 so cards that were swiped off screen fly back to the center of the stack
     controls.start({
-      x: 0,
       opacity: 1,
       scale: 1 - index * 0.04,
       y: index * 15,
       transition: { type: 'spring', stiffness: 300, damping: 25, mass: 1 }
     });
-  }, [index, controls]);
+  }, [index, controls, x]);
 
   const handleDragEnd = async (event, info) => {
     if (info.offset.x > 100 || info.velocity.x > 500) {
@@ -125,7 +128,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
         x, 
         rotate: isTop ? rotate : 0,
         zIndex: 10 - index,
-        willChange: isTop ? 'transform' : 'auto'
+        willChange: 'transform'
       }}
       initial={{ opacity: 0, scale: 0.9, y: index * 15 + 20 }}
       animate={controls}
@@ -160,8 +163,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
         className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
         style={{ 
           opacity: opacityRight,
-          background: 'radial-gradient(circle at right center, rgba(74,222,128,0.4) 0%, transparent 60%)',
-          boxShadow: 'inset -10px 0 30px rgba(74,222,128,0.2)'
+          background: 'radial-gradient(circle at right center, rgba(74,222,128,0.4) 0%, transparent 60%)'
         }}
       />
 
@@ -170,8 +172,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
         className="absolute inset-0 pointer-events-none rounded-[32px] sm:rounded-[40px]"
         style={{ 
           opacity: opacityLeft,
-          background: 'radial-gradient(circle at left center, rgba(239,68,68,0.4) 0%, transparent 60%)',
-          boxShadow: 'inset 10px 0 30px rgba(239,68,68,0.2)'
+          background: 'radial-gradient(circle at left center, rgba(239,68,68,0.4) 0%, transparent 60%)'
         }}
       />
     </motion.div>
