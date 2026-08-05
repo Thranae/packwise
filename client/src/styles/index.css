@@ -547,3 +547,11 @@ input:-webkit-autofill:active{
 .animate-float-spline {
   animation: float-spline 6s ease-in-out infinite;
 }
+
+@keyframes slow-zoom {
+  0% { transform: scale(1) translateZ(0); }
+  100% { transform: scale(1.15) translateZ(0); }
+}
+.animate-slow-zoom {
+  animation: slow-zoom 20s linear infinite alternate;
+}
