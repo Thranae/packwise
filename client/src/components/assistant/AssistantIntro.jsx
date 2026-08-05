@@ -95,7 +95,9 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
 
   React.useEffect(() => {
     // When index changes, animate smoothly to new position in stack
+    // We also set x to 0 so cards that were swiped off screen fly back to the center of the stack
     controls.start({
+      x: 0,
       opacity: 1,
       scale: 1 - index * 0.04,
       y: index * 15,
@@ -127,7 +129,8 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
       }}
       initial={{ opacity: 0, scale: 0.9, y: index * 15 + 20 }}
       animate={controls}
-      drag={isTop ? 'x' : false}
+      drag="x"
+      dragListener={isTop}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
       whileTap={{ cursor: 'grabbing' }}
