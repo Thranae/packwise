@@ -141,16 +141,19 @@ input:-webkit-autofill:active{
 @layer utilities {
   .glass-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-    border: 1px solid var(--theme-border-glass);
-    border-top-color: var(--theme-border-glass-top);
-    border-left-color: var(--theme-border-glass-left);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-top-color: rgba(255, 255, 255, 1);
+    border-left-color: rgba(255, 255, 255, 0.9);
     border-radius: 28px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.5);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
   }
 
   .dark .glass-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(10, 15, 30, 0.6) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
     border-top-color: rgba(255, 255, 255, 0.2);
     border-left-color: rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.02);
@@ -294,11 +297,11 @@ input:-webkit-autofill:active{
 
   /* Compact 3D Liquid Glass Pill (OPTIMIZED) */
   .ios-glass-pill {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.001) 100%);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.3) 100%);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05), inset 0 1px 2px rgba(255,255,255,0.8);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     transform-style: preserve-3d;
     perspective: 1000px;
@@ -307,14 +310,27 @@ input:-webkit-autofill:active{
     transform: translateZ(0);
     will-change: transform, box-shadow;
   }
+  
+  .dark .ios-glass-pill {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.001) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+  }
 
   .ios-glass-pill:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 100%);
+    border-top-color: rgba(255, 255, 255, 1);
+    border-left-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08), inset 0 2px 6px rgba(255,255,255,0.9), inset 0 0 15px rgba(255,255,255,0.5);
+    transform: translateY(-2px) scale(1.015);
+    z-index: 50;
+  }
+  
+  .dark .ios-glass-pill:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
     border-top-color: rgba(255, 255, 255, 0.5);
     border-left-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.5), inset 0 0 15px rgba(255,255,255,0.05);
-    transform: translateY(-2px) scale(1.015);
-    z-index: 50;
   }
 
   .ios-glass-pill:hover .ios-3d-element {
@@ -445,37 +461,21 @@ input:-webkit-autofill:active{
   html.native-android .ios-glass-pill,
   html.native-android .ios-liquid-button,
   html.native-android .glass-card {
-    /* Disable heavy GPU blur calculation */
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    
-    /* Restored lightweight transparency without the GPU hit */
-    background: var(--theme-bg-surface) !important;
-    background-color: var(--theme-bg-glass) !important;
-    
-    /* Hardware acceleration flags to prevent paint bottlenecks */
+    /* Kept hardware acceleration flags but allowed backdrop-filter for modern devices */
     transform: translateZ(0) !important;
     will-change: transform, opacity !important;
-    
-    /* Simplify shadows */
-    box-shadow: var(--theme-shadow) !important;
   }
 
   html.native-android .ios-glass-card:hover,
   html.native-android .ios-glass-pill:hover,
   html.native-android .ios-liquid-button:hover,
   html.native-android .glass-card:hover {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
   }
 
   /* Disable nested complex 3D hover effects on Android to save frame rates */
   html.native-android .ios-glass-card [class*="hover:bg-white"],
   html.native-android .ios-glass-card .lucide:hover {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
     transform: translateY(-1px) !important;
     animation: none !important;
   }
