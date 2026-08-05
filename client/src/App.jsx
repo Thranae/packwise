@@ -23,7 +23,7 @@ import { TravelProfileOnboarding } from './components/onboarding/TravelProfileOn
 
 import { WifiOff } from 'lucide-react';
 // ---------------------------------------------------------------------------
-const HomePage = lazy(() => import('./pages/HomePage'));
+const HomePage = lazy(() => import('./pages/WelcomeLandingPage'));
 const LoginPage = lazy(() => import('./pages/authentication/LoginPage'));
 const SignupPage = lazy(() => import('./pages/authentication/SignupPage'));
 

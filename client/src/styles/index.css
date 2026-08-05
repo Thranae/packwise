@@ -2,6 +2,7 @@
   --animate-shimmer: shimmer 1.5s infinite linear;
 }
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 @variant dark (&:where(.dark, .dark *));
 
