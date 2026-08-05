@@ -248,12 +248,9 @@ export default function SignupPage() {
           <h2 className="text-[28px] font-extrabold text-white tracking-tight mb-2 drop-shadow-md">
             Create Account
           </h2>
-          <p className="text-[15px] text-white/70 font-medium leading-relaxed pr-2">
+          <p className="text-[15px] text-white/70 font-medium leading-relaxed">
             Start your journey with Voyage Genie today.
           </p>
-        </div>
-        <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 pointer-events-none -mt-4 -mr-2 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
         </div>
       </div>
 
