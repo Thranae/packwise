@@ -139,7 +139,7 @@ const LocationInput = ({ label, value, onChange, placeholder, disabled, autoFocu
       return;
     }
 
-    if (value.trim().length < 2) {
+    if (!value || value.trim().length < 2) {
       setSuggestions([]);
       setShowDropdown(false);
       onSearching?.(false);
@@ -382,7 +382,7 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
     items = destinations;
     headerTitle = "Trending Destinations";
     headerSubtitle = "Tap to auto-fill your next adventure";
-    onCardClick = (item) => onSelectDestination(item.query);
+    onCardClick = (item) => onSelectDestination(item.title);
   } else if (step === 2) {
     items = seasons;
     headerTitle = "Smart Season Insights";
@@ -758,7 +758,7 @@ export const TripBuilderWizard = () => {
                 ) : (
                   <button 
                     onClick={handleGenerate}
-                    disabled={!prompt.trim()}
+                    disabled={!prompt?.trim()}
                     className="flex items-center gap-2 h-10 px-5 rounded-2xl bg-gradient-to-r from-emerald-400/90 to-teal-500/90 border-[1.5px] border-white/40 disabled:opacity-50 transition-all duration-300 shadow-[0_6px_12px_rgba(52,211,153,0.3)] group hover:shadow-[0_8px_16px_rgba(52,211,153,0.4)]"
                   >
                     <Sparkles className="w-4 h-4 text-white" />

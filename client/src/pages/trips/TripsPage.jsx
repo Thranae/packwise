@@ -67,7 +67,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white drop-shadow-sm mb-2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-sm mb-2"
             >
               My Trips
             </motion.h1>
@@ -75,7 +75,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-sm md:text-lg font-medium text-white/50 tracking-wide"
+              className="text-sm md:text-lg font-medium text-white/40 tracking-wide"
             >
               Plan, manage and revisit.
             </motion.p>
@@ -105,13 +105,14 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
         >
           {/* Liquid Glass Search Bar */}
           <div className={`
-            relative flex items-center w-full max-w-2xl h-14 md:h-16 rounded-[20px] md:rounded-[24px]
-            bg-white/5 backdrop-blur-2xl
-            border border-white/10
-            transition-all duration-700 ease-[cubic-bezier(0.16, 1, 0.3, 1)]
+            relative flex items-center w-full max-w-2xl h-14 md:h-16 rounded-[24px] md:rounded-[28px]
+            bg-white/[0.03] backdrop-blur-3xl
+            border-[1.5px] border-white/5 border-t-white/10
+            transition-all duration-500 ease-[cubic-bezier(0.16, 1, 0.3, 1)]
+            shadow-[inset_0_2px_8px_rgba(255,255,255,0.05),0_8px_24px_rgba(0,0,0,0.2)]
             ${isSearchFocused 
-              ? 'bg-white/10 border-blue-400/50 shadow-[0_12px_40px_rgba(59,130,246,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] -translate-y-1 scale-[1.02]' 
-              : 'hover:bg-white/10 hover:shadow-[0_12px_30px_rgba(0,0,0,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] hover:border-white/20 hover:-translate-y-0.5'}
+              ? 'bg-white/[0.06] border-white/20 border-t-white/30 shadow-[0_12px_40px_rgba(99,102,241,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] -translate-y-1 scale-[1.01]' 
+              : 'hover:bg-white/[0.05] hover:border-white/10 hover:border-t-white/20'}
           `}>
             <div className="pl-4 md:pl-6 flex items-center pointer-events-none">
               <Search className={`w-5 h-5 transition-colors duration-700 ${isSearchFocused ? 'text-blue-400' : 'text-white/50'}`} />
@@ -128,26 +129,34 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
           </div>
 
           {/* Filter Chips */}
-          <motion.div layout className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap items-center justify-start sm:gap-3 pb-6 pt-4 px-1 w-full max-w-full">
-            {FILTERS.map(filter => (
-              <button
-                key={filter}
-                onClick={() => { setActiveFilter(filter); lightTap(); }}
-                className={`
-                  ios-liquid-button shrink-0 relative flex items-center justify-center px-1 sm:px-4 md:px-6 min-h-[34px] md:min-h-[38px] w-full sm:w-auto rounded-[12px] sm:rounded-full text-[10.5px] sm:text-[12px] font-bold tracking-wide
-                  transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
-                  outline-none
-                  ${activeFilter === filter 
-                    ? 'text-white scale-[1.03] z-10 bg-white/15 ring-1 ring-white/40 shadow-[0_8px_16px_rgba(255,255,255,0.1),inset_0_1px_2px_rgba(255,255,255,0.2)] saturate-150' 
-                    : 'text-white/60 hover:text-white/90 hover:scale-[1.03] bg-transparent'
-                  }
-                `}
-                style={{ WebkitTapHighlightColor: 'transparent' }}
-              >
-                <span className={`relative z-10 block drop-shadow-md capitalize truncate text-center w-full ${activeFilter === filter ? '' : 'ios-3d-element'}`}>{filter}</span>
-              </button>
-            ))}
-          </motion.div>
+          <div className="relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
+            <motion.div 
+              layout 
+              className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-6 pt-2 snap-x snap-mandatory"
+            >
+              {FILTERS.map(filter => {
+                const isActive = activeFilter === filter;
+                return (
+                  <button
+                    key={filter}
+                    onClick={() => { setActiveFilter(filter); lightTap(); }}
+                    className={`
+                      shrink-0 snap-start relative flex items-center justify-center px-5 py-2.5 md:px-6 md:py-3 rounded-full text-[12px] md:text-[13px] font-bold tracking-wide
+                      transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                      outline-none border-[1.5px]
+                      ${isActive 
+                        ? 'text-black bg-white border-white shadow-[0_4px_16px_rgba(255,255,255,0.4)] scale-105 z-10' 
+                        : 'text-white/60 bg-white/[0.03] border-white/5 hover:bg-white/10 hover:text-white/90 hover:border-white/20'
+                      }
+                    `}
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                  >
+                    <span className={`capitalize block whitespace-nowrap ${isActive ? 'drop-shadow-sm' : ''}`}>{filter}</span>
+                  </button>
+                )
+              })}
+            </motion.div>
+          </div>
         </motion.div>
 
         {/* Trips Grid or Skeletons */}
