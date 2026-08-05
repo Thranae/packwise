@@ -189,7 +189,7 @@ export const Navbar = () => {
                           <div className="flex flex-col gap-3">
                             <div className="flex gap-3 items-start p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group/notif">
                               <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <Wand2 className="w-4 h-4 text-emerald-400" />
+                                <Bot className="w-4 h-4 text-emerald-400" />
                               </div>
                               <div className="flex flex-col gap-1">
                                 <span className="text-sm font-bold text-white group-hover/notif:text-emerald-400 transition-colors">Tokyo Itinerary Ready</span>

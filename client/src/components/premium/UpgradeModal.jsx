@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wand2, Check, X, Shield, Zap, Loader2 } from 'lucide-react';
+import { Bot, Check, X, Shield, Zap, Loader2 } from 'lucide-react';
 import { usePremium } from '../../context/PremiumContext';
 import { useToast } from '../../hooks/useToast';
 
@@ -46,7 +46,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
             {/* Header Area with Gradient */}
             <div className="relative pt-12 pb-8 px-6 text-center bg-gradient-to-b from-blue-900/40 to-transparent">
               <div className="mx-auto w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20 border border-blue-500/30">
-                <Wand2 className="w-8 h-8 text-blue-400" />
+                <Bot className="w-8 h-8 text-blue-400" />
               </div>
               
               <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">

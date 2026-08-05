@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
-import { MapPin, ArrowRight, ArrowLeft, Wand2, Users, Gauge, Wallet, UserCircle, ChevronRight } from 'lucide-react';
+import { MapPin, ArrowRight, ArrowLeft, Bot, Users, Gauge, Wallet, UserCircle, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { updateProfile } from '@/services/user.service';
@@ -407,7 +407,7 @@ export default function OnboardingPage() {
                 ) : (
                   <>
                     Complete Setup
-                    <Wand2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                    <Bot className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                   </>
                 )}
               </motion.button>

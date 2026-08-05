@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Compass, Wand2 } from 'lucide-react';
+import { Compass, Bot } from 'lucide-react';
 import Spline from '@splinetool/react-spline';
 
 export const GeneratingTripCard = ({ destination }) => (
@@ -23,7 +23,7 @@ export const GeneratingTripCard = ({ destination }) => (
     {/* Top Header */}
     <div className="relative z-10 flex items-center justify-between w-full">
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]">
-        <Wand2 className="w-3.5 h-3.5 text-blue-400" />
+        <Bot className="w-3.5 h-3.5 text-blue-400" />
         <span className="text-[11px] font-bold tracking-widest text-white/80 uppercase">AI Architect</span>
       </div>
     </div>

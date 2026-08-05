@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Wand2, Map, Book, Plus, ArrowRight } from 'lucide-react';
+import { Search, Bot, Map, Book, Plus, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 
@@ -58,7 +58,7 @@ export const GenieCommandPalette = () => {
           >
             {/* Search Input Area */}
             <div className="relative flex items-center p-6 border-b border-white/10 bg-white/5">
-              <Wand2 className="w-6 h-6 text-blue-400 shrink-0" />
+              <Bot className="w-6 h-6 text-blue-400 shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -106,7 +106,7 @@ export const GenieCommandPalette = () => {
                   </button>
                   <button onClick={() => handleAction(ROUTES.ASSISTANT)} className="flex items-center gap-3 p-4 rounded-2xl hover:bg-white/10 transition-colors text-left group">
                     <div className="w-10 h-10 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                      <Wand2 className="w-5 h-5 text-purple-400" />
+                      <Bot className="w-5 h-5 text-purple-400" />
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white group-hover:text-purple-400 transition-colors">Talk to Genie</h4>

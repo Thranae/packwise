@@ -4,7 +4,7 @@ import { useTripContext } from '@/context/TripContext';
 import {
   Calendar, MapPin, Clock, ChevronRight, PlaneLanding, Coffee, Map, PlaneTakeoff,
   Sun, Cloud, CloudRain, DollarSign, ChevronDown, GripVertical,
-  Utensils, Camera, ShoppingBag, Music, Landmark, CheckCircle2, Wand2, Loader2
+  Utensils, Camera, ShoppingBag, Music, Landmark, CheckCircle2, Bot, Loader2
 } from 'lucide-react';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useSoundEffect } from '@/hooks/useSoundEffect';
@@ -446,7 +446,7 @@ const TimelineCard = React.memo(({
                     disabled={isOptimizing}
                     className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 px-3 py-1.5 rounded-full border border-emerald-500/20 hover:border-emerald-500/40 bg-emerald-500/10 transition-all flex items-center gap-1.5 disabled:opacity-50"
                   >
-                    {isOptimizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
+                    {isOptimizing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Bot className="w-3.5 h-3.5" />}
                     {isOptimizing ? 'Optimizing...' : 'Optimize Route'}
                   </button>
                   <button onClick={(e) => { e.stopPropagation(); onOpenMap(index); }} className="text-xs font-semibold text-white/40 hover:text-white px-3 py-1.5 rounded-full border border-white/10 hover:border-white/20 transition-all flex items-center gap-1">

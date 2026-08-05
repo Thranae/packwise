@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Wand2, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
+import { Bot, MapPin, Wallet, Compass, ArrowRight, Loader2, Plus, Minus, ChevronRight, Calendar, Building2, Globe2, Plane, TreePine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -761,7 +761,7 @@ export const TripBuilderWizard = ({ initialDestination = "" }) => {
                     disabled={!prompt?.trim()}
                     className="flex items-center gap-2 h-10 px-5 rounded-2xl bg-gradient-to-r from-emerald-400/90 to-teal-500/90 border-[1.5px] border-white/40 disabled:opacity-50 transition-all duration-300 shadow-[0_6px_12px_rgba(52,211,153,0.3)] group hover:shadow-[0_8px_16px_rgba(52,211,153,0.4)]"
                   >
-                    <Wand2 className="w-4 h-4 text-white" />
+                    <Bot className="w-4 h-4 text-white" />
                     <span className="text-[12px] font-bold text-white tracking-wide">Generate</span>
                   </button>
                 )}

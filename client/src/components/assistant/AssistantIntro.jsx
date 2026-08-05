@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
-import { Wand2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Bot, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function AssistantIntro({ onStart }) {
   const [cards, setCards] = useState(SLIDESHOW_IMAGES);
@@ -79,7 +79,7 @@ export default function AssistantIntro({ onStart }) {
         </div>
         <div className="flex flex-col items-center gap-2 opacity-80">
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-green-400/50 bg-green-500/20 flex items-center justify-center text-green-300 backdrop-blur-md shadow-[0_0_15px_rgba(74,222,128,0.3)]">
-            <Wand2 className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <span className="text-green-300 text-[10px] sm:text-xs font-bold tracking-wider uppercase">Plan</span>
         </div>

@@ -52,7 +52,7 @@ export function DiscoverySwipe({ onSwipeRight }) {
   if (cards.length === 0) {
     return (
       <div className="w-full h-[400px] flex flex-col items-center justify-center bg-white/5 rounded-[32px] border border-white/10">
-        <Wand2 className="w-8 h-8 text-white/30 mb-4" />
+        <Bot className="w-8 h-8 text-white/30 mb-4" />
         <p className="text-white/50">You've swiped through all destinations!</p>
         <button 
           onClick={() => setCards(DESTINATIONS)}

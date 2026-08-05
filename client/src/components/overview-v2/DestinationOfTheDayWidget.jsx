@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wand2, MapPin, ArrowRight } from 'lucide-react';
+import { Bot, MapPin, ArrowRight } from 'lucide-react';
 import { useTripContext } from '@/context/TripContext';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -102,7 +102,7 @@ export const DestinationOfTheDayWidget = ({ className = "" }) => {
       </AnimatePresence>
 
       <div className="absolute top-6 left-6 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-        <Wand2 className="w-4 h-4 text-emerald-400" />
+        <Bot className="w-4 h-4 text-emerald-400" />
         <span className="text-[11px] font-bold text-white tracking-widest uppercase">Inspiration</span>
       </div>
 

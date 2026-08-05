@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Map, PlaneTakeoff, Wand2 } from 'lucide-react';
+import { Map, PlaneTakeoff, Bot } from 'lucide-react';
 
 const TransitionContext = createContext();
 
@@ -71,7 +71,7 @@ export const TransitionProvider = ({ children }) => {
               <h2 className="text-2xl font-extrabold text-white tracking-tight mb-2">{transitionText}</h2>
               
               <p className="text-sm text-white/50 flex items-center gap-1.5 mb-8">
-                <Wand2 className="w-4 h-4 text-blue-400" />
+                <Bot className="w-4 h-4 text-blue-400" />
                 Initializing engine...
               </p>
 

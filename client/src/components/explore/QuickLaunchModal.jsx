@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Clock, Wand2, X, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, Bot, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -91,7 +91,7 @@ export function QuickLaunchModal({ isOpen, onClose, destination }) {
 
           <div className="mt-8">
             <div className="text-[11px] text-white/40 text-center mb-4 flex items-center justify-center gap-2">
-              <Wand2 className="w-3 h-3" />
+              <Bot className="w-3 h-3" />
               Using Profile: {user?.travelPreferences?.budget || 'Medium'} • {((user?.travelPreferences?.males || 0) + (user?.travelPreferences?.females || 0)) || 2} Travelers
             </div>
             

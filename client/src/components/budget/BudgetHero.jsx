@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wand2, Plane, Wallet, Clock } from 'lucide-react';
+import { Bot, Plane, Wallet, Clock } from 'lucide-react';
 import { COUNTRY_DATA } from '@/utils/costEngine';
 
 export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) => {
@@ -48,7 +48,7 @@ export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) =
         {/* Top: badge + live indicator */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1">
-            <Wand2 className="w-3.5 h-3.5 text-blue-400" />
+            <Bot className="w-3.5 h-3.5 text-blue-400" />
             <span className="text-[11px] font-bold text-blue-300 uppercase tracking-wider">AI Predictor Active</span>
           </div>
           <div className="flex items-center gap-2 text-[11px] font-semibold text-white/40">

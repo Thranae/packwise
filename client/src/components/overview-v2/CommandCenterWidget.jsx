@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { MapPin, Clock, CloudSun, CloudRain, DollarSign, Wallet, Box, Wand2, BoxSelect, Map, Calculator, FileDown, Download, Share2, Loader2 } from 'lucide-react';
+import { MapPin, Clock, CloudSun, CloudRain, DollarSign, Wallet, Box, Bot, BoxSelect, Map, Calculator, FileDown, Download, Share2, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
@@ -223,7 +223,7 @@ export const CommandCenterWidget = ({ className = "" }) => {
         {/* Readiness */}
         <div className="flex items-center gap-2.5 p-2 rounded-[16px] bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] hover:bg-white/10 transition-colors group cursor-default">
           <div className="w-7 h-7 rounded-full bg-white/5 border border-white/5 flex items-center justify-center group-hover:bg-purple-500/20 group-hover:border-purple-500/30 transition-colors shrink-0">
-            <Wand2 className="w-3.5 h-3.5 text-white/70 group-hover:text-purple-400" />
+            <Bot className="w-3.5 h-3.5 text-white/70 group-hover:text-purple-400" />
           </div>
           <div className="flex flex-col truncate">
             <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/50">Readiness</span>
