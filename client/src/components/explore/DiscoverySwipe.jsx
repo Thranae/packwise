@@ -11,7 +11,7 @@ const DESTINATIONS = SLIDESHOW_IMAGES.map((img, index) => ({
   description: `Experience the breathtaking beauty and culture of ${img.city}.`
 }));
 
-export function DiscoverySwipe() {
+export function DiscoverySwipe({ onStart }) {
   const [cards, setCards] = useState(DESTINATIONS);
   const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
 
@@ -48,6 +48,7 @@ export function DiscoverySwipe() {
             direction={direction}
             onNext={handleNext}
             onPrev={handlePrev}
+            onStart={onStart}
           />
         ))}
       </AnimatePresence>
@@ -55,7 +56,7 @@ export function DiscoverySwipe() {
   );
 }
 
-function SwipeableCard({ card, idx, direction, onNext, onPrev }) {
+function SwipeableCard({ card, idx, direction, onNext, onPrev, onStart }) {
   const isFront = idx === 0;
   
   // Physics & Gestures
@@ -177,7 +178,18 @@ function SwipeableCard({ card, idx, direction, onNext, onPrev }) {
           <span className="text-sm font-bold uppercase tracking-widest">{card.name}</span>
         </div>
         <h3 className="text-3xl sm:text-4xl font-black text-white leading-tight drop-shadow-md">{card.name.split(',')[0]}</h3>
-        <p className="text-white/80 text-sm sm:text-base font-medium drop-shadow-sm">{card.description}</p>
+        <p className="text-white/80 text-sm sm:text-base font-medium drop-shadow-sm mb-4">{card.description}</p>
+        
+        {isFront && onStart && (
+          <button 
+            onPointerDown={(e) => e.stopPropagation()} // Prevent card drag/tap when clicking button
+            onClick={() => onStart(card)}
+            className="w-full py-4 rounded-[20px] bg-white/10 hover:bg-white/20 active:scale-[0.98] transition-all backdrop-blur-xl border border-white/20 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] pointer-events-auto"
+          >
+            <MapPin className="w-6 h-6" />
+            Plan Trip Here
+          </button>
+        )}
       </div>
     </motion.div>
   );

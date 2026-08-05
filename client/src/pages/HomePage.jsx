@@ -314,9 +314,40 @@ export default function HomePage() {
                      <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
                      <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/20 blur-[50px] rounded-full animate-pulse group-hover:scale-125 transition-transform duration-700" />
                      
-                     {/* Hero Image Section replaced with 3D DiscoverySwipe stacked deck */}
-                     <div className="w-full h-[60%] md:h-[65%] rounded-[24px] relative shrink-0 z-10 flex items-center justify-center">
-                        <DiscoverySwipe />
+                     {/* Hero Image Section */}
+                     <div className="w-full h-[60%] md:h-[65%] rounded-[24px] overflow-hidden relative shadow-[inset_0_2px_15px_rgba(0,0,0,0.4),0_10px_30px_rgba(0,0,0,0.4)] shrink-0 transform-gpu z-10 border border-white/10">
+                        <AnimatePresence>
+                          <motion.img 
+                            key={`img-${currentSlideIndex}`}
+                            src={SLIDESHOW_IMAGES[currentSlideIndex].url}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 2.5, ease: [0.4, 0, 0.2, 1] }}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                          />
+                        </AnimatePresence>
+                        
+                        <div className="absolute bottom-5 left-6 right-6">
+                           <AnimatePresence mode="wait">
+                             <motion.div
+                               key={`text-${currentSlideIndex}`}
+                               initial={{ opacity: 0, y: 20 }}
+                               animate={{ opacity: 1, y: 0 }}
+                               exit={{ opacity: 0, y: -20 }}
+                               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                               className="flex flex-col"
+                             >
+                               <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 tracking-tight leading-none mb-1 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] truncate flex items-center gap-2">
+                                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-sky-400 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] shrink-0" /> 
+                                 <span className="truncate">{SLIDESHOW_IMAGES[currentSlideIndex].city}</span>
+                               </h3>
+                               <p className="text-[10px] sm:text-[12px] text-white/90 font-black tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)] pl-[32px] sm:pl-[40px] truncate">
+                                 {SLIDESHOW_IMAGES[currentSlideIndex].country}
+                               </p>
+                             </motion.div>
+                           </AnimatePresence>
+                        </div>
                      </div>
                      
                      {/* Bottom Info Section */}
