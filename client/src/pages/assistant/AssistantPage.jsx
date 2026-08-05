@@ -10,6 +10,7 @@ import AssistantIntro from '@/components/assistant/AssistantIntro';
 export default function AssistantPage() {
   const [showIntro, setShowIntro] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [swipedDestination, setSwipedDestination] = useState("");
   const { isPremium } = usePremium();
 
   return (
@@ -22,7 +23,12 @@ export default function AssistantPage() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[100]"
           >
-            <AssistantIntro onStart={() => setShowIntro(false)} />
+            <AssistantIntro onStart={(dest) => {
+              if (dest && dest.city) {
+                setSwipedDestination(`${dest.city}, ${dest.country}`);
+              }
+              setShowIntro(false);
+            }} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -77,7 +83,7 @@ export default function AssistantPage() {
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="w-full flex-1 flex flex-col items-center"
             >
-              <TripBuilderWizard />
+              <TripBuilderWizard initialDestination={swipedDestination} />
             </motion.div>
           </AnimatePresence>
         </div>

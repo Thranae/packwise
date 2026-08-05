@@ -463,14 +463,14 @@ const InspirationCarousel = ({ step, onSelectDestination, onSelectSeason, onSele
   );
 };
 
-export const TripBuilderWizard = () => {
+export const TripBuilderWizard = ({ initialDestination = "" }) => {
   const navigate = useNavigate();
   const triggerTransition = useTransitionNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(initialDestination ? 2 : 1);
   const { generateTrip, isGenerating, loadingStep, currentTrip, triggerTripGenerationAnimation } = useTripContext();
   const { playSound } = useSoundEffect();
   const { lightTap, successTap } = useHaptics();
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(initialDestination);
   const [startCity, setStartCity] = useState("");
   const [duration, setDuration] = useState("");
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
