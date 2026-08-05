@@ -5,14 +5,30 @@ import { PageTransition } from '@/components/common/PageTransition';
 import { TripBuilderWizard } from '@/components/assistant/TripBuilderWizard';
 import UpgradeModal from '@/components/premium/UpgradeModal';
 import { usePremium } from '@/context/PremiumContext';
+import AssistantIntro from '@/components/assistant/AssistantIntro';
 
 export default function AssistantPage() {
+  const [showIntro, setShowIntro] = useState(true);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const { isPremium } = usePremium();
 
   return (
-    <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0 relative">
-      <div className="h-full min-h-0 px-3 sm:px-6 md:px-10 pb-2 pt-[calc(8px+var(--safe-top))] md:pt-4 flex flex-col items-start w-full relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
+    <>
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[100]"
+          >
+            <AssistantIntro onStart={() => setShowIntro(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <PageTransition className="col-span-1 lg:col-span-12 h-full flex flex-col min-h-0 relative">
+        <div className="h-full min-h-0 px-3 sm:px-6 md:px-10 pb-2 pt-[calc(8px+var(--safe-top))] md:pt-4 flex flex-col items-start w-full relative z-10 overflow-y-auto overflow-x-hidden custom-scrollbar">
         
         {/* Compact Header */}
         <div className="w-full max-w-[700px] mx-auto flex items-center justify-between gap-3 mb-3 z-20 relative shrink-0">
@@ -73,5 +89,6 @@ export default function AssistantPage() {
         onClose={() => setShowUpgradeModal(false)} 
       />
     </PageTransition>
+    </>
   );
 }

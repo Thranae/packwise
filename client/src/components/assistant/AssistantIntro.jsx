@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/constants/routes';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 
-export default function WelcomeLandingPage() {
-  const navigate = useNavigate();
+export default function AssistantIntro({ onStart }) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // Auto-advance slides every 10 seconds
@@ -78,7 +75,7 @@ export default function WelcomeLandingPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          onClick={() => navigate(ROUTES.SIGNUP)}
+          onClick={onStart}
           className="w-[200px] h-[64px] rounded-[32px] ios-liquid-button text-white text-[20px] font-semibold flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95"
         >
           Start
