@@ -47,18 +47,10 @@ export default function AssistantIntro({ onStart }) {
   return (
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col bg-[#050B14] items-center justify-center">
       
-      {/* Dynamic Ambient Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-blue-900/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-purple-900/20 to-transparent" />
-        <motion.div 
-          key={`bg-${imageIndex}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0 blur-[100px] scale-150"
-          style={{ backgroundImage: `url(${card.url})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-        />
+      {/* Static Ambient Background to prevent GPU glitching */}
+      <div className="absolute inset-0 pointer-events-none bg-[#050B14]">
+        <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-blue-900/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-purple-900/30 to-transparent" />
       </div>
 
       {/* Top Typography */}
@@ -83,7 +75,7 @@ export default function AssistantIntro({ onStart }) {
       </div>
 
       {/* Clean Liquid Glass Slider Container */}
-      <div className="relative w-full max-w-[340px] aspect-[4/5] z-10 flex items-center justify-center perspective-1000">
+      <div className="relative w-[92%] max-w-[400px] h-[75vh] mt-[15vh] z-10 flex items-end justify-center pb-[2vh]">
         
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -105,16 +97,16 @@ export default function AssistantIntro({ onStart }) {
                 paginate(-1);
               }
             }}
-            className="absolute inset-0 rounded-[32px] bg-white/[0.05] backdrop-blur-3xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] overflow-hidden flex flex-col cursor-grab active:cursor-grabbing"
+            className="absolute inset-x-0 bottom-[2vh] top-0 rounded-[32px] bg-white/[0.05] backdrop-blur-3xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.4)] overflow-hidden flex flex-col cursor-grab active:cursor-grabbing touch-pan-y"
+            style={{ touchAction: 'pan-y' }}
           >
-            {/* Image Section */}
-            <div className="relative w-full h-[60%] shrink-0">
+            {/* Image Section - Bright without dimming overlay */}
+            <div className="relative w-full flex-1 shrink-0">
               <img src={card.url} alt={card.city} className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] to-transparent pointer-events-none" />
             </div>
 
             {/* Liquid Glass Content Section */}
-            <div className="relative flex-1 flex flex-col p-6 items-center justify-center bg-[#050B14]/80">
+            <div className="relative shrink-0 flex flex-col p-6 items-center justify-center bg-black/50 backdrop-blur-2xl border-t border-white/10">
               <h2 className="text-white text-3xl font-extrabold tracking-tight drop-shadow-md text-center">{card.city}</h2>
               <div className="flex items-center gap-1.5 mt-2 mb-6">
                 <MapPin className="w-3.5 h-3.5 text-emerald-400" />
