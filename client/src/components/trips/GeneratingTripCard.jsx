@@ -36,8 +36,9 @@ export const GeneratingTripCard = ({ destination }) => (
         {/* Soft pulsing aura */}
         <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl animate-[pulse_3s_ease-in-out_infinite]" />
         
-        <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center border border-white/10 backdrop-blur-sm shadow-[inset_0_2px_10px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] z-10">
-          <Compass className="w-10 h-10 text-white animate-[spin_4s_ease-in-out_infinite]" strokeWidth={1.5} />
+        {/* Spline Model */}
+        <div className="w-48 h-48 relative flex items-center justify-center pointer-events-none drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+          <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
         </div>
       </div>
 

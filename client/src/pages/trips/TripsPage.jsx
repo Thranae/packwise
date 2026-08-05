@@ -202,7 +202,11 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center justify-center w-full min-h-[400px] py-12 rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)] ios-3d-element"
             >
-              <Compass className="w-16 h-16 text-white/20 mb-6 drop-shadow-md" />
+              <div className="w-full h-56 mb-4 relative flex items-center justify-center pointer-events-none drop-shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                <div className="w-56 h-56 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+                   <Spline scene="https://prod.spline.design/qi0d6jLF61ChsayE/scene.splinecode" />
+                </div>
+              </div>
               
               <h3 className="text-2xl font-semibold tracking-tighter text-white mb-2 drop-shadow-md">No trips yet.</h3>
               <p className="text-white/60 text-[15px] font-medium mb-8 max-w-sm text-center px-4">
