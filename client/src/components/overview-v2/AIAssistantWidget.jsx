@@ -74,8 +74,8 @@ export const AIAssistantWidget = ({ className = "" }) => {
                   <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-[#5b8cff] to-[#4d7fff] flex items-center justify-center shadow-[inset_0_4px_8px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active/avatar:scale-95 transition-transform duration-200">
                       <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover/avatar:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none z-30" />
-                      <div className="absolute inset-[-12px] z-10 pointer-events-none">
-                        <Spline scene="https://prod.spline.design/AWwwYBGtSV5Nh6nY/scene.splinecode" />
+                      <div className="absolute inset-[-24px] z-10 pointer-events-none scale-[0.65]">
+                        <Spline scene="https://prod.spline.design/UP9ptfgAz0jjQwkK/scene.splinecode" />
                       </div>
                     </div>
                   </div>
