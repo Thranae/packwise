@@ -28,11 +28,11 @@ export default function AssistantIntro({ onStart }) {
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-baseline gap-2"
         >
-          <span className="text-white text-4xl sm:text-5xl font-bold tracking-tighter drop-shadow-lg">
+          <span className="text-white text-4xl sm:text-5xl font-bold tracking-tighter">
             Pack
           </span>
           <span 
-            className="text-white text-5xl sm:text-6xl font-normal drop-shadow-xl -ml-2" 
+            className="text-white text-5xl sm:text-6xl font-normal -ml-2" 
             style={{ fontFamily: "'Pacifico', cursive" }}
           >
             Wise.
@@ -43,7 +43,7 @@ export default function AssistantIntro({ onStart }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-white/60 text-sm font-medium tracking-wide mt-1 drop-shadow-lg"
+          className="text-white/60 text-sm font-medium tracking-wide mt-1"
         >
           Swipe to discover your next adventure
         </motion.p>
@@ -68,13 +68,13 @@ export default function AssistantIntro({ onStart }) {
       {/* Footer Hints */}
       <div className="absolute bottom-[calc(4vh+var(--safe-bottom))] left-0 right-0 z-50 flex justify-between px-10 sm:px-24 pointer-events-none">
         <div className="flex flex-col items-center gap-2 opacity-80">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white/20 bg-white/5 flex items-center justify-center text-white backdrop-blur-md shadow-lg">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/20 bg-[#1e293b]/90 flex items-center justify-center text-white shadow-lg">
             <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <span className="text-white/80 text-[10px] sm:text-xs font-bold tracking-wider uppercase">Skip</span>
         </div>
         <div className="flex flex-col items-center gap-2 opacity-80">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-green-400/50 bg-green-500/20 flex items-center justify-center text-green-300 backdrop-blur-md shadow-[0_0_15px_rgba(74,222,128,0.3)]">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-green-400/50 bg-[#064e3b]/90 flex items-center justify-center text-green-300 shadow-[0_0_15px_rgba(74,222,128,0.3)]">
             <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <span className="text-green-300 text-[10px] sm:text-xs font-bold tracking-wider uppercase">Plan</span>
@@ -120,7 +120,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
 
   return (
     <motion.div
-      className="absolute inset-0 rounded-[32px] sm:rounded-[40px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 origin-bottom"
+      className="absolute inset-0 rounded-[32px] sm:rounded-[40px] overflow-hidden shadow-2xl border border-white/10 origin-bottom"
       style={{ 
         x, 
         rotate: isTop ? rotate : 0,
@@ -143,13 +143,13 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80 pointer-events-none" />
       
       {/* City/Country Label */}
-      <div className="absolute bottom-8 left-6 right-6 sm:bottom-12 sm:left-10 sm:right-10 pointer-events-none flex flex-col items-start">
-        <h2 className="text-white text-4xl sm:text-5xl font-bold tracking-tight drop-shadow-md">
+      <div className="absolute bottom-8 left-6 right-6 sm:bottom-12 sm:left-10 sm:right-10 pointer-events-none flex flex-col items-start z-10">
+        <h2 className="text-white text-4xl sm:text-5xl font-bold tracking-tight">
           {card.city}
         </h2>
         <div className="flex items-center gap-2 mt-2">
           <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-          <p className="text-white/80 font-bold text-xs sm:text-sm tracking-[0.2em] uppercase drop-shadow-md">
+          <p className="text-white/80 font-bold text-xs sm:text-sm tracking-[0.2em] uppercase">
             {card.country}
           </p>
         </div>
