@@ -67,11 +67,20 @@ export const AIAssistantWidget = ({ className = "" }) => {
             >
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-2 mt-0 mb-1">
-                <div className="relative w-20 h-20 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center group-hover:bg-white/10 transition-all duration-700 backdrop-blur-xl overflow-visible">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center pointer-events-none">
-                     <Sparkles className="w-8 h-8 text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]" />
+                {/* 3D Genie Style Avatar */}
+                <div className="relative group/avatar mt-2 mb-2">
+                  {/* Mild Aurora */}
+                  <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-400/30 via-blue-500/30 to-purple-500/30 blur-[16px] -z-10 animate-pulse" />
+                  <div className="w-[80px] h-[80px] rounded-full bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-[#5b8cff] to-[#4d7fff] flex items-center justify-center shadow-[inset_0_4px_8px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active/avatar:scale-95 transition-transform duration-200">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover/avatar:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none z-30" />
+                      <div className="absolute inset-[-12px] z-10 pointer-events-none">
+                        <Spline scene="https://prod.spline.design/AWwwYBGtSV5Nh6nY/scene.splinecode" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="absolute top-0 -right-0 w-3 h-3 bg-emerald-400 rounded-full border-[1.5px] border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)] z-10" />
+                  {/* Status Indicator */}
+                  <div className="absolute top-1 right-1 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)] z-40" />
                 </div>
                 <div className="flex flex-col text-center bg-white/5 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[20px] p-3 mx-2 hover:bg-white/10 transition-all duration-700 cursor-default group">
                   <h3 className="text-lg font-semibold tracking-tighter text-white group-hover:scale-105 transition-transform duration-700 mb-0.5 drop-shadow-md">Voyage Genie AI</h3>
