@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
-import { Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Wand2, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function AssistantIntro({ onStart }) {
   const [cards, setCards] = useState(SLIDESHOW_IMAGES);
@@ -79,7 +79,7 @@ export default function AssistantIntro({ onStart }) {
         </div>
         <div className="flex flex-col items-center gap-2 opacity-80">
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-green-400/50 bg-green-500/20 flex items-center justify-center text-green-300 backdrop-blur-md shadow-[0_0_15px_rgba(74,222,128,0.3)]">
-            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Wand2 className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <span className="text-green-300 text-[10px] sm:text-xs font-bold tracking-wider uppercase">Plan</span>
         </div>
@@ -99,10 +99,14 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
   const scale = 1 - index * 0.04;
   const yOffset = index * 15;
 
+  const [exitX, setExitX] = useState(0);
+
   const handleDragEnd = (event, info) => {
     if (info.offset.x > 100 || info.velocity.x > 500) {
+      setExitX(1000);
       onSwipe('right');
     } else if (info.offset.x < -100 || info.velocity.x < -500) {
+      setExitX(-1000);
       onSwipe('left');
     }
   };
@@ -119,7 +123,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
       }}
       initial={{ opacity: 0, scale: 0.9, y: yOffset + 20 }}
       animate={{ opacity: 1, scale, y: yOffset }}
-      exit={{ opacity: 0, scale: 0.8 }}
+      exit={{ opacity: 0, scale: 0.8, x: exitX }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       drag={isTop ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
@@ -146,23 +150,7 @@ function SwipeableCard({ card, index, isTop, onSwipe }) {
         </div>
       </div>
 
-      {/* Swipe Badges */}
-      {isTop && (
-        <>
-          <motion.div 
-            style={{ opacity: opacityRight }} 
-            className="absolute top-10 left-8 sm:top-16 sm:left-12 px-6 py-2 border-[4px] border-green-400 text-green-400 font-black text-3xl sm:text-4xl uppercase tracking-widest rounded-[16px] rotate-[-15deg] pointer-events-none bg-black/20 backdrop-blur-sm"
-          >
-            PLAN
-          </motion.div>
-          <motion.div 
-            style={{ opacity: opacityLeft }} 
-            className="absolute top-10 right-8 sm:top-16 sm:right-12 px-6 py-2 border-[4px] border-white/70 text-white/90 font-black text-3xl sm:text-4xl uppercase tracking-widest rounded-[16px] rotate-[15deg] pointer-events-none bg-black/20 backdrop-blur-sm"
-          >
-            SKIP
-          </motion.div>
-        </>
-      )}
+      {/* Removed Swipe Badges for cleaner look */}
     </motion.div>
   );
 }

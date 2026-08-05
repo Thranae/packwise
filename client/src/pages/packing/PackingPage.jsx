@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Plus, CheckCircle2, Circle, MoreVertical, Sparkles, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Wand2, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints, GripVertical, Check, RefreshCw } from 'lucide-react';
+import { Package, Plus, CheckCircle2, Circle, MoreVertical, Wand2, Clock, CloudRain, Sun, Thermometer, Scale, FileText, AlertTriangle, Briefcase, Home, Power, ShoppingCart, MessageSquare, X, Send, Bot, Scan, Users, Bell, Smartphone, MapPin, Shuffle, Wand2, Shirt, Camera, Umbrella, Glasses, Headphones, Footprints, GripVertical, Check, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import axios from 'axios';
 import { PageTransition } from '@/components/common/PageTransition';
@@ -963,7 +963,7 @@ export default function PackingPage() {
                   Add Item
                 </button>
                 <button onClick={() => openCategoryAi(cat.id, cat.name)} className="ios-liquid-button px-4 rounded-xl flex items-center gap-2 text-[14px] font-bold text-blue-300 hover:text-blue-100 transition-colors py-2 group">
-                  <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" /> 
+                  <Wand2 className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" /> 
                   Ask AI
                 </button>
               </div>
@@ -1103,7 +1103,7 @@ export default function PackingPage() {
               onClick={() => { setActiveTab('moodboard'); fetchMoodboard(); }}
               className={`px-8 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 flex items-center gap-2 ${activeTab === 'moodboard' ? 'bg-gradient-to-r from-blue-500/30 to-indigo-500/30 border border-blue-400/40 text-white shadow-[0_4px_16px_rgba(59,130,246,0.2)] scale-[1.02]' : 'text-white/50 hover:text-white/90 hover:bg-white/5 border border-transparent'}`}
             >
-              <Sparkles className={`w-4 h-4 ${activeTab === 'moodboard' ? 'text-blue-300' : 'text-white/50'}`} /> Outfit Mood Board
+              <Wand2 className={`w-4 h-4 ${activeTab === 'moodboard' ? 'text-blue-300' : 'text-white/50'}`} /> Outfit Mood Board
             </button>
           </div>
         </div>
@@ -1170,7 +1170,7 @@ export default function PackingPage() {
             <div className="ios-glass-card p-6 bg-gradient-to-br from-indigo-900/40 to-blue-900/40 rounded-[32px]">
               <div className="flex gap-4 ios-3d-element">
                 <div className="w-10 h-10 shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.2)]">
-                  <Sparkles className="w-5 h-5 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.8)]" />
+                  <Wand2 className="w-5 h-5 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.8)]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white tracking-wide">AI Packing Insight</h3>
@@ -1220,7 +1220,7 @@ export default function PackingPage() {
                     <div className="mt-auto pt-6 shrink-0">
                       <button onClick={() => setIsAiModalOpen(true)} className="ios-liquid-button w-full h-12 rounded-[20px] bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-100 font-bold tracking-wide transition-all duration-300 flex items-center justify-center gap-2 group/btn relative overflow-hidden">
                         <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                        <Sparkles className="w-5 h-5 text-amber-300 group-hover/btn:scale-110 transition-transform" />
+                        <Wand2 className="w-5 h-5 text-amber-300 group-hover/btn:scale-110 transition-transform" />
                         Ask AI what to buy...
                       </button>
                     </div>
@@ -1509,7 +1509,7 @@ export default function PackingPage() {
             <div className="flex justify-between items-center w-full px-2 mt-4 mb-2">
               <div className="flex items-center gap-3">
                 <h2 className="text-xl md:text-2xl font-bold text-white tracking-wide flex items-center gap-2 drop-shadow-md">
-                  <Sparkles className="w-5 h-5 text-indigo-400" /> {currentTrip?.destination?.split('&')[0]} Street Style
+                  <Wand2 className="w-5 h-5 text-indigo-400" /> {currentTrip?.destination?.split('&')[0]} Street Style
                 </h2>
                 {!isFetchingMoodboard && moodboardImages.length > 0 && (
                   <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/10 border border-white/20 text-white/60 tracking-wider">

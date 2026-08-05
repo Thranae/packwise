@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
-import { LayoutGrid, Map, Box, Wallet, Sparkles, FileText, User, Settings, Calendar, Compass, Plane, BookOpen } from 'lucide-react';
+import { LayoutGrid, Map, Box, Wallet, Wand2, FileText, User, Settings, Calendar, Compass, Plane, BookOpen } from 'lucide-react';
 import { LogoIcon, useLogoDoubleTap } from '@/components/ui/Logo';
 import { motion } from 'framer-motion';
 import { useTransitionNavigate } from '@/contexts/TransitionContext';
@@ -12,7 +12,7 @@ export const GLASS_HOVER = "transition-all duration-700 hover:-translate-y-1 hov
 const navItems = [
   { label: 'Home', path: '/overview', icon: LayoutGrid, colorClass: 'group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]' },
   { label: 'Trips', path: '/trips', icon: Map, colorClass: 'group-hover:text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' },
-  { label: 'AI Planner', path: '/assistant', icon: Sparkles, colorClass: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
+  { label: 'AI Planner', path: '/assistant', icon: Wand2, colorClass: 'group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(192,132,252,0.8)]' },
   { label: 'Packing', path: '/packing', icon: Box, colorClass: 'group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]' },
   { label: 'Calendar', path: '/calendar', icon: Calendar, colorClass: 'group-hover:text-pink-400 group-hover:drop-shadow-[0_0_8px_rgba(244,114,182,0.8)]' },
   { label: 'Budget', path: '/budget', icon: Wallet, colorClass: 'group-hover:text-green-400 group-hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]' },
@@ -132,7 +132,7 @@ export function Sidebar() {
         <div className={`rounded-xl p-3 flex flex-col group/ai ${GLASS} ${GLASS_HOVER}`}>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-              <Sparkles size={12} className="text-white" />
+              <Wand2 size={12} className="text-white" />
             </div>
             <span className="text-white/90 text-xs font-semibold">Voyage Genie AI</span>
           </div>

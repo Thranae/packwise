@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTripContext } from '@/context/TripContext';
-import { Book, Plus, Image as ImageIcon, MapPin, Calendar as CalendarIcon, Smile, Sun, Cloud, CloudRain, Snowflake, Wind, Coffee, Heart, Camera, ChevronDown, Check, X, Clock, Send, Sparkles, Loader2 } from 'lucide-react';
+import { Book, Plus, Image as ImageIcon, MapPin, Calendar as CalendarIcon, Smile, Sun, Cloud, CloudRain, Snowflake, Wind, Coffee, Heart, Camera, ChevronDown, Check, X, Clock, Send, Wand2, Loader2 } from 'lucide-react';
 import api from '@/services/api';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useToast } from '@/hooks/useToast';
@@ -388,7 +388,7 @@ export default function JournalPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover/ai-btn:opacity-100 transition-opacity blur-xl" />
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
-                {isGeneratingStory ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <Sparkles className="w-6 h-6 text-white" />}
+                {isGeneratingStory ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <Wand2 className="w-6 h-6 text-white" />}
               </div>
               <div className="flex flex-col text-left">
                 <span className="text-white font-bold text-lg">Generate AI Trip Story</span>

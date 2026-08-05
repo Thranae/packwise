@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Sparkles } from 'lucide-react';
+import { Bot, Wand2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
@@ -29,7 +29,7 @@ export const FloatingAssistant = () => {
               }}
               className="absolute -top-1 -right-1"
             >
-              <Sparkles className="h-4 w-4 text-yellow-300" />
+              <Wand2 className="h-4 w-4 text-yellow-300" />
             </motion.div>
           </div>
         </motion.div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchExchangeRates, calculateTripCost } from '@/utils/costEngine';
-import { Loader2, AlertCircle, Sparkles, RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { Loader2, AlertCircle, Wand2, RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { ConfigurationPanel } from '@/components/budget/ConfigurationPanel';
 import { BudgetHero } from '@/components/budget/BudgetHero';
 import { BudgetGrid } from '@/components/budget/BudgetGrid';
@@ -150,7 +150,7 @@ export default function CostIntelligencePage() {
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-blue-400 mb-1">
-            <Sparkles className="w-4 h-4" />
+            <Wand2 className="w-4 h-4" />
             <span className="text-xs font-bold uppercase tracking-[0.2em]">Smart Cost Engine</span>
           </div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">

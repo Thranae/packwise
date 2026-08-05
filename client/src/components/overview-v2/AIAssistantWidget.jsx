@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Send, Map, Wallet, MapPin, Box, Loader2, ArrowLeft } from 'lucide-react';
+import { Wand2, Send, Map, Wallet, MapPin, Box, Loader2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { LogoIcon } from '@/components/ui/Logo';

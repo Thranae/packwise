@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
-import { Plus, Search, Map, Compass, Globe, MapPin, Loader2, Sparkles, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
+import { Plus, Search, Map, Compass, Globe, MapPin, Loader2, Wand2, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import Spline from '@splinetool/react-spline';

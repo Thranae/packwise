@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   Map, Plane, CloudSun, Luggage, DollarSign, BookOpen,
-  Star, Globe, Shield, Zap, Sparkles, Moon, ArrowRight,
+  Star, Globe, Shield, Zap, Wand2, Moon, ArrowRight,
   Menu, X, CheckCircle2, PlayCircle, BarChart3, Clock,
   Smartphone, Compass, CreditCard, MapPin
 } from 'lucide-react';
@@ -266,7 +266,7 @@ export default function HomePage() {
                 <motion.div variants={fadeInUp} className="group cursor-pointer relative overflow-hidden px-5 py-2 text-sm font-bold text-blue-400 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(59,130,246,0.2)] rounded-full mb-6 inline-flex items-center justify-center hover:-translate-y-1 hover:scale-105 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(59,130,246,0.4)] hover:text-white transition-all duration-700">
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
                   <span className="relative z-10 flex items-center gap-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-                    <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Voyage Genie AI 2.0
+                    <Wand2 className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Voyage Genie AI 2.0
                   </span>
                 </motion.div>
                 
@@ -281,7 +281,7 @@ export default function HomePage() {
                 <motion.div variants={fadeInUp} className="hidden lg:flex mt-12 flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
                   <Link to={ROUTES.SIGNUP} className="w-full sm:w-auto">
                     <button className="w-full sm:w-auto px-8 py-4 primary-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                      <Sparkles className="w-5 h-5" />
+                      <Wand2 className="w-5 h-5" />
                       Start Exploring Free
                     </button>
                   </Link>
@@ -374,7 +374,7 @@ export default function HomePage() {
                   </Link>
                   <Link to={ROUTES.ASSISTANT} className="w-full sm:w-auto">
                     <button className="w-full sm:w-auto px-8 py-4 ios-liquid-button text-white font-semibold text-lg rounded-full flex items-center justify-center gap-2">
-                      <Sparkles className="w-5 h-5 text-purple-400" />
+                      <Wand2 className="w-5 h-5 text-purple-400" />
                       AI Planner
                     </button>
                   </Link>
@@ -413,7 +413,7 @@ export default function HomePage() {
             <motion.div variants={fadeInUp} className="group cursor-pointer relative overflow-hidden px-5 py-2 text-sm font-bold text-blue-400 bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.3),0_4px_8px_rgba(59,130,246,0.2)] rounded-full mb-6 inline-flex items-center justify-center hover:-translate-y-1 hover:scale-105 hover:shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-2px_4px_rgba(0,0,0,0.4),0_8px_16px_rgba(59,130,246,0.4)] hover:text-white transition-all duration-700">
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
               <span className="relative z-10 flex items-center gap-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-                <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Intelligent Tools
+                <Wand2 className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" /> Intelligent Tools
               </span>
             </motion.div>
             <motion.h2 variants={fadeInUp} className="text-3xl md:text-6xl font-semibold tracking-tighter">Everything you need.<br/>Nothing you don't.</motion.h2>
@@ -532,7 +532,7 @@ export default function HomePage() {
                 <div className={`${glassStyle} p-3 sm:p-4 flex items-center gap-3 sm:gap-4 shadow-[0_24px_48px_rgba(0,0,0,0.6)] backdrop-blur-md border-white/30 bg-white/10 group-hover:[transform:translateZ(60px)] transition-transform duration-700`}>
                   <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/30 flex items-center justify-center border border-blue-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_15px_rgba(59,130,246,0.6)] overflow-hidden">
                     <div className="absolute inset-0 bg-blue-400/20 animate-ping opacity-50" />
-                    <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-blue-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
+                    <Wand2 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] relative z-10" />
                   </div>
                   <div className="flex flex-col pr-2">
                     <span className="text-xs sm:text-sm font-extrabold text-white drop-shadow-lg tracking-wide">AI Synthesizing</span>

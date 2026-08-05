@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Send, Search, MapPin, ArrowUp, Loader2 } from 'lucide-react';
+import { Wand2, Send, Search, MapPin, ArrowUp, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTripContext } from '@/context/TripContext';
 import { useNavigate } from 'react-router-dom';
@@ -109,7 +109,7 @@ export const AIChatInterface = () => {
       {/* Header */}
       <div className="flex flex-col items-center gap-2 mb-4 shrink-0 ios-3d-element">
         <div className="relative w-12 h-12 rounded-[16px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_4px_12px_rgba(0,0,0,0.3)] flex items-center justify-center backdrop-blur-xl">
-          <Sparkles className="w-6 h-6 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.6)]" />
+          <Wand2 className="w-6 h-6 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.6)]" />
           <div className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-[#1c1d29] shadow-[0_0_8px_rgba(52,211,153,0.8)] ${isLoading ? 'bg-blue-400 animate-pulse' : 'bg-emerald-400'}`} />
         </div>
         <div className="flex flex-col text-center">
@@ -132,7 +132,7 @@ export const AIChatInterface = () => {
               {msg.role === 'user' ? (
                 <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-[9px] font-bold text-white shadow-md">YOU</div>
               ) : (
-                <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Sparkles className="w-3 h-3 text-white" /></div>
+                <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Wand2 className="w-3 h-3 text-white" /></div>
               )}
               <span className="text-[10px] font-semibold text-white/50 tracking-wider uppercase">
                 {msg.role === 'user' ? 'You' : 'Voyage Genie AI'}
@@ -189,7 +189,7 @@ export const AIChatInterface = () => {
               className="flex flex-col max-w-[90%] self-start items-start"
             >
               <div className="flex items-center gap-2 mb-1 px-1">
-                <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Sparkles className="w-3 h-3 text-white animate-pulse" /></div>
+                <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Wand2 className="w-3 h-3 text-white animate-pulse" /></div>
                 <span className="text-[10px] font-semibold text-white/50 tracking-wider uppercase">Voyage Genie AI</span>
               </div>
               <div className="p-4 shadow-xl text-left rounded-[20px] rounded-tl-sm ios-glass-card border border-white/10 text-white flex items-center gap-2">

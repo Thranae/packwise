@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Send, User, Loader2 } from 'lucide-react';
+import { Wand2, X, Send, User, Loader2 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui/Logo';
 import api from '@/services/api';
 import ReactMarkdown from 'react-markdown';
@@ -89,7 +89,7 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
               <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-white drop-shadow-md" />
+                    <Wand2 className="w-5 h-5 text-white drop-shadow-md" />
                   </div>
                   <div>
                     <h2 className="text-lg font-black text-white leading-tight">Voyage Genie AI</h2>
@@ -160,7 +160,7 @@ export const GenieSlideOut = ({ isOpen, onClose, initialQuery = '' }) => {
                     className="flex flex-col max-w-[90%] self-start items-start"
                   >
                     <div className="flex items-center gap-2 mb-1 px-1">
-                      <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Sparkles className="w-3 h-3 text-white animate-pulse" /></div>
+                      <div className="w-5 h-5 rounded-[6px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white shadow-md"><Wand2 className="w-3 h-3 text-white animate-pulse" /></div>
                       <span className="text-[10px] font-semibold text-white/50 tracking-wider uppercase">Voyage Genie AI</span>
                     </div>
                     <div className="p-4 shadow-xl text-left rounded-[20px] rounded-tl-sm ios-glass-card border border-white/10 text-white flex items-center gap-2">

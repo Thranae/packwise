@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Hand, Sparkles, X, Compass, ChevronRight } from 'lucide-react';
+import { Hand, Wand2, X, Compass, ChevronRight } from 'lucide-react';
 
 const TUTORIAL_STEPS = [
   {
-    icon: <Sparkles className="w-8 h-8 text-purple-400" />,
+    icon: <Wand2 className="w-8 h-8 text-purple-400" />,
     title: "Welcome to Voyage Genie",
     desc: "Your AI-powered travel companion. Let's take a quick look at how to navigate.",
   },

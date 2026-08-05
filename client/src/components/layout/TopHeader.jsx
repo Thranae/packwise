@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Sparkles, Bell, Globe, User, Settings, LogOut, Mic, Map, Book, ArrowRight, Download } from 'lucide-react';
+import { Search, Wand2, Bell, Globe, User, Settings, LogOut, Mic, Map, Book, ArrowRight, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
@@ -133,7 +133,7 @@ export const TopHeader = () => {
           `}
         >
           <div className="pl-5 flex items-center pointer-events-none text-white/50">
-            <Sparkles className={`w-5 h-5 transition-colors duration-700 ${isFocused || isListening ? 'text-blue-400' : ''}`} />
+            <Wand2 className={`w-5 h-5 transition-colors duration-700 ${isFocused || isListening ? 'text-blue-400' : ''}`} />
           </div>
           <input
             type="text"
@@ -226,7 +226,7 @@ export const TopHeader = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 via-blue-500 to-purple-500 flex items-center justify-center shrink-0">
-                        <Sparkles className="w-5 h-5 text-white" />
+                        <Wand2 className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">Ask Genie about "{query}"</span>
@@ -242,7 +242,7 @@ export const TopHeader = () => {
                   {isSearchingAI ? (
                     <div className="w-full flex items-center justify-center p-4">
                       <div className="flex items-center gap-2 text-white/50">
-                        <Sparkles className="w-4 h-4 animate-spin" />
+                        <Wand2 className="w-4 h-4 animate-spin" />
                         <span className="text-xs font-semibold">AI is searching the globe...</span>
                       </div>
                     </div>
@@ -351,7 +351,7 @@ export const TopHeader = () => {
             >
               <div className="absolute inset-0 bg-white/20 mix-blend-overlay" />
             </motion.div>
-            <Sparkles className="absolute w-3 h-3 text-white drop-shadow-md z-10" />
+            <Wand2 className="absolute w-3 h-3 text-white drop-shadow-md z-10" />
           </div>
           <div className="flex flex-col justify-center">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none mb-1">Genie AI</span>
@@ -400,7 +400,7 @@ export const TopHeader = () => {
                   {notifications && notifications.length > 0 ? notifications.map((notif) => (
                     <div key={notif.id} className={`flex gap-3 items-start p-2 rounded-xl transition-colors cursor-pointer group ${notif.read ? 'hover:bg-white/5 opacity-70' : 'bg-white/5 hover:bg-white/10'}`}>
                       <div className={`w-8 h-8 rounded-[12px] ${notif.type === 'pdf' ? 'bg-gradient-to-br from-purple-400 to-fuchsia-600 border-purple-300' : 'bg-gradient-to-br from-emerald-400 to-teal-500 border-emerald-300'} border flex items-center justify-center flex-shrink-0 mt-0.5 shadow-[inset_0_1px_3px_rgba(255,255,255,0.5),inset_0_-1px_3px_rgba(0,0,0,0.3),0_4px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-105`}>
-                        {notif.type === 'pdf' ? <Globe className="w-4 h-4 text-white drop-shadow-sm" /> : <Sparkles className="w-4 h-4 text-white drop-shadow-sm" />}
+                        {notif.type === 'pdf' ? <Globe className="w-4 h-4 text-white drop-shadow-sm" /> : <Wand2 className="w-4 h-4 text-white drop-shadow-sm" />}
                       </div>
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex justify-between items-center w-full">
