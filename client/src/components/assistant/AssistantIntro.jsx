@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useAnimation } from 'framer-motion';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 import { Bot, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export default function AssistantIntro({ onStart }) {
   const [cards, setCards] = useState(SLIDESHOW_IMAGES);
-  const [exitDirection, setExitDirection] = useState('right');
 
   // We only render top 3 to keep DOM light
   const activeCards = cards.slice(0, 3);
 
   const handleSwipe = (direction, cardData) => {
-    setExitDirection(direction);
-    // setTimeout allows React to batch the direction state change before unmounting,
-    // though React 18 batches this automatically.
     if (direction === 'right') {
-      // User swiped right to plan trip
       onStart(cardData);
     } else {
-      // User swiped left to skip
-      setCards(prev => [...prev.slice(1), prev[0]]); // Move top card to back
+      setCards(prev => [...prev.slice(1), prev[0]]); 
     }
   };
 
@@ -57,21 +51,18 @@ export default function AssistantIntro({ onStart }) {
 
       {/* Card Stack Container */}
       <div className="absolute inset-x-4 inset-y-[20vh] sm:inset-x-20 sm:inset-y-[15vh] z-10 perspective-[1000px]">
-        <AnimatePresence custom={exitDirection}>
-          {activeCards.map((card, index) => {
-            const isTop = index === 0;
-            return (
-              <SwipeableCard 
-                key={card.url} 
-                card={card} 
-                index={index}
-                isTop={isTop}
-                custom={exitDirection}
-                onSwipe={(dir) => handleSwipe(dir, card)}
-              />
-            );
-          })}
-        </AnimatePresence>
+        {activeCards.map((card, index) => {
+          const isTop = index === 0;
+          return (
+            <SwipeableCard 
+              key={card.url} 
+              card={card} 
+              index={index}
+              isTop={isTop}
+              onSwipe={(dir) => handleSwipe(dir, card)}
+            />
+          );
+        })}
       </div>
 
       {/* Footer Hints */}
@@ -93,22 +84,35 @@ export default function AssistantIntro({ onStart }) {
   );
 }
 
-function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
+function SwipeableCard({ card, index, isTop, onSwipe }) {
   const x = useMotionValue(0);
+  const controls = useAnimation();
+  
   // Map x to rotation (subtle)
   const rotate = useTransform(x, [-300, 300], [-8, 8]);
-  // Map x to opacity (for "Like" vs "Nope" badges)
   const opacityRight = useTransform(x, [0, 150], [0, 1]);
   const opacityLeft = useTransform(x, [0, -150], [0, 1]);
 
-  const scale = 1 - index * 0.04;
-  const yOffset = index * 15;
+  React.useEffect(() => {
+    // When index changes, animate smoothly to new position in stack
+    controls.start({
+      opacity: 1,
+      scale: 1 - index * 0.04,
+      y: index * 15,
+      transition: { type: 'spring', stiffness: 300, damping: 25, mass: 1 }
+    });
+  }, [index, controls]);
 
-  const handleDragEnd = (event, info) => {
+  const handleDragEnd = async (event, info) => {
     if (info.offset.x > 100 || info.velocity.x > 500) {
+      await controls.start({ x: window.innerWidth, transition: { duration: 0.2, ease: 'easeOut' } });
       onSwipe('right');
     } else if (info.offset.x < -100 || info.velocity.x < -500) {
+      await controls.start({ x: -window.innerWidth, transition: { duration: 0.2, ease: 'easeOut' } });
       onSwipe('left');
+    } else {
+      // Didn't swipe far enough, snap back to center
+      controls.start({ x: 0, transition: { type: 'spring', stiffness: 300, damping: 25 } });
     }
   };
 
@@ -116,23 +120,13 @@ function SwipeableCard({ card, index, isTop, custom, onSwipe }) {
     <motion.div
       className="absolute inset-0 rounded-[32px] sm:rounded-[40px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 origin-bottom"
       style={{ 
-        x: isTop ? x : 0, 
+        x, 
         rotate: isTop ? rotate : 0,
-        scale,
-        y: yOffset,
         zIndex: 10 - index,
         willChange: isTop ? 'transform' : 'auto'
       }}
-      initial={{ opacity: 0, scale: 0.9, y: yOffset + 20 }}
-      animate={{ opacity: 1, scale, y: yOffset }}
-      custom={custom}
-      exit={(direction) => ({
-        opacity: 0,
-        scale: 0.8,
-        x: direction === 'right' ? 800 : -800,
-        transition: { type: 'tween', duration: 0.3, ease: 'easeOut' }
-      })}
-      transition={{ type: 'spring', stiffness: 300, damping: 25, mass: 1 }}
+      initial={{ opacity: 0, scale: 0.9, y: index * 15 + 20 }}
+      animate={controls}
       drag={isTop ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
