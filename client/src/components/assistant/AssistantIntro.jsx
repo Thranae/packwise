@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
-import { Plane, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plane, MapPin, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const swipeConfidenceThreshold = 10000;
 const swipePower = (offset, velocity) => {
@@ -32,7 +32,7 @@ const variants = {
   }
 };
 
-export default function AssistantIntro({ onStart }) {
+export default function AssistantIntro({ onStart, onClose }) {
   const [[page, direction], setPage] = useState([0, 0]);
   const dests = SLIDESHOW_IMAGES.slice(0, 15);
 
@@ -52,6 +52,16 @@ export default function AssistantIntro({ onStart }) {
         <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-blue-900/30 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-purple-900/30 to-transparent" />
       </div>
+
+      {/* Top Navigation / Close Button */}
+      {onClose && (
+        <button 
+          onClick={onClose}
+          className="absolute top-[calc(2vh+var(--safe-top))] right-4 sm:right-8 z-[70] p-3 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-all backdrop-blur-md border border-white/10 text-white flex items-center justify-center shadow-lg"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Top Typography */}
       <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center drop-shadow-2xl">

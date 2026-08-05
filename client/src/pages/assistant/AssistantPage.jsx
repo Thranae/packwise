@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bot, Map } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { TripBuilderWizard } from '@/components/assistant/TripBuilderWizard';
@@ -12,6 +13,7 @@ export default function AssistantPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [swipedDestination, setSwipedDestination] = useState("");
   const { isPremium } = usePremium();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -23,12 +25,15 @@ export default function AssistantPage() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[100]"
           >
-            <AssistantIntro onStart={(dest) => {
-              if (dest && dest.city) {
-                setSwipedDestination(`${dest.city}, ${dest.country}`);
-              }
-              setShowIntro(false);
-            }} />
+            <AssistantIntro 
+              onStart={(dest) => {
+                if (dest && dest.city) {
+                  setSwipedDestination(`${dest.city}, ${dest.country}`);
+                }
+                setShowIntro(false);
+              }}
+              onClose={() => navigate('/overview')}
+            />
           </motion.div>
         )}
       </AnimatePresence>
