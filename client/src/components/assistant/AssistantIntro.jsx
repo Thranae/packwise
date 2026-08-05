@@ -18,7 +18,7 @@ export default function AssistantIntro({ onStart, onClose }) {
       {onClose && (
         <button 
           onClick={onClose}
-          className="absolute top-[calc(2vh+var(--safe-top))] right-4 sm:right-8 z-[70] p-3 rounded-full bg-[#1A1F2B]/60 hover:bg-[#252B3A]/80 active:scale-95 transition-all backdrop-blur-xl border border-white/10 text-white flex items-center justify-center shadow-2xl"
+          className="absolute top-[calc(2vh+var(--safe-top))] right-4 sm:right-8 z-[70] p-3 rounded-full bg-red-500/80 hover:bg-red-500 active:scale-95 transition-all backdrop-blur-xl border border-red-400/30 text-white flex items-center justify-center shadow-[0_4px_16px_rgba(239,68,68,0.4)]"
         >
           <X className="w-6 h-6" />
         </button>
