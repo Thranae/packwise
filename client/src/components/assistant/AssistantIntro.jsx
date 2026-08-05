@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
-import { Bot, MapPin } from 'lucide-react';
+import { Plane, MapPin } from 'lucide-react';
 
 export default function AssistantIntro({ onStart }) {
   // We can render more cards now because native CSS scroll is extremely performant
@@ -11,18 +11,18 @@ export default function AssistantIntro({ onStart }) {
     <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col bg-[#030712]">
       
       {/* Typography Section (Top) */}
-      <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center">
+      <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center drop-shadow-2xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-baseline gap-2"
         >
-          <span className="text-white text-4xl sm:text-5xl font-bold tracking-tighter">
+          <span className="text-white text-5xl sm:text-6xl font-bold tracking-tighter drop-shadow-2xl">
             Pack
           </span>
           <span 
-            className="text-white text-5xl sm:text-6xl font-normal -ml-2" 
+            className="text-white text-6xl sm:text-7xl font-normal -ml-2 drop-shadow-2xl" 
             style={{ fontFamily: "'Pacifico', cursive" }}
           >
             Wise.
@@ -33,21 +33,19 @@ export default function AssistantIntro({ onStart }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-white/60 text-sm font-medium tracking-wide mt-1"
+          className="text-white/80 text-sm font-bold tracking-wide mt-2 drop-shadow-xl"
         >
           Swipe horizontally to explore
         </motion.p>
       </div>
 
-      {/* Native Scroll-Snap Carousel Container */}
-      <div className="absolute inset-x-0 inset-y-[20vh] sm:inset-y-[15vh] z-10 flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {/* Spacer for first card to center slightly */}
-        <div className="w-6 sm:w-20 shrink-0" />
+      {/* Native Scroll-Snap Carousel Container (FULL SCREEN) */}
+      <div className="absolute inset-0 z-10 flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         
         {cards.map((card, index) => (
           <div 
             key={card.url + index} 
-            className="w-[82vw] sm:w-[60vw] max-w-[400px] shrink-0 snap-center mr-4 sm:mr-8 relative rounded-[32px] sm:rounded-[40px] overflow-hidden shadow-2xl bg-[#030712] flex flex-col justify-end border border-white/10"
+            className="w-screen h-screen shrink-0 snap-center relative bg-[#030712] flex flex-col justify-end"
             style={{ transform: 'translateZ(0)' }} // Force GPU hardware layer for each card
           >
             <img 
@@ -57,34 +55,32 @@ export default function AssistantIntro({ onStart }) {
               loading={index < 3 ? "eager" : "lazy"}
               draggable={false}
             />
-            {/* Gradient Overlay for Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/20 to-black/90 pointer-events-none" />
+            {/* Gradient Overlay for Text Readability - Darker at the bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/90 pointer-events-none" />
             
-            {/* Card Content */}
-            <div className="relative z-10 p-6 sm:p-10 flex flex-col items-start w-full">
-              <h2 className="text-white text-4xl sm:text-5xl font-bold tracking-tight drop-shadow-md">
+            {/* Card Content (Bottom) */}
+            <div className="relative z-10 p-8 sm:p-12 mb-[calc(2vh+var(--safe-bottom))] flex flex-col items-start w-full">
+              <h2 className="text-white text-5xl sm:text-7xl font-extrabold tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
                 {card.city}
               </h2>
-              <div className="flex items-center gap-2 mt-2 mb-6">
-                <MapPin className="w-3.5 h-3.5 text-green-400" />
-                <p className="text-white/90 font-bold text-xs sm:text-sm tracking-[0.2em] uppercase drop-shadow-md">
+              <div className="flex items-center gap-2 mt-3 mb-8">
+                <MapPin className="w-4 h-4 text-green-400 drop-shadow-lg" />
+                <p className="text-white/90 font-bold text-sm sm:text-base tracking-[0.2em] uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                   {card.country}
                 </p>
               </div>
               
               <button 
                 onClick={() => onStart(card)}
-                className="w-full py-4 rounded-2xl bg-white/20 hover:bg-white/30 active:scale-[0.98] transition-all backdrop-blur-md border border-white/30 text-white font-semibold flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-5 rounded-[20px] bg-white/10 hover:bg-white/20 active:scale-[0.98] transition-all backdrop-blur-xl border border-white/20 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
               >
-                <Bot className="w-5 h-5" />
+                <Plane className="w-6 h-6" />
                 Plan Trip Here
               </button>
             </div>
           </div>
         ))}
         
-        {/* Spacer for last card */}
-        <div className="w-2 sm:w-16 shrink-0" />
       </div>
 
     </div>
