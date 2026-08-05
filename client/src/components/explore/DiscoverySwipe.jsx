@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
+import { getTripImage } from '@/utils/imageUtils';
 
 // Build 100+ destinations from the constant
 const DESTINATIONS = SLIDESHOW_IMAGES.map((img, index) => ({
   id: index,
   name: `${img.city}, ${img.country}`,
-  image: img.url,
+  image: getTripImage(img.city), // Use the image utility for HD Unsplash images
   description: `Experience the breathtaking beauty and culture of ${img.city}.`
 }));
 
@@ -85,7 +86,7 @@ export function DiscoverySwipe() {
   };
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000 overflow-hidden rounded-[32px]">
+    <div className="relative w-full h-[400px] sm:h-[450px] perspective-1000 overflow-hidden rounded-[48px]">
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={currentIndex}
@@ -100,7 +101,7 @@ export function DiscoverySwipe() {
           onDragEnd={handleDragEnd}
           onTap={handleTap}
           whileDrag={{ scale: 0.98, cursor: 'grabbing' }}
-          className="absolute inset-0 w-full h-full rounded-[32px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.5)] touch-pan-y cursor-pointer transform-gpu"
+          className="absolute inset-0 w-full h-full rounded-[48px] overflow-hidden bg-slate-900 border border-white/20 shadow-[0_32px_64px_rgba(0,0,0,0.5)] touch-pan-y cursor-pointer transform-gpu"
         >
           <img 
             src={currentCard.image} 
