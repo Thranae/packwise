@@ -31,15 +31,19 @@ export const AnimatedBackground = React.memo(() => {
         }
       `}} />
 
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020617] transition-colors duration-700">
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-blue-50/50 dark:bg-[#020617] transition-colors duration-700">
         {/* Reduced number of orbs from 6 to 4, simplified animations */}
-        {/* Soft White Moonlight Glows */}
-        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', width: '40vw', height: '40vw', top: '-5%', left: '-5%', animation: 'floatWide1 25s ease-in-out infinite' }} />
-        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)', width: '35vw', height: '35vw', bottom: '10%', right: '10%', animation: 'floatWide3 30s ease-in-out infinite' }} />
+        {/* Soft White Moonlight Glows (Light mode: soft vibrant colors) */}
+        <div className="vision-blob dark:hidden" style={{ background: 'radial-gradient(circle, rgba(147,197,253,0.4) 0%, transparent 70%)', width: '40vw', height: '40vw', top: '-5%', left: '-5%', animation: 'floatWide1 25s ease-in-out infinite' }} />
+        <div className="vision-blob dark:hidden" style={{ background: 'radial-gradient(circle, rgba(196,181,253,0.4) 0%, transparent 70%)', width: '35vw', height: '35vw', bottom: '10%', right: '10%', animation: 'floatWide3 30s ease-in-out infinite' }} />
+        <div className="vision-blob dark:hidden" style={{ background: 'radial-gradient(circle, rgba(253,164,175,0.3) 0%, transparent 70%)', width: '50vw', height: '50vw', top: '20%', left: '20%', animation: 'floatWide2 28s ease-in-out infinite' }} />
+        <div className="vision-blob dark:hidden" style={{ background: 'radial-gradient(circle, rgba(253,186,116,0.3) 0%, transparent 70%)', width: '55vw', height: '55vw', bottom: '-10%', right: '-10%', animation: 'floatWide4 32s ease-in-out infinite' }} />
 
         {/* Deep Dark Combos - Reduced opacity and size */}
-        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(51,65,85,0.3) 0%, transparent 70%)', width: '50vw', height: '50vw', top: '20%', left: '20%', animation: 'floatWide2 28s ease-in-out infinite' }} />
-        <div className="vision-blob" style={{ background: 'radial-gradient(circle, rgba(49,46,129,0.35) 0%, transparent 70%)', width: '55vw', height: '55vw', bottom: '-10%', right: '-10%', animation: 'floatWide4 32s ease-in-out infinite' }} />
+        <div className="vision-blob hidden dark:block" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', width: '40vw', height: '40vw', top: '-5%', left: '-5%', animation: 'floatWide1 25s ease-in-out infinite' }} />
+        <div className="vision-blob hidden dark:block" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)', width: '35vw', height: '35vw', bottom: '10%', right: '10%', animation: 'floatWide3 30s ease-in-out infinite' }} />
+        <div className="vision-blob hidden dark:block" style={{ background: 'radial-gradient(circle, rgba(51,65,85,0.3) 0%, transparent 70%)', width: '50vw', height: '50vw', top: '20%', left: '20%', animation: 'floatWide2 28s ease-in-out infinite' }} />
+        <div className="vision-blob hidden dark:block" style={{ background: 'radial-gradient(circle, rgba(49,46,129,0.35) 0%, transparent 70%)', width: '55vw', height: '55vw', bottom: '-10%', right: '-10%', animation: 'floatWide4 32s ease-in-out infinite' }} />
 
         {/* Removed Dotted Texture Overlay for performance */}
       </div>

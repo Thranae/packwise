@@ -19,8 +19,8 @@ export function AppLayout({ children }) {
       <GenieCommandPalette />
       
       {/* Native-feeling static frosted glass edges for gap masking */}
-      <div className="fixed top-0 left-0 right-0 h-[calc(12px+var(--safe-top))] lg:h-[calc(20px+var(--safe-top))] z-[60] bg-[#030712]/95 backdrop-blur-xl border-b border-white/[0.02] pointer-events-none shadow-[0_4px_10px_rgba(0,0,0,0.2)]" />
-      <div className="fixed bottom-0 left-0 right-0 h-[calc(24px+var(--safe-bottom))] z-[60] bg-gradient-to-t from-[#030712] via-[#030712]/90 to-transparent pointer-events-none" />
+      <div className="fixed top-0 left-0 right-0 h-[calc(12px+var(--safe-top))] lg:h-[calc(20px+var(--safe-top))] z-[60] bg-white/70 dark:bg-[#030712]/95 backdrop-blur-xl border-b border-black/[0.05] dark:border-white/[0.02] pointer-events-none shadow-[0_4px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_10px_rgba(0,0,0,0.2)]" />
+      <div className="fixed bottom-0 left-0 right-0 h-[calc(24px+var(--safe-bottom))] z-[60] bg-gradient-to-t from-white/90 via-white/70 dark:from-[#030712] dark:via-[#030712]/90 to-transparent pointer-events-none" />
 
       <Sidebar />
       <BottomNav />
