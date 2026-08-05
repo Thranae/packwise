@@ -2,23 +2,23 @@ import React from 'react';
 import { SLIDESHOW_IMAGES } from '@/constants/slideshowImages';
 import { Plane, MapPin, X } from 'lucide-react';
 
-const dests = SLIDESHOW_IMAGES.slice(0, 15);
+const dests = SLIDESHOW_IMAGES;
 
 export default function AssistantIntro({ onStart, onClose }) {
   return (
-    <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col bg-[#050B14] items-center justify-center">
+    <div className="relative w-full h-screen min-h-screen overflow-hidden flex flex-col items-center justify-center bg-[#03060C]">
       
       {/* Static Ambient Background to prevent GPU glitching */}
-      <div className="absolute inset-0 pointer-events-none bg-[#050B14]">
-        <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-blue-900/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-purple-900/30 to-transparent" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-slate-900/50 via-[#03060C]/80 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-slate-950/80 to-transparent" />
       </div>
 
       {/* Top Navigation / Close Button */}
       {onClose && (
         <button 
           onClick={onClose}
-          className="absolute top-[calc(2vh+var(--safe-top))] right-4 sm:right-8 z-[70] p-3 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-all backdrop-blur-md border border-white/10 text-white flex items-center justify-center shadow-lg"
+          className="absolute top-[calc(2vh+var(--safe-top))] right-4 sm:right-8 z-[70] p-3 rounded-full bg-[#1A1F2B]/60 hover:bg-[#252B3A]/80 active:scale-95 transition-all backdrop-blur-xl border border-white/10 text-white flex items-center justify-center shadow-2xl"
         >
           <X className="w-6 h-6" />
         </button>
@@ -27,8 +27,8 @@ export default function AssistantIntro({ onStart, onClose }) {
       {/* Top Typography */}
       <div className="absolute top-[calc(6vh+var(--safe-top))] left-0 right-0 z-50 px-8 pointer-events-none flex flex-col items-center drop-shadow-2xl">
         <div className="flex items-baseline gap-2 animate-in fade-in slide-in-from-top-4 duration-1000">
-          <span className="text-white text-4xl sm:text-5xl font-bold tracking-tighter drop-shadow-2xl">Pack</span>
-          <span className="text-white text-5xl sm:text-6xl font-normal -ml-2 drop-shadow-2xl" style={{ fontFamily: "'Pacifico', cursive" }}>Wise.</span>
+          <span className="text-white text-4xl sm:text-5xl font-extrabold tracking-tighter drop-shadow-2xl font-['Outfit']">Pack</span>
+          <span className="text-blue-400 text-5xl sm:text-6xl font-normal -ml-2 drop-shadow-2xl" style={{ fontFamily: "'Pacifico', cursive" }}>Wise.</span>
         </div>
         <p className="text-white/60 text-xs sm:text-sm font-bold tracking-wide mt-2 animate-in fade-in duration-1000 delay-300">
           Swipe to discover destinations
@@ -52,7 +52,7 @@ export default function AssistantIntro({ onStart, onClose }) {
               </div>
 
               {/* Liquid Glass Content Section */}
-              <div className="relative shrink-0 flex flex-col p-6 items-center justify-center bg-black/50 backdrop-blur-2xl border-t border-white/10">
+              <div className="relative shrink-0 flex flex-col p-6 items-center justify-center bg-[#0A101C]/80 backdrop-blur-2xl border-t border-white/5">
                 <h2 className="text-white text-3xl font-extrabold tracking-tight drop-shadow-md text-center">{card.city}</h2>
                 <div className="flex items-center gap-1.5 mt-2 mb-6">
                   <MapPin className="w-3.5 h-3.5 text-emerald-400" />
@@ -61,7 +61,7 @@ export default function AssistantIntro({ onStart, onClose }) {
                 
                 <button 
                   onClick={() => onStart(card)}
-                  className="w-full py-3.5 rounded-[16px] bg-white/10 hover:bg-white/20 active:scale-95 transition-all backdrop-blur-md border border-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+                  className="w-full py-4 rounded-[16px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all text-white font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_32px_rgba(79,70,229,0.4)]"
                 >
                   <Plane className="w-5 h-5" />
                   Plan Trip Here
