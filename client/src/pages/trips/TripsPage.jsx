@@ -135,8 +135,8 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
           </div>
 
           {/* Filter Chips */}
-          <div className="relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex items-center gap-3 overflow-x-auto custom-scrollbar pb-6 pt-2 snap-x snap-mandatory pr-8">
+          <div className="relative w-full -mx-4 sm:mx-0">
+            <div className="flex items-center gap-3 overflow-x-auto custom-scrollbar pb-6 pt-2 snap-x snap-mandatory px-4 sm:px-0">
               {FILTERS.map(filter => {
                 const isActive = activeFilter === filter;
                 return (
@@ -146,10 +146,10 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                     className={`
                       shrink-0 snap-start relative flex items-center justify-center px-6 py-3 rounded-full text-[13px] font-bold tracking-wide
                       transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]
-                      outline-none border-[1.5px]
+                      outline-none
                       ${isActive 
-                        ? 'text-black bg-white border-white shadow-[0_8px_24px_rgba(255,255,255,0.4)] scale-105 z-10' 
-                        : 'text-white/60 bg-white/[0.03] border-white/5 active:bg-white/10 active:text-white/90 active:border-white/20'
+                        ? 'text-black bg-white shadow-[0_8px_24px_rgba(255,255,255,0.4)] scale-105 z-10 border border-white' 
+                        : 'text-white/90 bg-white/10 backdrop-blur-md border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] active:scale-95 active:bg-white/20'
                       }
                     `}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -158,6 +158,8 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                   </button>
                 )
               })}
+              {/* Spacer to ensure last item can scroll fully into view */}
+              <div className="w-4 shrink-0 sm:hidden"></div>
             </div>
           </div>
         </motion.div>
