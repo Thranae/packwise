@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import Spline from '@splinetool/react-spline';
 import { PageTransition } from '@/components/common/PageTransition';
+import { AnimatedBackground } from '@/components/common/AnimatedBackground';
 import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
@@ -57,9 +58,10 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
   }, [deferredSearchQuery, activeFilter, trips]);
 
   return (
-    <PageTransition className="col-span-12 relative">
-      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide relative z-10">
-        <div className="min-h-screen px-3 md:px-8 lg:px-10 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-8">
+    <PageTransition className="col-span-12 relative flex flex-col w-full h-full">
+      <AnimatedBackground />
+      <div className="flex-1 overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide relative z-10 w-full">
+        <div className="min-h-screen px-4 md:px-8 lg:px-10 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-8 w-full max-w-[1440px] mx-auto">
         
         {/* Header Section */}
         <div className="flex flex-row items-start justify-between gap-4 mb-8 md:mb-10 mt-2">
@@ -67,7 +69,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-sm mb-2"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-[0_4px_16px_rgba(255,255,255,0.1)] mb-2 ios-3d-element"
             >
               My Trips
             </motion.h1>
@@ -130,7 +132,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
           {/* Filter Chips */}
           <div className="relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex items-center gap-3 overflow-x-auto custom-scrollbar pb-4 pt-2 snap-x snap-mandatory">
+            <div className="flex items-center gap-3 overflow-x-auto custom-scrollbar pb-6 pt-2 snap-x snap-mandatory pr-8">
               {FILTERS.map(filter => {
                 const isActive = activeFilter === filter;
                 return (
@@ -138,16 +140,17 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                     key={filter}
                     onClick={() => { setActiveFilter(filter); lightTap(); }}
                     className={`
-                      shrink-0 snap-start relative flex items-center justify-center px-5 py-2.5 rounded-full text-[13px] font-bold tracking-wide
-                      transition-colors duration-200 outline-none
+                      shrink-0 snap-start relative flex items-center justify-center px-6 py-3 rounded-full text-[13px] font-bold tracking-wide
+                      transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]
+                      outline-none border-[1.5px]
                       ${isActive 
-                        ? 'text-black bg-white shadow-md' 
-                        : 'text-white/60 bg-white/5 hover:bg-white/10 hover:text-white'
+                        ? 'text-black bg-white border-white shadow-[0_8px_24px_rgba(255,255,255,0.4)] scale-105 z-10' 
+                        : 'text-white/60 bg-white/[0.03] border-white/5 hover:bg-white/10 hover:text-white/90 hover:border-white/20'
                       }
                     `}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    <span className="capitalize block whitespace-nowrap">{filter}</span>
+                    <span className={`capitalize block whitespace-nowrap ${isActive ? 'drop-shadow-sm' : ''}`}>{filter}</span>
                   </button>
                 )
               })}
