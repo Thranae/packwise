@@ -12,12 +12,15 @@ import { useHaptics } from '@/hooks/useHaptics';
 import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { GeneratingTripCard } from '@/components/trips/GeneratingTripCard';
+import { ScrollProgress } from '@/components/motion-primitives/scroll-progress';
+import { SlidingNumber } from '@/components/motion-primitives/sliding-number';
 
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
 
 
   export default function TripsPage() {
     const { trips, loadingTrips, fetchTrips, isGeneratingTrip, generatingDestination } = useTripContext();
+    const scrollContainerRef = React.useRef(null);
     const location = useLocation();
     const [searchQuery, setSearchQuery] = useState('');
     const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -60,7 +63,8 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
   return (
     <PageTransition className="col-span-12 relative flex flex-col w-full h-full">
       <AnimatedBackground />
-      <div className="flex-1 overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide relative z-10 w-full">
+      <ScrollProgress containerRef={scrollContainerRef} className="absolute top-0 z-[100] h-1 bg-gradient-to-r from-blue-500 to-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]" />
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide relative z-10 w-full">
         <div className="min-h-screen px-4 md:px-8 lg:px-10 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-8 w-full max-w-[1440px] mx-auto">
         
         {/* Header Section */}
@@ -69,9 +73,9 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             <motion.h1 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-[0_4px_16px_rgba(255,255,255,0.1)] mb-2 ios-3d-element"
+              className="flex items-center gap-2 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/40 drop-shadow-[0_4px_16px_rgba(255,255,255,0.1)] mb-2 ios-3d-element"
             >
-              My Trips
+              My Trips <span className="text-white/30 text-3xl sm:text-4xl md:text-5xl font-medium flex items-center"><span className="opacity-50 mr-0.5">(</span><SlidingNumber value={filteredTrips.length} /><span className="opacity-50 ml-0.5">)</span></span>
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 10 }}

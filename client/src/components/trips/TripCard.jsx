@@ -4,6 +4,7 @@ import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, 
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useImageColor } from '@/hooks/useImageColor';
+import { MorphingPopover, MorphingPopoverTrigger, MorphingPopoverContent } from '@/components/motion-primitives/morphing-popover';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useToast } from '@/hooks/useToast';
@@ -187,13 +188,16 @@ export const TripCard = ({ trip }) => {
             )}
 
 
-            {/* Quick Actions Dropdown */}
-            <div className="relative group/menu" onMouseLeave={() => setIsMenuOpen(false)} onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); setIsMenuOpen(!isMenuOpen); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-lg border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-center text-white transition-all duration-300">
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
+            {/* Quick Actions Dropdown (Morphing Popover) */}
+            <div onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+              <MorphingPopover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <MorphingPopoverTrigger>
+                  <div className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-lg border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-center text-white transition-all duration-300 cursor-pointer">
+                    <MoreHorizontal className="w-5 h-5" />
+                  </div>
+                </MorphingPopoverTrigger>
 
-              <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[20px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-300 z-[100] flex flex-col gap-1 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-1'}`}>
+                <MorphingPopoverContent className="w-44 p-3 rounded-[20px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)] z-[100] flex flex-col gap-1">
                 
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); setIsEditing(true); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>
@@ -279,7 +283,8 @@ export const TripCard = ({ trip }) => {
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); deleteTrip(trip._id); addToast('success', 'Trip deleted'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-red-500/20 hover:text-red-400 text-red-400/80 transition-colors text-left">
                   <Trash2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Delete</span>
                 </button>
-              </div>
+                </MorphingPopoverContent>
+              </MorphingPopover>
             </div>
           </div>
 
