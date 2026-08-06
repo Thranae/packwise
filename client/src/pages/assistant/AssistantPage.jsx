@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Bot, Map } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { TripBuilderWizard } from '@/components/assistant/TripBuilderWizard';
@@ -9,7 +9,8 @@ import { usePremium } from '@/context/PremiumContext';
 import AssistantIntro from '@/components/assistant/AssistantIntro';
 
 export default function AssistantPage() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [searchParams] = useSearchParams();
+  const [showIntro, setShowIntro] = useState(searchParams.get('mode') !== 'builder');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [swipedDestination, setSwipedDestination] = useState("");
   const { isPremium } = usePremium();

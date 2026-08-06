@@ -191,7 +191,7 @@ export default function ExplorePage() {
           type: cat.type,
           rating: (4.4 + Math.random() * 0.55).toFixed(1),
           reviews: (Math.floor(Math.random() * 40) + 2) + 'k',
-          img: results[i] || 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800&auto=format&fit=crop',
+          img: results[i] || 'https://picsum.photos/seed/1476514525535-07fb3b4ae5f1/1600/900',
         }));
 
         if (isMounted) setAttractions(cards);

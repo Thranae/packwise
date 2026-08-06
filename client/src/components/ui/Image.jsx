@@ -7,7 +7,7 @@ export const Image = ({
   src,
   alt,
   className,
-  fallbackSrc = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+  fallbackSrc = 'https://picsum.photos/seed/1535713875002-d1d0cf377fde/1600/900',
   ...props
 }) => {
   const [isLoading, setIsLoading] = useState(true);
