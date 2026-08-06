@@ -145,19 +145,19 @@ export const getDestinationImage = catchAsync(async (req, res) => {
 
   let imageUrl = null;
 
-  // Strategy 1: Try Pexels first (most reliable & highest quality)
-  imageUrl = await fetchFromPexels(pexelsKeys, primaryQuery);
+  // Strategy 1: Try Pixabay first (highest rate limit: 100 req/min)
+  imageUrl = await fetchFromPixabay(pixabayKeys, primaryQuery);
 
-  // Strategy 2: Try Unsplash if Pexels fails
+  // Strategy 2: Try Pexels if Pixabay fails
+  if (!imageUrl) {
+    console.log(`[Image] Pixabay failed, trying Pexels for "${primaryQuery}"`);
+    imageUrl = await fetchFromPexels(pexelsKeys, primaryQuery);
+  }
+
+  // Strategy 3: Try Unsplash if Pexels fails
   if (!imageUrl) {
     console.log(`[Image] Pexels failed, trying Unsplash for "${primaryQuery}"`);
     imageUrl = await fetchFromUnsplash(unsplashKeys, primaryQuery);
-  }
-
-  // Strategy 3: Try Pixabay if both above fail
-  if (!imageUrl) {
-    console.log(`[Image] Unsplash failed, trying Pixabay for "${primaryQuery}"`);
-    imageUrl = await fetchFromPixabay(pixabayKeys, primaryQuery);
   }
 
   // Strategy 4: Try Wikipedia (free, very accurate for geographic/landmark queries)

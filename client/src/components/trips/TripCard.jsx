@@ -3,7 +3,6 @@ import { motion, useTransform, useMotionValue, useMotionTemplate } from 'framer-
 import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, Copy, Share2, Trash2, Heart, FileDown, Plane, Check, X, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useImageColor } from '@/hooks/useImageColor';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
@@ -33,8 +32,7 @@ export const TripCard = ({ trip }) => {
   const { selectTrip, deleteTrip, duplicateTrip, toggleFavoriteTrip, addNotification, updateTripLocal } = useTripContext();
   const { addToast } = useToast();
   const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
-  const tiltConfig = isNative ? { maxTilt: 0, stiffness: 0, damping: 0 } : { maxTilt: 6, stiffness: 250, damping: 25 };
-  const { rotateX, rotateY, mouseX, mouseY } = useMouseTilt(cardRef, tiltConfig);
+  
   
   // Pass the raw destination — the server extracts the most specific term (city name)
   const { image: destinationImage, loading: imageLoading } = useDestinationImage(trip.destination, null, trip.heroImageSearchQuery);
@@ -150,27 +148,14 @@ export const TripCard = ({ trip }) => {
     >
       <motion.div
         ref={cardRef}
-        style={isNative ? undefined : { rotateX, rotateY, transformPerspective: 1000 }}
         whileHover={isNative ? undefined : { y: -6, transition: { duration: 0.25 } }}
-        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card transform-gpu will-change-transform bg-transparent"
+        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden bg-black/20 border border-white/5 shadow-xl transition-all duration-300"
       >
-        {/* Simplified Flashlight Effect - Reduced size and complexity */}
-        {!isNative && (
-          <motion.div
-            className="pointer-events-none absolute w-[400px] h-[400px] -left-[200px] -top-[200px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 mix-blend-overlay will-change-transform"
-            style={{
-              x: mouseX,
-              y: mouseY,
-              background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%)'
-            }}
-          />
-        )}
-
-        {/* Simplified Glow Effect */}
+        {/* Glow Effect */}
         {!isNative && (
           <div
-            className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-lg will-change-opacity transform-gpu"
-            style={{ background: `linear-gradient(to bottom right, ${glowColor}30, transparent)`, transform: 'translateZ(0)' }}
+            className="absolute -inset-[1px] rounded-[32px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-lg"
+            style={{ background: `linear-gradient(to bottom right, ${glowColor}30, transparent)` }}
           />
         )}
         
@@ -406,7 +391,7 @@ export const TripCard = ({ trip }) => {
                 </button>
               </div>
             ) : (
-              <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-[16px] ios-liquid-button text-white font-bold text-sm tracking-wide transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(59,130,246,0.25),inset_0_2px_4px_rgba(255,255,255,0.3)] cursor-pointer group/btn">
+              <button onClick={(e) => { e.stopPropagation(); selectTrip(trip._id); triggerTransition(ROUTES.OVERVIEW, { text: 'Generating insights & maps...' }); }} className="w-full flex items-center justify-center py-3.5 rounded-full bg-white text-black font-bold text-[14px] shadow-[0_8px_24px_rgba(255,255,255,0.15)] active:scale-95 transition-all duration-300 cursor-pointer">
                 Open Trip Overview
               </button>
             )}

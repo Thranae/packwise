@@ -130,10 +130,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
           {/* Filter Chips */}
           <div className="relative w-full -mx-4 px-4 sm:mx-0 sm:px-0">
-            <motion.div 
-              layout 
-              className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-6 pt-2 snap-x snap-mandatory"
-            >
+            <div className="flex items-center gap-3 overflow-x-auto custom-scrollbar pb-4 pt-2 snap-x snap-mandatory">
               {FILTERS.map(filter => {
                 const isActive = activeFilter === filter;
                 return (
@@ -141,21 +138,20 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                     key={filter}
                     onClick={() => { setActiveFilter(filter); lightTap(); }}
                     className={`
-                      shrink-0 snap-start relative flex items-center justify-center px-5 py-2.5 md:px-6 md:py-3 rounded-full text-[12px] md:text-[13px] font-bold tracking-wide
-                      transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
-                      outline-none border-[1.5px]
+                      shrink-0 snap-start relative flex items-center justify-center px-5 py-2.5 rounded-full text-[13px] font-bold tracking-wide
+                      transition-colors duration-200 outline-none
                       ${isActive 
-                        ? 'text-black bg-white border-white shadow-[0_4px_16px_rgba(255,255,255,0.4)] scale-105 z-10' 
-                        : 'text-white/60 bg-white/[0.03] border-white/5 hover:bg-white/10 hover:text-white/90 hover:border-white/20'
+                        ? 'text-black bg-white shadow-md' 
+                        : 'text-white/60 bg-white/5 hover:bg-white/10 hover:text-white'
                       }
                     `}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    <span className={`capitalize block whitespace-nowrap ${isActive ? 'drop-shadow-sm' : ''}`}>{filter}</span>
+                    <span className="capitalize block whitespace-nowrap">{filter}</span>
                   </button>
                 )
               })}
-            </motion.div>
+            </div>
           </div>
         </motion.div>
 
