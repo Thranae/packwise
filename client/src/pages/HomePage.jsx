@@ -68,7 +68,7 @@ export default function HomePage() {
   }, []);
   
   const tripDestination = nextTrip?.destination || 'Tokyo, Japan';
-  const tripImage = nextTrip?.heroImage || nextTrip?.image || nextTripImage || 'https://picsum.photos/seed/1540959733332-eab4deabeeaf/1600/900';
+  const tripImage = nextTrip?.heroImage || nextTrip?.image || nextTripImage || 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   const tripCountry = nextTrip?.country || 'Japan';
   
   const daysUntil = nextTrip?.startDate 
@@ -503,7 +503,7 @@ export default function HomePage() {
                 className="absolute inset-0 w-full h-full"
               >
                 <Image 
-                  src="https://picsum.photos/seed/1480796927426-f609979314bd/1600/900" 
+                  src="https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                   alt="Tokyo Cityscape Landscape" 
                   className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 opacity-90 saturate-150"
                 />

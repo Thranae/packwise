@@ -35,7 +35,7 @@ export const AuthLayout = ({ children }) => {
           {/* Premium Landscape Image (e.g., Hallstatt / Swiss Alps - No People) */}
           <div className="absolute inset-0">
             <Image 
-              src="https://picsum.photos/seed/1527668752968-14dc70a27c95/1600/900"
+              src="https://images.unsplash.com/photo-1527668752968-14dc70a27c95?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Premium Travel Landscape"
               className="w-full h-full object-cover"
             />

@@ -10,56 +10,56 @@ const DESTINATIONS = [
     name: "Kyoto",
     country: "Japan",
     tagline: "Temples & Timeless Tradition",
-    image: "https://picsum.photos/seed/1493976040374-85c8e12f0c0e/1600/900", // Asia / Temple
+    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Asia / Temple
     styles: ["Culture", "Relaxed"]
   },
   {
     name: "Amalfi Coast",
     country: "Italy",
     tagline: "Sun-drenched Cliffs & Sea",
-    image: "https://picsum.photos/seed/1523906834658-6e24ef2386f9/1600/900", // Venice / Europe
+    image: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Venice / Europe
     styles: ["Luxury", "Foodie"]
   },
   {
     name: "Swiss Alps",
     country: "Switzerland",
     tagline: "Majestic Peaks & Valleys",
-    image: "https://picsum.photos/seed/1476514525535-07fb3b4ae5f1/1600/900", // Mountains / Lake
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Mountains / Lake
     styles: ["Nature", "Fast-paced"]
   },
   {
     name: "Santorini",
     country: "Greece",
     tagline: "Whitewashed Dreams & Sunsets",
-    image: "https://picsum.photos/seed/1507525428034-b723cf961d3e/1600/900", // Beach
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Beach
     styles: ["Romantic", "Luxury"]
   },
   {
     name: "Bali",
     country: "Indonesia",
     tagline: "Lush Jungles & Tranquil Beaches",
-    image: "https://picsum.photos/seed/1506929562872-bb421503ef21/1600/900", // Tropical / Ocean
+    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Tropical / Ocean
     styles: ["Relaxed", "Nature"]
   },
   {
     name: "Banff",
     country: "Canada",
     tagline: "Turquoise Lakes & Glaciers",
-    image: "https://picsum.photos/seed/1493246507139-91e8fad9978e/1600/900", // Mountain/Lake
+    image: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Mountain/Lake
     styles: ["Adventure", "Nature"]
   },
   {
     name: "Dubai",
     country: "UAE",
     tagline: "Futuristic Skylines & Desert Oasis",
-    image: "https://picsum.photos/seed/1512453979798-5ea266f8880c/1600/900", // Dubai
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Dubai
     styles: ["Luxury", "Fast-paced"]
   },
   {
     name: "Machu Picchu",
     country: "Peru",
     tagline: "Ancient Ruins & Cloud Forests",
-    image: "https://picsum.photos/seed/1526392060635-9d6019884377/1600/900", // Machu Picchu
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Machu Picchu
     styles: ["Adventure", "Culture"]
   }
 ];
