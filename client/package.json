@@ -48,6 +48,7 @@
     "react-map-gl": "^8.1.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.1.1",
+    "react-use-measure": "^2.1.7",
     "remark-gfm": "^4.0.1",
     "sharp": "^0.35.3",
     "tailwind-merge": "^2.6.0",
