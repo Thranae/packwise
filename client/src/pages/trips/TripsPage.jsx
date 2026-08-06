@@ -114,7 +114,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             shadow-[inset_0_2px_8px_rgba(255,255,255,0.05),0_8px_24px_rgba(0,0,0,0.2)]
             ${isSearchFocused 
               ? 'bg-white/[0.06] border-white/20 border-t-white/30 shadow-[0_12px_40px_rgba(99,102,241,0.2),inset_0_1px_2px_rgba(255,255,255,0.3)] -translate-y-1 scale-[1.01]' 
-              : 'hover:bg-white/[0.05] hover:border-white/10 hover:border-t-white/20'}
+              : 'active:bg-white/[0.05] active:border-white/10 active:border-t-white/20'}
           `}>
             <div className="pl-4 md:pl-6 flex items-center pointer-events-none">
               <Search className={`w-5 h-5 transition-colors duration-700 ${isSearchFocused ? 'text-blue-400' : 'text-white/50'}`} />
@@ -145,7 +145,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                       outline-none border-[1.5px]
                       ${isActive 
                         ? 'text-black bg-white border-white shadow-[0_8px_24px_rgba(255,255,255,0.4)] scale-105 z-10' 
-                        : 'text-white/60 bg-white/[0.03] border-white/5 hover:bg-white/10 hover:text-white/90 hover:border-white/20'
+                        : 'text-white/60 bg-white/[0.03] border-white/5 active:bg-white/10 active:text-white/90 active:border-white/20'
                       }
                     `}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -218,7 +218,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
               </p>
               
               <Link to={`${ROUTES.ASSISTANT}?mode=builder`}>
-                <button className="flex items-center gap-2 h-12 px-8 rounded-full ios-liquid-button text-white group bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_8px_16px_rgba(59,130,246,0.3)] hover:scale-105 transition-transform duration-300">
+                <button className="flex items-center gap-2 h-12 px-8 rounded-full ios-liquid-button text-white group bg-gradient-to-r from-blue-600 to-purple-600 shadow-[0_8px_16px_rgba(59,130,246,0.3)] active:scale-95 transition-transform duration-300">
                   <span className="text-[14px] font-bold tracking-wide">Create your first journey</span>
                 </button>
               </Link>
