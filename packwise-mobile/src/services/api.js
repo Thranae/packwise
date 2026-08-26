@@ -1,11 +1,15 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { STORAGE_KEYS } from '../constants/app';
 import { router } from 'expo-router';
 
+export const STORAGE_KEYS = {
+  TOKEN: 'packwise_token',
+  USER: 'packwise_user'
+};
+
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || 'https://packwise.onrender.com/api',
-  timeout: 120000,
+  baseURL: process.env.EXPO_PUBLIC_API_URL || 'https://packwise-livid.vercel.app/api',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -17,29 +21,25 @@ api.interceptors.request.use(
     try {
       const token = await AsyncStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) {
-        // Token is stored as a JSON string — strip surrounding quotes
         const cleanToken = token.replace(/^"|"$/g, '');
         config.headers.Authorization = `Bearer ${cleanToken}`;
       }
-    } catch (e) {
-      console.warn("AsyncStorage error", e);
+    } catch (error) {
+      console.error('Error fetching token from AsyncStorage', error);
     }
     return config;
   },
   (error) => Promise.reject(error),
 );
 
-// Response interceptor — handle 401s globally and normalize errors
+// Response interceptor — handle 401s globally
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      try {
-        await AsyncStorage.removeItem(STORAGE_KEYS.TOKEN);
-        router.replace('/(auth)/login');
-      } catch (e) {
-        // ignore
-      }
+      await AsyncStorage.removeItem(STORAGE_KEYS.TOKEN);
+      // In a real app, redirect to login
+      // router.replace('/login');
     }
 
     return Promise.reject(

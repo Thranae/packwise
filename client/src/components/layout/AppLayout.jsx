@@ -11,7 +11,7 @@ import { BottomNav } from './BottomNav';
 
 export function AppLayout({ children }) {
   const location = useLocation();
-  const hideTopHeader = location.pathname === ROUTES.TRIPS || location.pathname === ROUTES.ASSISTANT || location.pathname === ROUTES.PACKING || location.pathname === ROUTES.JOURNAL || location.pathname === ROUTES.EXPLORE;
+  const hideTopHeader = location.pathname === ROUTES.TRIPS || location.pathname === ROUTES.PACKING || location.pathname === ROUTES.JOURNAL || location.pathname === ROUTES.EXPLORE;
   
   return (
     <>
@@ -25,7 +25,7 @@ export function AppLayout({ children }) {
       <Sidebar />
       <BottomNav />
       <LayoutGroup>
-        <div className="relative flex flex-col min-h-screen px-4 pb-[calc(80px+var(--safe-bottom))] pt-2 lg:pl-[288px] lg:pr-8 lg:pb-8 lg:pt-0 w-full overflow-x-clip">
+        <div className={`relative flex flex-col min-h-screen ${location.pathname === ROUTES.ASSISTANT ? 'px-0' : 'px-4'} pb-[calc(80px+var(--safe-bottom))] pt-2 lg:pl-[288px] lg:pr-8 lg:pb-8 lg:pt-0 w-full overflow-x-clip`}>
           {!hideTopHeader && <TopHeader />}
           <main className={`flex-1 flex flex-col min-h-0 w-full ${hideTopHeader ? 'mt-0' : 'mt-4 lg:mt-6'}`}>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0 relative">

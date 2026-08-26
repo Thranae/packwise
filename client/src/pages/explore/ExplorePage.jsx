@@ -168,22 +168,22 @@ export default function ExplorePage() {
           console.warn("Failed to get AI inspiration queries, using fallbacks");
         }
 
-        const fetchCategoryImage = async (category) => {
+        const fetchCategoryImage = async (category, i) => {
           const optimalQuery = aiQueries[category.type] || `${placeName} ${category.suffix}`;
           try {
-            const res = await api.get(`/images/search?query=${encodeURIComponent(optimalQuery)}`);
+            const res = await api.get(`/images/search?query=${encodeURIComponent(optimalQuery)}&index=${i}`);
             if (res.data?.data?.imageUrl) return res.data.data.imageUrl;
           } catch (_) {}
-          // Secondary fallback: try just the place name
+          // Secondary fallback: try just the place name with index
           try {
-            const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}`);
+            const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}&index=${i}`);
             if (res2.data?.data?.imageUrl) return res2.data.data.imageUrl;
           } catch (_) {}
           return null;
         };
 
         // Fetch all 8 in parallel, each with its own targeted AI query
-        const results = await Promise.all(CARD_CATEGORIES.map(cat => fetchCategoryImage(cat)));
+        const results = await Promise.all(CARD_CATEGORIES.map((cat, i) => fetchCategoryImage(cat, i)));
 
         const cards = CARD_CATEGORIES.map((cat, i) => ({
           id: i,

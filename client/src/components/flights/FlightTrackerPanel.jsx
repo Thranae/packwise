@@ -46,6 +46,18 @@ export default function FlightTrackerPanel() {
     targetPrice: '',
     phone: ''
   });
+  
+  const { currentTrip } = useTripContext();
+
+  useEffect(() => {
+    if (currentTrip) {
+      setFormData(prev => ({
+        ...prev,
+        destination: currentTrip.destination ? currentTrip.destination.split(',')[0].substring(0, 3).toUpperCase() : '',
+        departureDate: currentTrip.startDate ? new Date(currentTrip.startDate).toISOString().split('T')[0] : ''
+      }));
+    }
+  }, [currentTrip]);
 
   useEffect(() => {
     fetchAlerts();

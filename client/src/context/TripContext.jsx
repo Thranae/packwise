@@ -251,8 +251,9 @@ export const TripProvider = ({ children }) => {
 
       // 3. Fetch from server
       const res = await api.get('/trips');
-      if (res.status === 200 && res.data) {
-        await db.trips.bulkPut(res.data);
+      const serverTrips = res.data?.data || res.data;
+      if (res.status === 200 && Array.isArray(serverTrips)) {
+        await db.trips.bulkPut(serverTrips);
       }
     } catch (err) {
       console.warn("Could not sync trips from web backend. Working offline.", err);

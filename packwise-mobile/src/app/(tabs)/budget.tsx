@@ -11,6 +11,7 @@ import { BudgetGrid } from '../../components/budget/BudgetGrid';
 import { BudgetTimeline } from '../../components/budget/BudgetTimeline';
 import { useTripContext } from '../../context/TripContext';
 
+
 export default function BudgetScreen() {
   const { currentTrip } = useTripContext();
 
@@ -100,7 +101,8 @@ export default function BudgetScreen() {
   }, [handleCalculate]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#030712' }}>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
       <ScrollView 
         contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
@@ -170,5 +172,6 @@ export default function BudgetScreen() {
 
       </ScrollView>
     </SafeAreaView>
+    </View>
   );
 }

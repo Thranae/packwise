@@ -23,8 +23,9 @@ if (Capacitor.isNativePlatform()) {
   }
 }
 
-// Force unregister any old PWA service workers that might be caching the native app
-if ('serviceWorker' in navigator) {
+// Only unregister service workers on native Capacitor builds where PWA caching
+// would conflict with the native shell. In a browser PWA, keep them for offline support.
+if (Capacitor.isNativePlatform() && 'serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
     for (let registration of registrations) {
       registration.unregister();

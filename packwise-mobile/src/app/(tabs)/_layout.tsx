@@ -1,29 +1,46 @@
 import { Tabs } from "expo-router";
-import { Compass, Bot, Calculator } from "lucide-react-native";
+import { Compass, Bot, Calculator, Home, Briefcase, Wallet, User } from "lucide-react-native";
+import { View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import BottomTabBar from "../../components/navigation/BottomTabBar";
+import TopHeader from "../../components/navigation/TopHeader";
+import GradientBackground from "../../components/landing/GradientBackground";
 
 export default function TabsLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#030712', // Match dark theme
-          borderTopWidth: 1,
-          borderTopColor: '#1f2937', // border-gray-800
-          height: 65,
-          paddingBottom: 10,
-          paddingTop: 10,
-        },
-        tabBarActiveTintColor: '#3b82f6', // blue-500
-        tabBarInactiveTintColor: '#9ca3af', // gray-400
-      }}
-    >
+    <View style={{ flex: 1 }}>
+      <GradientBackground />
+      <Tabs
+        tabBar={props => <BottomTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+          sceneStyle: { backgroundColor: 'transparent' }
+        }}
+      >
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Home size={size} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="index"
         options={{
           title: "Trips",
           tabBarIcon: ({ color, size }) => (
-            <Compass size={size} color={color} />
+            <Briefcase size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ai"
+        options={{
+          title: "AI",
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ width: size, height: size }} /> // Handled by custom orb in BottomTabBar
           ),
         }}
       />
@@ -32,16 +49,16 @@ export default function TabsLayout() {
         options={{
           title: "Budget",
           tabBarIcon: ({ color, size }) => (
-            <Calculator size={size} color={color} />
+            <Wallet size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="genie"
+        name="profile"
         options={{
-          title: "Genie",
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Bot size={size} color={color} />
+            <User size={size} color={color} />
           ),
         }}
       />
@@ -52,5 +69,23 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
+
+    {/* Global Cloudy Header (dissolves scrolling content but sits behind TopHeader) */}
+    <LinearGradient
+      colors={['rgba(200, 224, 255, 1)', 'rgba(200, 224, 255, 0.8)', 'transparent']}
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 140, zIndex: 10 }}
+      pointerEvents="none"
+    />
+
+    {/* Global Cloudy Footer (dissolves scrolling content above the bottom tab bar) */}
+    <LinearGradient
+      colors={['transparent', 'rgba(200, 224, 255, 0.8)', 'rgba(200, 224, 255, 1)']}
+      style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, zIndex: 10 }}
+      pointerEvents="none"
+    />
+    
+    {/* Global Top Header */}
+    <TopHeader />
+  </View>
   );
 }

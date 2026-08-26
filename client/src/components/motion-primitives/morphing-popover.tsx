@@ -17,7 +17,7 @@ import {
   Variants,
 } from 'framer-motion';
 import useClickOutside from './useClickOutside';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/cn';
 
 const TRANSITION = {
   type: 'spring',
@@ -124,9 +124,8 @@ function MorphingPopoverTrigger({
   }
 
   if (asChild && isValidElement(children)) {
-    const MotionComponent = motion.create(
-      children.type as React.ForwardRefExoticComponent<any>
-    );
+    // Use generic motion component wrapper to avoid motion.create null reference error in Capacitor/React 19
+    const MotionComponent = motion.div;
     const childProps = children.props as Record<string, unknown>;
 
     return (

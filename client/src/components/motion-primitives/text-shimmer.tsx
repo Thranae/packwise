@@ -18,9 +18,8 @@ function TextShimmerComponent({
   duration = 2,
   spread = 2,
 }: TextShimmerProps) {
-  const MotionComponent = motion.create(
-    Component as keyof JSX.IntrinsicElements
-  );
+  // Safely get the motion component without using motion.create which crashes in this environment
+  const MotionComponent = motion[Component as keyof typeof motion] || motion.p;
 
   const dynamicSpread = useMemo(() => {
     return children.length * spread;

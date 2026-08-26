@@ -22,20 +22,23 @@ const extractPrimaryTerm = (query) => {
 /**
  * Fetch image from Pexels - most reliable provider
  */
-const fetchFromPexels = async (keys, query) => {
+const fetchFromPexels = async (keys, query, idx = 0) => {
   if (!keys.length) return null;
   const key = keys[Math.floor(Math.random() * keys.length)];
   try {
     const response = await axios.get('https://api.pexels.com/v1/search', {
-      params: { query, orientation: 'landscape', per_page: 8, size: 'large' },
+      params: { query, orientation: 'landscape', per_page: Math.max(10, idx + 1), size: 'large' },
       headers: { Authorization: key },
       timeout: 8000
     });
+    trackRateLimit('Pexels', response);
     if (response.data.photos && response.data.photos.length > 0) {
-      const photo = response.data.photos[0];
+      const i = idx < response.data.photos.length ? idx : 0;
+      const photo = response.data.photos[i];
       return photo.src.large2x || photo.src.large;
     }
   } catch (err) {
+    if (err.response) trackRateLimit('Pexels', err.response);
     console.error(`[Pexels] Error for "${query}":`, err.message);
   }
   return null;
@@ -44,19 +47,22 @@ const fetchFromPexels = async (keys, query) => {
 /**
  * Fetch image from Unsplash
  */
-const fetchFromUnsplash = async (keys, query) => {
+const fetchFromUnsplash = async (keys, query, idx = 0) => {
   if (!keys.length) return null;
   const key = keys[Math.floor(Math.random() * keys.length)];
   try {
     const response = await axios.get('https://api.unsplash.com/search/photos', {
-      params: { query, orientation: 'landscape', per_page: 5, order_by: 'relevant' },
+      params: { query, orientation: 'landscape', per_page: Math.max(10, idx + 1), order_by: 'relevant' },
       headers: { Authorization: `Client-ID ${key}` },
       timeout: 8000
     });
+    trackRateLimit('Unsplash', response);
     if (response.data.results && response.data.results.length > 0) {
-      return response.data.results[0].urls.full || response.data.results[0].urls.regular;
+      const i = idx < response.data.results.length ? idx : 0;
+      return response.data.results[i].urls.full || response.data.results[i].urls.regular;
     }
   } catch (err) {
+    if (err.response) trackRateLimit('Unsplash', err.response);
     console.error(`[Unsplash] Error for "${query}":`, err.message);
   }
   return null;
@@ -65,18 +71,21 @@ const fetchFromUnsplash = async (keys, query) => {
 /**
  * Fetch image from Pixabay
  */
-const fetchFromPixabay = async (keys, query) => {
+const fetchFromPixabay = async (keys, query, idx = 0) => {
   if (!keys.length) return null;
   const key = keys[Math.floor(Math.random() * keys.length)];
   try {
     const response = await axios.get('https://pixabay.com/api/', {
-      params: { key, q: query, image_type: 'photo', orientation: 'horizontal', per_page: 8, safesearch: true },
+      params: { key, q: query, image_type: 'photo', orientation: 'horizontal', per_page: Math.max(10, idx + 1), safesearch: true },
       timeout: 8000
     });
+    trackRateLimit('Pixabay', response);
     if (response.data.hits && response.data.hits.length > 0) {
-      return response.data.hits[0].largeImageURL;
+      const i = idx < response.data.hits.length ? idx : 0;
+      return response.data.hits[i].largeImageURL;
     }
   } catch (err) {
+    if (err.response) trackRateLimit('Pixabay', err.response);
     console.error(`[Pixabay] Error for "${query}":`, err.message);
   }
   return null;
@@ -121,14 +130,73 @@ const fetchFromWikipedia = async (query) => {
   return null;
 };
 
+// ── Server-side LRU image cache (max 500 entries, 1 hour TTL) ──────────────
+const IMAGE_CACHE_MAX = 500;
+const IMAGE_CACHE_TTL = 60 * 60 * 1000;
+const imageCache = new Map();
+
+const getCachedImage = (key) => {
+  const entry = imageCache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > IMAGE_CACHE_TTL) {
+    imageCache.delete(key);
+    return null;
+  }
+  return entry.url;
+};
+
+const setCachedImage = (key, url) => {
+  if (imageCache.size >= IMAGE_CACHE_MAX) {
+    const oldest = imageCache.keys().next().value;
+    imageCache.delete(oldest);
+  }
+  imageCache.set(key, { url, ts: Date.now() });
+};
+
+// ── Rate limit tracker per provider ────────────────────────────────────────
+const rateLimits = {
+  Pixabay:  { remaining: 100, resetAt: 0 },
+  Pexels:   { remaining: 200, resetAt: 0 },
+  Unsplash: { remaining: 50,  resetAt: 0 },
+};
+
+const trackRateLimit = (name, response) => {
+  if (!response?.headers) return;
+  const remainingStr = response.headers['x-ratelimit-remaining'] || response.headers['x-rate-limit-remaining'] || response.headers['x-ratelimit-remaining-requests'];
+  const remaining = parseInt(remainingStr, 10);
+  if (!isNaN(remaining)) {
+    rateLimits[name].remaining = remaining;
+    rateLimits[name].resetAt = Date.now() + 60 * 60 * 1000; // 1 hour reset estimation
+  }
+};
+
+const getHealthiestOrder = (providers) => {
+  const now = Date.now();
+  return providers
+    .filter(p => p.keys.length > 0)
+    .map(p => {
+      const limit = rateLimits[p.name];
+      const remaining = now > limit.resetAt ? 100 : limit.remaining;
+      return { ...p, remaining };
+    })
+    // Unsplash > Pexels > Pixabay (as long as they have > 5 remaining)
+    .sort((a, b) => {
+       if (a.remaining > 5 && b.remaining > 5) {
+         const order = { 'Unsplash': 3, 'Pexels': 2, 'Pixabay': 1 };
+         return order[b.name] - order[a.name];
+       }
+       return b.remaining - a.remaining;
+    });
+};
+
 export const getDestinationImage = catchAsync(async (req, res) => {
-  const { query: rawQuery, type, exact } = req.query;
+  const { query: rawQuery, type, exact, index = 0 } = req.query;
+  const idx = parseInt(index, 10) || 0;
+  
   if (!rawQuery) {
     return ApiResponse.sendError(res, 400, 'Query parameter is required');
   }
 
-  // Extract the most specific term to avoid country-level mismatches
-  // If exact=true is passed (usually from AI), we trust the query and don't strip it
   let primaryQuery = rawQuery;
   if (exact !== 'true') {
     primaryQuery = extractPrimaryTerm(rawQuery);
@@ -137,7 +205,14 @@ export const getDestinationImage = catchAsync(async (req, res) => {
     }
   }
   
-  console.log(`[Image] Fetching for: "${primaryQuery}" (raw: "${rawQuery}", type: "${type}", exact: "${exact}")`);
+  console.log(`[Image] Fetching for: "${primaryQuery}" (raw: "${rawQuery}", type: "${type}", exact: "${exact}", idx: ${idx})`);
+
+  const cacheKey = `${primaryQuery.toLowerCase().trim()}_idx_${idx}`;
+  const cached = getCachedImage(cacheKey);
+  if (cached) {
+    console.log(`[Image] 🗄️ Cache hit for "${primaryQuery}" idx ${idx}`);
+    return ApiResponse.send(res, 200, 'Image fetched successfully', { imageUrl: cached });
+  }
 
   const pexelsKeys = process.env.PEXELS_API_KEY ? process.env.PEXELS_API_KEY.split(',').map(k => k.trim()) : [];
   const unsplashKeys = process.env.UNSPLASH_API_KEY ? process.env.UNSPLASH_API_KEY.split(',').map(k => k.trim()) : [];
@@ -145,39 +220,38 @@ export const getDestinationImage = catchAsync(async (req, res) => {
 
   let imageUrl = null;
 
-  // Strategy 1: Try Pixabay first (highest rate limit: 100 req/min)
-  imageUrl = await fetchFromPixabay(pixabayKeys, primaryQuery);
+  const allProviders = [
+    { name: 'Unsplash', fetcher: fetchFromUnsplash, keys: unsplashKeys },
+    { name: 'Pexels', fetcher: fetchFromPexels, keys: pexelsKeys },
+    { name: 'Pixabay', fetcher: fetchFromPixabay, keys: pixabayKeys }
+  ];
+  
+  const sortedProviders = getHealthiestOrder(allProviders);
 
-  // Strategy 2: Try Pexels if Pixabay fails
-  if (!imageUrl) {
-    console.log(`[Image] Pixabay failed, trying Pexels for "${primaryQuery}"`);
-    imageUrl = await fetchFromPexels(pexelsKeys, primaryQuery);
+  for (const provider of sortedProviders) {
+    if (!imageUrl) {
+      imageUrl = await provider.fetcher(provider.keys, primaryQuery, idx);
+      if (imageUrl) {
+        console.log(`[Image] ${provider.name} succeeded for "${primaryQuery}" idx ${idx} (remaining: ~${provider.remaining})`);
+      } else {
+        console.log(`[Image] ${provider.name} failed for "${primaryQuery}" idx ${idx}`);
+      }
+    }
   }
 
-  // Strategy 3: Try Unsplash if Pexels fails
-  if (!imageUrl) {
-    console.log(`[Image] Pexels failed, trying Unsplash for "${primaryQuery}"`);
-    imageUrl = await fetchFromUnsplash(unsplashKeys, primaryQuery);
-  }
-
-  // Strategy 4: Try Wikipedia (free, very accurate for geographic/landmark queries)
-  if (!imageUrl) {
-    console.log(`[Image] All paid providers failed, trying Wikipedia for "${primaryQuery}"`);
+  if (!imageUrl && idx === 0) {
+    console.log(`[Image] All primary providers failed, trying Wikipedia for "${primaryQuery}"`);
     imageUrl = await fetchFromWikipedia(primaryQuery);
   }
 
-  // Strategy 5: Try Pollinations AI (free, no API key required, guarantees an image)
-  if (!imageUrl) {
-    console.log(`[Image] All other providers failed, using Pollinations AI for "${primaryQuery}"`);
-    imageUrl = `https://image.pollinations.ai/prompt/beautiful%20scenic%20travel%20photo%20of%20${encodeURIComponent(primaryQuery)}?width=1200&height=800&nologo=true`;
-  }
-
   if (imageUrl) {
+    setCachedImage(cacheKey, imageUrl);
     console.log(`[Image] ✅ Found image for "${primaryQuery}"`);
     ApiResponse.send(res, 200, 'Image fetched successfully', { imageUrl });
   } else {
-    console.warn(`[Image] ❌ No image found for "${primaryQuery}" - returning 404`);
-    ApiResponse.sendError(res, 404, 'No images found for this destination');
+    console.warn(`[Image] ❌ No image found for "${primaryQuery}" - returning generic fallback`);
+    const fallbackUrl = 'https://images.unsplash.com/photo-1488085061387-422e29b40080?q=80&w=1600&auto=format&fit=crop';
+    ApiResponse.send(res, 200, 'Fallback image', { imageUrl: fallbackUrl, isFallback: true });
   }
 });
 

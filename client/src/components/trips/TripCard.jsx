@@ -42,6 +42,15 @@ export const TripCard = ({ trip }) => {
   
   const [tripScore, setTripScore] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  useEffect(() => {
+    if (displayImage) {
+      const img = new Image();
+      img.src = displayImage;
+      img.onload = () => setImgLoaded(true);
+    }
+  }, [displayImage]);
   
   // Edit Mode State
   const [isEditing, setIsEditing] = useState(false);
@@ -162,14 +171,11 @@ export const TripCard = ({ trip }) => {
         <div className="relative h-[220px] w-full shrink-0">
           {/* Image & Gradient Wrapper with Overflow Hidden */}
           <div className="absolute inset-0 overflow-hidden bg-[#060b14] z-0 transform-gpu">
-            {imageLoading ? (
-              <div className="absolute inset-0 bg-white/5 animate-pulse" />
-            ) : (
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-[1.5s] ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:scale-110"
-                style={{ backgroundImage: `url(${displayImage})` }}
-              />
-            )}
+            <div className={`absolute inset-0 bg-white/5 animate-pulse transition-opacity duration-700 ${imgLoaded ? 'opacity-0' : 'opacity-100'}`} />
+            <div 
+              className={`absolute inset-0 bg-cover bg-center transition-all duration-[1.5s] ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              style={{ backgroundImage: `url(${displayImage})` }}
+            />
           </div>
           
           {/* Top Badges (Now outside overflow-hidden) */}
@@ -187,17 +193,13 @@ export const TripCard = ({ trip }) => {
               </div>
             )}
 
+            {/* Quick Actions Dropdown */}
+            <div className="relative group/menu" onMouseLeave={() => setIsMenuOpen(false)} onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+              <button onClick={(e) => { e.stopPropagation(); e.preventDefault(); setIsMenuOpen(!isMenuOpen); }} className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-lg border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-center text-white transition-all duration-300">
+                <MoreHorizontal className="w-5 h-5" />
+              </button>
 
-            {/* Quick Actions Dropdown (Morphing Popover) */}
-            <div onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
-              <MorphingPopover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-                <MorphingPopoverTrigger>
-                  <div className="w-10 h-10 rounded-[14px] bg-black/30 hover:bg-white/20 backdrop-blur-lg border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-center text-white transition-all duration-300 cursor-pointer">
-                    <MoreHorizontal className="w-5 h-5" />
-                  </div>
-                </MorphingPopoverTrigger>
-
-                <MorphingPopoverContent className="w-44 p-3 rounded-[20px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)] z-[100] flex flex-col gap-1">
+              <div className={`absolute top-full right-0 mt-3 w-44 p-3 rounded-[20px] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_2px_4px_rgba(255,255,255,0.3)] transition-all duration-300 z-[100] flex flex-col gap-1 origin-top-right ${isMenuOpen ? 'opacity-100 visible scale-100 translate-y-0' : 'opacity-0 invisible scale-95 translate-y-1'}`}>
                 
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); setIsEditing(true); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Edit2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Edit</span>
@@ -216,7 +218,6 @@ export const TripCard = ({ trip }) => {
                   setIsMenuOpen(false); 
                   const isNative = typeof window !== 'undefined' && window.Capacitor?.isNativePlatform();
                   const baseUrl = isNative ? 'https://packwise-neon.vercel.app' : window.location.origin;
-                  // Point to the Vercel Serverless Function to inject dynamic Open Graph tags for beautiful link previews
                   const shareUrl = `${baseUrl}/api/share?id=${trip._id}`;
 
                   if (isNative) {
@@ -231,7 +232,6 @@ export const TripCard = ({ trip }) => {
                       console.warn('Native share dismissed', err);
                     }
                   } else {
-                    // PWA / Web Browser Flow
                     let sharedViaApi = false;
                     try {
                       if (navigator.share) {
@@ -245,46 +245,45 @@ export const TripCard = ({ trip }) => {
                         throw new Error('Web Share API not supported');
                       }
                     } catch (err) {
-                      // Fallback to clipboard if share fails, is dismissed, or isn't supported
                       if (!sharedViaApi) {
                         try {
                           if (navigator.clipboard && window.isSecureContext) {
                             await navigator.clipboard.writeText(shareUrl);
                             addToast('success', 'Link copied to clipboard!');
                           } else {
-                            // Legacy fallback
                             const textArea = document.createElement("textarea");
                             textArea.value = shareUrl;
+                            textArea.style.position = "fixed"; 
                             document.body.appendChild(textArea);
+                            textArea.focus();
                             textArea.select();
-                            document.execCommand("copy");
-                            textArea.remove();
+                            document.execCommand('copy');
+                            document.body.removeChild(textArea);
                             addToast('success', 'Link copied to clipboard!');
                           }
-                        } catch (clipErr) {
-                          addToast('error', 'Could not copy link to clipboard.');
+                        } catch (clipboardErr) {
+                          addToast('error', 'Failed to copy link. Try again.');
                         }
                       }
                     }
                   }
                 }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
-                  <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share</span>
+                  <Share2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Share Trip</span>
                 </button>
-                <button onClick={(e) => { setIsMenuOpen(false); handleDownloadPDF(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); handleDownloadPDF(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <FileDown className="w-4 h-4 shrink-0 text-blue-400" /> <span className="text-xs font-semibold text-blue-400">Export PDF</span>
                 </button>
-                <button onClick={(e) => { setIsMenuOpen(false); handleTrackFlights(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); handleTrackFlights(e); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Plane className="w-4 h-4 shrink-0 text-amber-400" /> <span className="text-xs font-semibold text-amber-400">Track Flights</span>
                 </button>
-                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); toggleFavoriteTrip(trip._id); addToast('success', trip.isFavorite ? 'Removed from favorites' : 'Added to favorites'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
+                <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); toggleFavoriteTrip(trip._id); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-white/10 text-white/80 hover:text-white transition-colors text-left">
                   <Heart className={`w-4 h-4 shrink-0 ${trip.isFavorite ? 'fill-red-500 text-red-500' : ''}`} /> <span className="text-xs font-semibold">{trip.isFavorite ? 'Unfavorite' : 'Favourite'}</span>
                 </button>
                 <div className="h-[1px] w-full bg-white/10 my-1" />
                 <button onClick={(e) => { e.stopPropagation(); setIsMenuOpen(false); deleteTrip(trip._id); addToast('success', 'Trip deleted'); }} className="flex items-center gap-2.5 w-full p-2.5 rounded-[12px] hover:bg-red-500/20 hover:text-red-400 text-red-400/80 transition-colors text-left">
                   <Trash2 className="w-4 h-4 shrink-0" /> <span className="text-xs font-semibold">Delete</span>
                 </button>
-                </MorphingPopoverContent>
-              </MorphingPopover>
+              </div>
             </div>
           </div>
 

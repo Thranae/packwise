@@ -5,7 +5,13 @@ import { Map, PlaneTakeoff, Bot } from 'lucide-react';
 
 const TransitionContext = createContext();
 
-export const useTransitionNavigate = () => useContext(TransitionContext);
+export const useTransitionNavigate = () => {
+  const context = useContext(TransitionContext);
+  if (!context) {
+    throw new Error('useTransitionNavigate must be used within a TransitionProvider');
+  }
+  return context;
+};
 
 export const TransitionProvider = ({ children }) => {
   const navigate = useNavigate();

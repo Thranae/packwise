@@ -1,101 +1,52 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from './AuthContext';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const TripContext = createContext();
 
-const MOCK_TRIPS = [
-  {
-    _id: "mock-1",
-    destination: 'Tokyo & Kyoto Explorer',
-    country: 'Japan',
-    startDate: '2026-10-12T00:00:00Z',
-    endDate: '2026-10-26T00:00:00Z',
-    duration: '14 Days',
-    budget: 4500,
-    currency: 'JPY',
-    timezone: 'Asia/Tokyo',
-    travelers: 2,
-    status: 'upcoming',
-  },
-  {
-    _id: "mock-2",
-    destination: 'Swiss Alps Retreat',
-    country: 'Switzerland',
-    startDate: '2026-12-05T00:00:00Z',
-    endDate: '2026-12-15T00:00:00Z',
-    duration: '10 Days',
-    budget: 3200,
-    currency: 'CHF',
-    timezone: 'Europe/Zurich',
-    travelers: 4,
-    status: 'planning',
-  },
-  {
-    _id: "mock-3",
-    destination: 'Amalfi Coast Roadtrip',
-    country: 'Italy',
-    startDate: '2027-05-10T00:00:00Z',
-    endDate: '2027-05-24T00:00:00Z',
-    duration: '14 Days',
-    budget: 5100,
-    currency: 'EUR',
-    timezone: 'Europe/Rome',
-    travelers: 2,
-    status: 'draft',
-  }
-];
+export const useTrips = () => useContext(TripContext);
 
 export const TripProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
   
-  // Local data fetching via state for Native
   const [trips, setTrips] = useState([]);
-  
-  const [loadingTrips, setLoadingTrips] = useState(false);
-  const [loadingStep, setLoadingStep] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [manualTheme, setManualTheme] = useState(null);
-
-  // Initialize DB with mocks if completely empty and not loading
-  useEffect(() => {
-    if (trips.length === 0 && !isAuthenticated && !loadingTrips) {
-      setTrips(MOCK_TRIPS);
-    }
-  }, [trips.length, isAuthenticated, loadingTrips]);
-
+  const [loadingTrips, setLoadingTrips] = useState(true);
   const [currentTripState, setCurrentTripState] = useState(null);
-  const [packedItems, setPackedItems] = useState(new Set());
-  const [notifications, setNotifications] = useState([]);
 
-  // Load from AsyncStorage on mount
+  // Initialize trips when auth status changes
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const savedCurrentTripId = await AsyncStorage.getItem('packwise_current_trip_id');
-        if (savedCurrentTripId) {
-          const found = trips.find(t => t._id === savedCurrentTripId);
-          if (found) setCurrentTripState(found);
-        }
+    if (isAuthenticated) {
+      fetchTrips();
+    } else {
+      setTrips([]);
+      setCurrentTripState(null);
+      setLoadingTrips(false);
+    }
+  }, [isAuthenticated]);
 
-        const savedPackedItems = await AsyncStorage.getItem('packwise_packed_items');
-        if (savedPackedItems) setPackedItems(new Set(JSON.parse(savedPackedItems)));
-
-        const savedNotifications = await AsyncStorage.getItem('packwise_notifications');
-        if (savedNotifications) {
-          const parsed = JSON.parse(savedNotifications);
-          setNotifications(parsed.filter(n => n.id !== '1' && n.id !== '2' && n.id !== 'welcome-1'));
+  const fetchTrips = useCallback(async () => {
+    try {
+      setLoadingTrips(true);
+      const response = await api.get('/trips');
+      if (response.data?.success) {
+        setTrips(response.data.data);
+        
+        // Restore last selected trip from AsyncStorage
+        const savedId = await AsyncStorage.getItem('packwise_current_trip_id');
+        const found = response.data.data.find(t => t._id === savedId);
+        if (found) {
+          setCurrentTripState(found);
+        } else if (response.data.data.length > 0) {
+          setCurrentTripState(response.data.data[0]);
         }
-      } catch (e) {
-        console.error("Failed to load TripContext from AsyncStorage", e);
       }
-    };
-    if (trips.length > 0) loadData();
-  }, [trips.length]); // Only run when trips are loaded initially
-  
-  // Keep currentTrip in sync with Dexie changes
-  const currentTrip = trips.find(t => t._id === currentTripState?._id) || currentTripState || trips[0];
+    } catch (error) {
+      console.error('Failed to fetch trips:', error);
+    } finally {
+      setLoadingTrips(false);
+    }
+  }, []);
 
   const setCurrentTrip = useCallback(async (trip) => {
     setCurrentTripState(trip);
@@ -106,306 +57,17 @@ export const TripProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    AsyncStorage.setItem('packwise_packed_items', JSON.stringify(Array.from(packedItems)));
-  }, [packedItems]);
-
-  useEffect(() => {
-    AsyncStorage.setItem('packwise_notifications', JSON.stringify(notifications));
-  }, [notifications]);
-
-  const addNotification = useCallback((title, message, type = 'info') => {
-    const newNotif = {
-      id: Date.now().toString(),
-      title,
-      message,
-      type,
-      timestamp: Date.now(),
-      read: false
-    };
-    setNotifications(prev => [newNotif, ...prev]);
-  }, []);
-
-  const markNotificationsAsRead = useCallback(() => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  }, []);
-
-  // Smart Contextual Notifications based on Trips
-  useEffect(() => {
-    if (!trips || trips.length === 0) return;
-    
-    setNotifications(prev => {
-      let updated = [...prev];
-      let changed = false;
-      
-      trips.forEach(trip => {
-        if (!trip.startDate || !trip.destination) return;
-        
-        const tripStart = new Date(trip.startDate).getTime();
-        const tripEnd = new Date(trip.endDate || trip.startDate).getTime();
-        const now = Date.now();
-        const daysUntil = (tripStart - now) / (1000 * 60 * 60 * 24);
-        const daysSince = (now - tripEnd) / (1000 * 60 * 60 * 24);
-        
-        // Upcoming Trip Reminder (1-7 days away)
-        if (daysUntil > 0 && daysUntil <= 7) {
-          const notifId = `reminder-${trip._id}`;
-          if (!updated.some(n => n.id === notifId)) {
-            updated.unshift({
-              id: notifId,
-              title: 'Upcoming Trip!',
-              message: `Your trip to ${trip.destination} is in ${Math.ceil(daysUntil)} days. Make sure you've packed everything!`,
-              type: 'info',
-              timestamp: Date.now(),
-              read: false
-            });
-            changed = true;
-          }
-        }
-        
-        // Trip Completed Feedback
-        if (daysSince > 0 && daysSince <= 3) {
-          const notifId = `feedback-${trip._id}`;
-          if (!updated.some(n => n.id === notifId)) {
-            updated.unshift({
-              id: notifId,
-              title: 'Welcome Back!',
-              message: `Hope you enjoyed your trip to ${trip.destination}. Time to start planning the next one!`,
-              type: 'welcome',
-              timestamp: Date.now(),
-              read: false
-            });
-            changed = true;
-          }
-        }
-      });
-      
-      // Keep only top 20 notifications
-      if (updated.length > 20) {
-        updated = updated.slice(0, 20);
-        changed = true;
-      }
-      
-      return changed ? updated : prev;
-    });
-  }, [trips]);
-
-  const togglePackedItem = useCallback((itemId) => {
-    setPackedItems(prev => {
-      const newSet = new Set(prev);
-      const isPacked = !newSet.has(itemId);
-      if (isPacked) newSet.add(itemId);
-      else newSet.delete(itemId);
-      return newSet;
-    });
-  }, []);
-
-  // Fetch trips from backend to sync with local DB
-  const fetchTrips = useCallback(async () => {
-    if (!isAuthenticated) return;
-    try {
-      setLoadingTrips(true);
-      const res = await api.get('/trips');
-      if (res.status === 200 && res.data) {
-        // Sync API data down to local state
-        setTrips(res.data);
-      }
-    } catch (err) {
-      console.warn("Could not sync trips from web backend. Working offline.", err);
-    } finally {
-      setLoadingTrips(false);
-    }
-  }, [isAuthenticated]);
-
-  // Sync on mount
-  useEffect(() => {
-    fetchTrips();
-  }, [fetchTrips]);
-
-
-
-  const selectTrip = (tripId) => {
-    const trip = trips.find(t => t._id === tripId);
-    if (trip) {
-      setCurrentTrip(trip);
-      setManualTheme(null);
-    }
-  };
-
-  const generateTrip = async (prompt, meta = {}) => {
-    setIsGenerating(true);
-    setLoadingStep("INITIALIZING...");
-    
-    try {
-      setTimeout(() => setLoadingStep("DISCOVERING..."), 1500);
-      setTimeout(() => setLoadingStep("FINALIZING..."), 3000);
-      
-      const res = await api.post('/ai/trip', { prompt });
-      const aiData = res.data;
-      
-      setLoadingStep("Done.");
-      setTimeout(async () => {
-        const fallbackDest = prompt.split('.')[0]?.replace('Destination: ', '').trim() || prompt;
-        
-        // Use user's explicit values or fallback to AI data
-        const tripStartDate = meta.startDate ? new Date(meta.startDate) : (aiData.startDate ? new Date(aiData.startDate) : new Date());
-        const tripDuration = parseInt(meta.duration || aiData.duration || 7);
-        const tripEndDate = new Date(tripStartDate.getTime() + tripDuration * 24 * 60 * 60 * 1000);
-
-        const newTripData = {
-          ...aiData,
-          destination: aiData.destination || fallbackDest,
-          country: aiData.country || "Unknown",
-          startDate: tripStartDate.toISOString(),
-          endDate: tripEndDate.toISOString(),
-          duration: `${tripDuration} Days`,
-          budget: aiData.budget || 3000,
-          currency: aiData.currency || "USD",
-          timezone: aiData.timezone || "UTC",
-          gender: aiData.gender || "Not specified",
-          travelers: aiData.travelers || 1,
-          status: "planning"
-        };
-        
-        // Optimistic Local Write
-        const localId = "local-" + Date.now();
-        newTripData._id = localId;
-        setTrips(prev => [newTripData, ...prev.filter(t => t._id !== newTripData._id)]);
-        setCurrentTrip(newTripData);
-        
-        setManualTheme(null);
-
-        // Await Sync before removing loading state, to guarantee the trip is real for sharing
-        try {
-          const apiRes = await api.post('/trips', newTripData);
-          if ((apiRes.status === 200 || apiRes.status === 201) && apiRes.data.data) {
-            const realTrip = apiRes.data.data;
-            setTrips(prev => [realTrip, ...prev.filter(t => t._id !== localId && t._id !== realTrip._id)]);
-            setCurrentTrip(realTrip);
-          }
-        } catch (e) {
-          console.error("Sync failed for new trip:", e);
-          // Trip remains in local DB with local ID
-        }
-
-        setIsGenerating(false);
-        setLoadingStep(null);
-      }, 500);
-    } catch (error) {
-      console.error("Failed to generate trip:", error);
-      setIsGenerating(false);
-      setLoadingStep(null);
-    }
-  };
-
-  const modifyTrip = async (message) => {
-    if (!currentTrip) return;
-    setIsGenerating(true);
-    setLoadingStep("CURATING EXPERIENCE...");
-    try {
-      const res = await api.post('/trips/chat', { currentTrip, message });
-      const data = res.data;
-      if (res.status === 200 && data.data) {
-        setTrips(prev => [data.data, ...prev.filter(t => t._id !== data.data._id)]);
-        setCurrentTrip(data.data);
-      }
-    } catch (error) {
-      console.error("Network error modifying trip:", error);
-    } finally {
-      setIsGenerating(false);
-      setLoadingStep(null);
-    }
-  };
-
-  const deleteTrip = async (tripId) => {
-    // Optimistic Local Delete (Instant UX)
-    setTrips(prev => prev.filter(t => t._id !== tripId));
-    if (currentTrip?._id === tripId) setCurrentTrip(null);
-
-    // Background Sync
-    if (!String(tripId).startsWith("local-")) {
-      try {
-        await api.delete(`/trips/${tripId}`);
-      } catch (error) {
-        console.error("Background sync failed for deleting trip:", error);
-      }
-    }
-  };
-
-  const duplicateTrip = async (tripId) => {
-    setIsGenerating(true);
-    setLoadingStep("Duplicating trip...");
-    
-    // Premium fake delay for animation
-    await new Promise(r => setTimeout(r, 800));
-    
-    try {
-      const res = await api.post(`/trips/${tripId}/duplicate`);
-      const data = res.data;
-      if (data.data) {
-        setTrips(prev => [data.data, ...prev.filter(t => t._id !== data.data._id)]);
-      }
-    } catch (error) {
-      console.error("Failed to duplicate trip:", error);
-    } finally {
-      setIsGenerating(false);
-      setLoadingStep(null);
-    }
-  };
-
-  const toggleFavoriteTrip = async (tripId) => {
-    const trip = trips.find(t => t._id === tripId);
-    if (!trip) return;
-    
-    // Optimistic Local Update
-    const updatedTrip = { ...trip, isFavorite: !trip.isFavorite };
-    setTrips(prev => [updatedTrip, ...prev.filter(t => t._id !== updatedTrip._id)]);
-    
-    // Background Sync
-    if (!String(tripId).startsWith("local-")) {
-      try {
-        const res = await api.patch(`/trips/${tripId}/favorite`);
-        if (res.data?.data) {
-           setTrips(prev => [res.data.data, ...prev.filter(t => t._id !== res.data.data._id)]);
-        }
-      } catch (error) {
-        console.error("Failed to toggle favorite on server:", error);
-        // Revert local on failure
-        setTrips(prev => [trip, ...prev.filter(t => t._id !== trip._id)]);
-      }
-    }
-  };
-
   return (
-    <TripContext.Provider value={{
-      trips,
-      loadingTrips,
-      currentTrip,
-      setCurrentTrip,
-      selectTrip,
-      isGenerating,
-      loadingStep,
-      generateTrip,
-      modifyTrip,
-      deleteTrip,
-      duplicateTrip,
-      toggleFavoriteTrip,
-      manualTheme,
-      setManualTheme,
-      packedItems,
-      togglePackedItem,
-      fetchTrips,
-      notifications,
-      addNotification,
-      markNotificationsAsRead
-    }}>
+    <TripContext.Provider
+      value={{
+        trips,
+        loadingTrips,
+        currentTrip: currentTripState,
+        setCurrentTrip,
+        fetchTrips
+      }}
+    >
       {children}
     </TripContext.Provider>
   );
-};
-
-export const useTripContext = () => {
-  const context = useContext(TripContext);
-  if (!context) throw new Error("useTripContext must be used within a TripProvider");
-  return context;
 };

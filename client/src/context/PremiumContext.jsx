@@ -76,5 +76,9 @@ export const PremiumProvider = ({ children }) => {
 };
 
 export const usePremium = () => {
-  return useContext(PremiumContext);
+  const context = useContext(PremiumContext);
+  if (!context) {
+    throw new Error('usePremium must be used within a PremiumProvider');
+  }
+  return context;
 };

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { InstallPromptWidget } from '@/components/pwa/InstallPromptWidget';
-import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { App as CapacitorApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -38,7 +38,8 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const TripsPage = lazy(() => import('./pages/trips/TripsPage'));
 const PackingPage = lazy(() => import('./pages/packing/PackingPage'));
 const DocumentsPage = lazy(() => import('./pages/documents/DocumentsPage'));
-const AssistantPage = lazy(() => import('./pages/assistant/AssistantPage'));
+const AssistantPage = lazy(() => import('./pages/assistant/AssistantPageV2'));
+const AssistantBuilderPage = lazy(() => import('./pages/assistant/AssistantPage'));
 const ExplorePage = lazy(() => import('./pages/explore/ExplorePage'));
 const CalendarPage = lazy(() => import('./pages/calendar/CalendarPage'));
 const JournalPage = lazy(() => import('./pages/journal/JournalPage'));
@@ -126,6 +127,13 @@ function ProtectedRoute({ children }) {
 
 import { AppLayout } from './components/layout/AppLayout';
 import { AuthLayout } from './components/layout/AuthLayout';
+
+function AssistantRouterWrapper() {
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode');
+  if (mode === 'builder') return <AssistantBuilderPage />;
+  return <AssistantPage />;
+}
 
 // ---------------------------------------------------------------------------
 // Toast container — renders active toasts in a fixed overlay
@@ -300,7 +308,9 @@ function AppRoutes() {
             path={ROUTES.TRIPS_NEW}
             element={
               <ProtectedRoute>
-                <Navigate to={`${ROUTES.ASSISTANT}?mode=builder`} replace />
+                <AppLayout>
+                  <AssistantBuilderPage />
+                </AppLayout>
               </ProtectedRoute>
             }
           />
@@ -326,11 +336,21 @@ function AppRoutes() {
             }
           />
           <Route
+            path="/assistant/builder"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <AssistantBuilderPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path={ROUTES.ASSISTANT}
             element={
               <ProtectedRoute>
                 <AppLayout>
-                  <AssistantPage />
+                  <AssistantRouterWrapper />
                 </AppLayout>
               </ProtectedRoute>
             }

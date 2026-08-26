@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @theme {
   --animate-shimmer: shimmer 1.5s infinite linear;
 }
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 @variant dark (&:where(.dark, .dark *));
 
@@ -20,6 +20,23 @@
 
   --color-text-primary: var(--theme-text-primary);
   --color-text-secondary: var(--theme-text-secondary);
+
+  /* 8pt spacing grid */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* Consistent radii */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-card: 32px;
+
+  /* Page-level padding */
+  --padding-page: 24px;
 
   /* Smoothest of smoother default physics animations */
   --default-transition-duration: 600ms;
