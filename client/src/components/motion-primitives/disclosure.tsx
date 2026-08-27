@@ -7,7 +7,7 @@ import {
   Transition,
   Variant,
   Variants,
-} from 'motion/react';
+} from 'framer-motion';
 import { createContext, useContext, useState, useId, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 

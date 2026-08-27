@@ -29,7 +29,7 @@ export class ErrorBoundary extends React.Component {
             <br/><br/>
             {this.state.error && this.state.error.stack}
           </p>
-          <Button onClick={() => window.location.reload()}>
+          <Button onClick={() => window.location.href = window.location.pathname + '?clearCache=true'}>
             Refresh Page
           </Button>
         </div>

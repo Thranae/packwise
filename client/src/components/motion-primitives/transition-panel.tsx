@@ -5,7 +5,7 @@ import {
   Variant,
   motion,
   MotionProps,
-} from 'motion/react';
+} from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export type TransitionPanelProps = {
