@@ -14,15 +14,19 @@ import { useState, useEffect } from 'react';
 import api from '@/services/api';
 import { Share } from '@capacitor/share';
 
-// Simple formatter
 const formatDate = (dateString) => {
   if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return String(dateString);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
 const getDuration = (start, end) => {
   if (!start || !end) return '? Days';
-  const diff = new Date(end) - new Date(start);
+  const startD = new Date(start);
+  const endD = new Date(end);
+  if (isNaN(startD.getTime()) || isNaN(endD.getTime())) return '? Days';
+  const diff = endD - startD;
   return `${Math.ceil(diff / (1000 * 60 * 60 * 24))} Days`;
 };
 

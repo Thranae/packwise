@@ -43,9 +43,11 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
       const country = trip.country?.toLowerCase() || '';
       const status = trip.status?.toLowerCase() || '';
       
-      const startDateStr = trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : '';
-      const endDateStr = trip.endDate ? new Date(trip.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : '';
-      const monthYearStr = trip.startDate ? new Date(trip.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toLowerCase() : '';
+      const dStart = new Date(trip.startDate);
+      const dEnd = new Date(trip.endDate);
+      const startDateStr = (trip.startDate && !isNaN(dStart.getTime())) ? dStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : String(trip.startDate || '');
+      const endDateStr = (trip.endDate && !isNaN(dEnd.getTime())) ? dEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() : String(trip.endDate || '');
+      const monthYearStr = (trip.startDate && !isNaN(dStart.getTime())) ? dStart.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toLowerCase() : String(trip.startDate || '');
       
       const matchesSearch = !search || 
         dest.includes(search) || 
@@ -58,7 +60,11 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
       const matchesFilter = activeFilter === 'All' || trip.status === activeFilter;
 
       return matchesSearch && matchesFilter;
-    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }).sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return (isNaN(dateB) ? 0 : dateB) - (isNaN(dateA) ? 0 : dateA);
+    });
   }, [deferredSearchQuery, activeFilter, trips]);
 
   return (
