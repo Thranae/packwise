@@ -47,7 +47,12 @@ function AssistantOrchestrator() {
   }, [activeFilter]);
 
   return (
-    <div className="w-full h-full min-h-0 flex flex-col overflow-hidden relative">
+    <div className="dark w-full h-[100dvh] min-h-0 flex flex-col overflow-hidden relative bg-gradient-to-b from-[#09090b] via-[#0f172a] to-[#1e1b4b]">
+      
+      {/* iOS 26 Decorative Orbs */}
+      <div className="absolute top-[-50px] left-[-50px] w-[250px] h-[250px] rounded-full bg-indigo-500/40 blur-[50px] opacity-60 pointer-events-none" />
+      <div className="absolute top-[30%] right-[-100px] w-[250px] h-[250px] rounded-full bg-pink-500/30 blur-[50px] opacity-60 pointer-events-none" />
+
       <AnimatePresence mode="wait">
         {recState === REC_STATES.LOADING ? (
           <motion.div
@@ -55,7 +60,7 @@ function AssistantOrchestrator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full flex-1 flex items-center justify-center"
+            className="w-full flex-1 flex items-center justify-center relative z-10"
           >
             <div className="w-10 h-10 border-2 border-white/15 border-t-white/70 rounded-full animate-spin" />
           </motion.div>
@@ -65,14 +70,29 @@ function AssistantOrchestrator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35 }}
-            className="w-full flex-1 overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="w-full flex-1 overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] relative z-10"
           >
-            <div className="flex flex-col w-full pb-8">
+            <div className="flex flex-col w-full pb-[120px]">
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="px-4 pt-6 pb-2"
+              >
+                <div className="inline-flex items-center px-3 py-1.5 rounded-[20px] bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md mb-4">
+                  <span className="text-[10px] font-extrabold tracking-[0.1em] text-indigo-400 uppercase">PackWise AI ✨</span>
+                </div>
+                <h1 className="text-3xl font-extrabold tracking-tight text-white leading-[1.15]">
+                  How can I help you pack today?
+                </h1>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ type: 'spring', damping: 28, stiffness: 180 }}
+                transition={{ type: 'spring', damping: 28, stiffness: 180, delay: 0.15 }}
+                className="mt-4"
               >
                 <HeroDestinationCard />
               </motion.div>

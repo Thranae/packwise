@@ -98,7 +98,7 @@ export default function PromptBar() {
 
   return (
     <div className="relative w-full">
-      <div className="relative h-[56px] ios-glass-card rounded-[20px] flex items-center overflow-hidden">
+      <div className="relative h-[60px] bg-black/40 backdrop-blur-2xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6)] ios-glass-card rounded-[30px] flex items-center overflow-hidden">
         <div className="flex-1 flex items-center h-full pl-5 pr-1">
           <AnimatePresence mode="wait">
             {voiceState === 'listening' ? (

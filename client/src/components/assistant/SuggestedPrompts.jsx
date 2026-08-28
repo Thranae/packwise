@@ -38,9 +38,9 @@ export default function SuggestedPrompts() {
         <button
           key={prompt}
           onClick={() => handleTap(prompt)}
-          className="shrink-0 py-2 px-4 rounded-[12px] ios-glass-card active:bg-white/[0.1] transition-colors"
+          className="shrink-0 py-2 px-4 rounded-[14px] bg-black/20 backdrop-blur-xl border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.2)] ios-glass-card active:bg-white/[0.1] transition-colors"
         >
-          <span className="text-[12px] font-medium text-white/50 whitespace-nowrap">{prompt}</span>
+          <span className="text-[12px] font-medium text-white/70 whitespace-nowrap">{prompt}</span>
         </button>
       ))}
     </div>

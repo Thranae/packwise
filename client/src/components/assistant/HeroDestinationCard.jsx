@@ -74,7 +74,7 @@ export default function HeroDestinationCard() {
       animate={controls}
       className="relative w-full shrink-0 touch-pan-y will-change-transform transform-gpu px-3"
     >
-      <div className="relative w-full h-[340px] rounded-[28px] overflow-hidden bg-[#0A0F1C] border-[0.5px] border-white/[0.15] shadow-[0_20px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)]">
+      <div className="relative w-full h-[340px] rounded-[32px] overflow-hidden bg-black/30 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.3)] ios-glass-card">
 
         {/* Image */}
         <div className="absolute inset-0 z-0">

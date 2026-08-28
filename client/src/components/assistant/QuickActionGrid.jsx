@@ -90,7 +90,7 @@ export default function QuickActionGrid() {
             variants={item}
             whileTap={{ scale: 0.92 }}
             onClick={action.onTap}
-            className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-[16px] ios-glass-card active:bg-white/[0.07] transition-colors"
+            className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-[20px] bg-black/30 backdrop-blur-xl border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.5)] ios-glass-card active:bg-white/[0.07] transition-colors"
           >
             <div className={`w-9 h-9 rounded-[12px] ${action.bg} flex items-center justify-center`}>
               <Icon className={`w-[18px] h-[18px] ${action.color}`} />
