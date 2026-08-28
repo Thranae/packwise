@@ -65,7 +65,7 @@ function AssistantOrchestrator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35 }}
-            className="w-full flex-1 overflow-y-auto overflow-x-hidden scroll-smooth"
+            className="w-full flex-1 overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
             <div className="flex flex-col w-full pb-8">
 

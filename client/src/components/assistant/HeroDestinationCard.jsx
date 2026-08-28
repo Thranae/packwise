@@ -8,7 +8,7 @@ import { useHaptics } from '@/hooks/useHaptics';
 
 function GlassStat({ icon: Icon, value, color }) {
   return (
-    <div className="flex flex-col items-center justify-center py-2.5 px-1 rounded-[14px] bg-white/[0.08] backdrop-blur-2xl border border-white/[0.15] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+    <div className="flex flex-col items-center justify-center py-2.5 px-1 rounded-[14px] ios-glass-card">
       <Icon className={`w-4 h-4 ${color} mb-1 drop-shadow-sm`} />
       <span className="text-[11px] font-semibold text-white/90 leading-none">{value}</span>
     </div>
@@ -89,11 +89,11 @@ export default function HeroDestinationCard() {
 
         {/* Top: Match badge + Season */}
         <div className="relative z-10 flex justify-between items-start p-4">
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] bg-black/40 backdrop-blur-xl border border-white/[0.1]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] ios-glass-card">
             <Sparkles className="w-3 h-3 text-blue-400" />
             <span className="text-white text-[11px] font-bold">{currentRecommendation.matchPercent || 98}%</span>
           </div>
-          <div className="px-2.5 py-1.5 rounded-[10px] bg-white/[0.08] backdrop-blur-xl border border-white/[0.1]">
+          <div className="px-2.5 py-1.5 rounded-[10px] ios-glass-card">
             <span className="text-white/90 text-[10px] font-bold uppercase tracking-widest">{currentRecommendation.season}</span>
           </div>
         </div>

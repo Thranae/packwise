@@ -35,7 +35,7 @@ export default function ChatHistory() {
               <div className={`px-4 py-2.5 rounded-[18px] text-[14px] leading-relaxed font-medium ${
                 msg.role === 'user' 
                   ? 'bg-blue-600/30 text-white rounded-tr-[4px]' 
-                  : 'bg-white/[0.06] text-white/90 border border-white/[0.05] rounded-tl-[4px]'
+                  : 'ios-glass-card text-white/90 rounded-tl-[4px]'
               }`}>
                 {msg.text}
               </div>

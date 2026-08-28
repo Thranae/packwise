@@ -17,7 +17,7 @@ function DestinationCard({ dest, onSelect }) {
         lightTap();
         onSelect(dest);
       }}
-      className="shrink-0 snap-start relative w-[200px] h-[260px] rounded-[24px] overflow-hidden text-left border border-white/[0.08]"
+      className="shrink-0 snap-start relative w-[200px] h-[260px] rounded-[24px] overflow-hidden text-left ios-glass-card p-0"
     >
       <div
         className="absolute inset-0 bg-cover bg-center group-active:scale-[0.98] transition-transform duration-500"

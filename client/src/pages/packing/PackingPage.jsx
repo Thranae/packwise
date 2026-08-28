@@ -374,29 +374,12 @@ export default function PackingPage() {
       const fetchFor = async (query) => {
         try {
           const r = await axios.get(`${API_URL}/images/moodboard`, { params: { query, page: pageToFetch } });
-          if (r.data?.success && r.data?.data?.hasResults) {
-            return r.data.data.images || [];
+          if (r.data?.success) {
+            return r.data.data?.images || [];
           }
-          throw new Error('Backend failed, falling back to local mocks');
+          return [];
         } catch {
-          // LOCAL FALLBACK DEMO IMAGES
-          const isMen = query.includes('men');
-          const menMocks = [
-            'https://images.unsplash.com/photo-1516826957135-700ede19c6ce?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1480455624313-e29b44bbfde1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-          ];
-          const womenMocks = [
-            'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1495385794356-15371f348c31?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-          ];
-          // Return 2 random mock images per query to populate the board
-          const pool = isMen ? menMocks : womenMocks;
-          const shuffled = [...pool].sort(() => 0.5 - Math.random());
-          return shuffled.slice(0, 2);
+          return [];
         }
       };
 
@@ -407,15 +390,29 @@ export default function PackingPage() {
       const fetchGenderImages = async (gender) => {
         const g = gender === 'men' ? 'men' : 'women';
 
-        // Cascading relevance: City -> Country -> Generic Travel
+        // Determine season/style keyword from weather or trip data
+        const temp = weatherData?.current?.temp_c;
+        let styleKeyword = 'travel outfit';
+        let season = '';
+        if (temp !== undefined) {
+          if (temp > 25) { season = 'summer'; styleKeyword = 'summer outfit'; }
+          else if (temp > 15) { season = 'spring'; styleKeyword = 'spring fashion'; }
+          else if (temp > 5) { season = 'autumn'; styleKeyword = 'autumn fashion'; }
+          else { season = 'winter'; styleKeyword = 'winter outfit'; }
+        } else if (currentTrip?.season) {
+          season = currentTrip.season.toLowerCase();
+          styleKeyword = `${season} outfit`;
+        }
+
+        // Cascading relevance: City -> Country -> Weather -> Generic Travel
         const queries = [
-          `${g} street style ${cityPart}`,
-          `${g} local fashion ${cityPart}`,
-          `${g} traditional clothing ${countryPart}`,
+          `${g} ${styleKeyword} ${cityPart}`,
+          `${g} fashion ${cityPart}`,
+          `${g} ${styleKeyword} ${countryPart}`,
           `${g} travel outfit ${countryPart}`,
-          `${g} vacation style`,
+          `${g} ${season || 'vacation'} style`,
           `${g} casual fashion`
-        ];
+        ].filter(Boolean);
 
         // Fire ALL queries in parallel for speed
         const results = await Promise.allSettled(queries.map(q => fetchFor(q)));

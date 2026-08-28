@@ -19,7 +19,7 @@ export default function AIInsightCard() {
         exit={{ opacity: 0, y: -8 }}
         className="w-full relative"
       >
-        <div className="w-full p-5 rounded-[24px] bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] flex flex-col gap-3 relative overflow-hidden">
+        <div className="w-full p-5 rounded-[24px] ios-glass-card flex flex-col gap-3 relative overflow-hidden">
 
           {/* Top edge highlight */}
           <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />

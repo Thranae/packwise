@@ -42,7 +42,7 @@ export default function PrimaryCTA() {
           ? 'bg-emerald-500 text-white shadow-[0_6px_24px_rgba(16,185,129,0.25)]'
           : state === 'loading'
             ? 'bg-white/80 text-black/60'
-            : 'bg-white text-black shadow-[0_6px_24px_rgba(255,255,255,0.12)] active:shadow-[0_2px_8px_rgba(255,255,255,0.08)]'
+            : 'ios-liquid-button text-white shadow-[0_6px_24px_rgba(255,255,255,0.12)] active:shadow-[0_2px_8px_rgba(255,255,255,0.08)]'
       }`}
     >
       <AnimatePresence mode="wait">
