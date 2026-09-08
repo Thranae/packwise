@@ -171,12 +171,11 @@ export default function ExplorePage() {
         const fetchCategoryImage = async (category, i) => {
           const optimalQuery = aiQueries[category.type] || `${placeName} ${category.suffix}`;
           try {
-            const res = await api.get(`/images/search?query=${encodeURIComponent(optimalQuery)}&index=${i}`);
+            const res = await api.get(`/images/search?query=${encodeURIComponent(optimalQuery)}&index=${i}&strategy=bulk`);
             if (res.data?.data?.imageUrl) return res.data.data.imageUrl;
           } catch (_) {}
-          // Secondary fallback: try just the place name with index
           try {
-            const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}&index=${i}`);
+            const res2 = await api.get(`/images/search?query=${encodeURIComponent(baseQuery)}&index=${i}&strategy=bulk`);
             if (res2.data?.data?.imageUrl) return res2.data.data.imageUrl;
           } catch (_) {}
           return null;

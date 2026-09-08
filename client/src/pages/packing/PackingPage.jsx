@@ -359,18 +359,14 @@ export default function PackingPage() {
     setIsFetchingMoodboard(true);
     setMoodboardImages([]);
     try {
-      // Use the FULL destination string for geographic context
       const fullDest = currentTrip?.destination?.split('&')[0].trim() || 'Tokyo';
       const parts = fullDest.split(',').map(s => s.trim());
       const cityPart = parts[0];
       const countryPart = parts.length > 1 ? parts[parts.length - 1] : cityPart;
 
       const API_URL = '/api';
-      const MAX_PAIRS = 10; // up to 10 women + 10 men = 20 images
+      const MAX_PAIRS = 10;
 
-      /**
-       * Fetch images for ONE query from the backend.
-       */
       const fetchFor = async (query) => {
         try {
           const r = await axios.get(`${API_URL}/images/moodboard`, { params: { query, page: pageToFetch } });
@@ -383,84 +379,102 @@ export default function PackingPage() {
         }
       };
 
-      /**
-       * Run queries from specific to general in parallel.
-       * allSettled preserves order, so most specific results come first.
-       */
+      // Normalize URL for dedup: strip query params and resize suffixes 
+      // so the same photo at different sizes is caught as a duplicate
+      const normalizeUrl = (url) => {
+        try {
+          const u = new URL(url);
+          u.search = '';
+          return u.toString().replace(/\/$/, '');
+        } catch {
+          return url;
+        }
+      };
+
       const fetchGenderImages = async (gender) => {
         const g = gender === 'men' ? 'men' : 'women';
 
-        // Determine season/style keyword from weather or trip data
+        // Determine season/climate keyword from live weather data
         const temp = weatherData?.current?.temp_c;
-        let styleKeyword = 'travel outfit';
-        let season = '';
+        let climateKeyword = 'travel';
         if (temp !== undefined) {
-          if (temp > 25) { season = 'summer'; styleKeyword = 'summer outfit'; }
-          else if (temp > 15) { season = 'spring'; styleKeyword = 'spring fashion'; }
-          else if (temp > 5) { season = 'autumn'; styleKeyword = 'autumn fashion'; }
-          else { season = 'winter'; styleKeyword = 'winter outfit'; }
+          if (temp > 25) climateKeyword = 'summer';
+          else if (temp > 15) climateKeyword = 'spring';
+          else if (temp > 5) climateKeyword = 'autumn';
+          else climateKeyword = 'winter';
         } else if (currentTrip?.season) {
-          season = currentTrip.season.toLowerCase();
-          styleKeyword = `${season} outfit`;
+          climateKeyword = currentTrip.season.toLowerCase();
         }
 
-        // Cascading relevance: City -> Country -> Weather -> Generic Travel
+        // Only 3 focused queries — each one is destination-specific.
+        // No generic fallbacks like "casual fashion" that would dilute relevance.
         const queries = [
-          `${g} ${styleKeyword} ${cityPart}`,
-          `${g} fashion ${cityPart}`,
-          `${g} ${styleKeyword} ${countryPart}`,
-          `${g} travel outfit ${countryPart}`,
-          `${g} ${season || 'vacation'} style`,
-          `${g} casual fashion`
-        ].filter(Boolean);
+          `${g} ${climateKeyword} outfit ${cityPart}`,
+          `${g} fashion style ${countryPart} ${climateKeyword}`,
+          `${g} ${climateKeyword} travel outfit ${countryPart}`,
+        ];
 
-        // Fire ALL queries in parallel for speed
         const results = await Promise.allSettled(queries.map(q => fetchFor(q)));
 
-        // Accumulate and deduplicate ALL images found across every query
         const seen = new Set();
         const accumulated = [];
         for (const res of results) {
           if (res.status === 'fulfilled') {
             for (const url of res.value) {
-              if (!seen.has(url)) {
-                seen.add(url);
+              const key = normalizeUrl(url);
+              if (!seen.has(key)) {
+                seen.add(key);
                 accumulated.push(url);
               }
             }
           }
         }
 
-        console.log(`[Moodboard] ${g} for "${fullDest}": ${accumulated.length} total images found`);
-        return accumulated; // Return ALL found — even if just 2 or 4
+        console.log(`[Moodboard] ${g} for "${fullDest}": ${accumulated.length} unique images`);
+        return accumulated;
       };
 
-      // Fetch both genders simultaneously
       const [menImages, womenImages] = await Promise.all([
         fetchGenderImages('men'),
         fetchGenderImages('women'),
       ]);
 
-      // Build interleaved [{url, gender}] array, strictly alternating ♀ ♂
+      // Build a master set of normalized URLs to catch cross-gender duplicates
+      const globalSeen = new Set();
       const interleaved = [];
-      const seenUrls = new Set();
       let mIdx = 0, wIdx = 0, pairs = 0;
 
       while (pairs < MAX_PAIRS) {
-        while (wIdx < womenImages.length && seenUrls.has(womenImages[wIdx])) wIdx++;
-        while (mIdx < menImages.length && (seenUrls.has(menImages[mIdx]) || menImages[mIdx] === womenImages[wIdx])) mIdx++;
+        // Skip women duplicates
+        while (wIdx < womenImages.length && globalSeen.has(normalizeUrl(womenImages[wIdx]))) wIdx++;
+        // Skip men duplicates (also cross-check against all women URLs)
+        while (mIdx < menImages.length && globalSeen.has(normalizeUrl(menImages[mIdx]))) mIdx++;
 
         const wImg = womenImages[wIdx];
         const mImg = menImages[mIdx];
 
-        if (wImg) { interleaved.push({ url: wImg, gender: 'women' }); seenUrls.add(wImg); wIdx++; }
-        if (mImg) { interleaved.push({ url: mImg, gender: 'men' }); seenUrls.add(mImg); mIdx++; }
+        if (wImg) {
+          const wKey = normalizeUrl(wImg);
+          if (!globalSeen.has(wKey)) {
+            interleaved.push({ url: wImg, gender: 'women' });
+            globalSeen.add(wKey);
+          }
+          wIdx++;
+        }
 
-        if (!wImg && !mImg) break; // Both pools exhausted — show what we have
+        if (mImg) {
+          const mKey = normalizeUrl(mImg);
+          if (!globalSeen.has(mKey)) {
+            interleaved.push({ url: mImg, gender: 'men' });
+            globalSeen.add(mKey);
+          }
+          mIdx++;
+        }
+
+        if (!wImg && !mImg) break;
         pairs++;
       }
 
-      // Display whatever was found — 2, 6, 10, or 20 images
       setMoodboardImages(interleaved);
     } catch (error) {
       console.error('Moodboard fetch error:', error);

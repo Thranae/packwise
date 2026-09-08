@@ -581,7 +581,7 @@ export default function CalendarPage() {
     const fetchImg = async (suffix) => {
       try {
         const q = `${place} ${suffix}`;
-        const res = await api.get(`/images/search?query=${encodeURIComponent(q)}`);
+        const res = await api.get(`/images/search?query=${encodeURIComponent(q)}&strategy=bulk`);
         if (res.data?.data?.imageUrl) return res.data.data.imageUrl;
       } catch (_) {}
       return null;
