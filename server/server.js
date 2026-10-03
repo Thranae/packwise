@@ -5,6 +5,9 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import hpp from 'hpp';
 import cron from 'node-cron';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,10 +30,25 @@ app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
+
+// Rate limiting: 100 requests per 15 minutes per IP
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again in 15 minutes.'
+});
+app.use('/api', limiter);
+
 app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10kb' })); // Limit body payload to prevent DoS
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Prevent HTTP parameter pollution
+app.use(hpp());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -44,6 +62,14 @@ app.use('/api/export', exportRoutes);    // Feature 6: PDF Export
 app.get('/api/ping', (req, res) => res.status(200).json({ status: 'ok', message: 'Server is awake' }));
 
 app.use('/uploads', express.static('uploads'));
+
+// Handle unmatched API routes gracefully
+app.use('/api/*', (req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `API route not found: ${req.originalUrl}`
+  });
+});
 
 // Serve frontend static files in production
 app.use(express.static(path.join(__dirname, '../client/dist')));
