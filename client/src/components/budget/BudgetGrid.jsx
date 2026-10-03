@@ -31,10 +31,11 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
   const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
 
   const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
+  const safe = (v) => (Number.isFinite(v) ? v : 0);
   const fmtOrigin = (val) =>
-    new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(val * rateMultiplier));
+    new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(safe(val) * rateMultiplier));
   const fmtDest = (val) =>
-    new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(val));
+    new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(safe(val)));
 
   const dailyItems = [
     { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: 'text-blue-400', bg: 'bg-blue-500/15' },

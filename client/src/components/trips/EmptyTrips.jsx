@@ -85,7 +85,7 @@ export function EmptyTrips() {
             {TRENDING_DESTINATIONS.map(dest => (
               <div 
                 key={dest.id}
-                onClick={() => navigate(ROUTES.EXPLORE)}
+                onClick={() => navigate(`/assistant/builder?destination=${encodeURIComponent(dest.name)}`)}
                 className="shrink-0 snap-start relative w-48 md:w-64 h-40 md:h-48 rounded-[24px] overflow-hidden group cursor-pointer border border-white/10"
               >
                 <div 

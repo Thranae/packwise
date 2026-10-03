@@ -409,9 +409,9 @@ export default function PackingPage() {
         // Only 3 focused queries — each one is destination-specific.
         // No generic fallbacks like "casual fashion" that would dilute relevance.
         const queries = [
-          `${g} ${climateKeyword} outfit ${cityPart}`,
-          `${g} fashion style ${countryPart} ${climateKeyword}`,
-          `${g} ${climateKeyword} travel outfit ${countryPart}`,
+          `${g} ${climateKeyword} outfit travel`,
+          `${g} casual fashion ${climateKeyword}`,
+          `${climateKeyword} vacation style ${g}`,
         ];
 
         const results = await Promise.allSettled(queries.map(q => fetchFor(q)));

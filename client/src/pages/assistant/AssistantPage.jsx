@@ -10,9 +10,11 @@ import AssistantIntro from '@/components/assistant/AssistantIntro';
 
 export default function AssistantPage() {
   const [searchParams] = useSearchParams();
-  const [showIntro, setShowIntro] = useState(searchParams.get('mode') !== 'builder');
+  const queryDest = searchParams.get('destination') || '';
+  const isBuilderMode = searchParams.get('mode') === 'builder' || !!queryDest;
+  const [showIntro, setShowIntro] = useState(!isBuilderMode);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [swipedDestination, setSwipedDestination] = useState("");
+  const [swipedDestination, setSwipedDestination] = useState(queryDest);
   const { isPremium } = usePremium();
   const navigate = useNavigate();
 
@@ -33,7 +35,7 @@ export default function AssistantPage() {
                 }
                 setShowIntro(false);
               }}
-              onClose={() => navigate('/overview')}
+              onClose={() => setShowIntro(false)}
             />
           </motion.div>
         )}

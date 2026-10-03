@@ -588,7 +588,14 @@ export default function CalendarPage() {
     };
 
     (async () => {
-      const imgs = await Promise.all(suffixes.slice(0, base.length).map(fetchImg));
+      // Fetch in batches of 3 to avoid hammering the image API
+      const toFetch = suffixes.slice(0, base.length);
+      const imgs = [];
+      for (let i = 0; i < toFetch.length; i += 3) {
+        const batch = toFetch.slice(i, i + 3);
+        const batchResults = await Promise.all(batch.map(fetchImg));
+        imgs.push(...batchResults);
+      }
       
       // If some queries fail, fill them in by reusing the successful ones so we don't have blank cards
       const validImgs = imgs.filter(Boolean);

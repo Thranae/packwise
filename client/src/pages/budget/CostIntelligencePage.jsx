@@ -14,7 +14,7 @@ export default function CostIntelligencePage() {
   const [inputs, setInputs] = useState({
     originCountry: 'India',
     destCountry: currentTrip?.country || 'United States',
-    days: currentTrip ? Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) : 5,
+    days: currentTrip ? Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) || 5 : 5,
     travelers: currentTrip?.travelers || 2,
     travelStyle: currentTrip?.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip?.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard',
     budgetType: 'balanced',
@@ -43,7 +43,9 @@ export default function CostIntelligencePage() {
 
       let costs;
 
-      // If the AI generated perfect budget data, use it!
+      const safeDays = Math.max(1, inputs.days || 1);
+      const safe = (v) => (Number.isFinite(v) ? v : 0);
+
       if (currentTrip && currentTrip.budgetDetails && Array.isArray(currentTrip.budgetDetails.categories)) {
         const bd = currentTrip.budgetDetails;
         const getCat = (name) => bd.categories.find(c => c.name.toLowerCase().includes(name))?.amount || 0;
@@ -56,21 +58,21 @@ export default function CostIntelligencePage() {
         
         costs = {
           dailyBreakdown: {
-            hotel: Math.round(aiHotel / inputs.days),
-            food: Math.round(aiFood / inputs.days),
-            transport: Math.round(aiTransport / inputs.days),
-            attractions: Math.round((bd.total - (aiHotel + aiFood + aiTransport + aiShopping + aiMisc)) / inputs.days) || 0,
-            shopping: Math.round(aiShopping / inputs.days),
+            hotel: safe(Math.round(aiHotel / safeDays)),
+            food: safe(Math.round(aiFood / safeDays)),
+            transport: safe(Math.round(aiTransport / safeDays)),
+            attractions: safe(Math.round((bd.total - (aiHotel + aiFood + aiTransport + aiShopping + aiMisc)) / safeDays)),
+            shopping: safe(Math.round(aiShopping / safeDays)),
             insurance: 0,
-            total: Math.round(bd.total / inputs.days)
+            total: safe(Math.round(bd.total / safeDays))
           },
           summary: {
-            totalBudget: bd.total,
-            averageDailySpend: Math.round(bd.total / inputs.days),
-            emergencyReserve: Math.round(aiMisc * 0.5),
-            internetSim: Math.round(aiMisc * 0.25),
+            totalBudget: safe(bd.total),
+            averageDailySpend: safe(Math.round(bd.total / safeDays)),
+            emergencyReserve: safe(Math.round(aiMisc * 0.5)),
+            internetSim: safe(Math.round(aiMisc * 0.25)),
             visaFees: 0,
-            miscellaneous: Math.round(aiMisc * 0.25)
+            miscellaneous: safe(Math.round(aiMisc * 0.25))
           },
           destCurrency: currentTrip.currency || 'USD',
           destSymbol: currentTrip.currency === 'INR' ? '₹' : (currentTrip.currency === 'EUR' ? '€' : '$'),
@@ -123,7 +125,7 @@ export default function CostIntelligencePage() {
     if (currentTrip && currentTrip._id !== prevTripId.current) {
       prevTripId.current = currentTrip._id;
       
-      const newDays = Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000));
+      const newDays = Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) || 5;
       const newStyle = currentTrip.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard';
       
       setInputs(prev => ({

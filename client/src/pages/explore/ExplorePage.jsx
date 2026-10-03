@@ -181,8 +181,13 @@ export default function ExplorePage() {
           return null;
         };
 
-        // Fetch all 8 in parallel, each with its own targeted AI query
-        const results = await Promise.all(CARD_CATEGORIES.map((cat, i) => fetchCategoryImage(cat, i)));
+        // Fetch in batches of 3 to avoid hammering the image API (partitioning)
+        const results = [];
+        for (let i = 0; i < CARD_CATEGORIES.length; i += 3) {
+          const batch = CARD_CATEGORIES.slice(i, i + 3);
+          const batchResults = await Promise.all(batch.map((cat, idx) => fetchCategoryImage(cat, i + idx)));
+          results.push(...batchResults);
+        }
 
         const cards = CARD_CATEGORIES.map((cat, i) => ({
           id: i,

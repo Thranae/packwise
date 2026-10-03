@@ -15,13 +15,13 @@ export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) =
   const originRate = rates[originCurrency] || 1;
   const destRate = rates[destCurrency] || 1;
 
-  // The cost engine calculates everything in the destination currency
-  const totalDest = summary.totalBudget;
-  // Convert back to origin currency
-  const totalOrigin = (totalDest / destRate) * originRate;
+  const safe = (v) => (Number.isFinite(v) ? v : 0);
 
-  const fmt = (val) => new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(val));
-  const fmtDest = (val) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(val));
+  const totalDest = safe(summary.totalBudget);
+  const totalOrigin = safe((totalDest / destRate) * originRate);
+
+  const fmt = (val) => new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(safe(val)));
+  const fmtDest = (val) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(safe(val)));
 
   const stats = [
     { label: 'Per Day', value: `${originSymbol}${fmt((summary.averageDailySpend / destRate) * originRate)}`, sub: `${destSymbol}${fmtDest(summary.averageDailySpend)}` },
