@@ -68,12 +68,12 @@ const getActivities = (dest = '', dayNum) => {
 
 // 🏔️ Real AI Data Parsers 🏔️
 const parseWeatherCondition = (condition) => {
-  if (!condition) return { icon: Cloud, color: 'text-slate-300', bg: 'bg-slate-400/10' };
+  if (!condition) return { icon: Cloud, color: 'text-white/60', bg: 'bg-white/10' };
   const lower = condition.toLowerCase();
   if (lower.includes('sun') || lower.includes('clear')) return { icon: Sun, color: 'text-yellow-400', bg: 'bg-yellow-400/10' };
   if (lower.includes('rain') || lower.includes('shower') || lower.includes('storm')) return { icon: CloudRain, color: 'text-blue-400', bg: 'bg-blue-400/10' };
   if (lower.includes('snow')) return { icon: CloudRain, color: 'text-sky-300', bg: 'bg-sky-300/10' };
-  return { icon: Cloud, color: 'text-slate-300', bg: 'bg-slate-400/10' };
+  return { icon: Cloud, color: 'text-white/60', bg: 'bg-white/10' };
 };
 
 const getActivityIcon = (title = '', desc = '', time = '') => {
@@ -91,7 +91,7 @@ const getActivityIcon = (title = '', desc = '', time = '') => {
 // 🏔️ Fake weather per day 🏔️
 const weatherTypes = [
   { icon: Sun,       label: '28°C Sunny',  color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
-  { icon: Cloud,     label: '22°C Cloudy', color: 'text-slate-300',  bg: 'bg-slate-400/10'  },
+  { icon: Cloud,     label: '22°C Cloudy', color: 'text-white/60',  bg: 'bg-white/10'  },
   { icon: CloudRain, label: '18°C Rainy',  color: 'text-blue-400',   bg: 'bg-blue-400/10'   },
   { icon: Sun,       label: '31°C Clear',  color: 'text-orange-400', bg: 'bg-orange-400/10' },
 ];

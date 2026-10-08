@@ -15,7 +15,7 @@ const MOODS = [
 
 const WEATHER = [
   { id: 'sunny', icon: Sun, label: 'Sunny', color: 'text-orange-400', bg: 'bg-orange-400/20' },
-  { id: 'cloudy', icon: Cloud, label: 'Cloudy', color: 'text-gray-400', bg: 'bg-gray-400/20' },
+  { id: 'cloudy', icon: Cloud, label: 'Cloudy', color: 'text-white/60', bg: 'bg-white/10' },
   { id: 'rainy', icon: CloudRain, label: 'Rainy', color: 'text-blue-400', bg: 'bg-blue-400/20' },
   { id: 'snowy', icon: Snowflake, label: 'Snowy', color: 'text-cyan-400', bg: 'bg-cyan-400/20' },
   { id: 'windy', icon: Wind, label: 'Windy', color: 'text-teal-400', bg: 'bg-teal-400/20' },

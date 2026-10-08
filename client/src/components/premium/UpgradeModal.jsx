@@ -32,13 +32,11 @@ const UpgradeModal = ({ isOpen, onClose }) => {
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-md overflow-hidden bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl"
+            className="relative w-full max-w-md overflow-hidden bg-black/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl"
           >
-            {/* Close Button */}
             <button 
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white/60 hover:text-white transition-colors z-10"
             >
               <X className="w-5 h-5" />
             </button>
@@ -52,7 +50,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
               <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">
                 Voyage Genie <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Premium</span>
               </h2>
-              <p className="text-slate-400">Unlock the full power of AI to plan your perfect trips.</p>
+              <p className="text-white/60">Unlock the full power of AI to plan your perfect trips.</p>
             </div>
 
             {/* Features List */}
@@ -63,7 +61,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Unlimited AI Itineraries</h4>
-                  <p className="text-sm text-slate-400">Generate endless personalized trip plans.</p>
+                  <p className="text-sm text-white/60">Generate endless personalized trip plans.</p>
                 </div>
               </div>
 
@@ -73,7 +71,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Smart Packing Assistant</h4>
-                  <p className="text-sm text-slate-400">Context-aware packing lists based on live weather.</p>
+                  <p className="text-sm text-white/60">Context-aware packing lists based on live weather.</p>
                 </div>
               </div>
 
@@ -83,15 +81,15 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <h4 className="text-white font-medium">Offline Sync</h4>
-                  <p className="text-sm text-slate-400">Access your itineraries without internet connection.</p>
+                  <p className="text-sm text-white/60">Access your itineraries without internet connection.</p>
                 </div>
               </div>
             </div>
 
             {/* Pricing Action */}
-            <div className="px-6 pb-6 pt-4 bg-slate-800/50 border-t border-slate-700/50">
+            <div className="px-6 pb-6 pt-4 bg-white/5 border-t border-white/10">
               {!isReady ? (
-                <div className="text-center text-slate-400 text-sm py-4">Loading packages...</div>
+                <div className="text-center text-white/60 text-sm py-4">Loading packages...</div>
               ) : packages.length > 0 ? (
                 <div className="space-y-3">
                   {packages.map((pkg) => (
@@ -121,7 +119,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                 </button>
               )}
               
-              <p className="text-center text-xs text-slate-500 mt-4">
+              <p className="text-center text-xs text-white/40 mt-4">
                 Auto-renews. Cancel anytime in your device settings.
               </p>
             </div>

@@ -771,7 +771,7 @@ export default function PackingPage() {
         <div className="grid flex-1 relative">
               {/* AI Scanner Overlay - Compact PWA Widget Theme */}
               {isAiLoading && cat.id === 1 && (
-                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-slate-900/90 backdrop-blur-sm border-t border-white/10 flex flex-col items-center justify-center">
+                <div className="absolute inset-0 z-50 rounded-b-[32px] overflow-hidden bg-black/70 backdrop-blur-xl border-t border-white/10 flex flex-col items-center justify-center">
                   
                   {/* Minimalist Grid Background */}
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:16px_16px]" />
@@ -1339,7 +1339,7 @@ export default function PackingPage() {
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.95 }}
-                          className="absolute inset-0 z-30 bg-slate-900/90 backdrop-blur-md rounded-2xl border border-emerald-500/30 p-4 flex flex-col shadow-2xl"
+                          className="absolute inset-0 z-30 bg-black/80 backdrop-blur-xl rounded-2xl border border-emerald-500/30 p-4 flex flex-col shadow-2xl"
                         >
                           <div className="flex items-center justify-between mb-3">
                             <h4 className="text-sm font-bold text-white">Select Time</h4>
