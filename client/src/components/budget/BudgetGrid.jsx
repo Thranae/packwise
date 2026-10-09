@@ -25,8 +25,8 @@ const Card = ({ title, icon: Icon, iconColor, children, delay = 0 }) => (
 export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => {
   if (!summary || !breakdown || !rates) return null;
 
-  const originCurrency = 'INR';
-  const originSymbol = '₹';
+  const originCurrency = COUNTRY_DATA[inputs.originCountry]?.currency || 'USD';
+  const originSymbol = COUNTRY_DATA[inputs.originCountry]?.symbol || '$';
   const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
   const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
 
@@ -142,24 +142,7 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
           {/* Donut */}
           <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] relative shrink-0">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)]">
-              <defs>
-                <filter id="liquidTube" x="-20%" y="-20%" width="140%" height="140%">
-                  {/* Drop shadow */}
-                  <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#000" floodOpacity="0.4" result="shadow"/>
-                  {/* Inner highlight to create 3D tube effect */}
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
-                  <feOffset dx="-2" dy="-2" result="offsetBlur"/>
-                  <feComposite in="SourceAlpha" in2="offsetBlur" operator="out" result="highlight"/>
-                  <feFlood floodColor="white" floodOpacity="0.5" result="highlightColor"/>
-                  <feComposite in="highlightColor" in2="highlight" operator="in" result="highlightMask"/>
-                  {/* Merge graphic with highlight and shadow */}
-                  <feMerge>
-                    <feMergeNode in="shadow"/>
-                    <feMergeNode in="SourceGraphic"/>
-                    <feMergeNode in="highlightMask"/>
-                  </feMerge>
-                </filter>
-              </defs>
+              {/* Removed heavy SVG filters for buttery smooth 60fps animations on mobile */}
               {pieData.map((slice, i) => (
                 <motion.circle
                   key={i}
@@ -171,7 +154,6 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
                   stroke={slice.color}
                   strokeWidth="18"
                   strokeDashoffset={-(slice.offset * 2.51327)}
-                  filter="url(#liquidTube)"
                   style={{ strokeLinecap: 'round' }}
                 />
               ))}

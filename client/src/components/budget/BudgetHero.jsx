@@ -11,6 +11,7 @@ export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) =
   const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
   const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
   const destCode = COUNTRY_DATA[inputs.destCountry]?.code?.toLowerCase() || 'us';
+  const originCode = COUNTRY_DATA[inputs.originCountry]?.code?.toLowerCase() || 'us';
 
   const originRate = rates[originCurrency] || 1;
   const destRate = rates[destCurrency] || 1;
@@ -67,7 +68,7 @@ export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) =
           <div className="flex items-center gap-4 shrink-0">
             <div className="flex flex-col items-center gap-2">
               <div className="w-12 h-12 rounded-full overflow-hidden border border-white/15 bg-white/5">
-                <img src="https://flagcdn.com/w80/in.png" alt="India" className="w-full h-full object-cover" />
+                <img src={`https://flagcdn.com/w80/${originCode}.png`} alt={inputs.originCountry} className="w-full h-full object-cover" />
               </div>
               <span className="text-xs font-semibold text-white/60">{inputs.originCountry}</span>
             </div>

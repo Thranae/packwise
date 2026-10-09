@@ -6,8 +6,8 @@ import { COUNTRY_DATA } from '@/utils/costEngine';
 export const BudgetTimeline = React.memo(({ summary, breakdown, inputs, rates }) => {
   if (!summary || !breakdown || !rates) return null;
 
-  const originCurrency = 'INR';
-  const originSymbol = '₹';
+  const originCurrency = COUNTRY_DATA[inputs.originCountry]?.currency || 'USD';
+  const originSymbol = COUNTRY_DATA[inputs.originCountry]?.symbol || '$';
   const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
 
   const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
