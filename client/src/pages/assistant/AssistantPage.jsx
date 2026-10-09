@@ -83,16 +83,18 @@ export default function AssistantPage() {
         {/* Content Area */}
         <div className="w-full relative z-10 flex-1 flex flex-col min-h-0 items-center justify-start">
           <AnimatePresence mode="wait">
-            <motion.div
-              key="builder"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full flex-1 flex flex-col items-center"
-            >
-              <TripBuilderWizard initialDestination={swipedDestination} />
-            </motion.div>
+            {!showIntro && (
+              <motion.div
+                key="builder"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full flex-1 flex flex-col items-center"
+              >
+                <TripBuilderWizard initialDestination={swipedDestination} />
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
         

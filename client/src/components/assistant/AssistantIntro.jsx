@@ -53,7 +53,6 @@ export default function AssistantIntro({ onStart, onClose }) {
             <div
               key={index}
               className="relative shrink-0 w-[92vw] max-w-[400px] h-full snap-center rounded-[32px] bg-[#0A101C] border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
-              style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
             >
               {/* Image */}
               <div className="relative w-full flex-1 shrink-0">

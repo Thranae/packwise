@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { InstallPromptWidget } from '@/components/pwa/InstallPromptWidget';
+import { ReloadPrompt } from '@/components/pwa/ReloadPrompt';
 import { Routes, Route, useLocation, useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { App as CapacitorApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
@@ -462,6 +463,7 @@ function AppContent() {
       </AnimatePresence>
       <AppRoutes />
       <InstallPromptWidget />
+      <ReloadPrompt />
       <ToastContainer />
     </>
   );
