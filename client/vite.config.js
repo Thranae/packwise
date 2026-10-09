@@ -13,7 +13,7 @@ export default defineConfig({
       injectRegister: 'auto',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-        maximumFileSizeToCacheInBytes: 5000000, // 5MB to handle heavy bundles
+        maximumFileSizeToCacheInBytes: 10000000, // 10MB to handle heavy 3D bundles
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -110,8 +110,13 @@ export default defineConfig({
             if (id.includes('react/') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor-react';
             if (id.includes('framer-motion') || id.includes('lucide-react')) return 'vendor-ui';
             if (id.includes('maplibre-gl') || id.includes('react-map-gl') || id.includes('leaflet')) return 'vendor-map';
-            if (id.includes('three') || id.includes('globe.gl')) return 'vendor-3d';
+            if (id.includes('@splinetool')) return 'vendor-spline';
+            if (id.includes('three')) return 'vendor-three';
+            if (id.includes('globe.gl')) return 'vendor-globe';
             if (id.includes('jspdf') || id.includes('html2canvas')) return 'vendor-pdf';
+            if (id.includes('react-markdown') || id.includes('remark-gfm')) return 'vendor-markdown';
+            if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
+            if (id.includes('axios') || id.includes('dexie') || id.includes('zod')) return 'vendor-utils';
           }
         }
       }
