@@ -12,6 +12,7 @@ import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
+import { STORAGE_KEYS } from '@/constants/app';
 import { loginSchema } from '@/constants/validation';
 import api from '@/services/api';
 import axios from 'axios';
@@ -103,11 +104,11 @@ export default function LoginPage() {
         const data = res.data;
         if (data.success) {
           localStorage.setItem('token', data.data.token);
-          setAuthData(data.data.user, data.data.token);
+          if (data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(data.data.refreshToken));
+          setAuthData(data.data.user, data.data.token, data.data.refreshToken);
           clearTimeout(wakeTimer);
           setIsWakingUp(false);
           navigate(ROUTES.OVERVIEW, { replace: true });
-        } else {
           throw new Error(data.message || 'Login failed on backend');
         }
       } catch (error) {
@@ -142,11 +143,11 @@ export default function LoginPage() {
       const data = res.data;
       if (data.success) {
         localStorage.setItem('token', data.data.token);
-        setAuthData(data.data.user, data.data.token);
+        if (data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(data.data.refreshToken));
+        setAuthData(data.data.user, data.data.token, data.data.refreshToken);
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
         navigate(ROUTES.OVERVIEW, { replace: true });
-      } else {
         throw new Error(data.message || 'Login failed on backend');
       }
     } catch (error) {
@@ -219,7 +220,8 @@ export default function LoginPage() {
       const res = await api.post('/auth/verify-otp', { email: forgotEmail, otp: otpCode });
       if (res.data.success || res.data.status === 'success') {
         localStorage.setItem('token', res.data.data.token);
-        setAuthData(res.data.data.user, res.data.data.token);
+        if (res.data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(res.data.data.refreshToken));
+        setAuthData(res.data.data.user, res.data.data.token, res.data.data.refreshToken);
         toast.success('Login successful!');
         navigate(ROUTES.OVERVIEW, { replace: true });
       } else {

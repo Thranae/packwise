@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import ApiError from '../utils/ApiError.js';
-import { generateToken } from './token.service.js';
+import { generateToken, generateRefreshToken } from './token.service.js';
 import axios from 'axios';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
@@ -61,10 +61,11 @@ export const verifySignupOtp = async (email, otpCode) => {
   sendWelcomeEmail(user.email, user.name).catch(console.error);
 
   const token = generateToken(user._id);
+  const refreshToken = generateRefreshToken(user._id);
   const userObj = user.toObject();
   delete userObj.password;
 
-  return { user: userObj, token };
+  return { user: userObj, token, refreshToken };
 };
 
 export const loginUser = async ({ email, password }) => {
@@ -82,11 +83,12 @@ export const loginUser = async ({ email, password }) => {
   }
 
   const token = generateToken(user._id);
+  const refreshToken = generateRefreshToken(user._id);
   
   const userObj = user.toObject();
   delete userObj.password;
 
-  return { user: userObj, token };
+  return { user: userObj, token, refreshToken };
 };
 
 export const googleAuthUser = async (accessToken) => {
@@ -122,10 +124,11 @@ export const googleAuthUser = async (accessToken) => {
     }
 
     const token = generateToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
     const userObj = user.toObject();
     delete userObj.password;
 
-    return { user: userObj, token };
+    return { user: userObj, token, refreshToken };
   } catch (error) {
     console.error('Google Auth Error:', error.message);
     throw new ApiError(401, 'Invalid or expired Google access token');
@@ -207,7 +210,8 @@ export const verifyOtpAndLogin = async ({ email, otp }) => {
     throw new ApiError(400, 'OTP has expired');
   }
 
-  if (user.otp !== otp) {
+  const hashedInput = crypto.createHash('sha256').update(otp).digest('hex');
+  if (user.otp !== hashedInput) {
     throw new ApiError(401, 'Invalid OTP');
   }
 
@@ -217,10 +221,11 @@ export const verifyOtpAndLogin = async ({ email, otp }) => {
   await user.save();
 
   const token = generateToken(user._id);
+  const refreshToken = generateRefreshToken(user._id);
   const userObj = user.toObject();
   delete userObj.password;
   delete userObj.otp;
   delete userObj.otpExpires;
 
-  return { user: userObj, token };
+  return { user: userObj, token, refreshToken };
 };

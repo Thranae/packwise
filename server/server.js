@@ -31,6 +31,9 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
+// Trust the first proxy (e.g. Cloudflare, Nginx, Heroku) so rate limiter doesn't block everyone!
+app.set('trust proxy', 1);
+
 // Rate limiting: 100 requests per 15 minutes per IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,

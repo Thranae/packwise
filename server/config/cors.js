@@ -7,14 +7,26 @@ const allowedOrigins =
 
 const corsOptions = {
   origin(origin, callback) {
-    // Allow all origins to ensure the PWA works on any network, IP, or tunnel
-    callback(null, true);
+    // Allow non-browser clients (like mobile apps/postman) or explicit allowed origins
+    const allowed = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'capacitor://localhost',
+      'http://localhost',
+      env.FRONTEND_URL || process.env.FRONTEND_URL
+    ].filter(Boolean);
+
+    if (!origin || allowed.includes(origin) || env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Content-Length', 'X-Request-Id'],
-  maxAge: 86400, // 24 hours preflight cache
+  maxAge: 86400,
 };
 
 export default corsOptions;

@@ -30,12 +30,17 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
   const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
   const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
 
-  const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
-  const safe = (v) => (Number.isFinite(v) ? v : 0);
+  const rateOrigin = rates?.[originCurrency] || 1;
+  const rateDest = rates?.[destCurrency] || 1;
+  const rateMultiplier = isNaN(rateOrigin) || isNaN(rateDest) ? 1 : rateOrigin / rateDest;
+  
+  const safe = (v) => (Number.isFinite(v) && !isNaN(v) ? v : 0);
   const fmtOrigin = (val) =>
     new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(safe(val) * rateMultiplier));
   const fmtDest = (val) =>
     new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(safe(val)));
+
+  const days = Math.max(1, inputs.days || 1);
 
   const dailyItems = [
     { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: 'text-blue-400', bg: 'bg-blue-500/15' },
@@ -43,22 +48,23 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => 
     { name: 'Transport', val: breakdown.transport, icon: Car, color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
     { name: 'Activities', val: breakdown.attractions, icon: Landmark, color: 'text-purple-400', bg: 'bg-purple-500/15' },
     { name: 'Shopping', val: breakdown.shopping, icon: ShoppingBag, color: 'text-pink-400', bg: 'bg-pink-500/15' },
-    { name: 'Emergency', val: summary.emergencyReserve / inputs.days, icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/15' },
+    { name: 'Emergency', val: summary.emergencyReserve / days, icon: ShieldAlert, color: 'text-red-400', bg: 'bg-red-500/15' },
   ];
 
-  const total = summary.totalBudget;
+  const total = safe(summary.totalBudget);
   const cats = [
-    { name: 'Hotel', val: breakdown.hotel * inputs.days, color: '#60A5FA' },
-    { name: 'Food', val: breakdown.food * inputs.days, color: '#F97316' },
-    { name: 'Transport', val: breakdown.transport * inputs.days, color: '#34D399' },
-    { name: 'Other', val: total - (breakdown.hotel + breakdown.food + breakdown.transport) * inputs.days, color: '#9CA3AF' },
+    { name: 'Hotel', val: safe(breakdown.hotel) * days, color: '#60A5FA' },
+    { name: 'Food', val: safe(breakdown.food) * days, color: '#F97316' },
+    { name: 'Transport', val: safe(breakdown.transport) * days, color: '#34D399' },
+    { name: 'Other', val: Math.max(0, total - (safe(breakdown.hotel) + safe(breakdown.food) + safe(breakdown.transport)) * days), color: '#9CA3AF' },
   ];
   let offset = 0;
   const pieData = cats.map(c => {
-    const pct = (c.val / total) * 100;
+    const pct = total > 0 ? (c.val / total) * 100 : 0;
+    const safePct = isNaN(pct) || !Number.isFinite(pct) ? 0 : pct;
     const o = offset;
-    offset += pct;
-    return { ...c, pct, offset: o };
+    offset += safePct;
+    return { ...c, pct: safePct, offset: o };
   });
 
   const recs = [

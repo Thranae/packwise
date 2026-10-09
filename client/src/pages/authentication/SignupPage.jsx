@@ -12,6 +12,7 @@ import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { ROUTES } from '@/constants/routes';
+import { STORAGE_KEYS } from '@/constants/app';
 import { signupSchema } from '@/constants/validation';
 import api from '@/services/api';
 import axios from 'axios';
@@ -135,7 +136,8 @@ export default function SignupPage() {
       if (data.success) {
         // Set token and user data
         localStorage.setItem('token', data.data.token);
-        setAuthData(data.data.user, data.data.token);
+        if (data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(data.data.refreshToken));
+        setAuthData(data.data.user, data.data.token, data.data.refreshToken);
         
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
@@ -166,7 +168,8 @@ export default function SignupPage() {
         const data = res.data;
         if (data.success) {
           localStorage.setItem('token', data.data.token);
-          setAuthData(data.data.user, data.data.token);
+          if (data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(data.data.refreshToken));
+          setAuthData(data.data.user, data.data.token, data.data.refreshToken);
           clearTimeout(wakeTimer);
           setIsWakingUp(false);
           navigate(ROUTES.ONBOARDING, { replace: true });
@@ -204,7 +207,8 @@ export default function SignupPage() {
       const data = res.data;
       if (data.success) {
         localStorage.setItem('token', data.data.token);
-        setAuthData(data.data.user, data.data.token);
+        if (data.data.refreshToken) localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(data.data.refreshToken));
+        setAuthData(data.data.user, data.data.token, data.data.refreshToken);
         clearTimeout(wakeTimer);
         setIsWakingUp(false);
         navigate(ROUTES.ONBOARDING, { replace: true });

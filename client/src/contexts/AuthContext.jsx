@@ -71,10 +71,15 @@ export function AuthProvider({ children }) {
           STORAGE_KEYS.TOKEN,
           JSON.stringify(response.data.token),
         );
+        if (response.data.refreshToken) {
+          localStorage.setItem(
+            STORAGE_KEYS.REFRESH_TOKEN,
+            JSON.stringify(response.data.refreshToken),
+          );
+        }
         setUser(response.data.user);
         setIsAuthenticated(true);
 
-        // Sync the user's theme preference
         if (response.data.user?.theme) {
           setTheme(response.data.user.theme);
         }
@@ -101,6 +106,12 @@ export function AuthProvider({ children }) {
           STORAGE_KEYS.TOKEN,
           JSON.stringify(response.data.token),
         );
+        if (response.data.refreshToken) {
+          localStorage.setItem(
+            STORAGE_KEYS.REFRESH_TOKEN,
+            JSON.stringify(response.data.refreshToken),
+          );
+        }
         setUser(response.data.user);
         setIsAuthenticated(true);
 
@@ -132,6 +143,7 @@ export function AuthProvider({ children }) {
     }
 
     localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     setUser(null);
     setIsAuthenticated(false);
     navigate(ROUTES.LOGIN, { replace: true });
@@ -165,8 +177,11 @@ export function AuthProvider({ children }) {
    * @param {object} userData - The user object from the API.
    * @param {string} token - The JWT token.
    */
-  const setAuthData = useCallback((userData, token) => {
+  const setAuthData = useCallback((userData, token, refreshToken) => {
     localStorage.setItem(STORAGE_KEYS.TOKEN, JSON.stringify(token));
+    if (refreshToken) {
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, JSON.stringify(refreshToken));
+    }
     setUser(userData);
     setIsAuthenticated(true);
     if (userData?.theme) {

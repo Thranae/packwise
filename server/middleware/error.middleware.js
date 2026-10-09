@@ -9,11 +9,11 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   if (err.name === 'CastError') {
-    error = new ApiError(400, `Invalid ID format for ${err.path}`);
+    error = new ApiError(400, `Invalid ID format`);
   }
 
   if (err.code === 11000) {
-    error = new ApiError(409, 'Duplicate field value entered', Object.keys(err.keyValue));
+    error = new ApiError(409, 'Duplicate field value entered');
   }
 
   if (err.name === 'JsonWebTokenError') {
@@ -24,13 +24,25 @@ export const errorHandler = (err, req, res, next) => {
     error = new ApiError(401, 'Token expired');
   }
 
+  if (err.message && err.message.includes('not allowed by CORS')) {
+    error = new ApiError(403, 'Origin not allowed');
+  }
+
   const statusCode = error.statusCode || 500;
-  const message = error.message || 'Internal Server Error';
+  const message = statusCode === 500 && process.env.NODE_ENV !== 'development'
+    ? 'Internal Server Error'
+    : error.message || 'Internal Server Error';
+
+  if (statusCode === 500) {
+    console.error(`[ERROR] ${req.method} ${req.originalUrl}:`, err.stack || err.message);
+  }
 
   res.status(statusCode).json({
     success: false,
     message,
-    errors: error.errors || [],
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === 'development' && {
+      errors: error.errors || [],
+      stack: err.stack,
+    }),
   });
 };

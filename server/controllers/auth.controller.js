@@ -1,5 +1,7 @@
 import { catchAsync } from '../utils/catchAsync.js';
 import * as authService from '../services/auth.service.js';
+import { verifyRefreshToken, generateToken } from '../services/token.service.js';
+import User from '../models/User.js';
 import ApiResponse from '../utils/ApiResponse.js';
 
 export const signup = catchAsync(async (req, res) => {
@@ -48,6 +50,25 @@ export const verifyOtp = catchAsync(async (req, res) => {
   ApiResponse.send(res, 200, 'OTP verified and login successful', result);
 });
 
+export const refreshAccessToken = catchAsync(async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return ApiResponse.send(res, 400, 'Refresh token is required');
+  }
+
+  try {
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return ApiResponse.send(res, 401, 'User not found');
+    }
+    const newAccessToken = generateToken(user._id);
+    ApiResponse.send(res, 200, 'Token refreshed', { token: newAccessToken });
+  } catch (err) {
+    return ApiResponse.send(res, 401, 'Invalid or expired refresh token');
+  }
+});
+
 export const logout = catchAsync(async (req, res) => {
   ApiResponse.send(res, 200, 'Logged out successfully');
 });
@@ -65,3 +86,4 @@ export const updatePreferences = catchAsync(async (req, res) => {
   await user.save();
   ApiResponse.send(res, 200, 'Preferences updated successfully', user);
 });
+

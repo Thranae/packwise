@@ -4,6 +4,7 @@ export const APP_VERSION = '1.0.0';
 
 export const STORAGE_KEYS = {
   TOKEN: 'packwise_token',
+  REFRESH_TOKEN: 'packwise_refresh_token',
   THEME: 'packwise_theme',
 };
 
