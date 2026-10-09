@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 import { db } from '../db/db';
+import syncService from '../services/syncService';
 
 export const TripContext = createContext();
 
@@ -224,6 +225,11 @@ export const TripProvider = ({ children }) => {
     try {
       setLoadingTrips(true);
       
+      // 0. Process any pending offline mutations first
+      if (navigator.onLine) {
+        await syncService.processSyncQueue();
+      }
+      
       // 1. Sync any local (offline) trips to the server before pulling
       const localTrips = await db.trips.filter(t => String(t._id).startsWith('local-')).toArray();
       for (const localTrip of localTrips) {
@@ -404,7 +410,11 @@ export const TripProvider = ({ children }) => {
       try {
         await api.delete(`/trips/${tripId}`);
       } catch (error) {
-        console.error("Background sync failed for deleting trip:", error);
+        if (!navigator.onLine || error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+          syncService.queueSync(`/trips/${tripId}`, 'DELETE', null);
+        } else {
+          console.error("Background sync failed for deleting trip:", error);
+        }
       }
     }
   };
@@ -446,9 +456,13 @@ export const TripProvider = ({ children }) => {
            await db.trips.put(res.data.data); // Resync actual server state just in case
         }
       } catch (error) {
-        console.error("Failed to toggle favorite on server:", error);
-        // Revert local on failure
-        await db.trips.put(trip);
+        if (!navigator.onLine || error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+          syncService.queueSync(`/trips/${tripId}/favorite`, 'PATCH', null);
+        } else {
+          console.error("Failed to toggle favorite on server:", error);
+          // Revert local on failure
+          await db.trips.put(trip);
+        }
       }
     }
   };
@@ -470,8 +484,12 @@ export const TripProvider = ({ children }) => {
     if (isAuthenticated && !String(tripId).startsWith("local-")) {
       try {
         await api.patch(`/trips/${tripId}`, updates);
-      } catch (e) {
-        console.error("Failed to push trip update to server:", e);
+      } catch (error) {
+        if (!navigator.onLine || error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+          syncService.queueSync(`/trips/${tripId}`, 'PATCH', updates);
+        } else {
+          console.error("Failed to push trip update to server:", error);
+        }
       }
     }
   };

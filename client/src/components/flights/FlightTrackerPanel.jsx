@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plane, PlaneTakeoff, PlaneLanding, DollarSign, Bell, Trash2, Plus, TrendingDown, TrendingUp, Loader2, Phone, Calendar, MapPin, X, Check, AlertTriangle } from 'lucide-react';
 import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useTripContext } from '@/context/TripContext';
+import { db } from '@/db/db';
+import { useLiveQuery } from 'dexie-react-hooks';
+import syncService from '@/services/syncService';
 import api from '@/services/api';
 
 const MOCK_ALERTS = [
@@ -31,7 +34,9 @@ const MOCK_ALERTS = [
 ];
 
 export default function FlightTrackerPanel() {
-  const [alerts, setAlerts] = useState([]);
+  const dexieAlerts = useLiveQuery(() => db.alerts.toArray());
+  const alerts = dexieAlerts || [];
+  
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const panelRef = useRef(null);
@@ -66,11 +71,17 @@ export default function FlightTrackerPanel() {
   const fetchAlerts = async () => {
     try {
       setLoading(true);
+      if (navigator.onLine) await syncService.processSyncQueue();
+      
       const res = await api.get('/flights/alerts');
-      setAlerts(res.data);
+      if (res.data) {
+        await db.alerts.bulkPut(res.data);
+      }
     } catch (error) {
-      console.warn('Failed to fetch alerts, using mock data:', error);
-      setAlerts(MOCK_ALERTS);
+      if (alerts.length === 0) {
+        console.warn('Failed to fetch alerts, initializing with mock data (offline):', error);
+        await db.alerts.bulkPut(MOCK_ALERTS);
+      }
     } finally {
       setLoading(false);
     }
@@ -80,33 +91,50 @@ export default function FlightTrackerPanel() {
     e.preventDefault();
     try {
       setIsCreating(true);
-      const res = await api.post('/flights/alerts', formData);
-      setAlerts([...alerts, res.data]);
-      setFormData({ origin: '', destination: '', departureDate: '', targetPrice: '', phone: '' });
-    } catch (error) {
-      console.error('Failed to create alert:', error);
-      // Simulate creation for mock data
-      const newAlert = {
-        _id: `mock-${Date.now()}`,
+      
+      const newAlertData = {
+        _id: `local-${Date.now()}`,
         ...formData,
-        currentPrice: parseInt(formData.targetPrice) + 100,
+        currentPrice: parseInt(formData.targetPrice) + 100, // mock starting price
         status: 'active',
         priceHistory: [parseInt(formData.targetPrice) + 100]
       };
-      setAlerts([...alerts, newAlert]);
+      
+      // Optimistic local add
+      await db.alerts.put(newAlertData);
       setFormData({ origin: '', destination: '', departureDate: '', targetPrice: '', phone: '' });
+      
+      // Background Sync
+      const res = await api.post('/flights/alerts', formData);
+      if (res.data) {
+        await db.alerts.delete(newAlertData._id); // Delete local
+        await db.alerts.put(res.data); // Add real
+      }
+    } catch (error) {
+      if (!navigator.onLine || error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+        syncService.queueSync('/flights/alerts', 'POST', formData);
+      } else {
+        console.error('Failed to create alert on backend:', error);
+      }
     } finally {
       setIsCreating(false);
     }
   };
 
   const handleDelete = async (id) => {
-    try {
-      await api.delete(`/flights/alerts/${id}`);
-      setAlerts(alerts.filter(a => a._id !== id));
-    } catch (error) {
-      console.error('Failed to delete alert:', error);
-      setAlerts(alerts.filter(a => a._id !== id));
+    // Optimistic local delete
+    await db.alerts.delete(id);
+    
+    if (!String(id).startsWith('local-')) {
+      try {
+        await api.delete(`/flights/alerts/${id}`);
+      } catch (error) {
+        if (!navigator.onLine || error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+          syncService.queueSync(`/flights/alerts/${id}`, 'DELETE', null);
+        } else {
+          console.error('Failed to delete alert:', error);
+        }
+      }
     }
   };
 
