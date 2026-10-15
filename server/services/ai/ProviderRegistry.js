@@ -5,6 +5,7 @@
  * @property {string} apiKey - API key loaded from env
  * @property {string} baseUrl - The base URL for the API
  * @property {string} model - The primary model to use
+ * @property {{smart: string, fast: string}} [models] - Per-tier models for GPT/Claude providers (see modelCatalog.js)
  * @property {number} priority - The priority order (lower is higher priority)
  * @property {boolean} supportsStreaming - True if streaming is supported
  * @property {boolean} supportsToolCalling - True if function/tool calling is supported

@@ -1,6 +1,22 @@
 import axios from 'axios';
 import AIRouter from './ai/AIRouter.js';
 
+/**
+ * Parse JSON from a model reply, tolerating markdown fences or a sentence of prose around the payload.
+ * @param {string} text
+ */
+export function parseModelJson(text) {
+  const cleaned = text.replace(/```(?:json)?/gi, '').trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch (error) {
+    const start = cleaned.search(/[[{]/);
+    const end = Math.max(cleaned.lastIndexOf('}'), cleaned.lastIndexOf(']'));
+    if (start === -1 || end <= start) throw error;
+    return JSON.parse(cleaned.slice(start, end + 1));
+  }
+}
+
 class AIService {
   /**
    * Helper to execute a JSON-mode request through the AIRouter
@@ -12,8 +28,15 @@ class AIService {
   async _generateJson(prompt, schemaFallback, taskType = 'json') {
     try {
       const text = await AIRouter.routeRequest(prompt, taskType, true);
-      const jsonStr = text.replace(/```json\n?|\n?```/g, '').trim();
-      return JSON.parse(jsonStr);
+      const parsed = parseModelJson(text);
+
+      // JSON mode on OpenAI-style APIs always returns an object, so a requested array can arrive
+      // wrapped as {"items": [...]} — unwrap it when the caller expects an array.
+      if (Array.isArray(schemaFallback) && parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        const wrapped = Object.values(parsed).find(Array.isArray);
+        if (wrapped) return wrapped;
+      }
+      return parsed;
     } catch (error) {
       console.error("AI Generation Error:", error.message);
       return schemaFallback;
@@ -311,7 +334,7 @@ class AIService {
       "desc": "1 sentence accurate description of this real place",
       "imageQuery": "specific photo search query for this exact place (e.g. 'Shibuya Crossing Tokyo Japan')"
     }]`;
-    const result = await this._generateJson(aiPrompt, null, 'lightweight'); // Use Mistral or Groq for quick lightweight data
+    const result = await this._generateJson(aiPrompt, [], 'lightweight'); // Fast tier: GPT-6 Luna → Claude Sonnet 5.5
     
     if (!result || !Array.isArray(result) || result.length === 0) {
       return fetchNominatim();
@@ -361,7 +384,7 @@ class AIService {
 
     try {
       const prompt = `You are PackWise AI, an expert travel assistant. Context: ${JSON.stringify(context)}. User says: "${message}". Respond helpfully and concisely.`;
-      // Use 'casual' routing for fast responses via Groq/Mistral
+      // 'casual' routing = fast tier: Claude Sonnet 5.5 → GPT-6 Luna, then the remaining providers
       const response = await AIRouter.routeRequest(prompt, 'casual', false);
       return response;
     } catch (error) {
