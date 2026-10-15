@@ -170,7 +170,9 @@ class ProviderManager {
       name: 'OpenRouter Nemotron',
       apiKey: process.env.OPENROUTER_NEMOTRON_KEY,
       baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
-      model: 'nvidia/nemotron-4-340b-instruct',
+      // Same model as the NVIDIA NIM provider, served through OpenRouter as an independent fallback.
+      // (Replaces nvidia/nemotron-4-340b-instruct, which was retired and has no OpenRouter endpoints left.)
+      model: 'nvidia/nemotron-3-super-120b-a12b',
       priority: 2,
       supportsStreaming: true,
       supportsToolCalling: true,
