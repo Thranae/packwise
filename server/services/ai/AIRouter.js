@@ -69,7 +69,7 @@ class AIRouter {
     };
 
     if (provider.id === 'openai') {
-      // Reasoning models: `reasoning_effort` + `max_completion_tokens` (`max_tokens` is not accepted)
+      // Reasoning models: `reasoning_effort` + `max_completion_tokens` (caps reasoning + visible output tokens combined)
       payload.reasoning_effort = tier.effort;
       payload.max_completion_tokens = tier.maxTokens;
     } else if (provider.models && provider.id.startsWith('openrouter')) {
