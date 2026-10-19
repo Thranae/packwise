@@ -1,91 +1,174 @@
 <div align="center">
 
-# Hi there, I'm Thranaeswanth S 👋
+<!-- Hero Banner with Dynamic Gradient Wave -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,15,35,45&height=220&section=header&text=THRANAESWANTH%20S&fontSize=44&fontAlignY=36&desc=Full-Stack%20Systems%20Engineer%20%7C%20Autonomous%20AI%20%7C%20Offline-First%20OS&descSize=16&descAlignY=62&fontColor=ffffff" width="100%" alt="Thranaeswanth S Header Banner" />
 
-### Full-Stack Systems Engineer · Autonomous AI Orchestration · Cross-Platform Architecture
+<!-- Dynamic Animated Typing Subtitle -->
+<a href="https://github.com/Thranae">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=1000&color=38BDF8&center=true&vCenter=true&width=750&lines=Building+Autonomous+AI+Operating+Systems;Specialized+in+React+19%2C+Vite+6+%26+Tailwind+v4;Engineering+Self-Healing+Multi-LLM+Fallbacks;Offline-First+Data+Architecture+with+Dexie.js;Cross-Platform+Execution+on+Web%2C+iOS+%26+Android" alt="Typing Tagline" />
+</a>
 
-[![GitHub followers](https://img.shields.io/github/followers/Thranae?label=Follow&style=for-the-badge&color=2563EB&logo=github)](https://github.com/Thranae)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/thranaeswanth)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-10B981?style=for-the-badge&logo=safari&logoColor=white)](https://github.com/Thranae)
+<br />
+<br />
+
+<!-- Profile Header Badges -->
+[![GitHub](https://img.shields.io/badge/GITHUB-Thranae-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Thranae)
+[![LinkedIn](https://img.shields.io/badge/LINKEDIN-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/thranaeswanth)
+[![Flagship Project](https://img.shields.io/badge/FLAGSHIP-PackWise%20AI-2563EB?style=for-the-badge&logo=googlemaps&logoColor=white)](https://github.com/Thranae/packwise)
+[![Status](https://img.shields.io/badge/FOCUS-Building%20Intelligent%20Systems-10B981?style=for-the-badge)](https://github.com/Thranae)
 
 <br />
 
-```typescript
-const engineer = {
-  name: "Thranaeswanth S",
-  role: "Full-Stack & Autonomous AI Systems Engineer",
-  focus: ["Multi-LLM Fault Tolerance", "Offline-First PWAs", "3D Spatial Computing", "Universal Mobile"],
-  flagship: "PackWise AI (Autonomous Travel Operating System)",
-  stack: {
-    frontend: ["React 19", "Vite", "TailwindCSS v4", "Framer Motion", "Three.js"],
-    backend:  ["Node.js", "Express", "MongoDB Atlas", "JWT Security", "Redis"],
-    mobile:   ["React Native Expo", "Capacitor 8 Native iOS/Android"],
-    ai:       ["Google Gemini 2.5 Flash", "Groq Llama 3", "OpenAI GPT-4o", "Mistral AI"]
-  }
-};
-```
+<p align="center">
+  <i>"Resilient by default. High-performance by design. Obsessed with 60 FPS interactions and offline-first software that never breaks."</i>
+</p>
 
 </div>
 
 ---
 
-### 🌟 Featured Flagship Project
+### 👨‍💻 Engineering Profile
+
+```typescript
+interface SoftwareEngineer {
+  name: string;
+  role: string;
+  location: string;
+  architectureFocus: string[];
+  coreStack: {
+    frontend: string[];
+    mobile: string[];
+    backend: string[];
+    intelligence: string[];
+  };
+  currentMission: string;
+}
+
+const thranae: SoftwareEngineer = {
+  name: "Thranaeswanth S",
+  role: "Full-Stack Systems & AI Solutions Engineer",
+  location: "India",
+  architectureFocus: [
+    "Autonomous Multi-LLM Orchestration & Failover Systems",
+    "Offline-First Distributed Sync with Local IndexedDB",
+    "60 FPS Spatial Computing & 3D Interactive Globes",
+    "Universal Cross-Platform Codebases (Web PWA + Native iOS/Android)"
+  ],
+  coreStack: {
+    frontend: ["React 19", "Vite 6", "TailwindCSS v4", "Framer Motion", "Three.js"],
+    mobile: ["Capacitor 8", "React Native Expo", "Reanimated"],
+    backend: ["Node.js", "Express.js", "MongoDB Atlas", "JWT Token Rotation"],
+    intelligence: ["Google Gemini 2.5 Flash", "Groq Llama 3", "OpenAI GPT-4o", "Mistral AI"]
+  },
+  currentMission: "Building PackWise AI — The Autonomous Offline-First Travel Companion"
+};
+```
+
+---
+
+### 🌟 Flagship Project Spotlight
 
 <div align="center">
 
 <a href="https://github.com/Thranae/packwise">
-  <img src="https://raw.githubusercontent.com/Thranae/packwise/main/.github/assets/packwise-logo.png" width="90" height="90" alt="PackWise Logo" />
+  <img src="https://raw.githubusercontent.com/Thranae/packwise/main/.github/assets/packwise-logo.png" width="110" height="110" alt="PackWise Logo" />
 </a>
 
-### [PackWise AI — Autonomous Travel OS & Multi-LLM Intelligence](https://github.com/Thranae/packwise)
+## [PackWise AI — Autonomous Travel Operating System](https://github.com/Thranae/packwise)
 
-[![CI Build](https://img.shields.io/github/actions/workflow/status/Thranae/packwise/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=CI%20Status)](https://github.com/Thranae/packwise)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/Thranae/packwise/blob/main/LICENSE)
-[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![Dexie.js](https://img.shields.io/badge/Storage-Dexie.js_IndexedDB-FFA500?style=flat-square)](https://dexie.org/)
-[![Multi-LLM](https://img.shields.io/badge/AI-Multi--LLM_Fallback_Router-8B5CF6?style=flat-square)](https://github.com/Thranae/packwise)
+[![CI Build](https://img.shields.io/github/actions/workflow/status/Thranae/packwise/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI%20BUILD)](https://github.com/Thranae/packwise/actions)
+[![React 19](https://img.shields.io/badge/REACT-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Dexie.js](https://img.shields.io/badge/OFFLINE--FIRST-DEXIE.JS-F59E0B?style=for-the-badge&logo=databricks&logoColor=white)](https://dexie.org/)
+[![Multi-LLM](https://img.shields.io/badge/AI-MULTI--LLM%20FALLBACK-8B5CF6?style=for-the-badge&logo=openai&logoColor=white)](https://github.com/Thranae/packwise)
 
-An enterprise-grade, offline-first autonomous travel companion engineered for unpredictable real-world connectivity.
+<br />
+
+<p align="center">
+  <b>PackWise</b> is an enterprise-grade travel companion built to operate seamlessly even when networks fail. Features an autonomous multi-LLM self-healing router, zero-downtime offline reconciliation, and 60 FPS 3D spatial mapping.
+</p>
 
 </div>
 
-- **Self-Healing Multi-LLM Router**: Real-time fallback routing across Google Gemini 2.5 Flash, Groq, OpenAI, and Mistral with circuit breaker failovers.
-- **Offline-First Data Layer**: Dexie.js IndexedDB local storage engine with automatic two-way background sync on network reconnection.
-- **Universal Cross-Platform**: React 19 PWA, Capacitor 8 native iOS/Android, and React Native Expo mobile workspace.
-- **Enterprise Security**: Rotating dual JWT tokens stored in HttpOnly, SameSite=Strict cookies with MongoDB sanitization.
+<table>
+  <tr>
+    <td width="50%">
+      <h4>🧠 Multi-LLM Fallback Engine</h4>
+      <p>Eliminates vendor outages through a smart task router cycling from <b>Google Gemini 2.5 Flash</b> for strict JSON planning to <b>Groq Llama 3</b> for sub-300ms chat, falling back to <b>OpenAI</b> and <b>Mistral</b> on rate limits.</p>
+    </td>
+    <td width="50%">
+      <h4>📶 Offline-First Synchronization</h4>
+      <p>Local-first state writes commit instantly to <b>Dexie.js (IndexedDB)</b>. Offline changes queue into an idempotent log and reconcile automatically with MongoDB Atlas upon reconnection.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>🌐 3D Spatial Canvas</h4>
+      <p>Immersive global travel telemetry powered by <b>Three.js</b>, <b>React-Globe.gl</b>, and customized dark-mode <b>MapLibre GL</b> satellite vectors with fluid spring physics.</p>
+    </td>
+    <td width="50%">
+      <h4>🛡️ Hardened Security Architecture</h4>
+      <p>Dual-JWT access and rotating refresh tokens enclosed in <code>HttpOnly</code>, <code>SameSite=Strict</code> cookies with automated NoSQL query sanitization via <code>express-mongo-sanitize</code>.</p>
+    </td>
+  </tr>
+</table>
 
-👉 **[Explore PackWise on GitHub →](https://github.com/Thranae/packwise)**
+<p align="center">
+  <a href="https://github.com/Thranae/packwise"><b>👉 Explore the PackWise Repository & Architecture Spec →</b></a>
+</p>
 
 ---
 
-### 🛠️ Technical Arsenal
-
-| Domain | Technologies & Frameworks |
-| :--- | :--- |
-| **Frontend & 3D Spatial** | React 19, Vite, Next.js, TailwindCSS v4, Framer Motion, GSAP, Three.js, React-Globe.gl, Spline 3D |
-| **Mobile Runtimes** | React Native, Expo Router, Capacitor 8 (iOS & Android), React Native Reanimated |
-| **Backend & Distributed** | Node.js, Express.js, REST APIs, WebSockets, SSE Streaming, Node-Cron, Nodemailer |
-| **Database & Offline Store** | MongoDB Atlas, Mongoose ODM, Dexie.js (IndexedDB), Service Workers, Workbox PWA |
-| **AI Orchestration** | Google Gemini API, Groq Cloud, OpenAI GPT-4o, Mistral, Anthropic Claude, LangChain |
-| **DevOps & Security** | GitHub Actions CI/CD, Docker, Helmet CSP, JWT Token Rotation, Rate Limiting, Dependabot |
-
----
-
-### 📊 GitHub Activity & Metrics
+### 🛠️ Technical Capabilities & Stack
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Thranae&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="Thranae's GitHub Stats" height="165" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Thranae&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages" height="165" />
+
+| Ecosystem | Technologies & Frameworks |
+| :--- | :--- |
+| **Frontend & 3D Web** | ![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB) ![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=flat-square&logo=vite&logoColor=white) ![Tailwind](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white) ![Three.js](https://img.shields.io/badge/Three.js-000000?style=flat-square&logo=three.js&logoColor=white) ![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=flat-square&logo=framer&logoColor=white) ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=flat-square&logo=greensock&logoColor=white) |
+| **Mobile & Cross-Platform** | ![Capacitor](https://img.shields.io/badge/Capacitor_8-1192EE?style=flat-square&logo=capacitor&logoColor=white) ![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB) ![Expo](https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white) ![PWA](https://img.shields.io/badge/PWA_Workbox-5A0FC8?style=flat-square&logo=pwa&logoColor=white) |
+| **Backend & Gateways** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white) ![Express](https://img.shields.io/badge/Express.js-000000?style=flat-square&logo=express&logoColor=white) ![JWT](https://img.shields.io/badge/JWT_Token_Rotation-000000?style=flat-square&logo=json-web-tokens&logoColor=white) ![REST APIs](https://img.shields.io/badge/REST_APIs-02569B?style=flat-square) ![SSE](https://img.shields.io/badge/SSE_Streaming-FF6B6B?style=flat-square) |
+| **Databases & Offline Storage** | ![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white) ![Dexie.js](https://img.shields.io/badge/Dexie.js_IndexedDB-FFA500?style=flat-square) ![Mongoose](https://img.shields.io/badge/Mongoose_ODM-880000?style=flat-square&logo=mongoose&logoColor=white) |
+| **AI & Autonomous Agents** | ![Google Gemini](https://img.shields.io/badge/Gemini_2.5_Flash-4285F4?style=flat-square&logo=google&logoColor=white) ![Groq](https://img.shields.io/badge/Groq_Cloud-F05032?style=flat-square) ![OpenAI](https://img.shields.io/badge/OpenAI_GPT--4o-412991?style=flat-square&logo=openai&logoColor=white) ![Mistral](https://img.shields.io/badge/Mistral_AI-FF7000?style=flat-square) |
+| **DevOps & Verification** | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions_CI-2088FF?style=flat-square&logo=github-actions&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Dependabot](https://img.shields.io/badge/Dependabot-02569B?style=flat-square&logo=dependabot&logoColor=white) |
+
+</div>
+
+---
+
+### 📊 GitHub Activity & Real-Time Metrics
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Thranae&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&icon_color=60a5fa&text_color=e2e8f0" alt="Thranae's GitHub Stats" height="175" />
+  &nbsp;&nbsp;
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Thranae&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&text_color=e2e8f0" alt="Top Languages" height="175" />
 </div>
 
 <br />
 
 <div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Thranae&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
+  <img src="https://streak-stats.demolab.com/?user=Thranae&theme=tokyonight&hide_border=true&background=0d1117&ring=38bdf8&fire=60a5fa&currStreakNum=38bdf8&sideNums=e2e8f0&sideLabels=94a3b8" alt="GitHub Streak Tracker" />
 </div>
 
 ---
 
+### 💡 Core Engineering Principles
+
+1. **Failure Is a First-Class State**: Never assume the network or third-party APIs will respond. Every feature must have local fallbacks, optimistic client updates, and deterministic background sync.
+2. **Sub-16ms Frame Budgets**: If an animation stutters, it destroys the user's perception of quality. Optimize bundle chunking, decouple main-thread blocking operations, and embrace GPU-accelerated transforms.
+3. **Defense-in-Depth Security**: Avoid storing sensitive credentials in vulnerable localStorage. Use rotating HttpOnly cookies, sanitize every incoming payload, and enforce strict Content Security Policies.
+
+---
+
 <div align="center">
-  <sub>Let's build something extraordinary together. Feel free to reach out via <a href="https://linkedin.com/in/thranaeswanth">LinkedIn</a> or explore my code!</sub>
+
+### 🤝 Let's Connect & Collaborate
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Thranaeswanth-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/thranaeswanth)
+[![Email](https://img.shields.io/badge/Email-Contact%20Me-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:thranae7@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow%20@Thranae-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Thranae)
+
+<br />
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,15,35,45&height=100&section=footer" width="100%" alt="Footer Wave" />
+
 </div>
