@@ -40,13 +40,100 @@ Desktop.ini
 coverage/
 *.lcov
 
-# Misc
+# Temp & scratch
 .cache/
 .temp/
 .tmp/
 scratch/
+
+# Backup files
 *.bak
 ~$*
 *_backup.*
 
+# AI tool configuration directories
+.adal/
+.agents/
+.aider-desk/
+.augment/
+.autohand/
+.bob/
+.claude/
+.codeartsdoer/
+.codebuddy/
+.codemaker/
+.codestudio/
+.commandcode/
+.continue/
+.cortex/
+.crush/
+.devin/
+.factory/
+.forge/
+.goose/
+.grok/
+.hermes/
+.iflow/
+.inferencesh/
+.jazz/
+.junie/
+.kilocode/
+.kimchi/
+.kiro/
+.kode/
+.lingma/
+.mcpjam/
+.moxby/
+.mux/
+.neovate/
+.ona/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.reasonix/
+.roo/
+.rovodev/
+.tabnine/
+.terramind/
+.tinycloud/
+.trae/
+.vibe/
+.windsurf/
+.zcode/
+.zencoder/
+.gemini/
+.cursor/
+.copilot/
 
+# Loose scripts (not part of the project)
+fix*.js
+gen_ppt*.js
+generate_supertet_syllabus.js
+fetchPixabay.js
+replace_content*.js
+test-profile.js
+old_signup.txt
+spline.html
+
+# Presentation / report / document artifacts
+*.pptx
+*.docx
+*.pdf
+template.zip
+
+# Non-project directories
+ai-skills/
+components/
+data/
+skills/
+skills-lock.json
+unpacked_packwise_v2/
+unpacked_template/
+packwise_flutter/
+
+# Test / temp image artifacts
+test_chart.png
+test_mermaid.png
+stitch_screenshot.png
