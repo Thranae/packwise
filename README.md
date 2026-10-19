@@ -1,17 +1,10 @@
 <div align="center">
 
-<br />
-
 <a href="https://github.com/Thranae/packwise">
-  <img src=".github/assets/packwise-logo.png" alt="PackWise 3D App Icon" width="130" height="130" style="border-radius: 28px;" />
+  <img src=".github/assets/packwise-banner.svg" alt="PackWise AI Header Banner" width="100%" />
 </a>
 
-<br />
-<br />
-
-# PackWise AI
-
-### Next-Gen Autonomous Travel Operating System & Multi-LLM Intelligence
+<br /><br />
 
 [![CI Build](https://img.shields.io/github/actions/workflow/status/Thranae/packwise/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI%20BUILD)](https://github.com/Thranae/packwise/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/LICENSE-MIT-2563EB?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
@@ -26,7 +19,7 @@
 <br />
 
 <p align="center">
-  <b>PackWise</b> is an enterprise-grade, offline-first autonomous travel companion engineered for volatile real-world connectivity. Powered by a self-healing multi-LLM orchestrator, high-performance 3D spatial mapping, and cross-platform native execution across Web PWA, iOS, and Android.
+  <b>PackWise AI</b> is an enterprise-grade, offline-first autonomous travel operating system engineered for volatile real-world connectivity. Powered by a self-healing multi-LLM orchestrator, high-performance 60 FPS 3D spatial mapping, and cross-platform native execution across Web PWA, iOS, and Android.
 </p>
 
 <p align="center">
@@ -40,7 +33,9 @@
 
 <br />
 
-<img src=".github/assets/app-preview.jpg" alt="PackWise Application Interface Showcase" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);" />
+<a href="https://github.com/Thranae/packwise">
+  <img src=".github/assets/app-preview.jpg" alt="PackWise Application Interface Showcase" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);" />
+</a>
 
 <br />
 
@@ -54,28 +49,13 @@ Most travel applications fail travelers when they need them the most: in undergr
 
 PackWise was constructed from first principles to solve these foundational issues:
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                              PACKWISE CORE ARCHITECTURE                                │
-├──────────────────────────┬─────────────────────────────────────────────────────────────┤
-│ Dimension                │ Traditional Travel Software     │ PackWise Autonomous OS    │
-├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
-│ AI Reliability           │ Single API point of failure     │ Multi-LLM self-healing    │
-│                          │ (Crashes on HTTP 429/500)       │ router with zero downtime │
-├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
-│ Data Availability        │ Network-dependent               │ Offline-first Dexie DB    │
-│                          │ (Blank screens offline)         │ with background sync      │
-├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
-│ Spatial Interface        │ Flat, static list forms         │ 60 FPS Three.js globe     │
-│                          │                                 │ & MapLibre GL satellite   │
-├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
-│ Runtime Portability      │ Fragmented separate platforms   │ Unified monorepo: PWA,    │
-│                          │                                 │ Capacitor 8, & Expo       │
-├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
-│ Authentication Security  │ Vulnerable localStorage JWTs    │ Rotating Dual-JWT with    │
-│                          │                                 │ HttpOnly SameSite cookies │
-└──────────────────────────┴─────────────────────────────────┴───────────────────────────┘
-```
+| Dimension | Traditional Travel Software | PackWise Autonomous OS |
+| :--- | :--- | :--- |
+| **AI Reliability** | Single API point of failure (Crashes on HTTP 429/500) | Multi-LLM self-healing router with zero downtime |
+| **Data Availability** | Network-dependent (Blank screens offline) | Offline-first Dexie DB with background sync |
+| **Spatial Interface** | Flat, static list forms | 60 FPS Three.js globe & MapLibre GL satellite |
+| **Runtime Portability** | Fragmented separate platforms | Unified monorepo: PWA, Capacitor 8, & Expo |
+| **Authentication Security** | Vulnerable localStorage JWTs | Rotating Dual-JWT with HttpOnly SameSite cookies |
 
 ---
 
