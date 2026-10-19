@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src=".github/assets/icon.png" alt="PackWise 3D App Icon" width="128" height="128" />
+<img src=".github/assets/packwise-logo.png" alt="PackWise Logo" width="128" height="128" />
 
 # PackWise AI
 
