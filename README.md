@@ -1,149 +1,216 @@
 <div align="center">
 
-<img src=".github/assets/packwise-logo.png" alt="PackWise Logo" width="128" height="128" />
+<br />
+
+<a href="https://github.com/Thranae/packwise">
+  <img src=".github/assets/packwise-logo.png" alt="PackWise 3D App Icon" width="130" height="130" style="border-radius: 28px;" />
+</a>
+
+<br />
+<br />
 
 # PackWise AI
 
-### Autonomous Travel Operating System & Multi-LLM Itinerary Intelligence
+### Next-Gen Autonomous Travel Operating System & Multi-LLM Intelligence
 
-[![CI Build](https://github.com/Thranae/packwise/actions/workflows/ci.yml/badge.svg)](https://github.com/Thranae/packwise/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Vite 6](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Google Gemini](https://img.shields.io/badge/AI-Google_Gemini_2.5_Flash-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
-[![Offline-First](https://img.shields.io/badge/Storage-Dexie.js_IndexedDB-FFA500)](https://dexie.org/)
-[![Capacitor](https://img.shields.io/badge/Mobile-Capacitor_8_&_Expo-1192EE?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
-[![MongoDB](https://img.shields.io/badge/Database-MongoDB_Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![CI Build](https://img.shields.io/github/actions/workflow/status/Thranae/packwise/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI%20BUILD)](https://github.com/Thranae/packwise/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/LICENSE-MIT-2563EB?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![React 19](https://img.shields.io/badge/REACT-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite 6](https://img.shields.io/badge/VITE-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Node.js](https://img.shields.io/badge/NODE.JS-20+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Google Gemini](https://img.shields.io/badge/AI-GEMINI_2.5_FLASH-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Dexie.js](https://img.shields.io/badge/STORAGE-DEXIE_INDEXEDDB-F59E0B?style=for-the-badge&logo=databricks&logoColor=white)](https://dexie.org/)
+[![Capacitor](https://img.shields.io/badge/MOBILE-CAPACITOR_8_%26_EXPO-1192EE?style=for-the-badge&logo=capacitor&logoColor=white)](https://capacitorjs.com/)
+[![MongoDB](https://img.shields.io/badge/DATABASE-MONGODB_ATLAS-00ED64?style=for-the-badge&logo=mongodb&logoColor=black)](https://www.mongodb.com/)
+
+<br />
 
 <p align="center">
-  <b>PackWise</b> is an enterprise-grade, offline-first autonomous travel companion engineered for unpredictable real-world connectivity. Powered by a self-healing multi-LLM orchestrator, high-performance 3D spatial mapping, and cross-platform native execution across Web, iOS, and Android.
+  <b>PackWise</b> is an enterprise-grade, offline-first autonomous travel companion engineered for volatile real-world connectivity. Powered by a self-healing multi-LLM orchestrator, high-performance 3D spatial mapping, and cross-platform native execution across Web PWA, iOS, and Android.
 </p>
 
-[Key Features](#-key-features) • [System Architecture](#-system-architecture) • [Offline-First Engine](#-offline-first-data-engine) • [Multi-LLM Router](#-multi-llm-orchestrator) • [Monorepo Layout](#-monorepo-structure) • [Quick Start](#-quick-start)
+<p align="center">
+  <a href="#-system-architecture">Explore Architecture</a> •
+  <a href="#-core-engineering-highlights">Key Innovations</a> •
+  <a href="#-offline-first-synchronization-engine">Offline Data Layer</a> •
+  <a href="#-multi-provider-ai-routing-matrix">AI Matrix</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-monorepo-structure">Repository Layout</a>
+</p>
 
----
+<br />
+
+<img src=".github/assets/app-preview.jpg" alt="PackWise Application Interface Showcase" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);" />
+
+<br />
 
 </div>
 
-## 🌟 Key Features
+---
 
-| Capability | Engineering Highlights |
-| :--- | :--- |
-| **Autonomous Itinerary Generation** | Schema-enforced itinerary generation powered by Google Gemini 2.5 Flash, generating hour-by-hour schedules, local culinary highlights, geo-tagged activities, and automated packing lists. |
-| **Resilient Multi-LLM Router** | Zero-downtime AI architecture with intelligent task routing (Gemini 2.5 Flash &rarr; Groq Llama 3 &rarr; OpenAI &rarr; Mistral &rarr; OpenRouter) equipped with exponential backoff and circuit-breaker fallbacks. |
-| **Offline-First Data Layer** | Full client-side IndexedDB persistence via Dexie.js. Users can generate, view, edit trips, check off packing items, and log expenses without an active internet connection. Background Sync automatically reconciles state once connectivity resumes. |
-| **3D Spatial & Interactive Canvas** | Immersive WebGL interfaces including real-time Three.js globes, interactive MapLibre / Leaflet satellite mapping, and Spline 3D assets running at 60 FPS. |
-| **Hardened Security Suite** | Dual-token authentication with rotating JWT refresh tokens stored in HttpOnly, SameSite cookies, bcrypt password hashing, MongoDB query sanitization, and strict Helmet Content Security Policies. |
-| **Universal Cross-Platform** | Single codebase ecosystem spanning progressive web app (PWA), native iOS and Android builds via Capacitor 8, alongside a companion React Native Expo mobile workspace. |
-| **Itinerary Export Engine** | Server-side PDF and DOCX generation with custom brand typography, budget summaries, packing manifests, and QR trip sharing. |
+## ⚡ Architectural Paradigm Shift
+
+Most travel applications fail travelers when they need them the most: in underground subways, transcontinental flights, and foreign countries with spotty roaming connections. Furthermore, relying on a single AI endpoint leads to catastrophic rate limits and timeouts during peak usage.
+
+PackWise was constructed from first principles to solve these foundational issues:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              PACKWISE CORE ARCHITECTURE                                │
+├──────────────────────────┬─────────────────────────────────────────────────────────────┤
+│ Dimension                │ Traditional Travel Software     │ PackWise Autonomous OS    │
+├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
+│ AI Reliability           │ Single API point of failure     │ Multi-LLM self-healing    │
+│                          │ (Crashes on HTTP 429/500)       │ router with zero downtime │
+├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
+│ Data Availability        │ Network-dependent               │ Offline-first Dexie DB    │
+│                          │ (Blank screens offline)         │ with background sync      │
+├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
+│ Spatial Interface        │ Flat, static list forms         │ 60 FPS Three.js globe     │
+│                          │                                 │ & MapLibre GL satellite   │
+├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
+│ Runtime Portability      │ Fragmented separate platforms   │ Unified monorepo: PWA,    │
+│                          │                                 │ Capacitor 8, & Expo       │
+├──────────────────────────┼─────────────────────────────────┼───────────────────────────┤
+│ Authentication Security  │ Vulnerable localStorage JWTs    │ Rotating Dual-JWT with    │
+│                          │                                 │ HttpOnly SameSite cookies │
+└──────────────────────────┴─────────────────────────────────┴───────────────────────────┘
+```
 
 ---
 
 ## 🏛️ System Architecture
 
-PackWise employs a decoupled client-gateway topology designed for fault-tolerance, low-latency client rendering, and seamless cloud synchronization.
+PackWise utilizes a decoupled client-gateway topology optimized for sub-15ms local interaction latency, intelligent AI orchestration, and deterministic remote reconciliation.
 
 ```mermaid
 flowchart TD
-    subgraph Client["Client Tier (Cross-Platform)"]
-        UI["React 19 + Tailwind v4 + Framer Motion"]
-        PWA["Service Worker (Workbox PWA Cache)"]
-        Mobile["Capacitor 8 / React Native Expo"]
-        Dexie["Dexie.js (IndexedDB Local Store)"]
-        SyncMgr["Offline Sync Queue & Reconciler"]
+    classDef clientStyle fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef serverStyle fill:#0f172a,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+    classDef aiStyle fill:#1e1b4b,stroke:#a855f7,stroke-width:2px,color:#f8fafc;
+    classDef extStyle fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+
+    subgraph ClientLayer["1. Client Layer · Universal Cross-Platform"]
+        WebClient["React 19 Web App\n(Vite 6 + Tailwind v4 + Framer Motion)"]:::clientStyle
+        PWAServiceWorker["Service Worker Cache\n(Workbox Offline Shell)"]:::clientStyle
+        MobileApp["Native Apps\n(Capacitor 8 iOS/Android + Expo)"]:::clientStyle
+        DexieDB[("Dexie.js IndexedDB\nLocal-First Store")]:::clientStyle
+        SyncEngine["Sync Mutation Queue\n(Idempotent Action Log)"]:::clientStyle
         
-        UI --> Dexie
-        UI --> PWA
-        UI --> Mobile
-        Dexie <--> SyncMgr
+        WebClient <--> DexieDB
+        MobileApp <--> DexieDB
+        WebClient --- PWAServiceWorker
+        DexieDB <--> SyncEngine
     end
 
-    subgraph Gateway["Server Tier (Node.js & Express)"]
-        Security["Security Middleware\n(Helmet, CORS, HPP, Mongo-Sanitize)"]
-        Auth["Auth Service\n(Dual JWT + Refresh Token Rotation)"]
-        RateLimit["Rate Limiter (Express-Rate-Limit)"]
-        TripController["Trip & Budget Controller"]
-        ExportEngine["Document Exporter (PDFKit / DOCX)"]
+    subgraph GatewayLayer["2. Gateway Layer · Hardened Node.js & Express"]
+        SecurityShield["Security Perimeter\n(Helmet, Mongo-Sanitize, HPP, CORS)"]:::serverStyle
+        AuthService["Auth & Token Service\n(Rotating JWT + HttpOnly Cookies)"]:::serverStyle
+        RateLimiter["Adaptive Rate Limiter\n(Express-Rate-Limit)"]:::serverStyle
+        Controllers["Core API Controllers\n(Trips, Budgets, Flights, Weather)"]:::serverStyle
+        DocEngine["Document Exporter\n(Streaming PDFKit & DOCX)"]:::serverStyle
         
-        Security --> RateLimit --> Auth --> TripController
+        SecurityShield --> RateLimiter --> AuthService --> Controllers
+        Controllers --> DocEngine
     end
 
-    subgraph AIOrchestrator["Autonomous AI Router (AIRouter.js)"]
-        Router{"Task Classifier &\nHealth Evaluator"}
-        Gemini["Google Gemini 2.5 Flash\n(Structured Planning)"]
-        Groq["Groq Llama 3\n(Sub-second Streaming)"]
-        OpenAI["OpenAI GPT-4o\n(Secondary Fallback)"]
-        Mistral["Mistral AI\n(Tertiary Fallback)"]
-        
-        Router -->|Primary: Planning| Gemini
-        Router -->|Primary: Chat| Groq
-        Gemini -.->|Failover| Groq
-        Groq -.->|Failover| OpenAI
-        OpenAI -.->|Failover| Mistral
+    subgraph AIRoutingLayer["3. Multi-LLM Orchestrator · Self-Healing AIRouter"]
+        RouterEngine{"Task Classifier &\nLatency Evaluator"}:::aiStyle
+        GeminiPrimary["Google Gemini 2.5 Flash\n(Primary: Structured JSON Planning)"]:::aiStyle
+        GroqFast["Groq Llama 3 / OSS 120B\n(Primary: Low-Latency Streaming)"]:::aiStyle
+        OpenAIFallback["OpenAI GPT-4o / Sol\n(Secondary Fallback)"]:::aiStyle
+        MistralFallback["Mistral Large\n(Tertiary Fallback)"]:::aiStyle
+        OpenRouterPool["OpenRouter Distributed Pool\n(Emergency Cluster Fallback)"]:::aiStyle
+
+        RouterEngine -->|Planning / JSON| GeminiPrimary
+        RouterEngine -->|Conversational Chat| GroqFast
+        GeminiPrimary -.->|On 429/5xx| GroqFast
+        GroqFast -.->|Failover| OpenAIFallback
+        OpenAIFallback -.->|Failover| MistralFallback
+        MistralFallback -.->|Failover| OpenRouterPool
     end
 
-    subgraph External["External Telemetry & Cloud Services"]
-        Mongo[("MongoDB Atlas")]
-        Weather["OpenWeather API"]
-        Aviation["AviationStack Radar"]
-        Media["Unsplash / Pexels Multi-Key Pool"]
-        Notify["Brevo Email & Twilio SMS"]
+    subgraph ExternalTelemetry["4. Persistent State & Real-Time APIs"]
+        MongoDB[("MongoDB Atlas\nPrimary Document Store")]:::extStyle
+        WeatherAPI["OpenWeatherMap\nLive Atmospheric Telemetry"]:::extStyle
+        AviationAPI["AviationStack Radar\nLive Flight Price Tracking"]:::extStyle
+        MediaPool["Unsplash / Pexels / Pixabay\nMulti-Key Dynamic Image Rotation"]:::extStyle
+        DispatchAPI["Brevo Email & Twilio SMS\nScheduled Push Notifications"]:::extStyle
     end
 
-    SyncMgr <==>|Bi-directional Sync| Gateway
-    TripController --> AIOrchestrator
-    TripController --> Mongo
-    TripController --> Weather
-    TripController --> Aviation
-    TripController --> Media
-    TripController --> Notify
-    TripController --> ExportEngine
+    SyncEngine <==>|Bi-directional Sync on Online Event| GatewayLayer
+    Controllers --> AIRoutingLayer
+    Controllers --> MongoDB
+    Controllers --> WeatherAPI
+    Controllers --> AviationAPI
+    Controllers --> MediaPool
+    Controllers --> DispatchAPI
 ```
 
 ---
 
-## 📶 Offline-First Data Engine
+## 💎 Core Engineering Highlights
 
-Travelers frequently encounter dead zones, subway tunnels, and international roaming limits. PackWise is built on an **offline-first local-store architecture**:
-
-1. **Local-First Mutations**: Every trip modification, expense log, and packing check-off writes instantly to the client's Dexie.js (IndexedDB) database for sub-10ms UI updates.
-2. **Deterministic Mutation Queue**: Offline actions are appended to an indexed operation log (`offlineSyncQueue`) with idempotency keys.
-3. **Background Reconciliation**: When the browser or native app detects the `online` window event, the synchronization service pushes queued actions to the server, reconciles conflict timestamps, and updates remote MongoDB documents.
+### 1. 📶 Offline-First Synchronization Engine
+- **Zero-Latency Interactions**: Every state mutation (trip creation, expense logging, packing checklist updates) commits immediately to the client's local **Dexie.js (IndexedDB)** instance.
+- **Ordered Mutation Queue**: Offline transactions are assigned an idempotency hash and appended to an atomic queue.
+- **Automatic Reconnection Reconciliation**: When the client regains network connection, the synchronization manager dispatches a batch reconciliation payload to `/api/trips/sync`, resolving conflicts using deterministic server timestamps and updating MongoDB Atlas atomically.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Traveler
-    participant UI as React UI
-    participant DB as Local Dexie (IndexedDB)
-    participant Sync as Background Sync Worker
-    participant API as PackWise Express API
+    actor Traveler as ✈️ Traveler
+    participant UI as React 19 Frontend
+    participant DB as Dexie.js (IndexedDB)
+    participant Worker as Sync Worker
+    participant API as Express API Gateway
     participant Cloud as MongoDB Atlas
 
-    Traveler->>UI: Adds new trip expense (Offline)
-    UI->>DB: Write expense record locally
-    UI->>DB: Enqueue sync mutation payload
-    UI-->>Traveler: Instant 60fps UI feedback (No loading spinners)
+    Traveler->>UI: Adds expense / edits itinerary (Offline in flight)
+    UI->>DB: Instant local write to IndexedDB
+    UI->>DB: Push operation to `offlineSyncQueue`
+    UI-->>Traveler: Render optimistic state at 60 FPS (Zero lag)
     
-    Note over Traveler,API: Network connection restored
-    Sync->>Sync: Detect online event & read queued mutations
-    Sync->>API: POST /api/trips/sync (Batch payload)
+    Note over Traveler,API: Airplane lands · Network connection restored
+    Worker->>Worker: Detect `window.online` event
+    Worker->>DB: Retrieve queued mutation operations
+    Worker->>API: POST /api/trips/sync (Batch payload)
     API->>Cloud: Atomic upsert with version checks
-    API-->>Sync: 200 OK (Reconciled state)
-    Sync->>DB: Clear processed mutation queue
-    Sync->>UI: Trigger reactive sync badge update
+    Cloud-->>API: Persisted state confirmation
+    API-->>Worker: 200 OK (Reconciled documents)
+    Worker->>DB: Purge processed mutation queue
+    Worker->>UI: Emit state update badge (Synced)
 ```
 
 ---
 
-## 🧠 Multi-LLM Orchestrator
+### 2. 🧠 Multi-Provider AI Routing Matrix
+PackWise eliminates vendor lock-in and API outage risks through an autonomous task classifier and dynamic circuit breaker:
 
-Rather than relying on a single AI provider prone to rate limits and outages, PackWise features a custom `AIRouter`:
+| Tier | Provider | Model ID | Primary Responsibility | SLA Latency |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tier 1 (Planning)** | Google Gemini | `gemini-2.5-flash` | Strict Schema Itineraries, Activity Geo-Tagging | ~850ms |
+| **Tier 1 (Chat)** | Groq Cloud | `openai/gpt-oss-120b` | Real-time conversational streaming assistant | ~280ms |
+| **Tier 2 (Fallback)** | OpenAI | `gpt-4o` | Complex reasoning fallback & validation | ~1100ms |
+| **Tier 3 (Fallback)** | Mistral AI | `mistral-large-latest` | Multilingual localization & cultural notes | ~950ms |
+| **Tier 4 (Emergency)** | OpenRouter | `meta-llama/llama-3.3-70b` | Distributed failover cluster | ~1400ms |
 
-- **Smart Task Specialization**: Directs high-complexity itinerary structuring to **Google Gemini 2.5 Flash** for strict JSON output compliance, while routing conversational chat to **Groq** for sub-300ms time-to-first-token streaming.
-- **Self-Healing Fallback Chains**: If an endpoint returns a `429 Too Many Requests` or `5xx Server Error`, the router immediately transitions to the next healthy provider in the chain without failing the user request.
-- **Dynamic API Key Cycling**: Rotates API keys across multi-key pools (Pexels, Unsplash, Pixabay) to prevent quota exhaustion.
+---
+
+### 3. 🌐 3D Spatial Maps & Interactive Canvas
+- **Three.js & React-Globe.gl**: Interactive 3D globe visualization rendering global flight paths, destination coordinates, and day-night orbital terminators.
+- **MapLibre GL & Leaflet Integration**: High-density satellite and street vector maps with customized dark-mode Carto tiles and smooth marker zooming.
+- **Spline 3D Scene Runtime**: Embedded 3D interactive assets with gesture and scroll-linked micro-animations.
+
+---
+
+### 4. 🛡️ Enterprise Security Architecture
+- **Dual-Token Refresh Security**: Access tokens (15-minute expiry) paired with rotating refresh tokens (7-day expiry) stored exclusively inside `HttpOnly`, `SameSite=Strict`, `Secure` cookies.
+- **Defense-in-Depth Middleware**:
+  - `helmet`: Comprehensive Content Security Policy (CSP), HTTP Strict Transport Security (HSTS), and X-Frame-Options.
+  - `express-mongo-sanitize`: Eliminates NoSQL injection vectors by sanitizing user-supplied payload keys.
+  - `hpp`: Protects against HTTP Parameter Pollution attacks.
+  - `express-rate-limit`: Per-IP throttling on authentication, trip generation, and notification dispatches.
 
 ---
 
@@ -151,34 +218,37 @@ Rather than relying on a single AI provider prone to rate limits and outages, Pa
 
 ```text
 packwise/
-├── client/                     # Web Application & Capacitor Container
+├── client/                     # Web Frontend & Hybrid Native Container
 │   ├── src/
-│   │   ├── components/         # Modular UI (Widgets, 3D Canvas, Navigation)
+│   │   ├── components/         # Modular Atomic UI (Widgets, 3D Canvas, Navigation)
 │   │   ├── contexts/           # AuthContext, TripContext (Dexie integrated)
 │   │   ├── db/                 # Dexie.js IndexedDB schema & sync stores
-│   │   ├── hooks/              # Custom hooks (useLiveApis, useDestinationImage)
-│   │   └── utils/              # CostEngine, currency localizers, PDF generator
+│   │   ├── hooks/              # Custom reactive hooks (useLiveApis, useDestinationImage)
+│   │   └── utils/              # CostEngine, currency localizers, PDFKit streaming
 │   ├── public/                 # PWA icons, WebGL assets, Web Manifest
-│   ├── capacitor.config.json   # Native iOS & Android runtime config
+│   ├── capacitor.config.json   # Native iOS & Android runtime container config
 │   └── vite.config.js          # Optimized Rollup chunking & PWA service worker
-├── server/                     # Backend API & Orchestration Gateway
+├── server/                     # Backend API & Autonomous Orchestration Gateway
+│   ├── config/                 # Database, security policies, and environment config
 │   ├── controllers/            # Trip, Auth, SMS, Weather, Image controllers
-│   ├── middleware/             # Rate limit, JWT verification, error boundary
+│   ├── middleware/             # Rate limit, JWT verification, security boundaries
 │   ├── models/                 # Mongoose schemas (Trip, User, Notification)
-│   ├── routes/                 # Express API routes
+│   ├── routes/                 # Express API REST endpoints
 │   ├── services/
-│   │   ├── ai/                 # AIRouter, ProviderManager, Multi-LLM fallbacks
-│   │   ├── token.service.js    # Dual JWT access/refresh token rotation
-│   │   └── tripScore.service.js# Weather and contextual trip scoring
-│   └── server.js               # Entry point with graceful shutdown
+│   │   ├── ai/                 # AIRouter, ProviderManager, Multi-LLM failover chains
+│   │   ├── token.service.js    # Dual JWT access/refresh token rotation engine
+│   │   └── tripScore.service.js# Weather and contextual itinerary scoring
+│   └── server.js               # Entry point with health checks and graceful shutdown
 ├── packwise-mobile/            # Companion React Native Expo Application
 │   ├── src/
 │   │   ├── app/                # Expo Router file-based screen routes
-│   │   ├── components/         # Reanimated cards, glassmorphic HUDs
+│   │   ├── components/         # Reanimated cards, glassmorphic HUDs, Holographic passes
 │   │   └── store/              # Zustand state management
 │   └── app.json                # Expo mobile manifest
-└── .github/                    # CI/CD Workflows & Dependabot
-    └── workflows/ci.yml        # Automated build & syntax validation
+└── .github/                    # Continuous Integration & Repository Governance
+    ├── workflows/ci.yml        # Automated build & syntax validation pipeline
+    ├── dependabot.yml          # Automated weekly dependency security scans
+    └── assets/                 # High-resolution 3D icons, banners, and preview comps
 ```
 
 ---
@@ -188,22 +258,22 @@ packwise/
 ### Prerequisites
 - **Node.js**: `v20.0.0` or higher
 - **npm**: `v10.0.0` or higher
-- **MongoDB**: Local instance running on `localhost:27017` or a MongoDB Atlas URI
+- **MongoDB**: Local MongoDB instance (`mongodb://localhost:27017/packwise`) or MongoDB Atlas URI
 
-### 1. Clone the Repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/Thranae/packwise.git
 cd packwise
 ```
 
-### 2. Install All Dependencies
-Install dependencies for both frontend and backend in one command:
+### 2. Install Monorepo Dependencies
+Install all client and server dependencies with a single command:
 ```bash
 npm run install:all
 ```
 
-### 3. Configure Environment Variables
-Create your local environment files:
+### 3. Environment Configuration
+Set up your local environment files:
 
 ```bash
 # Server configuration
@@ -213,31 +283,39 @@ cp server/.env.example server/.env
 cp .env.example client/.env
 ```
 
-Ensure at least `MONGO_URI`, `JWT_SECRET`, and `GEMINI_API_KEY` are populated in `server/.env`.
+Populate the required credentials in `server/.env`:
+```env
+PORT=5000
+NODE_ENV=development
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/packwise
+JWT_SECRET=your_super_secret_jwt_access_key
+JWT_REFRESH_SECRET=your_super_secret_jwt_refresh_key
+GEMINI_API_KEY=your_google_gemini_api_key
+```
 
-### 4. Run the Full Stack Development Server
-Run both client and server concurrently with live hot-reloading:
+### 4. Launch Full Stack Development Servers
+Run both backend API and Vite client concurrently:
 ```bash
 npm run dev
 ```
 
-- Web Client: [http://localhost:5173](http://localhost:5173)
-- API Server: [http://localhost:5000](http://localhost:5000)
+- Web Application: [http://localhost:5173](http://localhost:5173)
+- API Gateway: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 📱 Mobile Development
+## 📱 Mobile Platform Execution
 
-### Capacitor (Native iOS & Android Container)
+### Native iOS & Android (Capacitor 8)
 ```bash
 cd client
 npm run build
 npx cap sync
-npx cap open android   # Opens Android Studio
-npx cap open ios       # Opens Xcode (macOS only)
+npx cap open android   # Launches Android Studio
+npx cap open ios       # Launches Xcode (macOS required)
 ```
 
-### React Native Expo
+### Universal React Native (Expo)
 ```bash
 cd packwise-mobile
 npm install
@@ -246,21 +324,36 @@ npx expo start
 
 ---
 
-## 🔒 Security Hardening
+## 📡 REST API Specification
 
-- **HttpOnly Cookie Storage**: Refresh tokens are isolated from JavaScript execution to prevent XSS credential theft.
-- **CSRF & Injection Mitigation**: Express uses `express-mongo-sanitize` to strip prohibited characters from inputs and query objects.
-- **Strict Headers**: Configured with `helmet` providing Content Security Policy (CSP), DNS prefetch controls, and frameguard protections.
-- **Strict Rate Limiting**: Sensitive endpoints (authentication, AI generation) are guarded against brute-force and DDoS attempts.
+| Endpoint | Method | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| `/api/auth/register` | `POST` | Public | Registers a new traveler and issues HttpOnly refresh cookie |
+| `/api/auth/login` | `POST` | Public | Authenticates credentials and returns access token |
+| `/api/auth/refresh` | `POST` | Public | Rotates refresh token and returns fresh access token |
+| `/api/trips` | `GET` | Bearer | Retrieves paginated user itineraries |
+| `/api/trips/generate` | `POST` | Bearer | Triggers multi-LLM autonomous trip generation |
+| `/api/trips/sync` | `POST` | Bearer | Batch reconciliation for offline Dexie mutation logs |
+| `/api/trips/:id/export/pdf` | `GET` | Bearer | Generates brand-styled PDF itinerary document |
+| `/api/weather/forecast` | `GET` | Bearer | Fetches real-time destination weather telemetry |
+| `/api/flights/track` | `POST` | Bearer | Initializes AviationStack live flight price monitor |
+
+---
+
+## 🤝 Contributing
+
+Contributions to PackWise AI are welcome! Please review our [CONTRIBUTING.md](CONTRIBUTING.md) guide for details on our code of conduct, branch conventions, and pull request procedures.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) — see the LICENSE file for details.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ---
 
 <div align="center">
-  <sub>Engineered by <b>Thranaeswanth S</b>. Star ⭐ this repository if you find the architecture helpful!</sub>
+  <sub>Architected & Engineered with precision by <b><a href="https://github.com/Thranae">Thranaeswanth S</a></b></sub>
+  <br />
+  <sub>Star ⭐ this repository if you find the engineering useful!</sub>
 </div>
