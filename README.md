@@ -19,6 +19,16 @@
 <br />
 
 <p align="center">
+  <a href="https://codespaces.new/Thranae/packwise">
+    <img src="https://github.com/codespaces/badge.svg" alt="Open in GitHub Codespaces" height="28" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://stackblitz.com/github/Thranae/packwise">
+    <img src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" alt="Open in StackBlitz" height="28" />
+  </a>
+</p>
+
+<p align="center">
   <b>PackWise AI</b> is an enterprise-grade, offline-first autonomous travel operating system engineered for volatile real-world connectivity. Powered by a self-healing multi-LLM orchestrator, high-performance 60 FPS 3D spatial mapping, and cross-platform native execution across Web PWA, iOS, and Android.
 </p>
 
@@ -191,6 +201,19 @@ PackWise eliminates vendor lock-in and API outage risks through an autonomous ta
   - `express-mongo-sanitize`: Eliminates NoSQL injection vectors by sanitizing user-supplied payload keys.
   - `hpp`: Protects against HTTP Parameter Pollution attacks.
   - `express-rate-limit`: Per-IP throttling on authentication, trip generation, and notification dispatches.
+
+---
+
+### 5. 🎫 Holographic Digital Boarding Pass
+PackWise features a native fluid motion boarding pass designed with Apple-class haptics, dynamic QR verification, and real-time flight telemetry. Operates 100% offline via local Dexie.js cryptographic ticket validation:
+
+<div align="center">
+  <img src=".github/assets/boarding-pass.svg" alt="PackWise Holographic Boarding Pass" width="90%" style="border-radius: 20px;" />
+</div>
+
+- **Iridescent Light Sweep**: Simulates physical holographic security foil through dynamic gradient interpolation.
+- **Offline Gate QR Code**: Encodes trip itinerary metadata and cryptographic authorization tokens for instant offline ticket presentation at airport gates.
+- **Real-Time Telemetry**: Seamlessly binds to the AviationStack radar service for gate changes, delay alerts, and baggage carousel updates.
 
 ---
 
