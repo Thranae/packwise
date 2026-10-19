@@ -39,7 +39,7 @@ export const LogoIcon = ({ size = 40 }) => {
 
         {/* 3D Drop Shadows */}
         <G transform="translate(0, 4)">
-          <Rect x="10" y="12" width="28" height="30" rx="4" fill="rgba(0,0,0,0.3)" blurRadius={4} />
+          <Rect x="10" y="12" width="28" height="30" rx="4" fill="rgba(0,0,0,0.3)" />
           <Path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="rgba(0,0,0,0.3)" />
         </G>
 

@@ -16,7 +16,7 @@ const DESTINATIONS = [
   { name: 'Maldives', country: 'Maldives',  match: 95, price: '₹ 70,000', image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=600', rating: 4.9 },
 ];
 
-const DestCard = ({ item, index }) => (
+const DestCard = ({ item, index }: { item: any; index: number }) => (
   <Animated.View entering={FadeInRight.duration(600).delay(index * 120)}>
     <TouchableOpacity activeOpacity={0.9} style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.image} contentFit="cover" transition={300} />

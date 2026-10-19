@@ -23,8 +23,8 @@ const FALLBACK_RATES = {
   'USD': 1, 'INR': 83.12, 'GBP': 0.79, 'JPY': 155.2, 'AED': 3.67, 'SGD': 1.35, 'AUD': 1.53, 'CAD': 1.37, 'EUR': 0.92, 'THB': 36.8, 'MYR': 4.75, 'KRW': 1360.5, 'NPR': 133.2, 'LKR': 298.5
 };
 
-let cachedRates = null;
-let lastFetchTime = null;
+let cachedRates: any = null;
+let lastFetchTime: Date | null = null;
 
 export const fetchExchangeRates = async (baseCurrency = 'USD') => {
   // Use cache if less than 1 hour old
@@ -46,9 +46,10 @@ export const fetchExchangeRates = async (baseCurrency = 'USD') => {
   }
 };
 
-export const calculateTripCost = (destCountry, days, travelers, style) => {
-  const destData = COUNTRY_DATA[destCountry] || {
-    currency: 'USD', symbol: '$', code: 'US', flag: 'YΧY',
+export const calculateTripCost = (destCountry: any, days: number = 7, travelers: number = 1, style: string = 'standard') => {
+  const countryDict = COUNTRY_DATA as Record<string, any>;
+  const destData = countryDict[destCountry] || {
+    currency: 'USD', symbol: '$', code: 'US', flag: '🌍',
     rates: { 
       budget: { hotel: 80, food: 40, transport: 15, attractions: 20, insurance: 5 }, 
       standard: { hotel: 180, food: 80, transport: 30, attractions: 50, insurance: 10 }, 
@@ -56,7 +57,7 @@ export const calculateTripCost = (destCountry, days, travelers, style) => {
     }
   };
 
-  const rates = destData.rates[style.toLowerCase()];
+  const rates = destData.rates[style.toLowerCase()] || destData.rates.standard;
   
   const dailyHotel = rates.hotel; // per room (assume 2 per room)
   const roomsNeeded = Math.ceil(travelers / 2);
@@ -104,7 +105,7 @@ export const calculateTripCost = (destCountry, days, travelers, style) => {
   };
 };
 
-export const convertCurrency = (amount, fromCurrency, toCurrency, rates) => {
+export const convertCurrency = (amount: number, fromCurrency: string, toCurrency: string, rates: Record<string, number>) => {
   if (fromCurrency === toCurrency) return amount;
   const amountInUSD = amount / (rates[fromCurrency] || 1);
   return amountInUSD * (rates[toCurrency] || 1);

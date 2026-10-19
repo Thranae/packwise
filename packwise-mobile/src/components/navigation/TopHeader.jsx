@@ -4,10 +4,13 @@ import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Bell, Briefcase, MapPin } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { LogoIcon } from '../ui/LogoIcon';
 
 export default function TopHeader() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top > 0 ? insets.top + 8 : 24 }]}>
@@ -31,7 +34,14 @@ export default function TopHeader() {
             
             {/* Logo & Brand */}
             <View style={styles.left}>
-              <View style={styles.logoPillWrapper}>
+              <TouchableOpacity 
+                style={styles.logoPillWrapper} 
+                activeOpacity={0.8}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.navigate('/(tabs)/home');
+                }}
+              >
                 <BlurView intensity={80} tint="default" style={styles.logoPillGlass}>
                   <LinearGradient
                     colors={['rgba(224, 236, 255, 0.9)', 'rgba(224, 236, 255, 0.2)', 'transparent']}
@@ -41,7 +51,7 @@ export default function TopHeader() {
                   <LogoIcon size={44} />
                   <Text style={styles.brandText}>PackWise</Text>
                 </BlurView>
-              </View>
+              </TouchableOpacity>
             </View>
 
             {/* Controls */}
@@ -58,7 +68,14 @@ export default function TopHeader() {
                 </BlurView>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.avatarContainer} activeOpacity={0.7}>
+              <TouchableOpacity 
+                style={styles.avatarContainer} 
+                activeOpacity={0.7}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.navigate('/(tabs)/profile');
+                }}
+              >
                 <BlurView intensity={80} tint="default" style={styles.buttonGlass}>
                   <LinearGradient
                     colors={['rgba(224, 236, 255, 0.9)', 'rgba(224, 236, 255, 0.2)', 'transparent']}

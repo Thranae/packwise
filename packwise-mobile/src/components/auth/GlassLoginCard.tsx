@@ -16,7 +16,23 @@ import { useRouter } from 'expo-router';
 const { width } = Dimensions.get('window');
 
 // Custom Glass Input Component
-const GlassInput = ({ icon: Icon, placeholder, secureTextEntry, rightIcon: RightIcon, onRightIconPress, value, onChangeText }) => {
+const GlassInput = ({
+  icon: Icon,
+  placeholder,
+  secureTextEntry = false,
+  rightIcon: RightIcon,
+  onRightIconPress,
+  value,
+  onChangeText
+}: {
+  icon: any;
+  placeholder: string;
+  secureTextEntry?: boolean;
+  rightIcon?: any;
+  onRightIconPress?: () => void;
+  value: string;
+  onChangeText: (text: string) => void;
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const glowOpacity = useSharedValue(0);
 
@@ -205,7 +221,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   inputGlow: {
-    position: 'absolute',
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#2F6BFF',
     opacity: 0.15,
@@ -262,7 +277,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   buttonGlow: {
-    position: 'absolute',
     ...StyleSheet.absoluteFillObject,
     backgroundColor: '#2F6BFF',
     opacity: 0.4,

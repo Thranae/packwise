@@ -10,7 +10,7 @@ import Animated, {
   FadeInDown,
 } from 'react-native-reanimated';
 
-const GlassButton = ({ label, icon: Icon, primary, delay = 0 }) => {
+const GlassButton = ({ label, icon: Icon, primary = false, delay = 0 }: { label: string; icon: any; primary?: boolean; delay?: number }) => {
   const scale = useSharedValue(1);
   const pressIn = () => { scale.value = withSpring(0.95); };
   const pressOut = () => { scale.value = withSpring(1); };

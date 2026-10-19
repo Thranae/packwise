@@ -14,7 +14,7 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 40;
 const CARD_HEIGHT = 460;
 
-export const ReanimatedTripCard = ({ trip }) => {
+export const ReanimatedTripCard = ({ trip }: { trip: any }) => {
   const tiltX = useSharedValue(0);
   const tiltY = useSharedValue(0);
 

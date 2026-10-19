@@ -31,8 +31,8 @@ class ProviderManager {
       id: 'gemini',
       name: 'Google Gemini',
       apiKey: process.env.GEMINI_API_KEY,
-      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-      model: 'gemini-2.0-flash',
+      baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent',
+      model: 'gemini-3.5-flash',
       priority: 1,
       supportsStreaming: false,
       supportsToolCalling: true,
@@ -48,17 +48,15 @@ class ProviderManager {
       apiKey: process.env.NVIDIA_API_KEY,
       baseUrl: process.env.NVIDIA_BASE_URL || 'https://integrate.api.nvidia.com/v1/chat/completions',
       model: 'nvidia/nemotron-3-super-120b-a12b',
-      priority: 2,
+      priority: 3,
       supportsStreaming: true,
       supportsToolCalling: true,
       supportsJSONMode: true,
       supportsVision: false,
       extraConfig: {
-        temperature: 1,
+        temperature: 0.7,
         top_p: 0.95,
-        max_tokens: 16384,
-        reasoning_budget: 16384,
-        chat_template_kwargs: {"enable_thinking":true}
+        max_tokens: 4096
       }
     });
   }
@@ -121,8 +119,8 @@ class ProviderManager {
       name: 'Groq',
       apiKey: process.env.GROQ_API_KEY,
       baseUrl: 'https://api.groq.com/openai/v1/chat/completions',
-      model: 'llama-3.3-70b-versatile',
-      priority: 3,
+      model: 'openai/gpt-oss-120b',
+      priority: 2,
       supportsStreaming: true,
       supportsToolCalling: true,
       supportsJSONMode: true,
@@ -213,6 +211,7 @@ class ProviderManager {
         ProviderRegistry.updateProviderStatus(provider.id, 'active');
         provider.healthError = null;
       } catch (error) {
+        console.error(`[HealthCheck ${provider.id}] Error:`, error.message, error.response?.data?.error?.message || '');
         ProviderRegistry.updateProviderStatus(provider.id, 'error');
         provider.healthError = error.response?.data?.error?.message || error.message;
       }

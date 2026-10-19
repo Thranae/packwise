@@ -16,7 +16,7 @@ import Animated, {
 const { width } = Dimensions.get('window');
 
 // Floating Particle Component
-const FloatingElement = ({ children, delay = 0, yOffset = 15, duration = 3000, style }) => {
+const FloatingElement = ({ children, delay = 0, yOffset = 15, duration = 3000, style }: { children: any; delay?: number; yOffset?: number; duration?: number; style?: any }) => {
   const translateY = useSharedValue(0);
 
   useEffect(() => {

@@ -18,7 +18,7 @@ const TABS = [
   { id: 'all', label: 'All', icon: LayoutGrid },
 ];
 
-function FilterChip({ tab, isActive, onPress }) {
+function FilterChip({ tab, isActive, onPress }: { tab: any; isActive: boolean; onPress: () => void }) {
   const Icon = tab.icon;
 
   const animatedStyle = useAnimatedStyle(() => {

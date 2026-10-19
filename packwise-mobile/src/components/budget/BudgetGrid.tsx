@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import {
   BedDouble, Utensils, Car, Landmark, ShoppingBag, ShieldAlert,
@@ -7,16 +7,23 @@ import {
   TrendingUp, ArrowRight
 } from 'lucide-react-native';
 import { COUNTRY_DATA } from '../../utils/costEngine';
-import Svg, { Path, Circle, Defs, FeDropShadow, FeGaussianBlur, FeColorMatrix } from 'react-native-svg';
+import Svg, { Circle } from 'react-native-svg';
+
+const ICON_COLORS: Record<string, string> = {
+  blue: '#3b82f6',
+  orange: '#f97316',
+  green: '#10b981',
+  purple: '#8b5cf6',
+  pink: '#ec4899',
+  red: '#ef4444',
+  amber: '#f59e0b',
+};
 
 const Card = ({ title, icon: Icon, iconColor, children, delay = 0 }: any) => (
-  <Animated.View
-    entering={FadeInUp.duration(450).delay(delay)}
-    className="bg-[#111827] rounded-[32px] p-6 flex flex-col gap-4 border border-gray-800"
-  >
-    <View className="flex flex-row items-center gap-2">
+  <Animated.View entering={FadeInUp.duration(450).delay(delay)} style={s.card}>
+    <View style={s.cardHeader}>
       <Icon size={16} color={iconColor} />
-      <Text className="text-[11px] font-bold uppercase tracking-widest text-white/60">{title}</Text>
+      <Text style={s.cardTitle}>{title}</Text>
     </View>
     {children}
   </Animated.View>
@@ -27,8 +34,9 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
 
   const originCurrency = 'INR';
   const originSymbol = '₹';
-  const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
-  const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
+  const countryDict = COUNTRY_DATA as Record<string, any>;
+  const destCurrency = countryDict[inputs.destCountry]?.currency || 'USD';
+  const destSymbol = countryDict[inputs.destCountry]?.symbol || '$';
 
   const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
   const fmtOrigin = (val: number) =>
@@ -37,20 +45,20 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
     new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(Math.round(val));
 
   const dailyItems = [
-    { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: '#60a5fa', bg: 'bg-blue-500/15' },
-    { name: 'Food', val: breakdown.food, icon: Utensils, color: '#fb923c', bg: 'bg-orange-500/15' },
-    { name: 'Transport', val: breakdown.transport, icon: Car, color: '#34d399', bg: 'bg-emerald-500/15' },
-    { name: 'Activities', val: breakdown.attractions, icon: Landmark, color: '#c084fc', bg: 'bg-purple-500/15' },
-    { name: 'Shopping', val: breakdown.shopping, icon: ShoppingBag, color: '#f472b6', bg: 'bg-pink-500/15' },
-    { name: 'Emergency', val: summary.emergencyReserve / inputs.days, icon: ShieldAlert, color: '#f87171', bg: 'bg-red-500/15' },
+    { name: 'Hotel', val: breakdown.hotel, icon: BedDouble, color: ICON_COLORS.blue, bg: 'rgba(59, 130, 246, 0.1)' },
+    { name: 'Food', val: breakdown.food, icon: Utensils, color: ICON_COLORS.orange, bg: 'rgba(249, 115, 22, 0.1)' },
+    { name: 'Transport', val: breakdown.transport, icon: Car, color: ICON_COLORS.green, bg: 'rgba(16, 185, 129, 0.1)' },
+    { name: 'Activities', val: breakdown.attractions, icon: Landmark, color: ICON_COLORS.purple, bg: 'rgba(139, 92, 246, 0.1)' },
+    { name: 'Shopping', val: breakdown.shopping, icon: ShoppingBag, color: ICON_COLORS.pink, bg: 'rgba(236, 72, 153, 0.1)' },
+    { name: 'Emergency', val: summary.emergencyReserve / inputs.days, icon: ShieldAlert, color: ICON_COLORS.red, bg: 'rgba(239, 68, 68, 0.1)' },
   ];
 
   const total = summary.totalBudget;
   const cats = [
-    { name: 'Hotel', val: breakdown.hotel * inputs.days, color: '#60A5FA' },
-    { name: 'Food', val: breakdown.food * inputs.days, color: '#F97316' },
-    { name: 'Transport', val: breakdown.transport * inputs.days, color: '#34D399' },
-    { name: 'Other', val: total - (breakdown.hotel + breakdown.food + breakdown.transport) * inputs.days, color: '#9CA3AF' },
+    { name: 'Hotel', val: breakdown.hotel * inputs.days, color: '#3b82f6' },
+    { name: 'Food', val: breakdown.food * inputs.days, color: '#f97316' },
+    { name: 'Transport', val: breakdown.transport * inputs.days, color: '#10b981' },
+    { name: 'Other', val: total - (breakdown.hotel + breakdown.food + breakdown.transport) * inputs.days, color: '#94a3b8' },
   ];
   let offset = 0;
   const pieData = cats.map(c => {
@@ -61,29 +69,29 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
   });
 
   const recs = [
-    { icon: FileText, color: '#60a5fa', bg: 'bg-blue-500/15', label: 'Visa', value: 'E-Visa Suggested' },
-    { icon: Wifi, color: '#34d399', bg: 'bg-emerald-500/15', label: 'Connectivity', value: 'eSIM Recommended' },
-    { icon: BatteryCharging, color: '#fbbf24', bg: 'bg-amber-500/15', label: 'Power Adapter', value: 'Type A / B' },
-    { icon: CloudSun, color: '#fb923c', bg: 'bg-orange-500/15', label: 'Avg Weather', value: '18°C – 24°C' },
+    { icon: FileText, color: ICON_COLORS.blue, bg: 'rgba(59, 130, 246, 0.1)', label: 'Visa', value: 'E-Visa Suggested' },
+    { icon: Wifi, color: ICON_COLORS.green, bg: 'rgba(16, 185, 129, 0.1)', label: 'Connectivity', value: 'eSIM Recommended' },
+    { icon: BatteryCharging, color: ICON_COLORS.amber, bg: 'rgba(245, 158, 11, 0.1)', label: 'Power Adapter', value: 'Type A / B' },
+    { icon: CloudSun, color: ICON_COLORS.orange, bg: 'rgba(249, 115, 22, 0.1)', label: 'Avg Weather', value: '18°C – 24°C' },
   ];
 
   return (
-    <View className="flex flex-col gap-4">
+    <View style={s.container}>
 
       {/* 1. Daily Breakdown */}
-      <Card title="Daily Breakdown" icon={BedDouble} iconColor="#60a5fa" delay={50}>
-        <View className="flex flex-col gap-1">
+      <Card title="Daily Breakdown" icon={BedDouble} iconColor={ICON_COLORS.blue} delay={50}>
+        <View style={s.dailyList}>
           {dailyItems.map((item, i) => (
-            <View key={i} className="flex flex-row items-center justify-between py-2 px-2 rounded-xl border border-white/5 bg-white/5 mb-2 gap-2">
-              <View className="flex flex-row items-center gap-3 flex-1">
-                <View className={`w-8 h-8 rounded-lg ${item.bg} flex items-center justify-center border border-white/20`}>
+            <View key={i} style={s.dailyRow}>
+              <View style={s.dailyLeft}>
+                <View style={[s.iconBox, { backgroundColor: item.bg }]}>
                   <item.icon size={16} color={item.color} />
                 </View>
-                <Text className="text-sm font-medium text-white/80" numberOfLines={1}>{item.name}</Text>
+                <Text style={s.dailyName} numberOfLines={1}>{item.name}</Text>
               </View>
-              <View className="flex flex-col items-end pl-1">
-                <Text className="text-sm font-bold text-white">{originSymbol} {fmtOrigin(item.val)}</Text>
-                <Text className="text-[10px] text-white/35">≈ {destSymbol}{fmtDest(item.val)}</Text>
+              <View style={s.dailyRight}>
+                <Text style={s.dailyAmount}>{originSymbol} {fmtOrigin(item.val)}</Text>
+                <Text style={s.dailySub}>≈ {destSymbol}{fmtDest(item.val)}</Text>
               </View>
             </View>
           ))}
@@ -91,46 +99,44 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
       </Card>
 
       {/* 2. Currency Converter */}
-      <Card title="Live Converter" icon={RefreshCw} iconColor="#34d399" delay={100}>
-        <View className="flex flex-col gap-4">
-          <View className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
-            <View className="flex flex-row items-center justify-between">
-              <Text className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">You pay ({originCurrency})</Text>
-              <Text className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">They get ({destCurrency})</Text>
-            </View>
-            <View className="flex flex-row items-center justify-between gap-1">
-              <Text className="text-xl font-bold text-white">{originSymbol} 10,000</Text>
-              <View className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center mx-1">
-                <ArrowRight size={14} color="#34d399" />
-              </View>
-              <Text className="text-xl font-bold text-emerald-400">
-                {destSymbol} {fmtDest(10000 / rateMultiplier)}
-              </Text>
-            </View>
-            <View className="flex flex-row items-center gap-1.5 pt-2 mt-1 border-t border-white/10">
-              <TrendingUp size={14} color="#34d399" />
-              <Text className="text-xs font-semibold text-emerald-400">1 {destCurrency} = {originSymbol}{rateMultiplier.toFixed(2)}</Text>
-            </View>
+      <Card title="Live Converter" icon={RefreshCw} iconColor={ICON_COLORS.green} delay={100}>
+        <View style={s.converterBox}>
+          <View style={s.converterLabels}>
+            <Text style={s.converterLabel}>You pay ({originCurrency})</Text>
+            <Text style={s.converterLabel}>They get ({destCurrency})</Text>
           </View>
-
-          <View className="flex flex-col gap-2">
-            <Text className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Quick Amounts</Text>
-            <View className="flex flex-row gap-2">
-              {[1000, 5000, 10000].map(amt => (
-                <TouchableOpacity key={amt} className="flex-1 bg-white/5 border border-white/10 rounded-xl p-2 items-center">
-                  <Text className="text-[11px] font-bold text-white">{originSymbol}{amt.toLocaleString()}</Text>
-                  <Text className="text-[9px] text-white/40">{destSymbol}{fmtDest(amt / rateMultiplier)}</Text>
-                </TouchableOpacity>
-              ))}
+          <View style={s.converterValues}>
+            <Text style={s.converterBig}>{originSymbol} 10,000</Text>
+            <View style={s.arrowCircle}>
+              <ArrowRight size={14} color="#10b981" />
             </View>
+            <Text style={[s.converterBig, { color: '#059669' }]}>
+              {destSymbol} {fmtDest(10000 / rateMultiplier)}
+            </Text>
+          </View>
+          <View style={s.rateRow}>
+            <TrendingUp size={13} color="#059669" />
+            <Text style={s.rateText}>1 {destCurrency} = {originSymbol}{rateMultiplier.toFixed(2)}</Text>
+          </View>
+        </View>
+
+        <View style={s.quickAmounts}>
+          <Text style={s.quickLabel}>QUICK AMOUNTS</Text>
+          <View style={s.quickRow}>
+            {[1000, 5000, 10000].map(amt => (
+              <TouchableOpacity key={amt} style={s.quickChip} activeOpacity={0.7}>
+                <Text style={s.quickChipMain}>{originSymbol}{amt.toLocaleString()}</Text>
+                <Text style={s.quickChipSub}>{destSymbol}{fmtDest(amt / rateMultiplier)}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
       </Card>
 
       {/* 3. Category Breakdown */}
-      <Card title="Category Breakdown" icon={Landmark} iconColor="#c084fc" delay={150}>
-        <View className="flex flex-row items-center gap-4">
-          <View className="w-[100px] h-[100px] relative">
+      <Card title="Category Breakdown" icon={Landmark} iconColor={ICON_COLORS.purple} delay={150}>
+        <View style={s.pieRow}>
+          <View style={s.pieContainer}>
             <Svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: [{ rotate: '-90deg' }] }}>
               {pieData.map((slice, i) => (
                 <Circle
@@ -145,22 +151,22 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
                 />
               ))}
             </Svg>
-            <View className="absolute inset-0 flex flex-col items-center justify-center">
-              <Text className="text-[8px] font-bold text-white/40 uppercase tracking-wider">Total</Text>
-              <Text className="text-[10px] font-bold text-white">{destSymbol}{fmtDest(total / rateMultiplier)}</Text>
+            <View style={s.pieCenter}>
+              <Text style={s.pieCenterLabel}>TOTAL</Text>
+              <Text style={s.pieCenterValue}>{destSymbol}{fmtDest(total / rateMultiplier)}</Text>
             </View>
           </View>
 
-          <View className="flex flex-col gap-2 flex-1">
+          <View style={s.pieLegend}>
             {pieData.map((slice, i) => (
-              <View key={i} className="flex flex-row items-center justify-between">
-                <View className="flex flex-row items-center gap-1.5">
-                  <View className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: slice.color }} />
-                  <Text className="text-[11px] text-white/70" numberOfLines={1}>{slice.name}</Text>
+              <View key={i} style={s.legendRow}>
+                <View style={s.legendLeft}>
+                  <View style={[s.legendDot, { backgroundColor: slice.color }]} />
+                  <Text style={s.legendName} numberOfLines={1}>{slice.name}</Text>
                 </View>
-                <View className="flex flex-row items-center gap-1 pl-1">
-                  <Text className="text-[11px] font-bold text-white">{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</Text>
-                  <Text className="text-[10px] text-white/35 w-6 text-right">{Math.round(slice.pct)}%</Text>
+                <View style={s.legendRight}>
+                  <Text style={s.legendAmount}>{originSymbol}{fmtOrigin(slice.val / rateMultiplier)}</Text>
+                  <Text style={s.legendPct}>{Math.round(slice.pct)}%</Text>
                 </View>
               </View>
             ))}
@@ -169,19 +175,16 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
       </Card>
 
       {/* 4. Smart Recommendations */}
-      <Card title="Smart Recommendations" icon={ShieldCheck} iconColor="#34d399" delay={200}>
-        <View className="flex flex-row flex-wrap justify-between gap-3">
+      <Card title="Smart Recommendations" icon={ShieldCheck} iconColor={ICON_COLORS.green} delay={200}>
+        <View style={s.recsGrid}>
           {recs.map((r, i) => (
-            <View
-              key={i}
-              className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-row gap-2 w-[47%] items-center"
-            >
-              <View className={`w-8 h-8 rounded-lg ${r.bg} flex items-center justify-center border border-white/20`}>
+            <View key={i} style={s.recItem}>
+              <View style={[s.recIconBox, { backgroundColor: r.bg }]}>
                 <r.icon size={16} color={r.color} />
               </View>
-              <View className="flex-1">
-                <Text className="text-[9px] font-bold text-white/40 uppercase tracking-wider" numberOfLines={1}>{r.label}</Text>
-                <Text className="text-[11px] font-semibold text-white mt-0.5" numberOfLines={1}>{r.value}</Text>
+              <View style={s.recTextCol}>
+                <Text style={s.recLabel} numberOfLines={1}>{r.label}</Text>
+                <Text style={s.recValue} numberOfLines={1}>{r.value}</Text>
               </View>
             </View>
           ))}
@@ -190,4 +193,287 @@ export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }: any
 
     </View>
   );
+});
+
+const s = StyleSheet.create({
+  container: { 
+    gap: 16 
+  },
+
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 24,
+    padding: 20,
+    gap: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.15)',
+    shadowColor: '#2F6BFF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 3,
+  },
+  cardHeader: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 8 
+  },
+  cardTitle: {
+    fontSize: 11.5,
+    fontFamily: 'Outfit_700Bold',
+    color: '#475569',
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+  },
+
+  dailyList: { 
+    gap: 8 
+  },
+  dailyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(241, 245, 249, 0.7)',
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  dailyLeft: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 12, 
+    flex: 1 
+  },
+  iconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dailyName: { 
+    fontSize: 14, 
+    fontFamily: 'Outfit_600SemiBold', 
+    color: '#1e293b' 
+  },
+  dailyRight: { 
+    alignItems: 'flex-end', 
+    gap: 2 
+  },
+  dailyAmount: { 
+    fontSize: 14.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#0f172a' 
+  },
+  dailySub: { 
+    fontSize: 11, 
+    fontFamily: 'Outfit_400Regular', 
+    color: '#64748b' 
+  },
+
+  converterBox: {
+    backgroundColor: 'rgba(241, 245, 249, 0.7)',
+    borderRadius: 18,
+    padding: 16,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.12)',
+  },
+  converterLabels: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  converterLabel: { 
+    fontSize: 10.5, 
+    fontFamily: 'Outfit_600SemiBold', 
+    color: '#64748b', 
+    textTransform: 'uppercase', 
+    letterSpacing: 1 
+  },
+  converterValues: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between' 
+  },
+  converterBig: { 
+    fontSize: 20, 
+    fontFamily: 'Outfit_800ExtraBold', 
+    color: '#0f172a' 
+  },
+  arrowCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'rgba(16, 185, 129, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rateRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(148, 163, 184, 0.12)',
+    paddingTop: 10,
+  },
+  rateText: { 
+    fontSize: 12, 
+    fontFamily: 'Outfit_600SemiBold', 
+    color: '#059669' 
+  },
+
+  quickAmounts: { 
+    gap: 8,
+    marginTop: 2,
+  },
+  quickLabel: { 
+    fontSize: 10, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#64748b', 
+    letterSpacing: 1.5 
+  },
+  quickRow: { 
+    flexDirection: 'row', 
+    gap: 8 
+  },
+  quickChip: {
+    flex: 1,
+    backgroundColor: 'rgba(241, 245, 249, 0.8)',
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.12)',
+  },
+  quickChipMain: { 
+    fontSize: 12.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#1e293b',
+    textAlign: 'center',
+  },
+  quickChipSub: { 
+    fontSize: 9.5, 
+    fontFamily: 'Outfit_400Regular', 
+    color: '#64748b', 
+    marginTop: 2,
+    textAlign: 'center',
+  },
+
+  pieRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 16 
+  },
+  pieContainer: { 
+    width: 100, 
+    height: 100, 
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pieCenter: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pieCenterLabel: { 
+    fontSize: 8.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#64748b', 
+    letterSpacing: 1 
+  },
+  pieCenterValue: { 
+    fontSize: 11, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#0f172a' 
+  },
+
+  pieLegend: { 
+    flex: 1, 
+    gap: 8 
+  },
+  legendRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between' 
+  },
+  legendLeft: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 8,
+    flex: 1,
+  },
+  legendDot: { 
+    width: 8, 
+    height: 8, 
+    borderRadius: 4 
+  },
+  legendName: { 
+    fontSize: 12.5, 
+    fontFamily: 'Outfit_500Medium', 
+    color: '#334155' 
+  },
+  legendRight: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 8 
+  },
+  legendAmount: { 
+    fontSize: 12.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#0f172a' 
+  },
+  legendPct: { 
+    fontSize: 11, 
+    fontFamily: 'Outfit_400Regular', 
+    color: '#64748b', 
+    width: 32, 
+    textAlign: 'right' 
+  },
+
+  recsGrid: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-between', 
+    gap: 8 
+  },
+  recItem: {
+    width: '48%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: 'rgba(241, 245, 249, 0.7)',
+    borderRadius: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.1)',
+  },
+  recIconBox: {
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recTextCol: { 
+    flex: 1, 
+    gap: 1 
+  },
+  recLabel: { 
+    fontSize: 9.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#64748b', 
+    textTransform: 'uppercase', 
+    letterSpacing: 1 
+  },
+  recValue: { 
+    fontSize: 11.5, 
+    fontFamily: 'Outfit_600SemiBold', 
+    color: '#0f172a' 
+  },
 });

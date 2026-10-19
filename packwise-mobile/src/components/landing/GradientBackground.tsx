@@ -13,7 +13,7 @@ import Animated, {
 
 const { width, height } = Dimensions.get('window');
 
-const GlowOrb = ({ x, y, size, color, delay = 0 }) => {
+const GlowOrb = ({ x, y, size, color, delay = 0 }: { x: number; y: number; size: number; color: string; delay?: number }) => {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(0.6);
 

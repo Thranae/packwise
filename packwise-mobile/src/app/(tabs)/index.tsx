@@ -202,8 +202,8 @@ export default function TripsTab() {
             }
           }, remaining);
 
-        } catch (error) {
-          console.log('Falling back to mock trips. (Server error:', error.message || error, ')');
+        } catch (error: any) {
+          console.log('Falling back to mock trips. (Server error:', error?.message || error, ')');
           if (isActive) setTrips(MOCK_TRIPS);
           setTimeout(() => {
             if (isActive) setIsLoading(false);

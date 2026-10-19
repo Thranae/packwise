@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft, FadeIn } from 'react-native-reanimated';
-import { MapPin, Wallet, Compass, ArrowRight, Sparkles, Plus, Minus, Building2, Globe2 } from 'lucide-react-native';
+import { MapPin, Wallet, Compass, ArrowRight, Sparkles, Plus, Minus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { useTripContext } from '../../context/TripContext';
 
@@ -23,7 +23,6 @@ const LocationInput = ({ label, value, onChange, placeholder, autoFocus }: any) 
     setShowDropdown(true);
     
     try {
-      // Basic free nominatim search for demo
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(text)}&limit=5&addressdetails=1`);
       if (!res.ok) throw new Error('API Error');
       const data = await res.json();
@@ -34,7 +33,6 @@ const LocationInput = ({ label, value, onChange, placeholder, autoFocus }: any) 
         const country = addr.country || '';
         return { city: mainName, country: country };
       });
-      // filter unique
       const unique = parsed.filter((v: any, i: number, a: any[]) => a.findIndex(t => (t.city === v.city && t.country === v.country)) === i);
       setSuggestions(unique);
     } catch (err) {
@@ -45,26 +43,26 @@ const LocationInput = ({ label, value, onChange, placeholder, autoFocus }: any) 
   };
 
   return (
-    <View className="mb-5 z-50">
-      <Text className="text-sm font-bold text-white mb-2">{label}</Text>
-      <View className="relative">
+    <View style={s.locContainer}>
+      <Text style={s.fieldLabel}>{label}</Text>
+      <View style={s.locInputWrapper}>
         <TextInput
           value={value}
           onChangeText={handleSearch}
           placeholder={placeholder}
-          placeholderTextColor="rgba(255,255,255,0.3)"
+          placeholderTextColor="#64748b"
           autoFocus={autoFocus}
-          className="w-full h-14 px-5 rounded-2xl bg-white/5 border border-white/10 text-white text-base"
+          style={s.locInput}
         />
         {isSearching && (
-          <View className="absolute right-4 top-4">
-            <ActivityIndicator size="small" color="#818cf8" />
+          <View style={s.locSpinner}>
+            <ActivityIndicator size="small" color="#60a5fa" />
           </View>
         )}
       </View>
       
       {showDropdown && suggestions.length > 0 && (
-        <View className="absolute top-[80px] left-0 right-0 bg-[#1e293b] rounded-xl border border-gray-700 overflow-hidden z-50 shadow-lg">
+        <View style={s.dropdownCard}>
           {suggestions.map((loc, idx) => (
             <TouchableOpacity
               key={idx}
@@ -72,12 +70,12 @@ const LocationInput = ({ label, value, onChange, placeholder, autoFocus }: any) 
                 onChange(`${loc.city}, ${loc.country}`);
                 setShowDropdown(false);
               }}
-              className="px-4 py-3 border-b border-white/5 flex flex-row items-center gap-3"
+              style={s.dropdownRow}
             >
-              <MapPin size={16} color="#818cf8" />
-              <View>
-                <Text className="text-white font-bold">{loc.city}</Text>
-                {loc.country ? <Text className="text-white/50 text-xs">{loc.country}</Text> : null}
+              <MapPin size={16} color="#60a5fa" />
+              <View style={{ flex: 1 }}>
+                <Text style={s.dropdownCity}>{loc.city}</Text>
+                {loc.country ? <Text style={s.dropdownCountry}>{loc.country}</Text> : null}
               </View>
             </TouchableOpacity>
           ))}
@@ -111,17 +109,17 @@ export const TripBuilderWizard = () => {
     const fullPrompt = `Destination: ${prompt}.${flightContext} Start Date: ${startDate}. Duration: ${duration} days. Budget: ${budget}. Style: ${styles.join(', ')}.${genderContext}`;
     
     await generateTrip(fullPrompt, { startDate, duration }); 
-    router.push('/(tabs)/'); // go to itinerary/home
+    router.push('/(tabs)');
   };
 
   if (isGenerating) {
     return (
-      <View className="flex-1 items-center justify-center bg-[#030712] p-6">
-        <Animated.View entering={FadeIn} className="items-center justify-center">
-          <View className="w-24 h-24 rounded-3xl bg-blue-500/10 border border-blue-500/20 items-center justify-center mb-6">
+      <View style={s.loadingContainer}>
+        <Animated.View entering={FadeIn} style={s.loadingBox}>
+          <View style={s.loadingIconWrapper}>
             <Sparkles size={40} color="#60a5fa" />
           </View>
-          <Text className="text-lg font-bold tracking-[0.2em] uppercase text-white/90 text-center animate-pulse">
+          <Text style={s.loadingStepText}>
             {loadingStep || 'Crafting Journey...'}
           </Text>
         </Animated.View>
@@ -136,26 +134,25 @@ export const TripBuilderWizard = () => {
   ];
 
   return (
-    <View className="flex-1 bg-[#030712] p-4">
+    <View style={s.container}>
       {/* Progress Bar */}
-      <View className="flex flex-row items-center justify-between mb-8 px-2 relative">
-        <View className="absolute top-1/2 left-4 right-4 h-1 bg-white/5 -z-10 rounded-full" />
+      <View style={s.progressRow}>
+        <View style={s.progressLineBg} />
         <View 
-          className="absolute top-1/2 left-4 h-1 bg-blue-500 -z-10 rounded-full" 
-          style={{ width: `${((step - 1) / 2) * 100}%` }}
+          style={[s.progressLineFill, { width: `${((step - 1) / 2) * 100}%` }]} 
         />
-        {steps.map((s) => (
-          <View key={s.id} className="items-center gap-2">
-            <View className={`w-12 h-12 rounded-full items-center justify-center ${step >= s.id ? 'bg-blue-600' : 'bg-gray-800'}`}>
-              <s.icon size={20} color={step >= s.id ? 'white' : '#9ca3af'} />
+        {steps.map((stepItem) => (
+          <View key={stepItem.id} style={s.stepCircleWrapper}>
+            <View style={[s.stepCircle, step >= stepItem.id ? s.stepCircleActive : s.stepCircleInactive]}>
+              <stepItem.icon size={18} color={step >= stepItem.id ? '#ffffff' : '#64748b'} />
             </View>
           </View>
         ))}
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scrollContent}>
         {step === 1 && (
-          <Animated.View entering={FadeInRight} exiting={FadeOutLeft} className="flex-1">
+          <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
             <LocationInput 
               label="Where do you want to go?"
               value={prompt}
@@ -173,30 +170,39 @@ export const TripBuilderWizard = () => {
         )}
 
         {step === 2 && (
-          <Animated.View entering={FadeInRight} exiting={FadeOutLeft} className="flex-1">
-            <Text className="text-sm font-bold text-white mb-4">How long is your trip?</Text>
-            <View className="flex flex-row items-center justify-center bg-white/5 border border-white/10 p-4 rounded-3xl mb-6 gap-6">
-              <TouchableOpacity onPress={() => setDuration(String(Math.max(1, parseInt(duration) - 1)))} className="w-12 h-12 rounded-full bg-white/10 items-center justify-center">
-                <Minus size={24} color="white" />
+          <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+            <Text style={s.fieldLabel}>How long is your trip?</Text>
+            <View style={s.counterBox}>
+              <TouchableOpacity 
+                onPress={() => setDuration(String(Math.max(1, parseInt(duration) - 1)))} 
+                style={s.counterBtn}
+                activeOpacity={0.7}
+              >
+                <Minus size={20} color="#ffffff" />
               </TouchableOpacity>
-              <View className="items-center">
-                <Text className="text-4xl font-black text-white">{duration}</Text>
-                <Text className="text-white/50 font-bold">Days</Text>
+              <View style={s.counterTextWrapper}>
+                <Text style={s.counterNumber}>{duration}</Text>
+                <Text style={s.counterSub}>Days</Text>
               </View>
-              <TouchableOpacity onPress={() => setDuration(String(parseInt(duration) + 1))} className="w-12 h-12 rounded-full bg-white/10 items-center justify-center">
-                <Plus size={24} color="white" />
+              <TouchableOpacity 
+                onPress={() => setDuration(String(parseInt(duration) + 1))} 
+                style={s.counterBtn}
+                activeOpacity={0.7}
+              >
+                <Plus size={20} color="#ffffff" />
               </TouchableOpacity>
             </View>
 
-            <Text className="text-sm font-bold text-white mb-4 mt-2">Estimated Budget Level</Text>
-            <View className="flex flex-row justify-between gap-3 mb-6">
+            <Text style={[s.fieldLabel, { marginTop: 16 }]}>Estimated Budget Level</Text>
+            <View style={s.budgetRow}>
               {['Budget', 'Moderate', 'Luxury'].map((b) => (
                 <TouchableOpacity 
                   key={b}
                   onPress={() => setBudget(b)}
-                  className={`flex-1 py-4 items-center rounded-2xl border ${budget === b ? 'bg-blue-500/20 border-blue-400' : 'bg-white/5 border-white/10'}`}
+                  style={[s.budgetBtn, budget === b && s.budgetBtnActive]}
+                  activeOpacity={0.7}
                 >
-                  <Text className={`font-bold ${budget === b ? 'text-blue-400' : 'text-white/60'}`}>{b}</Text>
+                  <Text style={[s.budgetBtnText, budget === b && s.budgetBtnTextActive]}>{b}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -204,36 +210,48 @@ export const TripBuilderWizard = () => {
         )}
 
         {step === 3 && (
-          <Animated.View entering={FadeInRight} exiting={FadeOutLeft} className="flex-1">
-            <Text className="text-sm font-bold text-white mb-4">Travel Style</Text>
-            <View className="flex flex-row flex-wrap gap-3 mb-8">
-              {['Fast-paced', 'Relaxed', 'Culture', 'Nature', 'Foodie', 'Luxury'].map((style) => (
+          <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+            <Text style={s.fieldLabel}>Travel Style</Text>
+            <View style={s.stylesWrap}>
+              {['Fast-paced', 'Relaxed', 'Culture', 'Nature', 'Foodie', 'Luxury'].map((styleItem) => (
                 <TouchableOpacity 
-                  key={style}
-                  onPress={() => toggleStyle(style)}
-                  className={`px-5 py-3 rounded-full border ${styles.includes(style) ? 'bg-purple-500/40 border-purple-400' : 'bg-white/5 border-white/10'}`}
+                  key={styleItem}
+                  onPress={() => toggleStyle(styleItem)}
+                  style={[s.styleChip, styles.includes(styleItem) && s.styleChipActive]}
+                  activeOpacity={0.7}
                 >
-                  <Text className={`font-bold ${styles.includes(style) ? 'text-white' : 'text-white/60'}`}>{style}</Text>
+                  <Text style={[s.styleChipText, styles.includes(styleItem) && s.styleChipTextActive]}>
+                    {styleItem}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
 
-            <Text className="text-sm font-bold text-white mb-4">Who is traveling?</Text>
-            <View className="flex flex-row gap-4">
-              <View className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-4">
-                <Text className="text-white font-bold mb-3 text-center">Male</Text>
-                <View className="flex flex-row items-center justify-center gap-3">
-                  <TouchableOpacity onPress={() => setMales(Math.max(0, males - 1))} className="w-8 h-8 rounded-full bg-white/10 items-center justify-center"><Minus size={16} color="white" /></TouchableOpacity>
-                  <Text className="text-xl font-bold text-white w-6 text-center">{males}</Text>
-                  <TouchableOpacity onPress={() => setMales(males + 1)} className="w-8 h-8 rounded-full bg-white/10 items-center justify-center"><Plus size={16} color="white" /></TouchableOpacity>
+            <Text style={[s.fieldLabel, { marginTop: 12 }]}>Who is traveling?</Text>
+            <View style={s.travelersRow}>
+              <View style={s.travelerCard}>
+                <Text style={s.travelerLabel}>Male</Text>
+                <View style={s.travelerCounter}>
+                  <TouchableOpacity onPress={() => setMales(Math.max(0, males - 1))} style={s.miniCounterBtn}>
+                    <Minus size={14} color="#ffffff" />
+                  </TouchableOpacity>
+                  <Text style={s.travelerNum}>{males}</Text>
+                  <TouchableOpacity onPress={() => setMales(males + 1)} style={s.miniCounterBtn}>
+                    <Plus size={14} color="#ffffff" />
+                  </TouchableOpacity>
                 </View>
               </View>
-              <View className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-4">
-                <Text className="text-white font-bold mb-3 text-center">Female</Text>
-                <View className="flex flex-row items-center justify-center gap-3">
-                  <TouchableOpacity onPress={() => setFemales(Math.max(0, females - 1))} className="w-8 h-8 rounded-full bg-white/10 items-center justify-center"><Minus size={16} color="white" /></TouchableOpacity>
-                  <Text className="text-xl font-bold text-white w-6 text-center">{females}</Text>
-                  <TouchableOpacity onPress={() => setFemales(females + 1)} className="w-8 h-8 rounded-full bg-white/10 items-center justify-center"><Plus size={16} color="white" /></TouchableOpacity>
+
+              <View style={s.travelerCard}>
+                <Text style={s.travelerLabel}>Female</Text>
+                <View style={s.travelerCounter}>
+                  <TouchableOpacity onPress={() => setFemales(Math.max(0, females - 1))} style={s.miniCounterBtn}>
+                    <Minus size={14} color="#ffffff" />
+                  </TouchableOpacity>
+                  <Text style={s.travelerNum}>{females}</Text>
+                  <TouchableOpacity onPress={() => setFemales(females + 1)} style={s.miniCounterBtn}>
+                    <Plus size={14} color="#ffffff" />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -242,36 +260,383 @@ export const TripBuilderWizard = () => {
       </ScrollView>
 
       {/* Bottom Nav */}
-      <View className="absolute bottom-0 left-0 right-0 p-4 bg-[#030712]/90 flex flex-row items-center justify-between border-t border-white/10">
+      <View style={s.bottomNav}>
         <TouchableOpacity 
           onPress={() => setStep(step - 1)}
           disabled={step === 1}
-          className={`px-6 py-4 rounded-full ${step === 1 ? 'opacity-0' : 'bg-white/10'}`}
+          style={[s.backBtn, step === 1 && { opacity: 0 }]}
+          activeOpacity={0.7}
         >
-          <Text className="text-white font-bold">Back</Text>
+          <Text style={s.backBtnText}>Back</Text>
         </TouchableOpacity>
 
         {step < 3 ? (
           <TouchableOpacity 
             onPress={() => setStep(step + 1)}
             disabled={step === 1 && !prompt.trim()}
-            className={`px-8 py-4 rounded-full flex flex-row items-center gap-2 ${step === 1 && !prompt.trim() ? 'bg-blue-600/50' : 'bg-blue-600'}`}
+            style={[s.nextBtn, step === 1 && !prompt.trim() && s.nextBtnDisabled]}
+            activeOpacity={0.8}
           >
-            <Text className="text-white font-bold">Next Step</Text>
-            <ArrowRight size={16} color="white" />
+            <Text style={s.nextBtnText}>Next Step</Text>
+            <ArrowRight size={16} color="#ffffff" strokeWidth={2.5} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity 
             onPress={handleGenerate}
-            className="px-6 py-4 rounded-full bg-emerald-500 flex flex-row items-center gap-2"
+            style={s.generateBtn}
+            activeOpacity={0.8}
           >
-            <Sparkles size={16} color="white" />
-            <Text className="text-white font-bold">Generate Itinerary</Text>
+            <Sparkles size={16} color="#ffffff" />
+            <Text style={s.generateBtnText}>Generate Itinerary</Text>
           </TouchableOpacity>
         )}
       </View>
     </View>
   );
 };
+
+const s = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#030712',
+    padding: 16,
+  },
+  scrollContent: {
+    paddingBottom: 110,
+  },
+
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#030712',
+    padding: 24,
+  },
+  loadingBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingIconWrapper: {
+    width: 88,
+    height: 88,
+    borderRadius: 24,
+    backgroundColor: 'rgba(96, 165, 250, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(96, 165, 250, 0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  loadingStepText: {
+    fontSize: 14,
+    fontFamily: 'Outfit_700Bold',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 28,
+    paddingHorizontal: 12,
+    position: 'relative',
+  },
+  progressLineBg: {
+    position: 'absolute',
+    top: '50%',
+    left: 20,
+    right: 20,
+    height: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 2,
+    zIndex: -1,
+  },
+  progressLineFill: {
+    position: 'absolute',
+    top: '50%',
+    left: 20,
+    height: 3,
+    backgroundColor: '#3b82f6',
+    borderRadius: 2,
+    zIndex: -1,
+  },
+  stepCircleWrapper: {
+    alignItems: 'center',
+  },
+  stepCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepCircleActive: {
+    backgroundColor: '#2563eb',
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  stepCircleInactive: {
+    backgroundColor: '#1e293b',
+  },
+
+  locContainer: {
+    marginBottom: 20,
+    position: 'relative',
+    zIndex: 50,
+  },
+  fieldLabel: {
+    fontSize: 13,
+    fontFamily: 'Outfit_700Bold',
+    color: '#ffffff',
+    marginBottom: 8,
+  },
+  locInputWrapper: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  locInput: {
+    width: '100%',
+    height: 52,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+    color: '#ffffff',
+    fontSize: 15,
+    fontFamily: 'Outfit_500Medium',
+  },
+  locSpinner: {
+    position: 'absolute',
+    right: 16,
+  },
+  dropdownCard: {
+    position: 'absolute',
+    top: 80,
+    left: 0,
+    right: 0,
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.2)',
+    overflow: 'hidden',
+    zIndex: 100,
+    elevation: 10,
+  },
+  dropdownRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  dropdownCity: {
+    color: '#ffffff',
+    fontFamily: 'Outfit_600SemiBold',
+    fontSize: 14,
+  },
+  dropdownCountry: {
+    color: '#94a3b8',
+    fontSize: 12,
+    fontFamily: 'Outfit_400Regular',
+  },
+
+  counterBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 24,
+    padding: 18,
+    gap: 24,
+    marginBottom: 20,
+  },
+  counterBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  counterTextWrapper: {
+    alignItems: 'center',
+  },
+  counterNumber: {
+    fontSize: 36,
+    fontFamily: 'Outfit_900Black',
+    color: '#ffffff',
+  },
+  counterSub: {
+    fontSize: 12,
+    fontFamily: 'Outfit_700Bold',
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+  },
+
+  budgetRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+    marginBottom: 20,
+  },
+  budgetBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  budgetBtnActive: {
+    backgroundColor: 'rgba(59, 130, 246, 0.18)',
+    borderColor: '#3b82f6',
+  },
+  budgetBtnText: {
+    fontSize: 14,
+    fontFamily: 'Outfit_600SemiBold',
+    color: '#94a3b8',
+  },
+  budgetBtnTextActive: {
+    color: '#60a5fa',
+    fontFamily: 'Outfit_700Bold',
+  },
+
+  stylesWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 24,
+  },
+  styleChip: {
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  styleChipActive: {
+    backgroundColor: 'rgba(168, 85, 247, 0.25)',
+    borderColor: '#a855f7',
+  },
+  styleChipText: {
+    fontSize: 13,
+    fontFamily: 'Outfit_600SemiBold',
+    color: '#94a3b8',
+  },
+  styleChipTextActive: {
+    color: '#ffffff',
+  },
+
+  travelersRow: {
+    flexDirection: 'row',
+    gap: 14,
+  },
+  travelerCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 16,
+    alignItems: 'center',
+  },
+  travelerLabel: {
+    fontSize: 14,
+    fontFamily: 'Outfit_700Bold',
+    color: '#ffffff',
+    marginBottom: 12,
+  },
+  travelerCounter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  miniCounterBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  travelerNum: {
+    fontSize: 18,
+    fontFamily: 'Outfit_700Bold',
+    color: '#ffffff',
+    width: 24,
+    textAlign: 'center',
+  },
+
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 16,
+    paddingBottom: 24,
+    backgroundColor: 'rgba(3, 7, 18, 0.95)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  backBtn: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  backBtnText: {
+    fontSize: 14,
+    fontFamily: 'Outfit_600SemiBold',
+    color: '#ffffff',
+  },
+  nextBtn: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: '#2563eb',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  nextBtnDisabled: {
+    backgroundColor: 'rgba(37, 99, 235, 0.4)',
+  },
+  nextBtnText: {
+    fontSize: 14,
+    fontFamily: 'Outfit_700Bold',
+    color: '#ffffff',
+  },
+  generateBtn: {
+    paddingHorizontal: 22,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: '#10b981',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  generateBtnText: {
+    fontSize: 14,
+    fontFamily: 'Outfit_700Bold',
+    color: '#ffffff',
+  },
+});
 
 export default TripBuilderWizard;

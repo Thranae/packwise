@@ -93,7 +93,7 @@ const ActionButton = ({ icon: Icon, text, color = "#0f172a", onPress }: any) => 
           />
           <View style={styles.actionButtonInnerStroke} pointerEvents="none" />
           <Icon size={16} color={color} strokeWidth={2.5} />
-          <Text style={[styles.actionButtonText, { color }]}>{text}</Text>
+          <Text style={[styles.actionButtonText, { color }]} numberOfLines={1} adjustsFontSizeToFit>{text}</Text>
         </BlurView>
       </View>
     </AnimatedTouchableOpacity>
@@ -216,7 +216,7 @@ export default function CommandCenterWidget({ trip }: { trip?: any }) {
             <View style={styles.actionGrid}>
               <ActionButton icon={SquareDashed} text="Pack" color="#475569" onPress={() => {}} />
               <ActionButton icon={Calculator} text="Budget" color="#475569" onPress={() => {}} />
-              <ActionButton icon={BookOpen} text="Itinerary / Calendar" color="#9333ea" onPress={() => {}} />
+              <ActionButton icon={BookOpen} text="Itinerary" color="#9333ea" onPress={() => {}} />
               <ActionButton icon={Download} text="Export Story" color="#2563eb" onPress={handleShareStory} />
             </View>
           </View>

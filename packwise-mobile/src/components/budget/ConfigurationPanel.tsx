@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
 import { MapPin, Calendar, Users, Diamond, Wallet, Car, Home, ChevronDown, X } from 'lucide-react-native';
 import { COUNTRY_DATA } from '../../utils/costEngine';
 
@@ -11,45 +11,45 @@ const CustomSelect = ({ name, value, options, onChange, label }: any) => {
     <>
       <TouchableOpacity 
         onPress={() => setOpen(true)}
-        className="w-full bg-[#0f131d] border border-white/10 rounded-xl px-3 py-2.5 flex flex-row items-center justify-between"
+        style={s.selectBtn}
+        activeOpacity={0.7}
       >
-        <Text className="text-sm font-medium text-white truncate pr-2" numberOfLines={1}>
+        <Text style={s.selectText} numberOfLines={1}>
           {selectedOption?.label || value}
         </Text>
-        <ChevronDown size={14} color="#9ca3af" />
+        <ChevronDown size={14} color="#64748b" />
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade">
         <TouchableOpacity 
-          className="flex-1 bg-black/60 justify-end"
+          style={s.modalOverlay}
           activeOpacity={1} 
           onPress={() => setOpen(false)}
         >
-          <View className="bg-[#111827] w-full rounded-t-3xl p-5 border-t border-gray-800 max-h-[70%]">
-            <View className="flex flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-bold text-white">{label}</Text>
-              <TouchableOpacity onPress={() => setOpen(false)}>
-                <X size={24} color="#9ca3af" />
+          <View style={s.modalSheet}>
+            <View style={s.modalHeader}>
+              <Text style={s.modalTitle}>{label}</Text>
+              <TouchableOpacity onPress={() => setOpen(false)} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                <X size={22} color="#64748b" />
               </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
               {options.map((opt: any) => (
                 <TouchableOpacity
-                  key={opt.value}
+                  key={String(opt.value)}
                   onPress={() => {
                     onChange({ target: { name, value: opt.value } });
                     setOpen(false);
                   }}
-                  className={`py-4 px-4 rounded-xl mb-2 flex flex-row items-center ${
-                    value == opt.value ? 'bg-blue-500/20 border border-blue-500/30' : 'bg-white/5'
-                  }`}
+                  style={[s.optionRow, value == opt.value && s.optionRowSelected]}
+                  activeOpacity={0.7}
                 >
-                  <Text className={`text-base ${value == opt.value ? 'text-blue-400 font-bold' : 'text-white/70'}`}>
+                  <Text style={[s.optionText, value == opt.value && s.optionTextSelected]}>
                     {opt.label}
                   </Text>
                 </TouchableOpacity>
               ))}
-              <View className="h-10" />
+              <View style={{ height: 40 }} />
             </ScrollView>
           </View>
         </TouchableOpacity>
@@ -67,21 +67,21 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
     }));
   }, [setInputs]);
 
-  const Field = ({ label, icon: Icon, iconColor = '#9ca3af', children }: any) => (
-    <View className="flex flex-col gap-1.5 w-[48%] mb-4">
-      <View className="flex flex-row items-center gap-1.5">
-        <Icon size={12} color={iconColor} />
-        <Text className="text-[10px] font-bold uppercase tracking-widest text-white/40">{label}</Text>
+  const Field = ({ label, icon: Icon, iconColor = '#64748b', children }: any) => (
+    <View style={s.field}>
+      <View style={s.fieldLabel}>
+        <Icon size={13} color={iconColor} />
+        <Text style={s.fieldLabelText}>{label}</Text>
       </View>
       {children}
     </View>
   );
 
   return (
-    <View className="w-full bg-[#111827] rounded-[32px] p-6 border border-gray-800 mt-2 mb-4">
-      <View className="flex flex-row flex-wrap justify-between">
+    <View style={s.panel}>
+      <View style={s.fieldsGrid}>
         
-        <Field label="Home Country" icon={MapPin} labelText="Home Country">
+        <Field label="Home Country" icon={MapPin}>
           <CustomSelect 
             name="originCountry" 
             value={inputs.originCountry} 
@@ -95,7 +95,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Destination" icon={MapPin} iconColor="#60a5fa" labelText="Destination">
+        <Field label="Destination" icon={MapPin} iconColor="#4f46e5">
           <CustomSelect 
             name="destCountry" 
             value={inputs.destCountry} 
@@ -105,7 +105,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Duration" icon={Calendar} labelText="Duration">
+        <Field label="Duration" icon={Calendar}>
           <CustomSelect 
             name="days" 
             value={inputs.days} 
@@ -115,7 +115,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Travelers" icon={Users} labelText="Travelers">
+        <Field label="Travelers" icon={Users}>
           <CustomSelect 
             name="travelers" 
             value={inputs.travelers} 
@@ -125,7 +125,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Travel Style" icon={Diamond} iconColor="#c084fc" labelText="Travel Style">
+        <Field label="Travel Style" icon={Diamond} iconColor="#8b5cf6">
           <CustomSelect 
             name="travelStyle" 
             value={inputs.travelStyle} 
@@ -139,7 +139,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Transportation" icon={Car} iconColor="#60a5fa" labelText="Transportation">
+        <Field label="Transportation" icon={Car} iconColor="#3b82f6">
           <CustomSelect 
             name="transportation" 
             value={inputs.transportation || 'public'} 
@@ -153,7 +153,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <Field label="Accommodation" icon={Home} iconColor="#fbbf24" labelText="Accommodation">
+        <Field label="Accommodation" icon={Home} iconColor="#f59e0b">
           <CustomSelect 
             name="accommodation" 
             value={inputs.accommodation || 'hotel'} 
@@ -168,16 +168,143 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
           />
         </Field>
 
-        <View className="w-[48%] justify-end pb-1">
+        <View style={s.field}>
+          <View style={{ height: 20 }} />
           <TouchableOpacity
             onPress={onCalculate}
-            className="h-[42px] w-full bg-blue-600 items-center justify-center rounded-xl"
+            style={s.calcButton}
+            activeOpacity={0.8}
           >
-            <Text className="text-white text-sm font-bold">Calculate Budget</Text>
+            <Text style={s.calcButtonText}>Apply Changes</Text>
           </TouchableOpacity>
         </View>
 
       </View>
     </View>
   );
+});
+
+const s = StyleSheet.create({
+  panel: {
+    backgroundColor: '#ffffff',
+    borderRadius: 24,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.15)',
+    marginTop: 4,
+    marginBottom: 16,
+    shadowColor: '#2F6BFF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 3,
+  },
+  fieldsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  field: { 
+    width: '48%', 
+    marginBottom: 14, 
+    gap: 6 
+  },
+  fieldLabel: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 6 
+  },
+  fieldLabelText: { 
+    fontSize: 10.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#64748b', 
+    textTransform: 'uppercase', 
+    letterSpacing: 1.2 
+  },
+
+  selectBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(241, 245, 249, 0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(148, 163, 184, 0.18)',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    height: 44,
+  },
+  selectText: { 
+    fontSize: 13.5, 
+    fontFamily: 'Outfit_600SemiBold', 
+    color: '#1e293b', 
+    flex: 1, 
+    marginRight: 6 
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    justifyContent: 'flex-end',
+  },
+  modalSheet: {
+    backgroundColor: '#ffffff',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 22,
+    maxHeight: '70%',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(148, 163, 184, 0.15)',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  modalTitle: { 
+    fontSize: 18, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#0f172a' 
+  },
+
+  optionRow: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    marginBottom: 6,
+    backgroundColor: 'rgba(241, 245, 249, 0.6)',
+  },
+  optionRowSelected: {
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.25)',
+  },
+  optionText: { 
+    fontSize: 15, 
+    fontFamily: 'Outfit_500Medium', 
+    color: '#475569' 
+  },
+  optionTextSelected: { 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#4f46e5' 
+  },
+
+  calcButton: {
+    height: 44,
+    backgroundColor: '#3b82f6',
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#2F6BFF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  calcButtonText: { 
+    fontSize: 13.5, 
+    fontFamily: 'Outfit_700Bold', 
+    color: '#ffffff',
+    textAlign: 'center',
+  },
 });

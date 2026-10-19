@@ -16,7 +16,7 @@ import Animated, {
 
 const { width } = Dimensions.get('window');
 
-const Float = ({ children, delay = 0, y = 12, dur = 3500, style }) => {
+const Float = ({ children, delay = 0, y = 12, dur = 3500, style }: { children: any; delay?: number; y?: number; dur?: number; style?: any }) => {
   const ty = useSharedValue(0);
   useEffect(() => {
     ty.value = withDelay(delay,

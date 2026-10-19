@@ -56,6 +56,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (updatedFields) => {
+    try {
+      const updatedUser = { ...user, ...updatedFields };
+      await AsyncStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Error updating user state:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -64,7 +74,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         loginWithToken,
         logout,
-        checkAuth
+        checkAuth,
+        updateUser
       }}
     >
       {children}

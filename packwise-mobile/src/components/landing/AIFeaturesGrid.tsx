@@ -21,7 +21,7 @@ const FEATURES = [
   { icon: Languages,      label: 'Language Assistant',   desc: 'Talk like a local anywhere',   color: '#2F6BFF', tall: false },
 ];
 
-const FeatureCard = ({ feature, index }) => {
+const FeatureCard = ({ feature, index }: { feature: any; index: number }) => {
   const Icon = feature.icon;
   return (
     <Animated.View entering={FadeInUp.duration(600).delay(800 + index * 80)}>

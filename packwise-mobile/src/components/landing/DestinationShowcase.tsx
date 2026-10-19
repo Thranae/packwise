@@ -18,7 +18,7 @@ const { width } = Dimensions.get('window');
 const CARD_W = width - 48;
 const CARD_H = 420;
 
-const GlassChip = ({ icon: Icon, label, value, accent }) => (
+const GlassChip = ({ icon: Icon, label, value, accent = false }: { icon: any; label: string; value: string; accent?: boolean }) => (
   <View style={[chipS.wrapper, accent && chipS.wrapperAccent]}>
     <BlurView intensity={100} tint="light" style={[chipS.chip, accent && chipS.chipAccent]}>
       <View style={chipS.shine} />

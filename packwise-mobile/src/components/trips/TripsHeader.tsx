@@ -13,7 +13,7 @@ export default function TripsHeader() {
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [isAutoReverting, setIsAutoReverting] = useState(false);
   const isPressed = useSharedValue(false);
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<any>(null);
 
   useEffect(() => {
     return () => {
