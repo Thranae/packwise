@@ -1,94 +1,110 @@
 <svg viewBox="0 0 512 512" width="512" height="512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Background Luxury Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0b1329" />
-      <stop offset="50%" stop-color="#070c1a" />
-      <stop offset="100%" stop-color="#03060f" />
+    <!-- Tile Outer Drop Shadow Filter -->
+    <filter id="tileShadow" x="-20%" y="-15%" width="140%" height="145%" filterUnits="objectBoundingBox">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000000" flood-opacity="0.25" />
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+
+    <!-- Convex 3D Base Gradient (from index.tsx: ['#f8fafc', '#cbd5e1']) -->
+    <linearGradient id="convexBase" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="35%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5e1" />
     </linearGradient>
 
-    <!-- Squircle Border Highlight -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.6" />
-      <stop offset="40%" stop-color="#3b82f6" stop-opacity="0.2" />
-      <stop offset="100%" stop-color="#1e293b" stop-opacity="0.4" />
+    <!-- Thick Glass Lens Overlay (from index.tsx: ['rgba(255,255,255,0.95)', 'rgba(255,255,255,0.1)', 'rgba(0,0,0,0.1)']) -->
+    <linearGradient id="glassLens" x1="10%" y1="10%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.08" />
     </linearGradient>
 
-    <!-- Metallic Silver for Handle & Ribs -->
+    <!-- Border Gradient for 3D Bevel -->
+    <linearGradient id="bevelBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.6" />
+      <stop offset="70%" stop-color="#94a3b8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#475569" stop-opacity="0.25" />
+    </linearGradient>
+
+    <!-- Metallic Silver for Handle & Ribs (from LogoIcon.tsx) -->
     <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="25%" stop-color="#e2e8f0" />
+      <stop offset="20%" stop-color="#e2e8f0" />
       <stop offset="50%" stop-color="#94a3b8" />
-      <stop offset="75%" stop-color="#f1f5f9" />
+      <stop offset="80%" stop-color="#f8fafc" />
       <stop offset="100%" stop-color="#64748b" />
     </linearGradient>
 
-    <!-- Premium Titanium Suitcase Body -->
+    <!-- Premium Titanium Body (from LogoIcon.tsx) -->
     <linearGradient id="titanium" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#334155" />
-      <stop offset="40%" stop-color="#1e293b" />
-      <stop offset="100%" stop-color="#0f172a" />
+      <stop offset="0%" stop-color="#cbd5e1" />
+      <stop offset="40%" stop-color="#64748b" />
+      <stop offset="100%" stop-color="#334155" />
     </linearGradient>
 
-    <!-- 3D Glossy Blue Pin -->
+    <!-- 3D Glossy Blue Pin (from LogoIcon.tsx) -->
     <linearGradient id="pin3D" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#93c5fd" />
       <stop offset="40%" stop-color="#3b82f6" />
       <stop offset="100%" stop-color="#1d4ed8" />
     </linearGradient>
 
-    <!-- Dark Rubber Wheels -->
+    <!-- Dark Rubber Wheels (from LogoIcon.tsx) -->
     <linearGradient id="rubber" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#475569" />
-      <stop offset="100%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#0f172a" />
     </linearGradient>
-
-    <!-- Soft Glow behind Pin -->
-    <radialGradient id="pinGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.45" />
-      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
-    </radialGradient>
   </defs>
 
-  <!-- App Icon Base Squircle -->
-  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#bgGrad)" />
-  <rect x="16" y="16" width="480" height="480" rx="110" stroke="url(#borderGrad)" stroke-width="4" />
+  <!-- 3D Squircle Base Card -->
+  <g filter="url(#tileShadow)">
+    <rect x="40" y="36" width="432" height="432" rx="100" fill="url(#convexBase)" />
+    <!-- Glass Lens Highlight -->
+    <rect x="40" y="36" width="432" height="432" rx="100" fill="url(#glassLens)" />
+    <!-- Bevel Stroke -->
+    <rect x="40" y="36" width="432" height="432" rx="100" stroke="url(#bevelBorder)" stroke-width="3" />
+  </g>
 
-  <!-- Centered Scaled Content: 64x64 scaled by 6.2, translated to center -->
-  <!-- 64 * 6.2 = 396.8. Offset = (512 - 396.8) / 2 = 57.6 -->
-  <g transform="translate(58, 62) scale(6.2)">
+  <!-- Centered Suitcase + Pin Icon -->
+  <!-- Scaled to 320x320 and centered at (512 - 320)/2 = 96, 96 -->
+  <!-- Internal viewBox of LogoIcon is 64x64. Scale = 320/64 = 5.0 -->
+  <!-- LogoIcon centered X=24, Y=26.25. In 64x64 frame with offset: -8, -5.25 -->
+  <!-- Transform: translate(96, 96) scale(5.0) translate(8, 5.25) -->
+  <!-- 96 + 8*5 = 136, 96 + 5.25*5 = 122.25 -->
+  <!-- Suitcase spans X: 10 to 38 (width 28, center 24). In 512 canvas: 136 + 24*5 = 256! (EXACT CENTER!) -->
+  <!-- Suitcase spans Y: 5.5 to 47 (height 41.5, center 26.25). In 512 canvas: 122.25 + 26.25*5 = 253.5! (DEAD CENTER!) -->
+  <g transform="translate(136, 122.25) scale(5.0)">
     
-    <!-- Ambient Pin Glow -->
-    <circle cx="24" cy="22" r="16" fill="url(#pinGlow)" />
-
-    <!-- 3D Drop Shadows on Suitcase -->
-    <g transform="translate(0, 3)" opacity="0.6">
-      <rect x="10" y="12" width="28" height="30" rx="4" fill="#000000" />
-      <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="#000000" />
+    <!-- 3D Drop Shadows (from LogoIcon.tsx line 41) -->
+    <g transform="translate(0, 3.5)">
+      <rect x="10" y="12" width="28" height="30" rx="4" fill="rgba(0,0,0,0.18)" />
+      <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="rgba(0,0,0,0.18)" />
     </g>
 
-    <!-- Suitcase Group -->
+    <!-- Suitcase Group (from LogoIcon.tsx line 47) -->
     <g>
       <!-- Back Handle Pole Shadows -->
-      <path d="M18 12V6 M30 12V6" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round" />
+      <path d="M18 12V6 M30 12V6" stroke="#475569" stroke-width="4" stroke-linecap="round" />
       <!-- Telescopic Handle Poles -->
-      <path d="M18 12V6 M30 12V6" stroke="url(#metal)" stroke-width="2.6" stroke-linecap="round" />
+      <path d="M18 12V6 M30 12V6" stroke="url(#metal)" stroke-width="2.5" stroke-linecap="round" />
       
       <!-- Handle Grip Shadow -->
-      <path d="M15 6.5H33" stroke="#0f172a" stroke-width="5.5" stroke-linecap="round" />
+      <path d="M15 6.5H33" stroke="#334155" stroke-width="5" stroke-linecap="round" />
       <!-- Handle Grip -->
       <path d="M15 5.5H33" stroke="url(#metal)" stroke-width="4" stroke-linecap="round" />
       
       <!-- Suitcase Body Base -->
-      <rect x="10" y="12" width="28" height="30" rx="4.5" fill="url(#titanium)" />
+      <rect x="10" y="12" width="28" height="30" rx="4" fill="url(#titanium)" />
       <!-- Suitcase Rim/Stroke -->
-      <rect x="10" y="12" width="28" height="30" rx="4.5" stroke="url(#metal)" stroke-width="1.6" />
+      <rect x="10" y="12" width="28" height="30" rx="4" stroke="url(#metal)" stroke-width="1.5" />
       
       <!-- 3D Vertical Ribs (Rimowa style) -->
-      <!-- Shadow tracks -->
-      <path d="M15 14V34 M24 14V34 M33 14V34" stroke="#050811" stroke-width="2" stroke-linecap="round" opacity="0.8" />
+      <!-- Shadows -->
+      <path d="M15 14V34 M24 14V34 M33 14V34" stroke="#334155" stroke-width="2" stroke-linecap="round" opacity="0.8" />
       <!-- Highlights -->
-      <path d="M14 14V34 M23 14V34 M32 14V34" stroke="url(#metal)" stroke-width="1.4" stroke-linecap="round" />
+      <path d="M14 14V34 M23 14V34 M32 14V34" stroke="url(#metal)" stroke-width="1.5" stroke-linecap="round" />
 
       <!-- Wheels Base -->
       <circle cx="15" cy="44" r="3" fill="url(#rubber)" />
@@ -98,17 +114,16 @@
       <circle cx="33" cy="44" r="1.5" fill="url(#metal)" />
     </g>
 
-    <!-- Location Pin Overlay -->
-    <g transform="translate(0, -2)">
+    <!-- Location Pin (from LogoIcon.tsx line 77) -->
+    <g transform="translate(0, -3)">
       <!-- Pin Drop Shadow -->
-      <path d="M24 17C27.3137 17 30 19.6863 30 23C30 27 24 33 24 33C24 33 18 27 18 23C18 19.6863 20.6863 17 24 17Z" fill="rgba(0,0,0,0.5)" />
+      <path d="M24 17C27.3137 17 30 19.6863 30 23C30 27 24 33 24 33C24 33 18 27 18 23C18 19.6863 20.6863 17 24 17Z" fill="rgba(0,0,0,0.2)" />
       <!-- Pin Body -->
       <path d="M24 16C27.3137 16 30 18.6863 30 22C30 26 24 32 24 32C24 32 18 26 18 22C18 18.6863 20.6863 16 24 16Z" fill="url(#pin3D)" />
       <!-- Pin Gloss/Highlight -->
-      <path d="M24 17C26.5 17 28.5 19 29 21.5C28.5 18 26.5 17.5 24 17.5C21.5 17.5 19.5 18 19 21.5C19.5 19 21.5 17 24 17Z" fill="#ffffff" opacity="0.75" />
-      <!-- Inner White Core Hole with 3D Depth -->
-      <circle cx="24" cy="22.3" r="2.6" fill="#1e3a8a" opacity="0.5" />
-      <circle cx="24" cy="22" r="2.5" fill="#f8fafc" />
+      <path d="M24 17C26.5 17 28.5 19 29 21.5C28.5 18 26.5 17.5 24 17.5C21.5 17.5 19.5 18 19 21.5C19.5 19 21.5 17 24 17Z" fill="#ffffff" opacity="0.6" />
+      <!-- Inner White Hole with shadow -->
+      <circle cx="24" cy="22" r="2.5" fill="#e2e8f0" />
       <circle cx="24" cy="21.5" r="1.5" fill="#ffffff" />
     </g>
   </g>
