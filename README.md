@@ -204,16 +204,16 @@ PackWise eliminates vendor lock-in and API outage risks through an autonomous ta
 
 ---
 
-### 5. 🎫 Holographic Digital Boarding Pass
-PackWise features a native fluid motion boarding pass designed with Apple-class haptics, dynamic QR verification, and real-time flight telemetry. Operates 100% offline via local Dexie.js cryptographic ticket validation:
+### 5. 📡 Real-Time Architecture Radar & Live Telemetry Engine
+PackWise features an embedded live system telemetry radar with rotating sweep physics, high-frequency signal monitoring, and distributed topology telemetry:
 
 <div align="center">
-  <img src=".github/assets/boarding-pass.svg" alt="PackWise Holographic Boarding Pass" width="90%" style="border-radius: 20px;" />
+  <img src=".github/assets/system-telemetry.svg" alt="PackWise Real-Time Architecture Radar & Telemetry Engine" width="100%" style="border-radius: 20px;" />
 </div>
 
-- **Iridescent Light Sweep**: Simulates physical holographic security foil through dynamic gradient interpolation.
-- **Offline Gate QR Code**: Encodes trip itinerary metadata and cryptographic authorization tokens for instant offline ticket presentation at airport gates.
-- **Real-Time Telemetry**: Seamlessly binds to the AviationStack radar service for gate changes, delay alerts, and baggage carousel updates.
+- **Dynamic Topology Mesh**: Continuously monitors the synchronization bus between the Edge PWA client, offline Dexie DB, resilient failover gateway, and multi-LLM matrix.
+- **Sub-16ms Frame Budget**: Real-time signal oscilloscope tracking hardware-accelerated 60 FPS WebGL spatial transformations.
+- **Failover Telemetry**: Sub-240ms automatic switchover between primary and secondary LLM providers with zero dropped prompts.
 
 ---
 
