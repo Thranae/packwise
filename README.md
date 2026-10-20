@@ -204,22 +204,12 @@ PackWise eliminates vendor lock-in and API outage risks through an autonomous ta
 
 ---
 
-### 5. 🌐 3D Spatial Travel Matrix & Great-Circle Flight Engine
-PackWise integrates an autonomous 3D spatial intelligence engine with spherical wireframe perspective, multi-city great-circle flight trajectory simulation, and in-flight zero-packet state reconciliation:
+### 5. 🌐 3D Spatial Canvas & Dynamic Travel Intelligence
+PackWise integrates hardware-accelerated 3D spatial computing powered by Three.js and MapLibre GL dark vector tiles:
 
-<div align="center">
-  <img src=".github/assets/orbital-core.svg" alt="PackWise 3D Spatial Travel Matrix & Orbital Flight Engine" width="100%" style="border-radius: 20px;" />
-</div>
-
-- **Great-Circle Vector Trajectories**: Real-time rendering of transcontinental flight paths between global transit hubs with animated photon signal sweeps.
-- **In-Flight Zero-Packet Autonomy**: Local Dexie.js (IndexedDB) commits mutations in < 4ms even at 38,000 feet without cellular or Wi-Fi connectivity.
-- **Multi-LLM Autonomous Mesh**: Automatic dynamic failover between Google Gemini 2.5 Flash, Groq Llama 3, OpenAI GPT-4o, and Mistral AI with sub-240ms recovery.
-
-<br />
-
-<div align="center">
-  <img src=".github/assets/offline-simulator.svg" alt="In-Flight & Offline-First State Reconciliation Simulator" width="100%" style="border-radius: 18px;" />
-</div>
+- **60 FPS Hardware Acceleration**: GPU-optimized spatial rendering decoupled from main-thread state logic for jitter-free mobile exploration.
+- **Transcontinental Great-Circle Paths**: Dynamic vector curves rendering global flight trajectories with spring physics and interactive destination telemetry.
+- **In-Flight Zero-Packet Autonomy**: Local Dexie.js (IndexedDB) commits mutations in < 4ms even at 38,000 feet without network connectivity.
 
 ---
 
