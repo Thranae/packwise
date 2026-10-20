@@ -204,16 +204,22 @@ PackWise eliminates vendor lock-in and API outage risks through an autonomous ta
 
 ---
 
-### 5. 📡 Real-Time Architecture Radar & Live Telemetry Engine
-PackWise features an embedded live system telemetry radar with rotating sweep physics, high-frequency signal monitoring, and distributed topology telemetry:
+### 5. 🌐 3D Spatial Travel Matrix & Great-Circle Flight Engine
+PackWise integrates an autonomous 3D spatial intelligence engine with spherical wireframe perspective, multi-city great-circle flight trajectory simulation, and in-flight zero-packet state reconciliation:
 
 <div align="center">
-  <img src=".github/assets/system-telemetry.svg" alt="PackWise Real-Time Architecture Radar & Telemetry Engine" width="100%" style="border-radius: 20px;" />
+  <img src=".github/assets/orbital-core.svg" alt="PackWise 3D Spatial Travel Matrix & Orbital Flight Engine" width="100%" style="border-radius: 20px;" />
 </div>
 
-- **Dynamic Topology Mesh**: Continuously monitors the synchronization bus between the Edge PWA client, offline Dexie DB, resilient failover gateway, and multi-LLM matrix.
-- **Sub-16ms Frame Budget**: Real-time signal oscilloscope tracking hardware-accelerated 60 FPS WebGL spatial transformations.
-- **Failover Telemetry**: Sub-240ms automatic switchover between primary and secondary LLM providers with zero dropped prompts.
+- **Great-Circle Vector Trajectories**: Real-time rendering of transcontinental flight paths between global transit hubs with animated photon signal sweeps.
+- **In-Flight Zero-Packet Autonomy**: Local Dexie.js (IndexedDB) commits mutations in < 4ms even at 38,000 feet without cellular or Wi-Fi connectivity.
+- **Multi-LLM Autonomous Mesh**: Automatic dynamic failover between Google Gemini 2.5 Flash, Groq Llama 3, OpenAI GPT-4o, and Mistral AI with sub-240ms recovery.
+
+<br />
+
+<div align="center">
+  <img src=".github/assets/offline-simulator.svg" alt="In-Flight & Offline-First State Reconciliation Simulator" width="100%" style="border-radius: 18px;" />
+</div>
 
 ---
 
