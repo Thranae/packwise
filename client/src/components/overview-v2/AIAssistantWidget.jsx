@@ -6,7 +6,6 @@ import { LogoIcon } from '@/components/ui/Logo';
 import { useTripContext } from '@/context/TripContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import Spline from '@splinetool/react-spline';
 import api from '@/services/api';
 
 export const AIAssistantWidget = ({ className = "" }) => {
@@ -67,15 +66,14 @@ export const AIAssistantWidget = ({ className = "" }) => {
             >
               {/* Avatar & Greeting */}
               <div className="flex flex-col items-center gap-1.5 mt-0 mb-0">
-                {/* 3D Genie Style Avatar */}
+                {/* Genie Style Avatar */}
                 <div className="relative group/avatar mt-1 mb-1">
-                  {/* Mild Aurora */}
-                  <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-400/30 via-blue-500/30 to-purple-500/30 blur-[16px] -z-10 animate-pulse" />
-                  <div className="w-[72px] h-[72px] sm:w-[80px] sm:h-[80px] rounded-full bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-[#5b8cff] to-[#4d7fff] flex items-center justify-center shadow-[inset_0_4px_8px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active/avatar:scale-95 transition-transform duration-200">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 translate-x-[-100%] group-hover/avatar:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none z-30" />
-                      <div className="absolute inset-[-24px] z-10 pointer-events-none scale-[0.65]">
-                        <Spline scene="https://prod.spline.design/UP9ptfgAz0jjQwkK/scene.splinecode" />
+                  {/* Subtle Glow */}
+                  <div className="absolute -inset-2 rounded-full bg-gradient-to-tr from-cyan-400/25 via-blue-500/25 to-purple-500/25 blur-[12px] -z-10" />
+                  <div className="w-[68px] h-[68px] sm:w-[76px] sm:h-[76px] rounded-full bg-gradient-to-b from-white/20 to-white/5 p-[1px] shadow-[0_8px_20px_rgba(0,0,0,0.35)]">
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-[#5b8cff] to-[#3b82f6] flex items-center justify-center shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-2px_4px_rgba(0,0,0,0.2)] border border-white/30 relative overflow-hidden group-active/avatar:scale-95 transition-transform duration-200">
+                      <div className="relative z-10 flex items-center justify-center text-white">
+                        <Bot className="w-8 h-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] stroke-[2]" />
                       </div>
                     </div>
                   </div>

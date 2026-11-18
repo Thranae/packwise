@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import Spline from '@splinetool/react-spline';
 import { MapPin, ArrowRight, ArrowLeft, Bot, Users, Gauge, Wallet, UserCircle, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';

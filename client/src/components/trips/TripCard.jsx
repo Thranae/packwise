@@ -4,7 +4,6 @@ import { MapPin, Calendar, Clock, Wallet, CloudSun, Box, MoreHorizontal, Edit2, 
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 import { useImageColor } from '@/hooks/useImageColor';
-import { MorphingPopover, MorphingPopoverTrigger, MorphingPopoverContent } from '@/components/motion-primitives/morphing-popover';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
 import { useTripContext } from '@/context/TripContext';
 import { useToast } from '@/hooks/useToast';
@@ -161,23 +160,23 @@ export const TripCard = ({ trip }) => {
     >
       <motion.div
         ref={cardRef}
-        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card transform-gpu will-change-transform bg-transparent"
+        className="relative flex flex-col h-full w-full rounded-[32px] overflow-hidden ios-glass-card bg-transparent"
       >
         {/* Glow Effect for mobile (static soft glow instead of hover-based) */}
         {!isNative && (
           <div
-            className="absolute -inset-[1px] rounded-[32px] opacity-100 transition-opacity duration-500 -z-10 blur-xl will-change-opacity transform-gpu"
-            style={{ background: `linear-gradient(to bottom right, ${glowColor}15, transparent)`, transform: 'translateZ(0)' }}
+            className="absolute -inset-[1px] rounded-[32px] opacity-100 transition-opacity duration-300 -z-10 blur-lg pointer-events-none"
+            style={{ background: `linear-gradient(to bottom right, ${glowColor}15, transparent)` }}
           />
         )}
         
         {/* Top Half: Image */}
         <div className="relative h-[220px] w-full shrink-0">
           {/* Image & Gradient Wrapper with Overflow Hidden */}
-          <div className="absolute inset-0 overflow-hidden bg-[#060b14] z-0 transform-gpu">
-            <div className={`absolute inset-0 bg-white/5 animate-pulse transition-opacity duration-700 ${imgLoaded ? 'opacity-0' : 'opacity-100'}`} />
+          <div className="absolute inset-0 overflow-hidden bg-[#060b14] z-0">
+            <div className={`absolute inset-0 bg-white/5 animate-pulse transition-opacity duration-500 ${imgLoaded ? 'opacity-0' : 'opacity-100'}`} />
             <div 
-              className={`absolute inset-0 bg-cover bg-center transition-all duration-[1.5s] ease-[cubic-bezier(0.16, 1, 0.3, 1)] group-hover:scale-110 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-[1.03] ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
               style={{ backgroundImage: `url(${displayImage})` }}
             />
           </div>

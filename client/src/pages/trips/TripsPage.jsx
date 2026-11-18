@@ -2,10 +2,7 @@ import React, { useState, useMemo, useDeferredValue, useEffect } from 'react';
 import { Plus, Search, Map, Compass, Globe, MapPin, Loader2, Bot, Plane, Home, Wallet, CloudSun, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import Spline from '@splinetool/react-spline';
 import { PageTransition } from '@/components/common/PageTransition';
-import { AnimatedBackground as PageBackground } from '@/components/common/AnimatedBackground';
-import { AnimatedBackground as FilterBackground } from '@/components/motion-primitives/animated-background';
 import { ROUTES } from '@/constants/routes';
 import { TripCard } from '@/components/trips/TripCard';
 import { useTripContext } from '@/context/TripContext';
@@ -13,8 +10,6 @@ import { useHaptics } from '@/hooks/useHaptics';
 import { useRoutePreload } from '@/hooks/useRoutePreload';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { GeneratingTripCard } from '@/components/trips/GeneratingTripCard';
-import { SlidingNumber } from '@/components/motion-primitives/sliding-number';
-
 import { EmptyTrips } from '@/components/trips/EmptyTrips';
 
 const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed'];
@@ -69,7 +64,6 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
   return (
     <PageTransition className="col-span-12 relative flex flex-col w-full h-full">
-      <PageBackground />
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden pb-24 scrollbar-hide relative z-10 w-full">
         <div className="min-h-screen px-6 pb-24 pt-[calc(24px+var(--safe-top))] md:pt-12 w-full max-w-[1440px] mx-auto">
         
@@ -79,7 +73,7 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
             My Trips
             <div className="flex items-center justify-center bg-white/10 border border-white/20 rounded-2xl px-3 py-1 backdrop-blur-xl shadow-lg">
               <span className="text-2xl font-bold text-white tracking-tighter">
-                <SlidingNumber value={trips.length} />
+                {trips.length}
               </span>
             </div>
           </h1>
@@ -127,24 +121,18 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
 
             {/* Segmented Filters */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-full px-1 snap-x pb-2">
-              <FilterBackground
-                defaultValue={activeFilter}
-                className="rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
-                transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-                enableHover={false}
-              >
+              <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
                 {FILTERS.map(filter => {
                   const isActive = activeFilter === filter;
                   return (
                     <button
                       key={filter}
-                      data-id={filter}
                       onClick={() => { setActiveFilter(filter); lightTap(); }}
                       className={`
-                        shrink-0 snap-start relative px-5 py-2.5 rounded-full text-[14px] font-bold tracking-wide
-                        transition-all duration-300 outline-none
+                        shrink-0 snap-start relative px-4 sm:px-5 py-2 rounded-full text-[13px] sm:text-[14px] font-bold tracking-wide
+                        transition-colors duration-200 outline-none cursor-pointer
                         ${isActive 
-                          ? 'text-white drop-shadow-md' 
+                          ? 'bg-white/20 text-white shadow-sm border border-white/25' 
                           : 'text-white/60 hover:text-white/90 border border-transparent'
                         }
                       `}
@@ -152,9 +140,9 @@ const FILTERS = ['All', 'draft', 'planning', 'upcoming', 'ongoing', 'completed']
                     >
                       <span className="capitalize">{filter}</span>
                     </button>
-                  )
+                  );
                 })}
-              </FilterBackground>
+              </div>
             </div>
           </motion.div>
         )}

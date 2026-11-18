@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
-import Spline from '@splinetool/react-spline';
 import { ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/Button';
 

@@ -103,8 +103,12 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
 
   // Inject 3D Space Dust
   useEffect(() => {
+    let disposed = false;
+    let animId = null;
+
     // Wait for Globe to initialize its scene
     const initSpaceDust = () => {
+      if (disposed) return;
       if (globeEl.current && globeEl.current.scene) {
         const scene = globeEl.current.scene();
         
@@ -112,11 +116,10 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
         if (scene.children.some(c => c.name === 'spaceDust')) return;
 
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 3000;
+        const particlesCount = 200;
         const posArray = new Float32Array(particlesCount * 3);
         
         for (let i = 0; i < particlesCount * 3; i++) {
-          // Spread particles in a large sphere around the globe
           posArray[i] = (Math.random() - 0.5) * 800;
         }
         
@@ -124,9 +127,9 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
         
         const particlesMaterial = new THREE.PointsMaterial({
           size: 1.2,
-          color: 0x93c5fd, // Light blue dust
+          color: 0x93c5fd,
           transparent: true,
-          opacity: 0.6,
+          opacity: 0.5,
           blending: THREE.AdditiveBlending
         });
         
@@ -139,16 +142,18 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
     };
     
     const initClouds = () => {
+      if (disposed) return;
       if (globeEl.current && globeEl.current.scene) {
         const scene = globeEl.current.scene();
         if (scene.children.some(c => c.name === 'clouds')) return;
 
-        const cloudGeometry = new THREE.SphereGeometry(100.6, 75, 75);
+        const cloudGeometry = new THREE.SphereGeometry(100.6, 32, 32);
         new THREE.TextureLoader().load('//unpkg.com/three-globe/example/img/earth-clouds10k.png', (texture) => {
+          if (disposed) return;
           const cloudMaterial = new THREE.MeshPhongMaterial({
             map: texture,
             transparent: true,
-            opacity: 0.4,
+            opacity: 0.35,
             blending: THREE.AdditiveBlending,
             depthWrite: false
           });
@@ -157,8 +162,9 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
           scene.add(cloudMesh);
 
           const animateClouds = () => {
+            if (disposed) return;
             cloudMesh.rotation.y += 0.0003;
-            requestAnimationFrame(animateClouds);
+            animId = requestAnimationFrame(animateClouds);
           };
           animateClouds();
         });
@@ -169,6 +175,11 @@ export const InteractiveGlobeWidget = ({ className = "" }) => {
     
     initSpaceDust();
     initClouds();
+
+    return () => {
+      disposed = true;
+      if (animId) cancelAnimationFrame(animId);
+    };
   }, []);
 
   // Marker data

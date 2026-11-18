@@ -6,7 +6,6 @@ import { User, Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 import { Capacitor } from '@capacitor/core';
-import Spline from '@splinetool/react-spline';
 import { LogoIcon, Logo } from '@/components/ui/Logo';
 import OtpInput from '@/components/ui/OtpInput';
 import { useAuth } from '@/hooks/useAuth';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Compass, Bot } from 'lucide-react';
-import Spline from '@splinetool/react-spline';
 
 export const GeneratingTripCard = ({ destination }) => (
   <motion.div 
