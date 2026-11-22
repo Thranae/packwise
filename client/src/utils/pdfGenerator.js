@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { getTripImage } from './imageUtils';
+import { getRealisticTripBudget, getCountryData } from './costEngine';
 
 // Helper to avoid canvas tainting by fetching image directly to base64
 const fetchImageAsBase64 = async (url) => {
@@ -70,7 +71,7 @@ export const generatePremiumPDF = async (trip) => {
                    <span class="text-xl font-bold">${trip?.travelers || 1} Travelers</span>
                  </div>
                  <div class="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg">
-                   <span class="text-xl font-bold">Budget: ${trip?.currency || '$'} ${trip?.budget || 'N/A'}</span>
+                   <span class="text-xl font-bold">Budget: ${trip?.currency || getCountryData(trip?.country || trip?.destination).currency} ${getRealisticTripBudget(trip).toLocaleString()}</span>
                  </div>
               </div>
            </div>

@@ -7,6 +7,7 @@ import { TripContext } from '@/context/TripContext';
 import { ROUTES } from '@/constants/routes';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/hooks/useAuth';
+import { getRealisticTripBudget, getCountryData } from '@/utils/costEngine';
 
 // Helper for parsing weather icons
 const renderWeatherIcon = (condition) => {
@@ -215,7 +216,7 @@ export const SharedTripPage = () => {
               </div>
             ) : (
               <div className="p-6 rounded-2xl bg-white/5 text-center text-white/60">
-                Estimated budget: {trip.budget} {trip.currency || 'USD'}
+                Estimated budget: {getRealisticTripBudget(trip).toLocaleString()} {trip.currency || getCountryData(trip.country || trip.destination).currency}
               </div>
             )}
             

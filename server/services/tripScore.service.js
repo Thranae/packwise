@@ -1,5 +1,6 @@
 import aiService from './ai.service.js';
 import axios from 'axios';
+import { estimateTripBudget } from '../controllers/trip.controller.js';
 
 class TripScoreService {
   /**
@@ -85,12 +86,15 @@ class TripScoreService {
   }
 
   async _getBudgetScore(trip) {
-    const { budget, startDate, endDate, destination } = trip;
-    if (!budget || budget === 0) return { score: 40, label: 'No Budget Set', detail: 'Please set a budget for your trip' };
-
+    let { budget, startDate, endDate, destination, country } = trip;
     const days = startDate && endDate
-      ? Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24))
+      ? Math.max(1, Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)))
       : 7;
+
+    if (!budget || Number(budget) === 0) {
+      const est = estimateTripBudget(country || destination, days, trip.travelers || 1, trip.travelStyle || 'standard');
+      budget = est.budget;
+    }
 
     const dailyBudget = budget / days;
 

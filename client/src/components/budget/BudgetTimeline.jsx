@@ -1,16 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PlaneTakeoff, PlaneLanding, Map, Clock } from 'lucide-react';
-import { COUNTRY_DATA } from '@/utils/costEngine';
+import { COUNTRY_DATA, getCountryData, FALLBACK_RATES } from '@/utils/costEngine';
 
 export const BudgetTimeline = React.memo(({ summary, breakdown, inputs, rates }) => {
   if (!summary || !breakdown || !rates) return null;
 
-  const originCurrency = COUNTRY_DATA[inputs.originCountry]?.currency || 'USD';
-  const originSymbol = COUNTRY_DATA[inputs.originCountry]?.symbol || '$';
-  const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
+  const originData = getCountryData(inputs.originCountry);
+  const destData = getCountryData(inputs.destCountry);
+  const originCurrency = originData.currency || 'USD';
+  const originSymbol = originData.symbol || '$';
+  const destCurrency = destData.currency || 'USD';
 
-  const rateMultiplier = (rates[originCurrency] || 1) / (rates[destCurrency] || 1);
+  const rateOrigin = rates?.[originCurrency] || FALLBACK_RATES[originCurrency] || 1;
+  const rateDest = rates?.[destCurrency] || FALLBACK_RATES[destCurrency] || 1;
+  const rateMultiplier = rateOrigin / rateDest;
   const fmtOrigin = (val) =>
     new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(val * rateMultiplier));
 

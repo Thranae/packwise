@@ -6,18 +6,34 @@ import { useTripContext } from '@/context/TripContext';
 import { useAI } from '@/hooks/useAI';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
+import { getRealisticTripBudget, getCountryData } from '@/utils/costEngine';
 
 export const BudgetWidget = ({ className = "" }) => {
-  const { currentTrip } = useTripContext();
+  const { currentTrip, updateTripLocal } = useTripContext();
   const { getBudgetAdvice, loading } = useAI();
   const [advice, setAdvice] = useState(null);
   const navigate = useNavigate();
 
+  const countryData = getCountryData(currentTrip?.country || currentTrip?.destination);
+  const budget = currentTrip ? getRealisticTripBudget(currentTrip) : 3000;
+  const currency = currentTrip?.currency || countryData.currency || 'USD';
+
+  // Auto-heal 0-budget trip in background
   useEffect(() => {
-    if (currentTrip?.destination && currentTrip?.budget) {
-      getBudgetAdvice(currentTrip.destination, currentTrip.budget, currentTrip.currency || 'INR').then(setAdvice);
+    if (currentTrip && currentTrip._id && (!currentTrip.budget || Number(currentTrip.budget) === 0)) {
+      updateTripLocal(currentTrip._id, {
+        budget,
+        currency,
+        country: currentTrip.country || countryData.name
+      });
     }
-  }, [currentTrip?.destination, currentTrip?.budget]);
+  }, [currentTrip, budget, currency, countryData.name, updateTripLocal]);
+
+  useEffect(() => {
+    if (currentTrip?.destination && budget > 0) {
+      getBudgetAdvice(currentTrip.destination, budget, currency).then(setAdvice);
+    }
+  }, [currentTrip?.destination, budget, currency]);
 
   const cardRef = useRef(null);
   const { rotateX, rotateY } = useMouseTilt(cardRef, { maxTilt: 5, stiffness: 250, damping: 25 });
@@ -29,8 +45,6 @@ export const BudgetWidget = ({ className = "" }) => {
   };
   
   const duration = currentTrip ? getDuration(currentTrip.startDate, currentTrip.endDate) : 1;
-  const budget = currentTrip?.budget || 0;
-  const currency = currentTrip?.currency || 'INR';
   const dailyBudget = Math.round(budget / duration);
   
   // AI Logic
@@ -57,7 +71,7 @@ export const BudgetWidget = ({ className = "" }) => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col ios-3d-element">
           <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-white/50 mb-1">Est. Budget</span>
-          <span className="text-3xl font-semibold tracking-tighter text-white drop-shadow-sm">{budget} {currency}</span>
+          <span className="text-3xl font-semibold tracking-tighter text-white drop-shadow-sm">{Number(budget).toLocaleString()} {currency}</span>
         </div>
         <div className="w-12 h-12 rounded-[16px] bg-white/5 border border-white/10 flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] ios-3d-icon">
           <Wallet className="w-6 h-6 text-blue-400" />

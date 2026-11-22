@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Calendar, Users, Diamond, Wallet, Car, Home, ChevronDown } from 'lucide-react';
-import { COUNTRY_DATA } from '@/utils/costEngine';
+import { COUNTRY_DATA, getCountryData } from '@/utils/costEngine';
 
 const CustomSelect = ({ name, value, options, onChange }) => {
   const [open, setOpen] = useState(false);
@@ -15,7 +15,7 @@ const CustomSelect = ({ name, value, options, onChange }) => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  const selectedOption = options.find(o => o.value == value) || options[0];
+  const selectedOption = options.find(o => String(o.value).toLowerCase() === String(value).toLowerCase()) || options[0];
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -47,7 +47,7 @@ const CustomSelect = ({ name, value, options, onChange }) => {
                   setOpen(false);
                 }}
                 className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
-                  value == opt.value ? 'bg-blue-500/20 text-blue-300 font-semibold' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  String(value).toLowerCase() === String(opt.value).toLowerCase() ? 'bg-blue-500/20 text-blue-300 font-semibold' : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {opt.label}
@@ -63,11 +63,17 @@ const CustomSelect = ({ name, value, options, onChange }) => {
 export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }) => {
   const handleChange = React.useCallback((e) => {
     const { name, value } = e.target;
+    const nextVal = (name === 'days' || name === 'travelers') ? Number(value) : value;
+    
     setInputs((prev) => ({
       ...prev,
-      [name]: name === 'days' || name === 'travelers' ? Number(value) : value,
+      [name]: nextVal,
     }));
-  }, [setInputs]);
+
+    if (onCalculate) {
+      onCalculate({ [name]: nextVal });
+    }
+  }, [setInputs, onCalculate]);
 
   const Field = ({ label, icon: Icon, iconColor = 'text-white/30', children }) => (
     <div className="flex flex-col gap-1.5">
@@ -79,6 +85,23 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
     </div>
   );
 
+  const countryOptions = Object.keys(COUNTRY_DATA).sort().map(c => ({
+    value: c,
+    label: `${COUNTRY_DATA[c].flag} ${c}`
+  }));
+
+  const originOptions = [
+    { value: 'India', label: '🇮🇳 India' },
+    { value: 'United States', label: '🇺🇸 United States' },
+    { value: 'United Kingdom', label: '🇬🇧 United Kingdom' },
+    { value: 'Australia', label: '🇦🇺 Australia' },
+    { value: 'Canada', label: '🇨🇦 Canada' },
+    { value: 'Germany', label: '🇩🇪 Germany' },
+    { value: 'Singapore', label: '🇸🇬 Singapore' },
+    { value: 'UAE', label: '🇦🇪 UAE' },
+    { value: 'Japan', label: '🇯🇵 Japan' }
+  ];
+
   return (
     <div className="w-full ios-glass-card rounded-[32px] p-6 relative z-10">
       {/* Top row — 4 fields */}
@@ -88,11 +111,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
             name="originCountry" 
             value={inputs.originCountry} 
             onChange={handleChange} 
-            options={[
-              { value: 'India', label: 'India' },
-              { value: 'United States', label: 'United States' },
-              { value: 'United Kingdom', label: 'United Kingdom' }
-            ]} 
+            options={originOptions} 
           />
         </Field>
 
@@ -101,7 +120,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
             name="destCountry" 
             value={inputs.destCountry} 
             onChange={handleChange} 
-            options={Object.keys(COUNTRY_DATA).map(c => ({ value: c, label: c }))} 
+            options={countryOptions} 
           />
         </Field>
 
@@ -169,7 +188,7 @@ export const ConfigurationPanel = React.memo(({ inputs, setInputs, onCalculate }
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          onClick={onCalculate}
+          onClick={() => onCalculate && onCalculate()}
           className="h-[42px] w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-400 hover:to-purple-400 text-white text-sm font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(99,102,241,0.35)]"
         >
           Calculate Budget

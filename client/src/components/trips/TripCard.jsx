@@ -12,6 +12,7 @@ import { useTransitionNavigate } from '@/contexts/TransitionContext';
 import { useState, useEffect } from 'react';
 import api from '@/services/api';
 import { Share } from '@capacitor/share';
+import { getRealisticTripBudget, getCountryData, calculateTripCost } from '@/utils/costEngine';
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -67,10 +68,27 @@ export const TripCard = ({ trip }) => {
     e.stopPropagation();
     setIsSaving(true);
     try {
+      const countryData = getCountryData(trip.country || trip.destination);
+      let numericBudget = Number(editedBudget);
+      if (!Number.isFinite(numericBudget) || numericBudget <= 0) {
+        const dStart = new Date(editedStartDate);
+        const dEnd = new Date(editedEndDate);
+        const diff = !isNaN(dStart.getTime()) && !isNaN(dEnd.getTime()) ? dEnd - dStart : 0;
+        const duration = Math.max(1, Math.ceil(diff / 86400000)) || 5;
+        const calculated = calculateTripCost(
+          trip.country || trip.destination,
+          duration,
+          parseInt(editedTravelers) || 1,
+          typeof editedBudget === 'string' ? editedBudget : 'standard'
+        );
+        numericBudget = calculated.summary.totalBudget;
+      }
+
       await updateTripLocal(trip._id, {
         startDate: new Date(editedStartDate).toISOString(),
         endDate: new Date(editedEndDate).toISOString(),
-        budget: editedBudget,
+        budget: numericBudget,
+        currency: trip.currency || countryData.currency || 'USD',
         travelers: parseInt(editedTravelers) || 1
       });
       addToast('success', 'Trip updated!');
@@ -357,7 +375,9 @@ export const TripCard = ({ trip }) => {
                   </select>
                 </div>
               ) : (
-                <span className="text-[13px] font-bold text-white truncate w-full">{trip.budget} {trip.currency}</span>
+                <span className="text-[13px] font-bold text-white truncate w-full">
+                  {getRealisticTripBudget(trip).toLocaleString()} {trip.currency || getCountryData(trip.country || trip.destination).currency}
+                </span>
               )}
             </div>
             {/* Travelers */}

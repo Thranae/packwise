@@ -10,6 +10,7 @@ import { useMouseTilt } from '@/hooks/useMouseTilt';
 import { useLiveWeather } from '@/hooks/useLiveApis';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
+import { getRealisticTripBudget, getCountryData } from '@/utils/costEngine';
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -268,7 +269,9 @@ export const HeroSection = ({ isSharedView = false }) => {
           {/* Budget */}
           <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full ios-liquid-button transition-colors">
             <Wallet className="w-4 h-4 md:w-5 md:h-5 text-emerald-400 drop-shadow-md" />
-            <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">{currentTrip.budget} {currentTrip.currency}</span>
+            <span className="text-xs md:text-sm font-bold text-white whitespace-nowrap">
+              {getRealisticTripBudget(currentTrip).toLocaleString()} {currentTrip.currency || getCountryData(currentTrip.country || currentTrip.destination).currency}
+            </span>
           </div>
         </div>
 

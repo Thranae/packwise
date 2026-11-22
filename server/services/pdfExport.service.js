@@ -1,5 +1,6 @@
 import PDFDocument from 'pdfkit';
 import Trip from '../models/Trip.js';
+import { estimateTripBudget } from '../controllers/trip.controller.js';
 
 /**
  * PDF Export Service
@@ -54,12 +55,21 @@ class PDFExportService {
     doc.fontSize(12).fillColor('#64748B').font('Helvetica')
       .text(trip.country || '', 50, 153);
 
+    let budgetValue = trip.budget;
+    let currencyValue = trip.currency || 'USD';
+    if (!budgetValue || Number(budgetValue) === 0) {
+      const days = trip.startDate && trip.endDate ? Math.max(1, Math.ceil((new Date(trip.endDate) - new Date(trip.startDate)) / 86400000)) : 7;
+      const est = estimateTripBudget(trip.country || trip.destination, days, trip.travelers || 1);
+      budgetValue = est.budget;
+      currencyValue = est.currency;
+    }
+
     // Trip metadata row
     const metaY = 170;
     const meta = [
       { label: 'Status', value: (trip.status || 'planning').toUpperCase() },
       { label: 'Travelers', value: String(trip.travelers || 1) },
-      { label: 'Budget', value: `${trip.budget || 0} ${trip.currency || 'USD'}` },
+      { label: 'Budget', value: `${Number(budgetValue).toLocaleString()} ${currencyValue}` },
     ];
 
     if (trip.startDate) {

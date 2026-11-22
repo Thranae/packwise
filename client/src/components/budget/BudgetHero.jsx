@@ -1,20 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Plane, Wallet, Clock } from 'lucide-react';
-import { COUNTRY_DATA } from '@/utils/costEngine';
+import { COUNTRY_DATA, getCountryData, FALLBACK_RATES } from '@/utils/costEngine';
 
 export const BudgetHero = React.memo(({ summary, inputs, rates, lastUpdated }) => {
   if (!summary || !rates) return null;
 
-  const originCurrency = COUNTRY_DATA[inputs.originCountry]?.currency || 'USD';
-  const originSymbol = COUNTRY_DATA[inputs.originCountry]?.symbol || '$';
-  const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
-  const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
-  const destCode = COUNTRY_DATA[inputs.destCountry]?.code?.toLowerCase() || 'us';
-  const originCode = COUNTRY_DATA[inputs.originCountry]?.code?.toLowerCase() || 'us';
+  const originData = getCountryData(inputs.originCountry);
+  const destData = getCountryData(inputs.destCountry);
+  const originCurrency = originData.currency || 'USD';
+  const originSymbol = originData.symbol || '$';
+  const destCurrency = destData.currency || 'USD';
+  const destSymbol = destData.symbol || '$';
+  const destCode = destData.code?.toLowerCase() || 'us';
+  const originCode = originData.code?.toLowerCase() || 'in';
 
-  const originRate = rates[originCurrency] || 1;
-  const destRate = rates[destCurrency] || 1;
+  const originRate = rates[originCurrency] || FALLBACK_RATES[originCurrency] || 1;
+  const destRate = rates[destCurrency] || FALLBACK_RATES[destCurrency] || 1;
 
   const safe = (v) => (Number.isFinite(v) ? v : 0);
 

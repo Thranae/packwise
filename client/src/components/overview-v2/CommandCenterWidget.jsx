@@ -8,6 +8,7 @@ import { useSoundEffect } from '@/hooks/useSoundEffect';
 import { useToast } from '@/hooks/useToast';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
+import { getRealisticTripBudget, getCountryData } from '@/utils/costEngine';
 
 export const CommandCenterWidget = ({ className = "" }) => {
   const cardRef = useRef(null);
@@ -29,7 +30,8 @@ export const CommandCenterWidget = ({ className = "" }) => {
   };
   
   const duration = currentTrip ? getDuration(currentTrip.startDate, currentTrip.endDate) : 1;
-  const dailyBudget = currentTrip ? Math.round(currentTrip.budget / duration) : 0;
+  const currentBudget = currentTrip ? getRealisticTripBudget(currentTrip) : 0;
+  const dailyBudget = currentTrip ? Math.round(currentBudget / duration) : 0;
   
   const [localTime, setLocalTime] = useState('--:--');
   const [countdown, setCountdown] = useState('--');
@@ -266,7 +268,7 @@ export const CommandCenterWidget = ({ className = "" }) => {
             <div className="flex flex-col">
               <span className="text-3xl text-white/40 font-bold uppercase tracking-widest mb-4">Travel Budget</span>
               <div className="flex items-baseline gap-4">
-                <span className="text-[100px] text-white font-black tracking-tighter">{currentTrip?.budget || 0}</span>
+                <span className="text-[100px] text-white font-black tracking-tighter">{currentBudget ? currentBudget.toLocaleString() : 0}</span>
                 <span className="text-5xl text-blue-300 font-bold uppercase">{targetCurrency}</span>
               </div>
             </div>

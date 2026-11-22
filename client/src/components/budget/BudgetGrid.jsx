@@ -5,7 +5,7 @@ import {
   FileText, Wifi, BatteryCharging, CloudSun, ShieldCheck, RefreshCw,
   TrendingUp, ArrowRight
 } from 'lucide-react';
-import { COUNTRY_DATA } from '@/utils/costEngine';
+import { COUNTRY_DATA, getCountryData, FALLBACK_RATES } from '@/utils/costEngine';
 
 const Card = ({ title, icon: Icon, iconColor, children, delay = 0 }) => (
   <motion.div
@@ -25,13 +25,15 @@ const Card = ({ title, icon: Icon, iconColor, children, delay = 0 }) => (
 export const BudgetGrid = React.memo(({ summary, breakdown, inputs, rates }) => {
   if (!summary || !breakdown || !rates) return null;
 
-  const originCurrency = COUNTRY_DATA[inputs.originCountry]?.currency || 'USD';
-  const originSymbol = COUNTRY_DATA[inputs.originCountry]?.symbol || '$';
-  const destCurrency = COUNTRY_DATA[inputs.destCountry]?.currency || 'USD';
-  const destSymbol = COUNTRY_DATA[inputs.destCountry]?.symbol || '$';
+  const originData = getCountryData(inputs.originCountry);
+  const destData = getCountryData(inputs.destCountry);
+  const originCurrency = originData.currency || 'USD';
+  const originSymbol = originData.symbol || '$';
+  const destCurrency = destData.currency || 'USD';
+  const destSymbol = destData.symbol || '$';
 
-  const rateOrigin = rates?.[originCurrency] || 1;
-  const rateDest = rates?.[destCurrency] || 1;
+  const rateOrigin = rates?.[originCurrency] || FALLBACK_RATES[originCurrency] || 1;
+  const rateDest = rates?.[destCurrency] || FALLBACK_RATES[destCurrency] || 1;
   const rateMultiplier = isNaN(rateOrigin) || isNaN(rateDest) ? 1 : rateOrigin / rateDest;
   
   const safe = (v) => (Number.isFinite(v) && !isNaN(v) ? v : 0);

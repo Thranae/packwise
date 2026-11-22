@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fetchExchangeRates, calculateTripCost } from '@/utils/costEngine';
+import { fetchExchangeRates, calculateTripCost, getCountryData } from '@/utils/costEngine';
 import { Loader2, AlertCircle, Bot, RefreshCw, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { ConfigurationPanel } from '@/components/budget/ConfigurationPanel';
 import { BudgetHero } from '@/components/budget/BudgetHero';
@@ -11,12 +11,35 @@ import { useTripContext } from '@/context/TripContext';
 export default function CostIntelligencePage() {
   const { currentTrip, updateTripLocal } = useTripContext();
 
+  const getTripDays = (trip) => {
+    if (!trip) return 5;
+    if (trip.startDate && trip.endDate) {
+      const diff = new Date(trip.endDate) - new Date(trip.startDate);
+      const days = Math.ceil(diff / 86400000);
+      if (days > 0) return days;
+    }
+    if (trip.duration) {
+      const parsed = parseInt(trip.duration);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+    return 5;
+  };
+
+  const getTripStyle = (trip) => {
+    const raw = String(trip?.travelStyle || '').toLowerCase();
+    if (raw.includes('lux')) return 'luxury';
+    if (raw.includes('budg') || raw.includes('cheap')) return 'budget';
+    return 'standard';
+  };
+
+  const initialDest = getCountryData(currentTrip?.country || currentTrip?.destination || 'United States').name;
+
   const [inputs, setInputs] = useState({
     originCountry: 'India',
-    destCountry: currentTrip?.country || 'United States',
-    days: currentTrip ? Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) || 5 : 5,
+    destCountry: initialDest,
+    days: getTripDays(currentTrip),
     travelers: currentTrip?.travelers || 2,
-    travelStyle: currentTrip?.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip?.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard',
+    travelStyle: getTripStyle(currentTrip),
     budgetType: 'balanced',
     transportation: 'public',
     accommodation: 'hotel',
@@ -29,126 +52,87 @@ export default function CostIntelligencePage() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [configOpen, setConfigOpen] = useState(false);
 
-  const handleCalculate = useCallback(async (isManualOverride = false) => {
-    // Prevent event object from being truthy
-    const isManual = typeof isManualOverride === 'boolean' ? isManualOverride : false;
-    
+  const inputsRef = useRef(inputs);
+  useEffect(() => {
+    inputsRef.current = inputs;
+  }, [inputs]);
+
+  const handleCalculate = useCallback(async (overrides = {}) => {
     setLoading(true);
     setError(null);
-    setConfigOpen(false);
     try {
+      const active = { ...inputsRef.current, ...overrides };
       const response = await fetchExchangeRates();
       setRates(response.rates);
       setLastUpdated(Date.now());
 
-      let costs;
+      const safeDays = Math.max(1, parseInt(active.days) || 1);
+      const safeTravelers = Math.max(1, parseInt(active.travelers) || 1);
+      const safeCountry = getCountryData(active.destCountry).name;
 
-      const safeDays = Math.max(1, inputs.days || 1);
-      const safe = (v) => (Number.isFinite(v) ? v : 0);
+      const costs = calculateTripCost(
+        safeCountry,
+        safeDays,
+        safeTravelers,
+        active.travelStyle
+      );
 
-      if (currentTrip && currentTrip.budgetDetails && Array.isArray(currentTrip.budgetDetails.categories)) {
-        const bd = currentTrip.budgetDetails;
-        const getCat = (name) => bd.categories.find(c => c.name.toLowerCase().includes(name))?.amount || 0;
-        
-        const aiHotel = getCat('hotel') || getCat('stay');
-        const aiFood = getCat('food') || getCat('dining');
-        const aiTransport = getCat('transport') || getCat('flight') || getCat('travel');
-        const aiShopping = getCat('shop');
-        const aiMisc = getCat('misc') || getCat('other');
-        
-        costs = {
-          dailyBreakdown: {
-            hotel: safe(Math.round(aiHotel / safeDays)),
-            food: safe(Math.round(aiFood / safeDays)),
-            transport: safe(Math.round(aiTransport / safeDays)),
-            attractions: safe(Math.round((bd.total - (aiHotel + aiFood + aiTransport + aiShopping + aiMisc)) / safeDays)),
-            shopping: safe(Math.round(aiShopping / safeDays)),
-            insurance: 0,
-            total: safe(Math.round(bd.total / safeDays))
-          },
-          summary: {
-            totalBudget: safe(bd.total),
-            averageDailySpend: safe(Math.round(bd.total / safeDays)),
-            emergencyReserve: safe(Math.round(aiMisc * 0.5)),
-            internetSim: safe(Math.round(aiMisc * 0.25)),
-            visaFees: 0,
-            miscellaneous: safe(Math.round(aiMisc * 0.25))
-          },
-          destCurrency: currentTrip.currency || 'USD',
-          destSymbol: currentTrip.currency === 'INR' ? '₹' : (currentTrip.currency === 'EUR' ? '€' : '$'),
-          destCode: currentTrip.country || inputs.destCountry,
-          destFlag: '🌍'
-        };
-      } else {
-        // Fallback to local offline calculation engine if AI data is missing
-        costs = calculateTripCost(
-          inputs.destCountry,
-          inputs.days,
-          inputs.travelers,
-          inputs.travelStyle
-        );
-        
-        // Scale to exactly match the AI's high-level budget unless the user explicitly overrode the config
-        if (currentTrip && currentTrip.budget && !isManual) {
-          const ratio = currentTrip.budget / costs.summary.totalBudget;
-          if (ratio !== 1 && ratio > 0 && isFinite(ratio)) {
-            for (let key in costs.dailyBreakdown) {
-              costs.dailyBreakdown[key] = Math.round(costs.dailyBreakdown[key] * ratio);
-            }
-            for (let key in costs.summary) {
-              costs.summary[key] = Math.round(costs.summary[key] * ratio);
-            }
-            costs.summary.totalBudget = currentTrip.budget;
-          }
-        }
+      // Persist the calculated budget & country into the active trip so other views reflect it
+      if (updateTripLocal && currentTrip?._id) {
+        updateTripLocal(currentTrip._id, {
+          budget: costs.summary.totalBudget,
+          currency: costs.destCurrency,
+          country: safeCountry
+        });
       }
-      
-      // If user tweaked config manually, push the newly calculated budget back to the global trip!
-      if (isManual && updateTripLocal && currentTrip) {
-        updateTripLocal(currentTrip._id, { budget: costs.summary.totalBudget });
-      }
-      
-      // Ensure smooth loading animation transition
-      await new Promise(r => setTimeout(r, 400));
-      
+
+      await new Promise(r => setTimeout(r, 200));
       setCostData(costs);
     } catch (err) {
       setError(err.message || 'Failed to load cost estimates');
     } finally {
       setLoading(false);
     }
-  }, [inputs, currentTrip, updateTripLocal]);
+  }, [currentTrip, updateTripLocal]);
 
-  const prevTripId = React.useRef(currentTrip?._id);
+  const prevTripId = useRef(currentTrip?._id);
 
+  // Sync inputs when currentTrip changes
   useEffect(() => {
     if (currentTrip && currentTrip._id !== prevTripId.current) {
       prevTripId.current = currentTrip._id;
       
-      const newDays = Math.max(1, Math.ceil((new Date(currentTrip.endDate) - new Date(currentTrip.startDate)) / 86400000)) || 5;
-      const newStyle = currentTrip.travelStyle?.toLowerCase().includes('luxury') ? 'luxury' : currentTrip.travelStyle?.toLowerCase().includes('budget') ? 'budget' : 'standard';
-      
-      setInputs(prev => ({
-        ...prev,
-        destCountry: currentTrip.country || 'United States',
-        days: newDays || 5,
-        travelers: currentTrip.travelers || 2,
-        travelStyle: newStyle
-      }));
-      
-      handleCalculate(false);
+      const newDest = getCountryData(currentTrip.country || currentTrip.destination || 'United States').name;
+      const newDays = getTripDays(currentTrip);
+      const newStyle = getTripStyle(currentTrip);
+      const newTravelers = currentTrip.travelers || 2;
+
+      const nextInputs = {
+        originCountry: 'India',
+        destCountry: newDest,
+        days: newDays,
+        travelers: newTravelers,
+        travelStyle: newStyle,
+        budgetType: 'balanced',
+        transportation: 'public',
+        accommodation: 'hotel',
+      };
+
+      setInputs(nextInputs);
+      inputsRef.current = nextInputs;
+      handleCalculate(nextInputs);
     }
   }, [currentTrip, handleCalculate]);
 
+  // Initial calculation on mount
   useEffect(() => {
-    handleCalculate(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    handleCalculate();
+  }, [handleCalculate]);
 
   return (
     <div className="col-span-12 w-full max-w-5xl mx-auto flex flex-col gap-6 pb-20 px-4 pt-2 md:pt-6">
 
-      {/* ✨ Page Header ✨ */}
+      {/* Page Header */}
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-blue-400 mb-1">
@@ -170,15 +154,15 @@ export default function CostIntelligencePage() {
             <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${configOpen ? 'rotate-180' : ''}`} />
           </button>
           <button
-            onClick={() => handleCalculate(true)}
+            onClick={() => handleCalculate()}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 md:px-4 py-2.5 md:py-2 rounded-xl bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 text-sm font-semibold transition-all"
           >
-            <RefreshCw className="w-4 h-4" /> <span>Calculate</span>
+            <RefreshCw className="w-4 h-4" /> <span>Recalculate</span>
           </button>
         </div>
       </div>
 
-      {/* ── Collapsible Config Panel ── */}
+      {/* Collapsible Config Panel */}
       <AnimatePresence>
         {configOpen && (
           <motion.div
@@ -193,14 +177,14 @@ export default function CostIntelligencePage() {
               <ConfigurationPanel
                 inputs={inputs}
                 setInputs={setInputs}
-                onCalculate={() => handleCalculate(true)}
+                onCalculate={(overrides) => handleCalculate(overrides)}
               />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Results Area ── */}
+      {/* Results Area */}
       <AnimatePresence>
         {error ? (
           <motion.div
@@ -229,7 +213,7 @@ export default function CostIntelligencePage() {
               <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl animate-pulse" />
             </div>
             <p className="text-sm font-semibold text-white/40 tracking-widest uppercase animate-pulse">
-              Crunching the numbers…
+              Calculating Country Budget…
             </p>
           </motion.div>
 

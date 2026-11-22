@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 import { db } from '../db/db';
 import syncService from '../services/syncService';
+import { getRealisticTripBudget, getCountryData } from '../utils/costEngine';
 
 export const TripContext = createContext();
 
@@ -15,7 +16,7 @@ const MOCK_TRIPS = [
     startDate: '2026-10-12T00:00:00Z',
     endDate: '2026-10-26T00:00:00Z',
     duration: '14 Days',
-    budget: 4500,
+    budget: 450000,
     currency: 'JPY',
     timezone: 'Asia/Tokyo',
     travelers: 2,
@@ -89,6 +90,25 @@ export const TripProvider = ({ children }) => {
       db.trips.bulkPut(MOCK_TRIPS);
     }
   }, [dexieTrips, isAuthenticated]);
+
+  // Heal any trips stored in local Dexie that have budget: 0 or missing
+  useEffect(() => {
+    if (dexieTrips && dexieTrips.length > 0) {
+      const tripsToHeal = dexieTrips.filter(t => !t.budget || Number(t.budget) === 0);
+      if (tripsToHeal.length > 0) {
+        const healed = tripsToHeal.map(t => {
+          const countryData = getCountryData(t.country || t.destination);
+          return {
+            ...t,
+            country: t.country || countryData.name,
+            budget: getRealisticTripBudget(t),
+            currency: t.currency || countryData.currency || 'USD'
+          };
+        });
+        db.trips.bulkPut(healed);
+      }
+    }
+  }, [dexieTrips]);
 
   const savedCurrentTripId = localStorage.getItem('packwise_current_trip_id');
   const initialCurrentTrip = savedCurrentTripId 
@@ -259,7 +279,17 @@ export const TripProvider = ({ children }) => {
       const res = await api.get('/trips');
       const serverTrips = res.data?.data || res.data;
       if (res.status === 200 && Array.isArray(serverTrips)) {
-        await db.trips.bulkPut(serverTrips);
+        const healedTrips = serverTrips.map(t => {
+          const countryData = getCountryData(t.country || t.destination);
+          const realBudget = getRealisticTripBudget(t);
+          return {
+            ...t,
+            country: t.country || countryData.name,
+            budget: realBudget,
+            currency: t.currency || countryData.currency || 'USD'
+          };
+        });
+        await db.trips.bulkPut(healedTrips);
       }
     } catch (err) {
       console.warn("Could not sync trips from web backend. Working offline.", err);
@@ -333,15 +363,24 @@ export const TripProvider = ({ children }) => {
       const tripDuration = parseInt(meta.duration || aiData.duration || 7);
       const tripEndDate = new Date(tripStartDate.getTime() + tripDuration * 24 * 60 * 60 * 1000);
 
+      const resolvedCountry = getCountryData(aiData.country || aiData.destination || fallbackDest);
+      const realisticBudget = getRealisticTripBudget({
+        budget: aiData.budget,
+        country: resolvedCountry.name,
+        duration: tripDuration,
+        travelers: aiData.travelers || 1,
+        travelStyle: aiData.travelStyle || 'standard'
+      });
+
       const newTripData = {
         ...aiData,
         destination: aiData.destination || fallbackDest,
-        country: aiData.country || "Unknown",
+        country: aiData.country || resolvedCountry.name,
         startDate: tripStartDate.toISOString(),
         endDate: tripEndDate.toISOString(),
         duration: `${tripDuration} Days`,
-        budget: aiData.budget || 3000,
-        currency: aiData.currency || "USD",
+        budget: realisticBudget,
+        currency: aiData.currency || resolvedCountry.currency || "USD",
         timezone: aiData.timezone || "UTC",
         gender: aiData.gender || "Not specified",
         travelers: aiData.travelers || 1,
