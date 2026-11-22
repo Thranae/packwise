@@ -1,10 +1,11 @@
 <div align="center">
 
-<a href="https://github.com/Thranae/packwise#readme">
+<a href="https://packwise-neon.vercel.app" target="_blank">
   <img src=".github/assets/packwise-banner.svg" alt="PackWise AI Header Banner" width="100%" />
 </a>
 
 <p align="center">
+  <a href="https://packwise-neon.vercel.app" target="_blank"><img src="https://img.shields.io/badge/LIVE%20DEMO-packwise--neon.vercel.app-000000?style=flat-square&logo=vercel&logoColor=white" alt="Live Demo on Vercel" /></a>
   <a href="https://github.com/Thranae/packwise/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/Thranae/packwise/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=CI%20BUILD" alt="CI Build" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-2563EB?style=flat-square&logo=opensourceinitiative&logoColor=white" alt="License: MIT" /></a>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/REACT-19.0-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React 19" /></a>
@@ -17,6 +18,10 @@
 </p>
 
 <p align="center">
+  <a href="https://packwise-neon.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/⚡_LAUNCH_LIVE_APP-VERCEL_DEPLOYMENT-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Launch Live App on Vercel" height="28" />
+  </a>
+  &nbsp;&nbsp;
   <a href="https://codespaces.new/Thranae/packwise">
     <img src="https://github.com/codespaces/badge.svg" alt="Open in GitHub Codespaces" height="28" />
   </a>
@@ -41,7 +46,7 @@
   <a href="#-monorepo-structure">Repository Layout</a>
 </p>
 
-<a href="https://github.com/Thranae/packwise#readme">
+<a href="https://packwise-neon.vercel.app" target="_blank">
   <img src=".github/assets/app-preview.jpg" alt="PackWise Application Interface Showcase" width="100%" style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 16px 40px rgba(0,0,0,0.4);" />
 </a>
 
@@ -332,6 +337,7 @@ npm run dev
 
 - Web Application: [http://localhost:5173](http://localhost:5173)
 - API Gateway: [http://localhost:5000](http://localhost:5000)
+- Live Production Web App: [https://packwise-neon.vercel.app](https://packwise-neon.vercel.app)
 
 ---
 
