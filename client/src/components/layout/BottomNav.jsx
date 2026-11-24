@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutGrid, Map, Bot, Banknote, User, PlaneTakeoff, Sparkles } from 'lucide-react';
+import { LayoutGrid, Map, Bot, Banknote, User, PlaneTakeoff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHaptics } from '@/hooks/useHaptics';
 import { useSoundEffect } from '@/hooks/useSoundEffect';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Info, Sparkles } from 'lucide-react';
+import { Info, Zap } from 'lucide-react';
 import { useAssistant, REC_STATES } from '@/context/AssistantContext';
 import { TextShimmer } from '@/components/motion-primitives/text-shimmer';
 
@@ -23,7 +23,7 @@ export default function AIReasoningPanel() {
         
         <div className="w-full p-5 rounded-[24px] bg-white/[0.04] backdrop-blur-xl border border-white/10 flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            <Zap className="w-4 h-4 text-purple-400" />
             <span className="text-[11px] font-bold uppercase tracking-widest text-white/80">AI Insight</span>
           </div>
           

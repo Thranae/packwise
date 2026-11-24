@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-import { Compass, Sparkles, MapPin, Star, Thermometer, LayoutTemplate, Briefcase } from 'lucide-react';
+import { Compass, Bot, MapPin, Star, Thermometer, LayoutTemplate, Briefcase } from 'lucide-react';
 import { useHaptics } from '@/hooks/useHaptics';
 import { BorderTrail } from '@/components/motion-primitives/border-trail';
 import { TextShimmer } from '@/components/motion-primitives/text-shimmer';
@@ -119,7 +119,7 @@ export function EmptyTrips() {
         <h3 className="text-lg font-bold text-white mb-4 px-1">Quick Tools</h3>
         <div className="grid grid-cols-2 gap-4">
           <Link to={`${ROUTES.ASSISTANT}`} className="flex flex-col justify-between h-32 md:h-40 p-5 rounded-[24px] bg-white/[0.04] border border-white/10 active:bg-white/[0.08] transition-colors active:scale-[0.97] group">
-            <Sparkles className="w-7 h-7 text-white/80 group-active:text-white" />
+            <Bot className="w-7 h-7 text-white/80 group-active:text-white" />
             <div className="flex flex-col">
               <span className="text-white font-bold text-[15px]">AI Planner</span>
               <span className="text-white/50 text-xs mt-0.5">Generate itineraries</span>

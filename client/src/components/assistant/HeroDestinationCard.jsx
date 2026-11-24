@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useAnimation } from 'framer-motion';
-import { MapPin, CloudSun, Wallet, Clock, Sparkles } from 'lucide-react';
+import { MapPin, CloudSun, Wallet, Clock, Zap } from 'lucide-react';
 import { useAssistant, REC_STATES } from '@/context/AssistantContext';
 import { RecommendationEngine } from '@/services/RecommendationEngine';
 import { useDestinationImage } from '@/hooks/useDestinationImage';
@@ -90,7 +90,7 @@ export default function HeroDestinationCard() {
         {/* Top: Match badge + Season */}
         <div className="relative z-10 flex justify-between items-start p-4">
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px] ios-glass-card">
-            <Sparkles className="w-3 h-3 text-blue-400" />
+            <Zap className="w-3 h-3 text-blue-400" />
             <span className="text-white text-[11px] font-bold">{currentRecommendation.matchPercent || 98}%</span>
           </div>
           <div className="px-2.5 py-1.5 rounded-[10px] ios-glass-card">

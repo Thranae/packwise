@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { useAssistant, REC_STATES } from '@/context/AssistantContext';
 
 export default function AIInsightCard() {
@@ -27,7 +27,7 @@ export default function AIInsightCard() {
           {/* Header */}
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+              <Zap className="w-3.5 h-3.5 text-purple-400" />
               <span className="text-[11px] font-bold uppercase tracking-widest text-white/60">AI Insight</span>
             </div>
             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/20">

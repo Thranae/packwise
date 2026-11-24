@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, X, Sparkles, Send } from 'lucide-react';
+import { Mic, X, Bot, Send } from 'lucide-react';
 import { useAssistant, AI_STATES } from '@/context/AssistantContext';
 import { useHaptics } from '@/hooks/useHaptics';
 import { aiService } from '@/services/aiService';
@@ -127,7 +127,7 @@ export default function PromptBar() {
                 exit={{ opacity: 0 }}
                 className="flex items-center gap-2"
               >
-                <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+                <Bot className="w-4 h-4 text-purple-400 animate-pulse" />
                 <span className="text-sm font-medium text-white/60">Thinking...</span>
               </motion.div>
             ) : (

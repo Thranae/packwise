@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, X, Send, Sparkles } from 'lucide-react';
+import { Mic, X, Send, Bot } from 'lucide-react';
 import { useHaptics } from '@/hooks/useHaptics';
 
 export default function VoiceAssistantDock() {
@@ -67,7 +67,7 @@ export default function VoiceAssistantDock() {
               )}
               {state === 'thinking' && (
                 <div className="flex items-center gap-2 text-purple-300">
-                  <Sparkles className="w-5 h-5 animate-pulse" />
+                  <Bot className="w-5 h-5 animate-pulse" />
                   <span className="font-semibold text-sm">Genie is thinking...</span>
                 </div>
               )}

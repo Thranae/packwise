@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Plane, Briefcase, Sparkles } from 'lucide-react';
+import { Plus, Plane, Briefcase, Compass } from 'lucide-react';
 import { useAssistant, REC_STATES } from '@/context/AssistantContext';
 import { useHaptics } from '@/hooks/useHaptics';
 
@@ -22,7 +22,7 @@ export default function QuickActions() {
         className="col-span-2 w-full py-4 rounded-[20px] bg-white text-black font-bold text-sm tracking-wide shadow-[0_8px_32px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2 overflow-hidden relative group"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-        <Sparkles className="w-4 h-4 text-purple-600" />
+        <Compass className="w-4 h-4 text-purple-600" />
         Generate Itinerary
       </motion.button>
 

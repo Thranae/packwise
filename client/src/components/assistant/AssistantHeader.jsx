@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, Sparkles, Search } from 'lucide-react';
+import { Bot, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAssistant, AI_STATES } from '@/context/AssistantContext';
 

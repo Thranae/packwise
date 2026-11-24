@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Loader2, Check } from 'lucide-react';
+import { Compass, Loader2, Check } from 'lucide-react';
 import { useAssistant } from '@/context/AssistantContext';
 import { useHaptics } from '@/hooks/useHaptics';
 import { aiService } from '@/services/aiService';
@@ -58,7 +58,7 @@ export default function PrimaryCTA() {
           </motion.div>
         ) : (
           <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
-            <Sparkles className="w-[18px] h-[18px] text-purple-600" />
+            <Compass className="w-[18px] h-[18px] text-purple-600" />
             <span>Generate Itinerary</span>
           </motion.div>
         )}
