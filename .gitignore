@@ -125,7 +125,7 @@ template.zip
 
 # Non-project directories
 ai-skills/
-components/
+/components/
 data/
 skills/
 skills-lock.json

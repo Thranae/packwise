@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/common/PageTransition';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/Button';
+import { RazorpayCheckoutButton } from '@/components/RazorpayCheckoutButton';
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -115,7 +116,16 @@ export default function SettingsPage() {
               </div>
               <div className="flex flex-col items-start sm:items-end gap-3">
                 <span className="text-sm font-medium text-text-primary">Next billing: Nov 1, 2024</span>
-                <Button variant="secondary" className="px-6 bg-white/10 hover:bg-white/20 border-white/20">Manage Billing</Button>
+                <div className="flex items-center gap-2">
+                  <RazorpayCheckoutButton
+                    amount={49900}
+                    currency="INR"
+                    name="PackWise Voyage Genie Pro"
+                    buttonText="Pay ₹499 with Razorpay"
+                    onSuccess={() => alert('Payment verified successfully! Welcome to PackWise Pro.')}
+                  />
+                  <Button variant="secondary" className="px-6 bg-white/10 hover:bg-white/20 border-white/20">Manage Billing</Button>
+                </div>
               </div>
             </div>
           </motion.div>

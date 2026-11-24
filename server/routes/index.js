@@ -9,6 +9,7 @@ import aiRoutes from './ai.routes.js';
 import smsRoutes from './smsRoutes.js';
 
 import exportRoutes from './export.routes.js';
+import paymentRoutes from './payment.routes.js';
 
 const router = express.Router();
 
@@ -21,6 +22,8 @@ router.use('/currency', currencyRoutes);
 router.use('/ai', aiRoutes);
 router.use('/sms', smsRoutes);
 router.use('/export', exportRoutes);
+router.use('/payment', paymentRoutes);
+router.use('/', paymentRoutes); // Mounts /create-order and /verify-payment directly under /api
 
 export default router;
 
